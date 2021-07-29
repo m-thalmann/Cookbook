@@ -1,0 +1,887 @@
+openapi: 3.0.0
+info:
+  title: Cookbook
+  version: '1.0'
+  contact:
+    url: 'https://github.com/m-thalmann/Cookbook'
+    email: matthiasthalmann1@hotmail.de
+    name: Matthias Thalmann
+  description: The API for the Cookbook-Webapp
+  license:
+    name: MIT
+servers:
+  - url: 'http://localhost:80'
+    description: Dev
+tags:
+  - name: User
+  - name: Recipe
+  - name: Ingredient
+paths:
+  /auth:
+    get:
+      summary: Returns whether the user is authenticated or not
+      tags:
+        - User
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+                  info:
+                    type: string
+                    example: Authorized
+                required:
+                  - user
+                  - info
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      operationId: get-auth
+      description: Returns whether the user is authenticated or not
+      security:
+        - Token: []
+    delete:
+      summary: Deletes the authenticated user
+      tags:
+        - User
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          description: Something went wrong
+      operationId: delete-auth
+      description: Deletes the authenticated user and all of its data
+      security:
+        - Token: []
+  /auth/login:
+    post:
+      summary: Authenticates the user and returns a token
+      tags:
+        - User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+                  info:
+                    type: string
+                    example: Authorized
+                  token:
+                    $ref: '#/components/schemas/JwtToken'
+                required:
+                  - user
+                  - info
+                  - token
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: Email and password expected
+                required:
+                  - info
+        '404':
+          description: Email or password wrong
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: Email or password wrong
+                required:
+                  - info
+      operationId: post-auth-login
+      description: Authenticates the user and returns a token
+  /auth/register:
+    post:
+      summary: Registers a new user
+      tags:
+        - User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+                  info:
+                    type: string
+                    example: Authorized
+                  token:
+                    $ref: '#/components/schemas/JwtToken'
+                required:
+                  - user
+                  - info
+                  - token
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '405':
+          description: Registration is disabled
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: Registration is disabled
+                required:
+                  - info
+        '409':
+          description: A user with this email already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: A user with this email already exists
+                required:
+                  - info
+      operationId: post-auth-register
+      description: Registers a new user and returns a token
+  /auth/registrationEnabled:
+    get:
+      summary: Returns whether the registration is enabled
+      tags:
+        - User
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: boolean
+      operationId: get-auth-registrationEnabled
+      description: Returns whether the registration is enabled
+  /recipes:
+    get:
+      summary: Return all visible recipes for the user
+      tags:
+        - Recipe
+      parameters:
+        - $ref: '#/components/parameters/ItemsPerPage'
+        - $ref: '#/components/parameters/Page'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Pagination'
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Recipe'
+                    required:
+                      - items
+      operationId: get-recipes
+      description: Return all visible recipes for the user, or only public recipes if no authentication is provided
+      security:
+        - Token: []
+    post:
+      summary: Create a new recipe
+      tags:
+        - Recipe
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                public:
+                  type: boolean
+                  description: Whether the recipe is publicly visible or not
+                name:
+                  type: string
+                  maxLength: 20
+                  example: Chocolate Cake
+                description:
+                  type: string
+                  nullable: true
+                category:
+                  type: string
+                  maxLength: 10
+                  nullable: true
+                  example: Dessert
+                portions:
+                  type: integer
+                  nullable: true
+                  minimum: 1
+                difficulty:
+                  type: integer
+                  nullable: true
+                  minimum: 0
+                  maximum: 4
+                preparation:
+                  type: string
+                  nullable: true
+                  description: Descriptive explanation of the preparation-steps (in HTML format)
+                preparationTime:
+                  type: number
+                  nullable: true
+                  minimum: 1
+                  description: Preparation time in minutes
+                cookTime:
+                  type: number
+                  nullable: true
+                  minimum: 1
+                  description: Cooking/baking time in minutes
+                ingredients:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        maxLength: 20
+                        example: Flour
+                      unit:
+                        type: string
+                        maxLength: 10
+                        nullable: true
+                        example: 'g'
+                        description: The unit used to measure this ingredient
+                      amount:
+                        type: number
+                        minimum: 0
+                        exclusiveMinimum: true
+                        nullable: true
+                        example: 100
+                    required:
+                      - name
+                      - unit
+                      - amount
+              required:
+                - public
+                - name
+                - description
+                - category
+                - portions
+                - difficulty
+                - preparation
+                - preparationTime
+                - cookTime
+                - ingredients
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recipe'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          description: Duplicate ingredient name
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: An ingredient with this name already exists for this recipe
+                required:
+                  - info
+      operationId: post-recipes
+      description: Create a new recipe
+      security:
+        - Token: []
+  /recipes/id/{id}:
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Returns the recipe with the given id
+      tags:
+        - Recipe
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recipe'
+        '404':
+          description: Recipe not found or not visible for the user
+      operationId: get-recipes-id
+      description: Returns the recipe with the given id, if it is visible to the user
+      security:
+        - Token: []
+    put:
+      summary: Update an existing recipe
+      tags:
+        - Recipe
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                public:
+                  type: boolean
+                  description: Whether the recipe is publicly visible or not
+                name:
+                  type: string
+                  maxLength: 20
+                  example: Chocolate Cake
+                description:
+                  type: string
+                  nullable: true
+                category:
+                  type: string
+                  maxLength: 10
+                  nullable: true
+                  example: Dessert
+                portions:
+                  type: integer
+                  nullable: true
+                  minimum: 1
+                difficulty:
+                  type: integer
+                  nullable: true
+                  minimum: 0
+                  maximum: 4
+                preparation:
+                  type: string
+                  nullable: true
+                  description: Descriptive explanation of the preparation-steps (in HTML format)
+                preparationTime:
+                  type: number
+                  nullable: true
+                  minimum: 1
+                  description: Preparation time in minutes
+                cookTime:
+                  type: number
+                  nullable: true
+                  minimum: 1
+                  description: Cooking/baking time in minutes
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Recipe'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Can't change ownership of recipe
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: You can't change ownership
+                required:
+                  - info
+        '404':
+          description: Recipe not found
+      operationId: put-recipes-id
+      description: Update an existing recipe
+      security:
+        - Token: []
+    delete:
+      summary: Delete an existing recipe
+      tags:
+        - Recipe
+      responses:
+        '200':
+          description: OK (also if not deleted due to not found or not owned by user)
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          description: Something went wrong
+      operationId: delete-recipes-id
+      description: Delete an existing recipe
+      security:
+        - Token: []
+  /recipes/search/{search}:
+    parameters:
+      - schema:
+          type: string
+        name: search
+        in: path
+        required: true
+    get:
+      summary: Search for a recipe
+      tags:
+        - Recipe
+      parameters:
+        - $ref: '#/components/parameters/ItemsPerPage'
+        - $ref: '#/components/parameters/Page'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Pagination'
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Recipe'
+                    required:
+                      - items
+      operationId: get-recipes-search
+      description: Search for a recipe in the name and description
+      security:
+        - Token: []
+  /recipes/category/{category}:
+    parameters:
+      - schema:
+          type: string
+        name: category
+        in: path
+        required: true
+        description: The name of the category (case-insensitive)
+    get:
+      summary: Return all recipes for a category
+      tags:
+        - Recipe
+      parameters:
+        - $ref: '#/components/parameters/ItemsPerPage'
+        - $ref: '#/components/parameters/Page'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Pagination'
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Recipe'
+                    required:
+                      - items
+      operationId: get-recipes-category
+      description: Return all recipes for a category
+      security:
+        - Token: []
+  /recipes/id/{id}/ingredients:
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    post:
+      summary: Add a new ingredient to a recipe
+      tags:
+        - Ingredient
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  maxLength: 20
+                  example: Flour
+                unit:
+                  type: string
+                  maxLength: 10
+                  nullable: true
+                  example: 'g'
+                  description: The unit used to measure this ingredient
+                amount:
+                  type: number
+                  minimum: 0
+                  exclusiveMinimum: true
+                  nullable: true
+                  example: 100
+              required:
+                - name
+                - unit
+                - amount
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ingredient'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Recipe not found or not owned by user
+        '409':
+          description: Duplicate ingredient name in recipe
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: An ingredient with this name already exists for this recipe
+                required:
+                  - info
+      operationId: post-recipes-id-ingredients
+      description: Add a new ingredient to a recipe
+      security:
+        - Token: []
+  /ingredients/search/{search}:
+    parameters:
+      - schema:
+          type: string
+          minLength: 3
+        name: search
+        in: path
+        required: true
+    get:
+      summary: Search for an ingredient in existing recipes of this user
+      tags:
+        - Ingredient
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Sugar
+                    unit:
+                      type: string
+                      nullable: true
+                      example: g
+                  required:
+                    - name
+                    - unit
+        '400':
+          description: Search-string too short
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: Search must be at least 3 characters long
+                required:
+                  - info
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      operationId: get-ingredients-search
+      description: Search for an ingredient in existing recipes of this user
+      security:
+        - Token: []
+  /ingredients/id/{id}:
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    put:
+      summary: Update a specific ingredient
+      tags:
+        - Ingredient
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  maxLength: 20
+                  example: Flour
+                unit:
+                  type: string
+                  maxLength: 10
+                  nullable: true
+                  example: 'g'
+                  description: The unit used to measure this ingredient
+                amount:
+                  type: number
+                  minimum: 0
+                  exclusiveMinimum: true
+                  nullable: true
+                  example: 100
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ingredient'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Not found
+      operationId: put-ingredients-id
+      description: Update a specific ingredient
+      security:
+        - Token: []
+    delete:
+      summary: Delete a specific ingredient
+      tags:
+        - Ingredient
+      responses:
+        '200':
+          description: OK (also if not deleted due to not found or not owned by user)
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          description: Something went wrong
+      operationId: delete-ingredients-id
+      description: Delete a specific ingredient
+      security:
+        - Token: []
+components:
+  schemas:
+    User:
+      title: User
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        email:
+          type: string
+          format: email
+      required:
+        - id
+        - email
+    Ingredient:
+      title: Ingredient
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        recipeId:
+          type: integer
+          minimum: 1
+        name:
+          type: string
+          maxLength: 20
+          example: Flour
+        unit:
+          type: string
+          maxLength: 10
+          nullable: true
+          example: 'g'
+          description: The unit used to measure this ingredient
+        amount:
+          type: number
+          minimum: 0
+          exclusiveMinimum: true
+          nullable: true
+          example: 100
+      required:
+        - id
+        - recipeId
+        - name
+        - unit
+        - amount
+    Recipe:
+      title: Recipe
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        public:
+          type: boolean
+          description: Whether the recipe is publicly visible or not
+        name:
+          type: string
+          maxLength: 20
+          example: Chocolate Cake
+        description:
+          type: string
+          nullable: true
+        category:
+          type: string
+          maxLength: 10
+          nullable: true
+          example: Dessert
+        portions:
+          type: integer
+          nullable: true
+          minimum: 1
+        difficulty:
+          type: integer
+          nullable: true
+          minimum: 0
+          maximum: 4
+        preparation:
+          type: string
+          nullable: true
+          description: Descriptive explanation of the preparation-steps (in HTML format)
+        preparationTime:
+          type: number
+          nullable: true
+          minimum: 1
+          description: Preparation time in minutes
+        cookTime:
+          type: number
+          nullable: true
+          minimum: 1
+          description: Cooking/baking time in minutes
+        user:
+          $ref: '#/components/schemas/User'
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ingredient'
+      required:
+        - id
+        - public
+        - name
+        - description
+        - category
+        - portions
+        - difficulty
+        - preparation
+        - preparationTime
+        - cookTime
+        - user
+        - ingredients
+    JwtToken:
+      title: JWT Token
+      type: string
+      example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjowLCJ1c2VyX3VzZXJuYW1lIjoiYWRtaW4iLCJ1c2VyX3JvbGUiOiJBRE1JTiJ9.INqBvo5b1p-2evTrolDw3bqTH12zKvUEEUMfmY4oNX4
+      pattern: "^Bearer (?:\\w|[-_=])+\\.(?:\\w|[-_=])+\\.?(?:\\w|[-_.+\\/=])*$"
+      description: 'The token containing user information in the payload'
+    Pagination:
+      title: Pagination
+      type: object
+      properties:
+        page:
+          type: integer
+          minimum: 0
+          description: The current page
+        items_per_page:
+          type: integer
+          minimum: 1
+          description: The items displayed per page
+        total_items:
+          type: integer
+          minimum: 0
+          description: The total amount of items found
+        total_pages:
+          type: integer
+          minimum: 0
+          description: The total amount of pages needed to display all items
+      required:
+        - page
+        - items_per_page
+        - total_items
+        - total_pages
+  responses:
+    Unauthorized:
+      description: There was no authentication provided or it was invalid
+    Forbidden:
+      description: The user has not the rights to perform this action
+    ValidationError:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties:
+              type: string
+              description: The error message for the property (key)
+  parameters:
+    ItemsPerPage:
+      schema:
+        type: integer
+        minimum: 1
+      name: items_per_page
+      in: query
+      required: false
+      description: How many items a single page should contain
+    Page:
+      schema:
+        type: integer
+        minimum: 0
+      name: page
+      in: query
+      required: false
+      description: The page to display (starting at 0)
+  securitySchemes:
+    Token:
+      type: http
+      scheme: bearer
