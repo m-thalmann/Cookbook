@@ -1,0 +1,34 @@
+{
+  "printWidth": 120,
+  "singleQuote": true,
+  "useTabs": false,
+  "tabWidth": 2,
+  "semi": true,
+  "trailingComma": "es5",
+  "bracketSpacing": true,
+  "arrowParens": "always",
+  "endOfLine": "crlf",
+  "overrides": [
+    {
+      "files": "*yaml",
+      "options": {
+        "tabWidth": 2
+      }
+    },
+    {
+      "files": ["*.html", "*.php"],
+      "options": {
+        "tabWidth": 4
+      }
+    },
+    {
+      "files": "*.php",
+      "options": {
+        "printWidth": 80,
+        "singleQuote": false,
+        "trailingCommaPHP": true,
+        "braceStyle": "1tbs"
+      }
+    }
+  ]
+}

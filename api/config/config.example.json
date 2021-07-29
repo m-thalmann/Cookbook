@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0",
+  "root_url": "/api",
+  "database": {
+    "host": "localhost",
+    "user": "root",
+    "password": "123456789",
+    "database": "database_name",
+    "charset": "utf8"
+  },
+  "token": {
+    "secret": "86nYFNtuqMxGCG3v7TQuoFhgMSwil3hP",
+    "ttl": 604800
+  },
+  "password": {
+    "secret": "320fhjewkbgv430ghwogvwb132kr21bj"
+  },
+  "registration_enabled": true
+}
