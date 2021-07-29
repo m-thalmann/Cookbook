@@ -1,0 +1,73 @@
+<header [class.small]="smallHeader">
+    <div class="container">
+        <h1><img src="assets/images/cookbook.svg" alt="Cookbook Logo" /><span>Cookbook</span></h1>
+
+        <nav class="desktop-nav hide-mobile">
+            <ng-container *ngTemplateOutlet="navItems"></ng-container>
+        </nav>
+
+        <div class="actions">
+            <button mat-icon-button>
+                <mat-icon>search</mat-icon>
+            </button>
+            <button mat-icon-button class="hide-desktop" (click)="toggleMenu()">
+                <mat-icon *ngIf="!showMenu">menu</mat-icon>
+                <mat-icon *ngIf="showMenu">close</mat-icon>
+            </button>
+            <button mat-icon-button class="hide-mobile">
+                <mat-icon>account_circle</mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <nav class="mobile-nav hide-desktop" [class.show]="showMenu">
+        <ng-container *ngTemplateOutlet="navItems"></ng-container>
+        <div class="spacer"></div>
+        <div class="account" *ngIf="isLoggedin">
+            <button mat-button><mat-icon>settings</mat-icon> Settings</button>
+            <button mat-button color="warn"><mat-icon>logout</mat-icon> Logout</button>
+        </div>
+        <div class="account" *ngIf="!isLoggedin">
+            <button mat-button><mat-icon>login</mat-icon> Login</button>
+            <button mat-button><mat-icon>add</mat-icon> Register</button>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <router-outlet></router-outlet>
+</main>
+
+<button
+    mat-fab
+    color="primary"
+    aria-label="Back to top"
+    class="back-to-top"
+    [class.show]="smallHeader"
+    (click)="scrollToTop()"
+>
+    <mat-icon>expand_less</mat-icon>
+</button>
+
+<ng-template #navItems>
+    <a routerLink="/home" routerLinkActive="active">
+        <div>
+            <mat-icon>home</mat-icon>
+            <span>Home</span>
+        </div>
+    </a>
+    <a routerLink="/my" routerLinkActive="active" *ngIf="isLoggedin">
+        <div>
+            <mat-icon>restaurant_menu</mat-icon>
+            <span>My Recipes</span>
+        </div>
+    </a>
+    <a routerLink="/categories" routerLinkActive="active">
+        <div>
+            <mat-icon>menu_book</mat-icon>
+            <span>Categories</span>
+        </div>
+    </a>
+</ng-template>
+
+<!-- // TODO: add menu -->

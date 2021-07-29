@@ -1,0 +1,20 @@
+@import '~@angular/material/theming';
+
+// for color info see: https://material.io/design/color/
+
+$primary: mat-palette($mat-gray, 900);
+$accent: mat-palette($mat-brown, 600);
+$warn: mat-palette($mat-red);
+
+$link: #1693ff;
+
+$body-background: #d4d4d4;
+
+$background: #ffffff;
+$foreground: #000000;
+
+$snackbar-background: #333333;
+$snackbar-foreground: #fff;
+
+$mobile-width: 700px;
+$desktop-width: 700.1px;

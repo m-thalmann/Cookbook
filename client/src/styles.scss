@@ -1,0 +1,52 @@
+@import '~@angular/material/theming';
+@import './variables.scss';
+
+@include mat-core();
+
+$theme: mat-dark-theme(
+  (
+    color: (
+      primary: $primary,
+      accent: $accent,
+      warn: $warn,
+    ),
+  )
+);
+
+@include angular-material-theme($theme);
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  height: fit-content;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+
+  background: $body-background;
+}
+
+a {
+  color: $link;
+}
+
+.float-right {
+  float: right;
+}
+
+@media screen and (min-width: $desktop-width) {
+  .hide-desktop {
+    display: none !important;
+  }
+}
+@media screen and (max-width: $mobile-width) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
