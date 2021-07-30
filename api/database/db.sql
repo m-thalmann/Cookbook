@@ -3,7 +3,9 @@ CREATE TABLE `users` (
   `email` varchar(100) NOT NULL,
   `password` varchar(64) NOT NULL,
   `passwordSalt` varchar(32) NOT NULL,
-  `lastUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `lastUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+  UNIQUE(email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `recipes` (

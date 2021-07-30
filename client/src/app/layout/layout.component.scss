@@ -1,8 +1,8 @@
 @import '../../variables.scss';
 
 header {
-  background: mat-color($primary);
-  color: mat-color($primary, '900-contrast');
+  background: $header-background;
+  color: $header-foreground;
   box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.6);
 
   position: sticky;
@@ -66,20 +66,20 @@ header {
       }
 
       &:hover {
-        background: lighten(mat-color($primary), 5%);
+        background: lighten($header-background, 5%);
 
         &::after {
-          background: lighten(mat-color($primary), 5%);
+          background: lighten($header-background, 5%);
           border-radius: 0 0 2px 2px;
           height: 3px;
         }
       }
 
       &.active {
-        background: mat-color($accent);
+        background: mat-color($primary);
 
         &::after {
-          background: mat-color($accent);
+          background: mat-color($primary);
           border-radius: 0 0 3px 3px;
           height: 5px;
         }
@@ -142,7 +142,7 @@ header {
         transition-delay: 0.2s;
       }
 
-      background: lighten(mat-color($primary), 10%);
+      background: lighten($header-background, 10%);
       display: block;
     }
 
@@ -163,11 +163,11 @@ header {
       }
 
       &:hover {
-        background: lighten(mat-color($primary), 15%);
+        background: lighten($header-background, 15%);
       }
 
       &.active {
-        background: mat-color($accent);
+        background: mat-color($primary);
 
         &::before {
           content: '';
@@ -187,6 +187,20 @@ header {
 
     .account {
       padding: 1em 0;
+
+      .account-mail {
+        margin-bottom: 0.25em;
+        opacity: 0.7;
+
+        mat-icon,
+        span {
+          vertical-align: middle;
+        }
+
+        mat-icon {
+          margin-right: 0.25em;
+        }
+      }
     }
 
     > :last-child {
@@ -211,7 +225,10 @@ main {
   color: $foreground;
   box-shadow: 0px 0px 10px -5px rgba(0, 0, 0, 0.75);
 
-  padding: 2em 1em;
+  padding: 1em 1em;
+  margin: 1.5em auto !important;
+
+  border-radius: 0.5em;
 }
 
 header > .container,
@@ -240,6 +257,11 @@ main {
   header {
     padding: 0 10px;
   }
+
+  main {
+    margin: 1.5em 0.5em !important;
+    width: calc(100% - 1em);
+  }
 }
 
 @media screen and (max-width: 800px) {
@@ -251,5 +273,9 @@ main {
 @media screen and (max-width: $mobile-width) {
   header .container {
     grid-template-columns: 2fr 1fr;
+  }
+
+  main {
+    margin: 0.5em !important;
   }
 }

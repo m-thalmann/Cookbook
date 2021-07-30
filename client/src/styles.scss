@@ -3,7 +3,7 @@
 
 @include mat-core();
 
-$theme: mat-dark-theme(
+$theme: mat-light-theme(
   (
     color: (
       primary: $primary,
@@ -32,12 +32,55 @@ body {
   background: $body-background;
 }
 
-a {
+a,
+.link {
   color: $link;
 }
 
-.float-right {
-  float: right;
+h1,
+h2,
+h3,
+h4 {
+  > mat-icon,
+  > span {
+    vertical-align: middle;
+  }
+
+  > mat-icon {
+    margin-right: 0.5em;
+  }
+}
+
+.mat-snack-bar-container.action-warn .mat-simple-snackbar-action {
+  color: mat-color($warn) !important;
+}
+
+.fg-primary {
+  color: mat-color($primary) !important;
+}
+.bg-primary {
+  background: mat-color($primary) !important;
+}
+.fg-accent {
+  color: mat-color($accent) !important;
+}
+.bg-accent {
+  background: mat-color($accent) !important;
+}
+.fg-warn {
+  color: mat-color($warn) !important;
+}
+.bg-warn {
+  background: mat-color($warn) !important;
+}
+
+.link {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.vertical-align-middle {
+  vertical-align: middle;
 }
 
 @media screen and (min-width: $desktop-width) {

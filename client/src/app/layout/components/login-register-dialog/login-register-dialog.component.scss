@@ -1,0 +1,29 @@
+form {
+  margin-bottom: 2em;
+
+  mat-form-field,
+  mat-slide-toggle,
+  .form_footer {
+    display: block;
+  }
+
+  mat-slide-toggle {
+    margin-bottom: 1.5em;
+  }
+
+  .form_footer {
+    text-align: left;
+
+    button {
+      margin-right: 1em;
+    }
+
+    mat-spinner {
+      vertical-align: middle;
+    }
+
+    > * {
+      display: inline-block;
+    }
+  }
+}

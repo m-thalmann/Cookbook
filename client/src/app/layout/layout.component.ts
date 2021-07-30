@@ -1,7 +1,10 @@
 import { AfterViewInit, Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { NavigationEnd, Router } from '@angular/router';
 import { fromEvent } from 'rxjs';
 import { map, share, throttleTime } from 'rxjs/operators';
 import { UserService } from '../core/auth/user.service';
+import { LoginRegisterDialogComponent } from './components/login-register-dialog/login-register-dialog.component';
 
 @Component({
   selector: 'cb-layout',
@@ -12,7 +15,13 @@ export class LayoutComponent implements AfterViewInit {
   showMenu = false;
   smallHeader = false;
 
-  constructor(private user: UserService) {}
+  constructor(public user: UserService, private dialog: MatDialog, private router: Router) {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.showMenu = false;
+      }
+    });
+  }
 
   ngAfterViewInit() {
     fromEvent(window, 'scroll')
@@ -42,5 +51,11 @@ export class LayoutComponent implements AfterViewInit {
         window.scrollTo(0, currentScroll - currentScroll / 8);
       }
     })();
+  }
+
+  showLoginRegisterDialog() {
+    this.dialog.open(LoginRegisterDialogComponent, {
+      width: '400px',
+    });
   }
 }

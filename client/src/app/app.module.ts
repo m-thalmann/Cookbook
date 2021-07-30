@@ -8,13 +8,15 @@ import { ConfigService } from './core/config/config.service';
 import { MaterialModule } from './core/material/material.module';
 import { LayoutComponent } from './layout/layout.component';
 import { PageHomeComponent } from './pages/page-home/page-home.component';
+import { LoginRegisterDialogComponent } from './layout/components/login-register-dialog/login-register-dialog.component';
+import { LogoutComponent } from './pages/logout/logout.component';
 
 export function setupConfig(service: ConfigService) {
   return () => service.load();
 }
 
 @NgModule({
-  declarations: [AppComponent, LayoutComponent, PageHomeComponent],
+  declarations: [AppComponent, LayoutComponent, PageHomeComponent, LoginRegisterDialogComponent, LogoutComponent],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, MaterialModule, HttpClientModule],
   providers: [
     {

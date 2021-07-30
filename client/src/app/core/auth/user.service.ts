@@ -118,7 +118,7 @@ export class UserService {
    *
    * @param redirect_path the path to redirect the user to, after the logout (or no redirect if null)
    */
-  logout(redirect_path: string | null = '/login') {
+  logout(redirect_path: string | null = '/home') {
     this.remove();
 
     this.dialog.closeAll();
@@ -132,7 +132,7 @@ export class UserService {
    * @param reason the reason for the logout
    */
   logoutReason(reason: string) {
-    this.logout(`/login?reason=${reason}`);
+    this.logout(`/home?reason=${reason}`);
   }
 
   /**
