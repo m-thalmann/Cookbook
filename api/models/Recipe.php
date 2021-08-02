@@ -100,11 +100,16 @@ class Recipe extends Model {
         return $this->user;
     }
 
-    public function jsonSerialize() {
-        return array_merge(parent::jsonSerialize(), [
+    public function jsonSerialize($ingredients = false) {
+        $ret = array_merge(parent::jsonSerialize(), [
             "user" => $this->user(),
-            "ingredients" => Ingredient::getByRecipeId($this->id),
         ]);
+
+        if($ingredients){
+            $ret["ingredients"] = Ingredient::getByRecipeId($this->id);
+        }
+
+        return $ret;
     }
 
     public static function getErrors($recipe) {

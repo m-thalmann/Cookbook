@@ -40,7 +40,7 @@ $group
         }
 
         if ($recipe !== null) {
-            return $recipe;
+            return $recipe->jsonSerialize(true);
         } else {
             return Response::notFound();
         }
@@ -129,7 +129,7 @@ $group
 
         Model::db()->commit();
 
-        return Response::created($recipe);
+        return Response::created($recipe->jsonSerialize(true));
     })
     ->put('/id/{{i:id}}', Authorization::middleware(), function ($req) {
         $recipe = Recipe::getById(
@@ -155,7 +155,7 @@ $group
             return Response::badRequest(Recipe::getErrors($recipe));
         }
 
-        return $recipe;
+        return $recipe->jsonSerialize(true);
     })
     ->delete('/id/{{i:id}}', Authorization::middleware(), function ($req) {
         if (

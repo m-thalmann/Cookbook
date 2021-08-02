@@ -325,7 +325,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Recipe'
+                $ref: '#/components/schemas/RecipeFull'
         '400':
           $ref: '#/components/responses/ValidationError'
         '401':
@@ -363,7 +363,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Recipe'
+                $ref: '#/components/schemas/RecipeFull'
         '404':
           description: Recipe not found or not visible for the user
       operationId: get-recipes-id
@@ -424,7 +424,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Recipe'
+                $ref: '#/components/schemas/RecipeFull'
         '400':
           $ref: '#/components/responses/ValidationError'
         '401':
@@ -810,10 +810,6 @@ components:
           description: Cooking/baking time in minutes
         user:
           $ref: '#/components/schemas/User'
-        ingredients:
-          type: array
-          items:
-            $ref: '#/components/schemas/Ingredient'
       required:
         - id
         - public
@@ -826,7 +822,18 @@ components:
         - preparationTime
         - cookTime
         - user
-        - ingredients
+    RecipeFull:
+      title: Recipe with ingredients
+      allOf:
+        - $ref: '#/components/schemas/Recipe'
+        - type: object
+          properties:
+            ingredients:
+              type: array
+              items:
+                $ref: '#/components/schemas/Ingredient'
+          required:
+            - ingredients
     JwtToken:
       title: JWT Token
       type: string

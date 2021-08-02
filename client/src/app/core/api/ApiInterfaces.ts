@@ -24,6 +24,9 @@ export interface Recipe {
   preparationTime: number | null;
   cookTime: number | null;
   user: User;
+}
+
+export interface RecipeFull extends Recipe {
   ingredients: Ingredient[];
 }
 
