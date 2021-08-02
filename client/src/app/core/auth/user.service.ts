@@ -145,13 +145,20 @@ export class UserService {
   static parseUserFromToken(token: string): User | never {
     let token_payload = JSON.parse(atob(token.split('.')[1]));
 
-    if (!(typeof token_payload.user_id === 'number' && typeof token_payload.user_email === 'string')) {
+    if (
+      !(
+        typeof token_payload.user_id === 'number' &&
+        typeof token_payload.user_email === 'string' &&
+        typeof token_payload.user_name === 'string'
+      )
+    ) {
       throw new Error('Token does not contain correct user data');
     }
 
     return {
       id: token_payload.user_id,
       email: token_payload.user_email,
+      name: token_payload.user_name,
     };
   }
 }

@@ -111,11 +111,11 @@ export class ApiService {
     );
   }
 
-  registerUser(email: string, password: string) {
+  registerUser(email: string, password: string, name: string) {
     return this.handleResponse<{ user: User; token: string; info: string }>(
       this.http.post<{ user: User; token: string; info: string }>(
         `${this.URL}/auth/register`,
-        { email: email, password: password },
+        { email: email, password: password, name: name },
         this.httpOptions
       )
     );

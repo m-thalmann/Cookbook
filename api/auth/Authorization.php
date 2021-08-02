@@ -22,6 +22,7 @@ class Authorization {
             return \JWT::encode(Config::get('token.secret'), [
                 "user_id" => $user->id,
                 "user_email" => $user->email,
+                "user_name" => $user->name,
                 "user_lastUpdated" => $user->lastUpdated,
                 "exp" => time() + Config::get('token.ttl'),
             ]);

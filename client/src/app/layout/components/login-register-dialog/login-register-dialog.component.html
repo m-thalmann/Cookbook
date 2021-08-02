@@ -8,6 +8,11 @@
             <input matInput type="text" formControlName="email" />
             <mat-error *ngIf="getFormError('email') != null">{{ getFormError('email') }}</mat-error>
         </mat-form-field>
+        <mat-form-field appearance="outline" color="primary" *ngIf="!isLogin">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" formControlName="name" />
+            <mat-error *ngIf="getFormError('name') != null">{{ getFormError('name') }}</mat-error>
+        </mat-form-field>
         <mat-form-field appearance="outline" color="primary">
             <mat-label>Password</mat-label>
             <input matInput type="password" formControlName="password" />
@@ -22,7 +27,7 @@
         <mat-slide-toggle color="primary" formControlName="remember">Remember me</mat-slide-toggle>
 
         <div class="form_footer">
-            <button mat-raised-button color="primary" (click)="action()" [disabled]="loading">
+            <button mat-raised-button color="primary" (click)="action()" [disabled]="loading || !loginForm.valid">
                 {{ isLogin ? 'Login' : 'Register' }}
             </button>
 
@@ -34,10 +39,10 @@
 
     <p *ngIf="isLogin">
         Don't have an account yet?
-        <a (click)="isLogin = false" class="link" [class.disabled]="loading">Register</a>
+        <a (click)="toggleLogin()" class="link" [class.disabled]="loading">Register</a>
     </p>
     <p *ngIf="!isLogin">
         Already have an account?
-        <a (click)="isLogin = true" class="link" [class.disabled]="loading">Login</a>
+        <a (click)="toggleLogin()" class="link" [class.disabled]="loading">Login</a>
     </p>
 </div>

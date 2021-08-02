@@ -21,10 +21,18 @@ class User extends Model {
     /**
      * @prop
      * @email
+     * @maxLength 100
      * @var string
      */
     public $email;
-    // TODO: name
+    
+    /**
+     * @prop
+     * @maxLength 20
+     * @var string
+     */
+    public $name;
+
     /**
      * @prop
      * @var string
@@ -81,6 +89,7 @@ class User extends Model {
     public static function getErrors($user) {
         return Validation::getValidationErrorMessages($user, [
             "email" => ["Email", true],
+            "name" => ["Name", true],
             "password" => ["Password", true],
         ]);
     }

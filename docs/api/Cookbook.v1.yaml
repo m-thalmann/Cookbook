@@ -137,10 +137,14 @@ paths:
                 email:
                   type: string
                   format: email
+                name:
+                  type: string
+                  maxLength: 20
                 password:
                   type: string
               required:
                 - email
+                - name
                 - password
       responses:
         '201':
@@ -720,9 +724,13 @@ components:
         email:
           type: string
           format: email
+        name:
+          type: string
+          maxLength: 20
       required:
         - id
         - email
+        - name
     Ingredient:
       title: Ingredient
       type: object

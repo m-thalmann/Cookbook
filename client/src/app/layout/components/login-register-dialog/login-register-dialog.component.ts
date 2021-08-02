@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/core/api/api.service';
@@ -29,6 +29,15 @@ export class LoginRegisterDialogComponent {
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
+      name: [
+        '',
+        (control: AbstractControl) => {
+          if (!this.isLogin) {
+            return Validators.required(control);
+          }
+          return null;
+        },
+      ],
       password: ['', Validators.required],
       passwordConfirm: [
         '',
@@ -46,6 +55,9 @@ export class LoginRegisterDialogComponent {
   get email() {
     return this.loginForm.get('email');
   }
+  get name() {
+    return this.loginForm.get('name');
+  }
   get password() {
     return this.loginForm.get('password');
   }
@@ -59,8 +71,6 @@ export class LoginRegisterDialogComponent {
   getFormError(key: string) {
     let err = getFormError(this.loginForm.get(key));
 
-    console.log(key, err);
-
     return err;
   }
 
@@ -68,6 +78,8 @@ export class LoginRegisterDialogComponent {
    * Login/Register
    */
   async action() {
+    console.log(this.loginForm);
+
     if (this.loginForm.invalid) return;
 
     this.error = null;
@@ -80,7 +92,7 @@ export class LoginRegisterDialogComponent {
     if (this.isLogin) {
       res = await this.api.loginUser(this.email?.value, this.password?.value);
     } else {
-      res = await this.api.registerUser(this.email?.value, this.password?.value);
+      res = await this.api.registerUser(this.email?.value, this.password?.value, this.name?.value);
     }
 
     this.loading = false;
@@ -112,5 +124,18 @@ export class LoginRegisterDialogComponent {
     }
 
     this.dialogRef.disableClose = false;
+  }
+
+  /**
+   * Switches between login/register and updates the validity of the form
+   */
+  toggleLogin() {
+    this.isLogin = !this.isLogin;
+
+    this.email?.updateValueAndValidity();
+    this.name?.updateValueAndValidity();
+    this.password?.updateValueAndValidity();
+    this.passwordConfirm?.updateValueAndValidity();
+    this.remember?.updateValueAndValidity();
   }
 }
