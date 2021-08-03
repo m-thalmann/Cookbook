@@ -32,6 +32,8 @@ try {
     define('ROOT_URL', Config::get('root_url'));
     define('VERSION', Config::get('version'));
 
+    define('ROOT_DIR', __DIR__);
+
     // Router
     Router::setHeaders([
         "Access-Control-Allow-Headers" => "Content-Type, Authorization",
@@ -52,6 +54,10 @@ try {
             __DIR__ . '/routes/ingredients/index.php'
         );
         Router::group('/recipes', __DIR__ . '/routes/recipes/index.php');
+        Router::group(
+            '/recipeImages',
+            __DIR__ . '/routes/recipeImages/index.php'
+        );
 
         if (!Router::execute()) {
             throw new \Exception('Method not found');

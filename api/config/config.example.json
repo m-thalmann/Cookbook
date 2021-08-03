@@ -8,6 +8,7 @@
     "database": "database_name",
     "charset": "utf8"
   },
+  "image_store": null,
   "token": {
     "secret": "86nYFNtuqMxGCG3v7TQuoFhgMSwil3hP",
     "ttl": 604800

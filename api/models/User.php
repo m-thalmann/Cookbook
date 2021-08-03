@@ -25,7 +25,7 @@ class User extends Model {
      * @var string
      */
     public $email;
-    
+
     /**
      * @prop
      * @maxLength 20

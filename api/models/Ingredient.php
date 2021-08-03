@@ -24,7 +24,6 @@ class Ingredient extends Model {
      */
     public $recipeId;
 
-    // TODO: minExclusive not working
     /**
      * @prop
      * @minExclusive 0

@@ -87,8 +87,6 @@ class Recipe extends Model {
      */
     public $cookTime;
 
-    // TODO: image
-
     /**
      * The user model for the recipe
      */
@@ -100,13 +98,14 @@ class Recipe extends Model {
         return $this->user;
     }
 
-    public function jsonSerialize($ingredients = false) {
+    public function jsonSerialize($full = false) {
         $ret = array_merge(parent::jsonSerialize(), [
             "user" => $this->user(),
         ]);
 
-        if($ingredients){
+        if ($full) {
             $ret["ingredients"] = Ingredient::getByRecipeId($this->id);
+            $ret["imagesCount"] = RecipeImage::getAmountForRecipe($this->id);
         }
 
         return $ret;

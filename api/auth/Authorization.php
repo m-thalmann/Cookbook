@@ -34,8 +34,8 @@ class Authorization {
     public static function authorize($token) {
         $data = \JWT::decode(Config::get("token.secret"), $token);
 
-        $id = $data["id"];
-        $lastUpdated = $data["lastUpdated"];
+        $id = $data["user_id"];
+        $lastUpdated = $data["user_lastUpdated"];
 
         $user = User::get("id = ?", [$id])->getFirst();
 

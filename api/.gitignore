@@ -1,0 +1,2 @@
+data/image_store/**
+!data/image_store/.gitkeep

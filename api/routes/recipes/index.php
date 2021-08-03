@@ -5,6 +5,7 @@ namespace API\Routes;
 use API\Auth\Authorization;
 use API\Models\Ingredient;
 use API\Models\Recipe;
+use API\Models\RecipeImage;
 use PAF\Model\DuplicateException;
 use PAF\Model\InvalidException;
 use PAF\Model\Model;
@@ -195,4 +196,103 @@ $group
         }
 
         return Response::created($ingredient);
+    })
+    ->get('/id/{{i:id}}/images/count', function ($req) {
+        if (Authorization::middleware()($req)->isOk()) {
+            return RecipeImage::query(
+                "recipeId = ? AND EXISTS (SELECT * FROM recipes WHERE id = recipeId AND (public = 1 OR userId = ?))",
+                [$req["params"]["id"], Authorization::user()->id]
+            )->count();
+        } else {
+            return RecipeImage::query(
+                "recipeId = ? AND recipeId IN (SELECT id FROM recipes WHERE public = 1)",
+                [$req["params"]["id"]]
+            )->count();
+        }
+    })
+    ->get('/id/{{i:id}}/images/number/{{i:number}}', function ($req) {
+        if (Authorization::middleware()($req)->isOk()) {
+            $image = RecipeImage::query(
+                "recipeId = ? AND EXISTS (SELECT * FROM recipes WHERE id = recipeId AND (public = 1 OR userId = ?))",
+                [$req["params"]["id"], Authorization::user()->id]
+            )
+                ->limit(1)
+                ->offset($req["params"]["number"])
+                ->get()
+                ->getFirst();
+        } else {
+            $image = RecipeImage::query(
+                "recipeId = ? AND recipeId IN (SELECT id FROM recipes WHERE public = 1)",
+                [$req["params"]["id"]]
+            )
+                ->limit(1)
+                ->offset($req["params"]["number"])
+                ->get()
+                ->getFirst();
+        }
+
+        if ($image === null) {
+            return Response::notFound();
+        }
+
+        $size = filesize($image->path);
+
+        $fp = fopen($image->path, 'rb');
+
+        $file = fread($fp, $size);
+
+        fclose($fp);
+
+        return Response::ok($file, $image->mimeType);
+    })
+    ->post('/id/{{i:id}}/images', Authorization::middleware(), function ($req) {
+        if (
+            Recipe::query("id = ? AND userId = ?", [
+                $req["params"]["id"],
+                Authorization::user()->id,
+            ])->count() === 0
+        ) {
+            return Response::notFound();
+        }
+
+        if (
+            !isset($_FILES['image']) ||
+            !isset($_FILES['image']['error']) ||
+            is_array($_FILES['image']['error'])
+        ) {
+            return Response::badRequest(["info" => "No file"]);
+        }
+
+        switch ($_FILES['image']['error']) {
+            case UPLOAD_ERR_OK:
+                break;
+            case UPLOAD_ERR_NO_FILE:
+                return Response::badRequest(["info" => "No file"]);
+            case UPLOAD_ERR_INI_SIZE:
+            case UPLOAD_ERR_FORM_SIZE:
+                return Response::badRequest([
+                    "info" => 'Exceeded filesize limit',
+                ]);
+            default:
+                return Response::error(["info" => 'Upload error']);
+        }
+
+        $name = $_FILES['image']['name'];
+
+        $tmpLocation = $_FILES['image']['tmp_name'];
+        $fileExtension = substr($name, strrpos($name, '.') + 1);
+
+        try {
+            $image = RecipeImage::add(
+                $req["params"]["id"],
+                $tmpLocation,
+                $fileExtension
+            );
+        } catch (\InvalidArgumentException $e) {
+            return Response::badRequest(["info" => $e->getMessage()]);
+        } catch (DuplicateException $e) {
+            return Response::conflict(["info" => $e->getMessage()]);
+        }
+
+        return Response::created($image);
     });

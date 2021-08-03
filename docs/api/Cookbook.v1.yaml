@@ -16,6 +16,7 @@ tags:
   - name: User
   - name: Recipe
   - name: Ingredient
+  - name: RecipeImage
 paths:
   /auth:
     get:
@@ -712,6 +713,138 @@ paths:
       description: Delete a specific ingredient
       security:
         - Token: []
+  /recipes/id/{id}/images/count:
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Return the amount of available images for this recipe
+      tags:
+        - RecipeImage
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                minimum: 0
+      operationId: get-recipes-id-images-count
+      description: Return the amount of available images for this recipe
+      security:
+        - Token: []
+  /recipes/id/{id}/images/number/{number}:
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+      - schema:
+          type: integer
+          minimum: 0
+        name: number
+        in: path
+        required: true
+        description: The number of the image
+    get:
+      summary: Return a single image for this recipe
+      tags:
+        - RecipeImage
+      responses:
+        '200':
+          description: OK
+          content:
+            image/*:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Not found
+      operationId: get-recipes-id-images-number
+      description: Return a single image for this recipe with the given number
+      security:
+        - Token: []
+  /recipes/id/{id}/images:
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    post:
+      summary: Add a new recipe-image to a recipe
+      tags:
+        - RecipeImage
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeImage'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: No file
+                required:
+                  - info
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Recipe not found
+        '409':
+          description: An identical image already exists for this recipe
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: The same image already exists for this recipe
+                required:
+                  - info
+      operationId: post-recipes-id-images
+      description: Add a new recipe-image to a recipe
+      security:
+        - Token: []
+  /recipeImages/id/{id}:
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    delete:
+      summary: Delete a specific recipe-image
+      tags:
+        - RecipeImage
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Not found
 components:
   schemas:
     User:
@@ -823,7 +956,7 @@ components:
         - cookTime
         - user
     RecipeFull:
-      title: Recipe with ingredients
+      title: Recipe with additional information
       allOf:
         - $ref: '#/components/schemas/Recipe'
         - type: object
@@ -832,8 +965,33 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/Ingredient'
+            imagesCount:
+              type: integer
+              minimum: 0
+              description: The amount of images available for this recipe
           required:
             - ingredients
+            - imagesCount
+    RecipeImage:
+      title: Recipe-Image
+      type: object
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        recipeId:
+          type: integer
+          minimum: 1
+        mimeType:
+          type: string
+          enum:
+            - image/jpeg
+            - image/png
+            - image/gif
+      required:
+        - id
+        - recipeId
+        - mimeType
     JwtToken:
       title: JWT Token
       type: string
