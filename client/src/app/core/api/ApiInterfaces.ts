@@ -28,6 +28,13 @@ export interface Recipe {
 
 export interface RecipeFull extends Recipe {
   ingredients: Ingredient[];
+  imagesCount: number;
+}
+
+export interface RecipeImage {
+  id: number;
+  recipeId: number;
+  mimeType: string;
 }
 
 export interface NewIngredient {

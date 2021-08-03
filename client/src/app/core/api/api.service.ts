@@ -13,6 +13,7 @@ import {
   NewRecipe,
   Pagination,
   Recipe,
+  RecipeImage,
   SearchIngredient,
   User,
 } from './ApiInterfaces';
@@ -36,6 +37,21 @@ export class ApiService {
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
+
+    let token = this.user.token;
+
+    if (this.user.isLoggedin && token) {
+      headers = headers.append('Authorization', token);
+    }
+
+    return {
+      observe: 'response',
+      headers: headers,
+    };
+  }
+
+  private get httpOptionsImageUpload(): { observe: 'response'; headers: HttpHeaders } {
+    let headers = new HttpHeaders();
 
     let token = this.user.token;
 
@@ -99,26 +115,34 @@ export class ApiService {
     return new ApiResponse<T>(status, value);
   }
 
+  private get<T>(url: string, httpOptions = this.httpOptions) {
+    return this.handleResponse<T>(this.http.get<T>(url, httpOptions));
+  }
+  private post<T>(url: string, data: any, httpOptions = this.httpOptions) {
+    return this.handleResponse<T>(this.http.post<T>(url, data, httpOptions));
+  }
+  private put<T>(url: string, data: any, httpOptions = this.httpOptions) {
+    return this.handleResponse<T>(this.http.put<T>(url, data, httpOptions));
+  }
+  private delete<T>(url: string, httpOptions = this.httpOptions) {
+    return this.handleResponse<T>(this.http.delete<T>(url, httpOptions));
+  }
+
   // User
 
   loginUser(email: string, password: string) {
-    return this.handleResponse<{ user: User; token: string; info: string }>(
-      this.http.post<{ user: User; token: string; info: string }>(
-        `${this.URL}/auth/login`,
-        { email: email, password: password },
-        this.httpOptions
-      )
-    );
+    return this.post<{ user: User; token: string; info: string }>(`${this.URL}/auth/login`, {
+      email: email,
+      password: password,
+    });
   }
 
   registerUser(email: string, password: string, name: string) {
-    return this.handleResponse<{ user: User; token: string; info: string }>(
-      this.http.post<{ user: User; token: string; info: string }>(
-        `${this.URL}/auth/register`,
-        { email: email, password: password, name: name },
-        this.httpOptions
-      )
-    );
+    return this.post<{ user: User; token: string; info: string }>(`${this.URL}/auth/register`, {
+      email: email,
+      password: password,
+      name: name,
+    });
   }
 
   // TODO: edit user
@@ -135,19 +159,15 @@ export class ApiService {
   // }
 
   deleteUser() {
-    return this.handleResponse<{}>(this.http.delete<{}>(`${this.URL}/auth`, this.httpOptions));
+    return this.delete<any>(`${this.URL}/auth`);
   }
 
   checkAuthentication() {
-    return this.handleResponse<{ user: User; info: string }>(
-      this.http.get<{ user: User; info: string }>(`${this.URL}/auth`, this.httpOptions)
-    );
+    return this.get<{ user: User; info: string }>(`${this.URL}/auth`);
   }
 
   registrationEnabled() {
-    return this.handleResponse<boolean>(
-      this.http.get<boolean>(`${this.URL}/auth/registrationEnabled`, this.httpOptions)
-    );
+    return this.get<boolean>(`${this.URL}/auth/registrationEnabled`);
   }
 
   // Recipe
@@ -159,9 +179,7 @@ export class ApiService {
       query.push(`items_per_page=${items_per_page}`);
     }
 
-    return this.handleResponse<Pagination<Recipe>>(
-      this.http.get<Pagination<Recipe>>(`${this.URL}/recipes?${query.join('&')}`, this.httpOptions)
-    );
+    return this.get<Pagination<Recipe>>(`${this.URL}/recipes?${query.join('&')}`);
   }
 
   searchRecipes(search: string, page: number = 0, items_per_page: number | null = null) {
@@ -171,9 +189,7 @@ export class ApiService {
       query.push(`items_per_page=${items_per_page}`);
     }
 
-    return this.handleResponse<Pagination<Recipe>>(
-      this.http.get<Pagination<Recipe>>(`${this.URL}/recipes/search/${search}?${query.join('&')}`, this.httpOptions)
-    );
+    return this.get<Pagination<Recipe>>(`${this.URL}/recipes/search/${search}?${query.join('&')}`);
   }
 
   getRecipesForCategory(category: string, page: number = 0, items_per_page: number | null = null) {
@@ -183,43 +199,37 @@ export class ApiService {
       query.push(`items_per_page=${items_per_page}`);
     }
 
-    return this.handleResponse<Pagination<Recipe>>(
-      this.http.get<Pagination<Recipe>>(`${this.URL}/recipes/category/${category}?${query.join('&')}`, this.httpOptions)
-    );
+    return this.get<Pagination<Recipe>>(`${this.URL}/recipes/category/${category}?${query.join('&')}`);
   }
 
   getRecipeById(id: number) {
-    return this.handleResponse<Recipe>(this.http.get<Recipe>(`${this.URL}/recipes/id/${id}`, this.httpOptions));
+    return this.get<Recipe>(`${this.URL}/recipes/id/${id}`);
   }
 
   createRecipe(recipe: NewRecipe) {
-    return this.handleResponse<Recipe>(this.http.post<Recipe>(`${this.URL}/recipes`, recipe, this.httpOptions));
+    return this.post<Recipe>(`${this.URL}/recipes`, recipe);
   }
 
   editRecipe(id: number, recipe: EditRecipe) {
-    return this.handleResponse<Recipe>(this.http.put<Recipe>(`${this.URL}/recipes/id/${id}`, recipe, this.httpOptions));
+    return this.put<Recipe>(`${this.URL}/recipes/id/${id}`, recipe);
   }
 
   deleteRecipe(id: number) {
-    return this.handleResponse<any>(this.http.delete(`${this.URL}/recipes/id/${id}`, this.httpOptions));
+    return this.delete<any>(`${this.URL}/recipes/id/${id}`);
   }
 
   // Ingredient
 
   addIngredient(recipeId: number, ingredient: NewIngredient) {
-    return this.handleResponse<Ingredient>(
-      this.http.post<Ingredient>(`${this.URL}/recipes/id/${recipeId}/ingredients`, ingredient, this.httpOptions)
-    );
+    return this.post<Ingredient>(`${this.URL}/recipes/id/${recipeId}/ingredients`, ingredient);
   }
 
   editIngredient(id: number, ingredient: EditIngredient) {
-    return this.handleResponse<Ingredient>(
-      this.http.put<Ingredient>(`${this.URL}/ingredients/id/${id}`, ingredient, this.httpOptions)
-    );
+    return this.put<Ingredient>(`${this.URL}/ingredients/id/${id}`, ingredient);
   }
 
   deleteIngredient(id: number) {
-    return this.handleResponse<any>(this.http.delete(`${this.URL}/ingredients/id/${id}`, this.httpOptions));
+    return this.delete<any>(`${this.URL}/ingredients/id/${id}`);
   }
 
   searchIngredient(search: string) {
@@ -227,8 +237,27 @@ export class ApiService {
       return null;
     }
 
-    return this.handleResponse<SearchIngredient[]>(
-      this.http.get<SearchIngredient[]>(`${this.URL}/ingredients/search/${search}`, this.httpOptions)
-    );
+    return this.get<SearchIngredient[]>(`${this.URL}/ingredients/search/${search}`);
+  }
+
+  // Recipe Images
+
+  getRecipeImagesCount(recipeId: number) {
+    return this.get<number>(`${this.URL}/recipes/id/${recipeId}/images/count`);
+  }
+
+  getRecipeImageURL(recipeId: number, number: number) {
+    return `${this.URL}/recipes/id/${recipeId}/images/number/${number}`;
+  }
+
+  addRecipeImage(recipeId: number, image: File) {
+    const fd = new FormData();
+    fd.append('image', image, image.name);
+
+    return this.post<RecipeImage>(`${this.URL}/recipes/id/${recipeId}/images`, fd, this.httpOptionsImageUpload);
+  }
+
+  deleteRecipeImage(id: number) {
+    return this.delete<any>(`${this.URL}/recipeImages/id/${id}`);
   }
 }
