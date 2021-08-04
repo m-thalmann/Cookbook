@@ -11,6 +11,9 @@ export const getFormError = (field: AbstractControl | null) => {
     if (field.hasError('passwordsMismatch')) {
       return "The passwords don't match";
     }
+    if (field.hasError('maxlength')) {
+      return 'The entered value is too long';
+    }
   }
 
   return null;

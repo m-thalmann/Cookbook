@@ -13,6 +13,7 @@ import { LogoutComponent } from './pages/logout/logout.component';
 import { RecipeItemComponent } from './components/recipe-item/recipe-item.component';
 import { ImageFallbackDirective } from './core/directives/image-fallback.directive';
 import { PaginatorComponent } from './components/paginator/paginator.component';
+import { SettingsDialogComponent } from './layout/components/settings-dialog/settings-dialog.component';
 
 export function setupConfig(service: ConfigService) {
   return () => service.load();
@@ -28,6 +29,7 @@ export function setupConfig(service: ConfigService) {
     RecipeItemComponent,
     ImageFallbackDirective,
     PaginatorComponent,
+    SettingsDialogComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, MaterialModule, HttpClientModule],
   providers: [

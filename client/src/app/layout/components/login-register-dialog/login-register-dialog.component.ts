@@ -28,12 +28,18 @@ export class LoginRegisterDialogComponent {
     private user: UserService
   ) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
       name: [
         '',
         (control: AbstractControl) => {
           if (!this.isLogin) {
-            return Validators.required(control);
+            let error = Validators.required(control);
+
+            if (error) {
+              return error;
+            }
+
+            return Validators.maxLength(20)(control);
           }
           return null;
         },
@@ -78,8 +84,6 @@ export class LoginRegisterDialogComponent {
    * Login/Register
    */
   async action() {
-    console.log(this.loginForm);
-
     if (this.loginForm.invalid) return;
 
     this.error = null;

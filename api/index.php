@@ -62,8 +62,10 @@ try {
         if (!Router::execute()) {
             throw new \Exception('Method not found');
         }
-    } catch (\Exception $e) {
+    } catch (\InvalidArgumentException $e) {
         Router::output(Response::badRequest($e->getMessage()));
+    } catch (\Exception $e) {
+        Router::output(Response::error($e->getMessage()));
     }
 } catch (\Exception $e) {
     @header("Content-Type: application/json");

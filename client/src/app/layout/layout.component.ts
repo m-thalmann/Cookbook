@@ -5,6 +5,7 @@ import { fromEvent } from 'rxjs';
 import { map, share, throttleTime } from 'rxjs/operators';
 import { UserService } from '../core/auth/user.service';
 import { LoginRegisterDialogComponent } from './components/login-register-dialog/login-register-dialog.component';
+import { SettingsDialogComponent } from './components/settings-dialog/settings-dialog.component';
 
 @Component({
   selector: 'cb-layout',
@@ -51,6 +52,10 @@ export class LayoutComponent implements AfterViewInit {
         window.scrollTo(0, currentScroll - currentScroll / 8);
       }
     })();
+  }
+
+  showSettingsDialog() {
+    this.dialog.open(SettingsDialogComponent);
   }
 
   showLoginRegisterDialog() {

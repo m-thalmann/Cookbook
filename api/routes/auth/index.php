@@ -49,7 +49,7 @@ $group
         } catch (InvalidException $e) {
             return Response::badRequest(User::getErrors($user));
         } catch (DuplicateException $e) {
-            return Response::conflict("A user with this email already exists");
+            return Response::conflict(["info" => "A user with this email already exists"]);
         }
 
         $token = Authorization::generateToken($user);
@@ -59,6 +59,29 @@ $group
             "user" => $user,
             "token" => "Bearer $token",
         ]);
+    })
+    ->put('/', Authorization::middleware(), function($req){ // TODO: document
+        $user = Authorization::user();
+
+        $data = $req["post"] ?? [];
+
+        if(!array_key_exists("old_password", $data) || Authorization::encryptPassword($data["old_password"], $user->passwordSalt) !== $user->password){
+            return Response::forbidden(["info" => "Old password is wrong"]);
+        }
+
+        unset($data["old_password"]);
+
+        $user->editValues($data, true);
+
+        try {
+            $user->save();
+        } catch (InvalidException $e) {
+            return Response::badRequest(User::getErrors($user));
+        } catch (DuplicateException $e) {
+            return Response::conflict(["info" => "A user with this email already exists"]);
+        }
+
+        return $user;
     })
     ->delete('/', Authorization::middleware(), function () {
         if (User::query("id = ?", [Authorization::user()->id])->delete()) {

@@ -17,7 +17,13 @@
             <button mat-icon-button class="hide-mobile" [matMenuTriggerFor]="userMenu" *ngIf="isLoggedin">
                 <mat-icon>account_circle</mat-icon>
             </button>
-            <button mat-icon-button class="hide-mobile" (click)="showLoginRegisterDialog()" *ngIf="!isLoggedin">
+            <button
+                mat-icon-button
+                class="hide-mobile"
+                (click)="showLoginRegisterDialog()"
+                *ngIf="!isLoggedin"
+                color="accent"
+            >
                 <mat-icon>login</mat-icon>
             </button>
         </div>
@@ -31,7 +37,9 @@
                 <mat-icon>email</mat-icon>
                 <span>{{ user.user?.email }}</span>
             </div>
-            <button mat-button (click)="showMenu = false"><mat-icon>settings</mat-icon> Settings</button>
+            <button mat-button (click)="showMenu = false; showSettingsDialog()">
+                <mat-icon>settings</mat-icon> Settings
+            </button>
             <button routerLink="/logout" mat-button color="warn"><mat-icon>logout</mat-icon> Logout</button>
         </div>
         <div class="account" *ngIf="!isLoggedin">
@@ -80,7 +88,7 @@
 
 <mat-menu #userMenu="matMenu" xPosition="before" class="hide-mobile">
     <div mat-menu-item [disabled]="true"><mat-icon>email</mat-icon> {{ user.user?.email }}</div>
-    <button mat-menu-item><mat-icon>settings</mat-icon> Settings</button>
+    <button mat-menu-item (click)="showSettingsDialog()"><mat-icon>settings</mat-icon> Settings</button>
     <button routerLink="/logout" mat-menu-item class="fg-warn">
         <mat-icon class="fg-warn">logout</mat-icon> Logout
     </button>

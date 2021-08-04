@@ -7,6 +7,9 @@ use API\Models\User;
 use PAF\Router\Response;
 
 class Authorization {
+    /**
+     * @var User
+     */
     private static $user = null;
 
     public static function encryptPassword($password, $salt) {

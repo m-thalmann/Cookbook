@@ -145,18 +145,9 @@ export class ApiService {
     });
   }
 
-  // TODO: edit user
-  // updateUser(
-  //   id: number,
-  //   values: {
-  //     old_password?: string;
-  //     username?: string;
-  //     password?: string;
-  //     role?: Role;
-  //   }
-  // ) {
-  //   return this.handleResponse<{}>(this.http.put<{}>(`${this.URL}/users/${id}`, values, this.httpOptions));
-  // }
+  updateUser(values: { old_password?: string; email?: string; name?: string; password?: string }) {
+    return this.put<User>(`${this.URL}/auth`, values);
+  }
 
   deleteUser() {
     return this.delete<any>(`${this.URL}/auth`);
