@@ -13,9 +13,13 @@ const FALLBACK_IMAGE = 'assets/images/cookbook.svg';
 export class RecipeItemComponent {
   @Input() recipe: Recipe | null = null;
 
+  @Input() disabled: boolean = false;
+
   constructor(private api: ApiService, private user: UserService) {}
 
   get recipeURL() {
+    if (this.disabled) return null;
+
     return '/recipes/' + this.recipe?.id;
   }
 
