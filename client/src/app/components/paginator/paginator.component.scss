@@ -1,0 +1,14 @@
+@import '../../../variables.scss';
+
+button {
+  &.active {
+    background: mat-color($accent);
+    color: mat-color($accent, default-contrast);
+    cursor: default;
+  }
+}
+
+button,
+span {
+  margin-right: 0.1em;
+}

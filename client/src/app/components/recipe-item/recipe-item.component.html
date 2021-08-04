@@ -1,4 +1,10 @@
-<a class="container" [class.owner]="isOwner" *ngIf="recipe !== null" [routerLink]="recipeURL">
+<a
+    class="container"
+    [class.owner]="isOwner"
+    [class.disabled]="disabled"
+    *ngIf="recipe !== null"
+    [routerLink]="recipeURL"
+>
     <div class="img-container">
         <img [src]="thumbnail" [cbImageFallback]="fallbackImage" [alt]="recipe.name + '\'s image'" />
     </div>

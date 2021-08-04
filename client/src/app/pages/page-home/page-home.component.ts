@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
+import { ApiService } from 'src/app/core/api/api.service';
+import { Pagination, Recipe } from 'src/app/core/api/ApiInterfaces';
 
 @Component({
   selector: 'cb-page-home',
@@ -8,7 +10,13 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./page-home.component.scss'],
 })
 export class PageHomeComponent implements OnInit {
-  constructor(private route: ActivatedRoute, private snackBar: MatSnackBar) {
+  loading = false;
+  error = false;
+  private _page = 0;
+
+  recipes: Pagination<Recipe> | null = null;
+
+  constructor(private route: ActivatedRoute, private snackBar: MatSnackBar, private api: ApiService) {
     this.route.queryParams.subscribe((params) => {
       if (params.reason) {
         let reason: string;
@@ -32,5 +40,33 @@ export class PageHomeComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit() {
+    this.reload();
+  }
+
+  get page() {
+    return this._page;
+  }
+
+  set page(page: number) {
+    this._page = page;
+    this.reload();
+  }
+
+  async reload() {
+    this.loading = true;
+    this.error = false;
+
+    let recipes = await this.api.getRecipes(this.page);
+
+    if (recipes.isOK()) {
+      this.recipes = recipes.value;
+    } else {
+      this.error = true;
+
+      console.error('Error loading recipes:', recipes.error);
+    }
+
+    this.loading = false;
+  }
 }

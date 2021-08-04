@@ -85,6 +85,17 @@ h4 {
   vertical-align: middle;
 }
 
+.icon-text {
+  > * {
+    vertical-align: middle;
+    display: inline-block;
+  }
+
+  mat-icon {
+    margin-right: 0.25em;
+  }
+}
+
 @media screen and (min-width: $desktop-width) {
   .hide-desktop {
     display: none !important;
