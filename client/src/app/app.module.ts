@@ -10,13 +10,23 @@ import { LayoutComponent } from './layout/layout.component';
 import { PageHomeComponent } from './pages/page-home/page-home.component';
 import { LoginRegisterDialogComponent } from './layout/components/login-register-dialog/login-register-dialog.component';
 import { LogoutComponent } from './pages/logout/logout.component';
+import { RecipeItemComponent } from './components/recipe-item/recipe-item.component';
+import { ImageFallbackDirective } from './core/directives/image-fallback.directive';
 
 export function setupConfig(service: ConfigService) {
   return () => service.load();
 }
 
 @NgModule({
-  declarations: [AppComponent, LayoutComponent, PageHomeComponent, LoginRegisterDialogComponent, LogoutComponent],
+  declarations: [
+    AppComponent,
+    LayoutComponent,
+    PageHomeComponent,
+    LoginRegisterDialogComponent,
+    LogoutComponent,
+    RecipeItemComponent,
+    ImageFallbackDirective,
+  ],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, MaterialModule, HttpClientModule],
   providers: [
     {

@@ -10,12 +10,6 @@
   "endOfLine": "crlf",
   "overrides": [
     {
-      "files": "*yaml",
-      "options": {
-        "tabWidth": 2
-      }
-    },
-    {
       "files": ["*.html", "*.php"],
       "options": {
         "tabWidth": 4

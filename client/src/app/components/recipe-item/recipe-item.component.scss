@@ -1,0 +1,170 @@
+@import '../../../variables.scss';
+
+.container {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  position: relative;
+
+  border: 1px solid #{$foreground}25;
+  border-radius: 0.75em;
+  padding: 1em;
+  cursor: pointer;
+
+  transition: box-shadow 0.1s, border-color 0.2s;
+
+  &.owner {
+    .content {
+      width: calc(75% - 3.5rem);
+    }
+  }
+
+  &:hover {
+    box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.75);
+    border-color: mat-color($primary);
+
+    .edit-recipe {
+      opacity: 1 !important;
+    }
+  }
+
+  > * {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .img-container {
+    width: 25%;
+    height: 12em;
+    margin-right: 1em;
+    position: relative;
+    overflow: hidden;
+    border-radius: 1em;
+
+    img {
+      border-radius: 1em;
+      height: 100%;
+
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  .content {
+    width: 75%;
+
+    h3 {
+      font-size: 1.5em;
+      margin-bottom: 0;
+
+      mat-icon {
+        margin-right: 0;
+        margin-left: 0.5em;
+      }
+    }
+
+    .author {
+      font-size: small;
+      opacity: 0.5;
+      margin-bottom: 0.5rem;
+    }
+
+    .description {
+      margin-bottom: 0.5rem;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .information {
+      mat-chip,
+      a[mat-chip] {
+        opacity: 1;
+        cursor: pointer;
+        font-weight: normal;
+
+        &:not(.difficulty) {
+          mat-icon {
+            font-size: 1.25em;
+            line-height: 1.25em;
+          }
+
+          mat-icon,
+          span {
+            vertical-align: middle;
+            display: inline;
+          }
+        }
+
+        &.difficulty {
+          mat-icon {
+            font-size: 1.5em;
+            line-height: 1.5em;
+            height: 1.5em;
+            &.disabled {
+              opacity: 0.25;
+            }
+          }
+        }
+      }
+
+      a[mat-chip] {
+        text-decoration: none;
+      }
+    }
+
+    .author,
+    .description,
+    .information {
+      display: block;
+    }
+  }
+
+  .edit-recipe {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+
+    transition: color 0.2s, opacity 0.2s;
+    opacity: 0.5;
+
+    &:hover {
+      color: mat-color($accent);
+    }
+  }
+}
+
+@media screen and (max-width: $mobile-width) {
+  .container {
+    > * {
+      display: block;
+    }
+
+    .img-container {
+      width: 100%;
+      margin-right: 0;
+      margin-bottom: 1em;
+    }
+
+    .content {
+      width: 100% !important;
+
+      mat-chip-list {
+        width: fit-content;
+        margin: 0 auto;
+      }
+    }
+
+    .edit-recipe {
+      position: relative;
+      top: unset;
+      right: unset;
+      transform: unset;
+
+      margin: 1em auto 0 auto;
+    }
+  }
+}

@@ -10,6 +10,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatInputModule } from '@angular/material/input';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [],
@@ -26,6 +28,8 @@ import { MatInputModule } from '@angular/material/input';
     MatProgressSpinnerModule,
     MatSlideToggleModule,
     MatInputModule,
+    MatChipsModule,
+    MatTooltipModule,
   ],
 })
 export class MaterialModule {}
