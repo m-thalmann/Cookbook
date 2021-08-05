@@ -588,6 +588,40 @@ paths:
       description: Return all recipes for a category
       security:
         - Token: []
+  /users/id/{id}/recipes:
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Return all recipes for a user
+      tags:
+        - Recipe
+      parameters:
+        - $ref: '#/components/parameters/ItemsPerPage'
+        - $ref: '#/components/parameters/Page'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Pagination'
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Recipe'
+                    required:
+                      - items
+      operationId: get-users-id-recipes
+      description: Return all recipes for a user (that are visible to the authenticated user)
+      security:
+        - Token: []
   /recipes/id/{id}/ingredients:
     parameters:
       - schema:

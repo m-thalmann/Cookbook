@@ -17,40 +17,19 @@ export class AuthGuard implements CanActivate {
    * @param state
    * @returns whether the user is allowed to request this route
    */
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    // const redirectUrl = state.url;
+  canActivate(_: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    const url = state.url.split('?')[0];
 
-    // const url = redirectUrl.split('?')[0];
+    if (this.user.isLoggedin || !url.startsWith('/my')) {
+      return true;
+    }
 
-    // if (url.startsWith('/admin')) {
-    //   if (url === '/admin/users') {
-    //     if (this.user.hasRole(Role.Admin)) return true;
-    //   } else {
-    //     if (this.user.hasRole(Role.Gamemanager)) return true;
-    //   }
-    // } else if (this.user.isLoggedin) {
-    //   return true;
-    // }
+    this.snackBar.open('You need to login to view this page!', 'OK', {
+      panelClass: 'action-warn',
+    });
 
-    // let redirect: string | UrlTree;
+    this.router.navigateByUrl('/home');
 
-    // if (this.user.isLoggedin) {
-    //   this.snackBar.open('You are not authorized to view this page!', 'OK', {
-    //     panelClass: 'action-warn',
-    //   });
-
-    //   redirect = '/home';
-    // } else {
-    //   redirect = this.router.createUrlTree(['/login'], {
-    //     queryParams: {
-    //       redirectUrl,
-    //     },
-    //   });
-    // }
-
-    // this.router.navigateByUrl(redirect);
-
-    // return false;
-    return true; // TODO: implement
+    return false;
   }
 }

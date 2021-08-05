@@ -14,6 +14,8 @@ import { RecipeItemComponent } from './components/recipe-item/recipe-item.compon
 import { ImageFallbackDirective } from './core/directives/image-fallback.directive';
 import { PaginatorComponent } from './components/paginator/paginator.component';
 import { SettingsDialogComponent } from './layout/components/settings-dialog/settings-dialog.component';
+import { PageMyRecipesComponent } from './pages/page-my-recipes/page-my-recipes.component';
+import { RecipeListComponent } from './components/recipe-list/recipe-list.component';
 
 export function setupConfig(service: ConfigService) {
   return () => service.load();
@@ -30,6 +32,8 @@ export function setupConfig(service: ConfigService) {
     ImageFallbackDirective,
     PaginatorComponent,
     SettingsDialogComponent,
+    PageMyRecipesComponent,
+    RecipeListComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, MaterialModule, HttpClientModule],
   providers: [

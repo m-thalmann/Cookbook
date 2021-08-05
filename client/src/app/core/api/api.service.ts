@@ -193,6 +193,16 @@ export class ApiService {
     return this.get<Pagination<Recipe>>(`${this.URL}/recipes/category/${category}?${query.join('&')}`);
   }
 
+  getRecipesForUser(id: number, page: number = 0, items_per_page: number | null = null) {
+    let query = [`page=${page}`];
+
+    if (items_per_page !== null) {
+      query.push(`items_per_page=${items_per_page}`);
+    }
+
+    return this.get<Pagination<Recipe>>(`${this.URL}/users/id/${id}/recipes?${query.join('&')}`);
+  }
+
   getRecipeById(id: number) {
     return this.get<Recipe>(`${this.URL}/recipes/id/${id}`);
   }

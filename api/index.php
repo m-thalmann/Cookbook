@@ -53,11 +53,12 @@ try {
             '/ingredients',
             __DIR__ . '/routes/ingredients/index.php'
         );
-        Router::group('/recipes', __DIR__ . '/routes/recipes/index.php');
         Router::group(
             '/recipeImages',
             __DIR__ . '/routes/recipeImages/index.php'
         );
+        Router::group('/recipes', __DIR__ . '/routes/recipes/index.php');
+        Router::group('/users', __DIR__ . '/routes/users/index.php');
 
         if (!Router::execute()) {
             throw new \Exception('Method not found');

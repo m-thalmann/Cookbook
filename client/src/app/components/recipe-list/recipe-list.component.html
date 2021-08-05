@@ -1,0 +1,11 @@
+<ng-container *ngIf="recipes">
+    <cb-recipe-item *ngFor="let recipe of recipes.items" [recipe]="recipe" [disabled]="loading"></cb-recipe-item>
+
+    <p class="icon-text" *ngIf="recipes.total_items === 0"><mat-icon>info</mat-icon><span>No recipes found</span></p>
+
+    <cb-paginator [(page)]="page" [pages]="recipes.total_pages" [disabled]="loading"></cb-paginator>
+</ng-container>
+
+<mat-spinner *ngIf="!recipes && !error" [diameter]="64"></mat-spinner>
+
+<p class="icon-text fg-warn" *ngIf="error"><mat-icon>error</mat-icon><span>Error loading recipes</span></p>
