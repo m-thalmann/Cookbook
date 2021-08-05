@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from 'src/app/core/api/api.service';
+import { Options } from 'src/app/core/api/ApiInterfaces';
 
 @Component({
   selector: 'cb-page-home',
@@ -35,8 +36,8 @@ export class PageHomeComponent {
     });
   }
 
-  reload = async (page: number) => {
-    let res = await this.api.getRecipes({ page: page });
+  reload = async (options: Options) => {
+    let res = await this.api.getRecipes(options);
 
     if (res.isOK() && res.value) {
       this.results = res.value.total_items;

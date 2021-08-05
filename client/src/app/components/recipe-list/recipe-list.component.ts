@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Pagination, Recipe } from 'src/app/core/api/ApiInterfaces';
+import { Options, Pagination, Recipe, RecipeSortDirection } from 'src/app/core/api/ApiInterfaces';
 import { ApiResponse } from 'src/app/core/api/ApiResponse';
 
 @Component({
@@ -8,7 +8,14 @@ import { ApiResponse } from 'src/app/core/api/ApiResponse';
   styleUrls: ['./recipe-list.component.scss'],
 })
 export class RecipeListComponent implements OnInit {
-  @Input() reloadFunction!: (page: number) => Promise<ApiResponse<Pagination<Recipe>>>;
+  @Input()
+  set sort(sort: string) {
+    this._sort = sort;
+    this.sortDirection = RecipeSortDirection[sort];
+  }
+  @Input() sortDirection: 'asc' | 'desc' = 'desc';
+
+  @Input() reloadFunction!: (options: Options) => Promise<ApiResponse<Pagination<Recipe>>>;
   @Input()
   set doReload(doReloadFunction: EventEmitter<void> | null) {
     doReloadFunction?.subscribe(() => this.reload());
@@ -21,12 +28,18 @@ export class RecipeListComponent implements OnInit {
   error = false;
   private _page = 0;
 
+  private _sort: string = 'id';
+
   recipes: Pagination<Recipe> | null = null;
 
   constructor() {}
 
   ngOnInit() {
     this.reload();
+  }
+
+  get sort() {
+    return this._sort;
   }
 
   get page() {
@@ -38,6 +51,17 @@ export class RecipeListComponent implements OnInit {
     this.reload();
   }
 
+  sortChange(sort: string) {
+    this.sort = sort;
+    this.sortDirection = RecipeSortDirection[sort];
+    this.page = 0;
+  }
+
+  toggleSortDirection() {
+    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    this.page = 0;
+  }
+
   async reload() {
     this.loading = true;
     this.loadingChange.emit(this.loading);
@@ -45,7 +69,7 @@ export class RecipeListComponent implements OnInit {
     this.error = false;
     this.errorChange.emit(this.loading);
 
-    let recipes = await this.reloadFunction(this.page);
+    let recipes = await this.reloadFunction({ page: this.page, sort: this.sort, sortDirection: this.sortDirection });
 
     if (recipes.isOK()) {
       this.recipes = recipes.value;

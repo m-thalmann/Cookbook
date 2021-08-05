@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ApiService } from 'src/app/core/api/api.service';
+import { Options } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
 
 @Component({
@@ -12,8 +13,8 @@ export class PageMyRecipesComponent {
 
   constructor(private api: ApiService, private user: UserService) {}
 
-  reload = async (page: number) => {
-    let res = await this.api.getRecipesForUser(this.user.user!.id, { page: page });
+  reload = async (options: Options) => {
+    let res = await this.api.getRecipesForUser(this.user.user!.id, options);
 
     if (res.isOK() && res.value) {
       this.results = res.value.total_items;

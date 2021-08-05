@@ -93,3 +93,16 @@ export interface Options {
   sort?: string | null;
   sortDirection?: 'asc' | 'desc' | null;
 }
+
+interface SortDirection {
+  [key: string]: 'asc' | 'desc';
+}
+
+export const RecipeSortDirection: SortDirection = {
+  id: 'desc',
+  name: 'asc',
+  category: 'asc',
+  public: 'desc',
+  difficulty: 'asc',
+  userId: 'asc',
+};
