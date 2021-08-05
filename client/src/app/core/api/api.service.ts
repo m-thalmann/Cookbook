@@ -11,6 +11,7 @@ import {
   Ingredient,
   NewIngredient,
   NewRecipe,
+  Options,
   Pagination,
   Recipe,
   RecipeImage,
@@ -115,6 +116,29 @@ export class ApiService {
     return new ApiResponse<T>(status, value);
   }
 
+  private getQueryString(options: Options) {
+    let query = [];
+
+    if (typeof options.page !== 'undefined') {
+      query.push(`page=${options.page}`);
+    }
+    if (typeof options.itemsPerPage !== 'undefined' && options.itemsPerPage !== null) {
+      query.push(`itemsPerPage=${options.itemsPerPage}`);
+    }
+    if (typeof options.sort !== 'undefined') {
+      query.push(`sort=${options.sort}`);
+    }
+    if (typeof options.sortDirection !== 'undefined' && options.sortDirection !== null) {
+      query.push(`sortDir=${options.sortDirection}`);
+    }
+
+    if (query.length > 0) {
+      return `?${query.join('&')}`;
+    }
+
+    return '';
+  }
+
   private get<T>(url: string, httpOptions = this.httpOptions) {
     return this.handleResponse<T>(this.http.get<T>(url, httpOptions));
   }
@@ -145,7 +169,7 @@ export class ApiService {
     });
   }
 
-  updateUser(values: { old_password?: string; email?: string; name?: string; password?: string }) {
+  updateUser(values: { oldPassword?: string; email?: string; name?: string; password?: string }) {
     return this.put<User>(`${this.URL}/auth`, values);
   }
 
@@ -163,44 +187,20 @@ export class ApiService {
 
   // Recipe
 
-  getRecipes(page: number = 0, items_per_page: number | null = null) {
-    let query = [`page=${page}`];
-
-    if (items_per_page !== null) {
-      query.push(`items_per_page=${items_per_page}`);
-    }
-
-    return this.get<Pagination<Recipe>>(`${this.URL}/recipes?${query.join('&')}`);
+  getRecipes(options: Options) {
+    return this.get<Pagination<Recipe>>(`${this.URL}/recipes${this.getQueryString(options)}`);
   }
 
-  searchRecipes(search: string, page: number = 0, items_per_page: number | null = null) {
-    let query = [`page=${page}`];
-
-    if (items_per_page !== null) {
-      query.push(`items_per_page=${items_per_page}`);
-    }
-
-    return this.get<Pagination<Recipe>>(`${this.URL}/recipes/search/${search}?${query.join('&')}`);
+  searchRecipes(search: string, options: Options) {
+    return this.get<Pagination<Recipe>>(`${this.URL}/recipes/search/${search}${this.getQueryString(options)}`);
   }
 
-  getRecipesForCategory(category: string, page: number = 0, items_per_page: number | null = null) {
-    let query = [`page=${page}`];
-
-    if (items_per_page !== null) {
-      query.push(`items_per_page=${items_per_page}`);
-    }
-
-    return this.get<Pagination<Recipe>>(`${this.URL}/recipes/category/${category}?${query.join('&')}`);
+  getRecipesForCategory(category: string, options: Options) {
+    return this.get<Pagination<Recipe>>(`${this.URL}/recipes/category/${category}${this.getQueryString(options)}`);
   }
 
-  getRecipesForUser(id: number, page: number = 0, items_per_page: number | null = null) {
-    let query = [`page=${page}`];
-
-    if (items_per_page !== null) {
-      query.push(`items_per_page=${items_per_page}`);
-    }
-
-    return this.get<Pagination<Recipe>>(`${this.URL}/users/id/${id}/recipes?${query.join('&')}`);
+  getRecipesForUser(id: number, options: Options) {
+    return this.get<Pagination<Recipe>>(`${this.URL}/users/id/${id}/recipes${this.getQueryString(options)}`);
   }
 
   getRecipeById(id: number) {

@@ -54,12 +54,12 @@ class Ingredient extends Model {
      * @return boolean True if succeeded, false if the recipe does not exist or is not owned by the user
      */
     public function setRecipeId($recipeId, $userId) {
-        $recipe_count = Recipe::query(
+        $recipeCount = Recipe::query(
             "id = ? AND id IN (SELECT id FROM recipes WHERE userId = ?)",
             [$recipeId, $userId]
         )->count();
 
-        if ($recipe_count !== 1) {
+        if ($recipeCount !== 1) {
             return false;
         }
 

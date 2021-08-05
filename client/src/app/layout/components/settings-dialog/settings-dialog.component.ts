@@ -51,7 +51,7 @@ export class SettingsDialogComponent {
             return null;
           },
         ],
-        current_password: ['', Validators.required],
+        currentPassword: ['', Validators.required],
         password: [
           { value: '123456789', disabled: true },
           () => {
@@ -61,13 +61,13 @@ export class SettingsDialogComponent {
             return null;
           },
         ],
-        password_confirm: [
+        passwordConfirm: [
           '',
           () => {
-            if (this.editPassword && this.password?.value != this.password_confirm?.value) {
+            if (this.editPassword && this.password?.value != this.passwordConfirm?.value) {
               return { passwordsMismatch: true };
             }
-            if (this.editPassword && this.password_confirm?.value.trim().length === 0) {
+            if (this.editPassword && this.passwordConfirm?.value.trim().length === 0) {
               return { required: true };
             }
             return null;
@@ -88,8 +88,8 @@ export class SettingsDialogComponent {
     );
 
     this.password?.valueChanges.subscribe(() => {
-      if (this.password_confirm) {
-        this.password_confirm.updateValueAndValidity();
+      if (this.passwordConfirm) {
+        this.passwordConfirm.updateValueAndValidity();
       }
     });
   }
@@ -100,14 +100,14 @@ export class SettingsDialogComponent {
   get name() {
     return this.settingsForm?.get('name');
   }
-  get current_password() {
-    return this.settingsForm?.get('current_password');
+  get currentPassword() {
+    return this.settingsForm?.get('currentPassword');
   }
   get password() {
     return this.settingsForm?.get('password');
   }
-  get password_confirm() {
-    return this.settingsForm?.get('password_confirm');
+  get passwordConfirm() {
+    return this.settingsForm?.get('passwordConfirm');
   }
 
   getFormError(key: string) {
@@ -180,7 +180,7 @@ export class SettingsDialogComponent {
     this.dialogRef.disableClose = true;
 
     let updateValues: any = {
-      old_password: this.current_password?.value,
+      oldPassword: this.currentPassword?.value,
     };
 
     if (this.editEmail) {
@@ -201,13 +201,15 @@ export class SettingsDialogComponent {
 
     try {
       if (res.isOK()) {
-        this.snackBar.open('Successfully updated settings!', 'OK', {
-          duration: 5000,
-        });
-
         this.dialogRef.close();
 
-        await this.api.checkAuthentication();
+        if ((await this.api.checkAuthentication()).isOK()) {
+          this.snackBar.open('Successfully updated settings!', 'OK', {
+            duration: 5000,
+          });
+        } else {
+          location.reload();
+        }
       } else if (res.isConflict()) {
         throw new Error('This email is already taken!');
       } else if (res.isForbidden()) {

@@ -26,7 +26,7 @@
 
         <mat-slide-toggle color="primary" formControlName="remember">Remember me</mat-slide-toggle>
 
-        <div class="form_footer">
+        <div class="form-footer">
             <button mat-raised-button color="primary" (click)="action()" [disabled]="loading || !loginForm.valid">
                 {{ isLogin ? 'Login' : 'Register' }}
             </button>

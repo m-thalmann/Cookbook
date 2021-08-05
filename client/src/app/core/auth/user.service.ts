@@ -45,13 +45,13 @@ export class UserService {
     if (this.isRemembered) {
       token = localStorage.getItem(StorageNames.Token);
     } else {
-      let token_cookie = document.cookie
+      let tokenCookie = document.cookie
         .split('; ')
         .map((el) => el.split('='))
         .find((el) => el[0] == StorageNames.Token);
 
-      if (token_cookie != null) {
-        token = token_cookie[1];
+      if (tokenCookie != null) {
+        token = tokenCookie[1];
       }
     }
 
@@ -116,14 +116,14 @@ export class UserService {
   /**
    * Logsout the user and removes him from storage and cookies
    *
-   * @param redirect_path the path to redirect the user to, after the logout (or no redirect if null)
+   * @param redirectPath the path to redirect the user to, after the logout (or no redirect if null)
    */
-  logout(redirect_path: string | null = '/home') {
+  logout(redirectPath: string | null = '/home') {
     this.remove();
 
     this.dialog.closeAll();
 
-    if (redirect_path !== null) this.router.navigateByUrl(redirect_path);
+    if (redirectPath !== null) this.router.navigateByUrl(redirectPath);
   }
 
   /**
@@ -143,22 +143,22 @@ export class UserService {
    * @returns The parsed user
    */
   static parseUserFromToken(token: string): User | never {
-    let token_payload = JSON.parse(atob(token.split('.')[1]));
+    let tokenPayload = JSON.parse(atob(token.split('.')[1]));
 
     if (
       !(
-        typeof token_payload.user_id === 'number' &&
-        typeof token_payload.user_email === 'string' &&
-        typeof token_payload.user_name === 'string'
+        typeof tokenPayload.user_id === 'number' &&
+        typeof tokenPayload.user_email === 'string' &&
+        typeof tokenPayload.user_name === 'string'
       )
     ) {
       throw new Error('Token does not contain correct user data');
     }
 
     return {
-      id: token_payload.user_id,
-      email: token_payload.user_email,
-      name: token_payload.user_name,
+      id: tokenPayload.user_id,
+      email: tokenPayload.user_email,
+      name: tokenPayload.user_name,
     };
   }
 }

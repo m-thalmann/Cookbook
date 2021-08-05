@@ -62,10 +62,10 @@ paths:
                   type: string
                 password:
                   type: string
-                old_password:
+                oldPassword:
                   type: string
               required:
-                - old_password
+                - oldPassword
       responses:
         '200':
           description: OK
@@ -272,6 +272,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ItemsPerPage'
         - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/SortDir'
       responses:
         '200':
           description: OK
@@ -533,6 +535,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ItemsPerPage'
         - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/SortDir'
       responses:
         '200':
           description: OK
@@ -568,6 +572,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ItemsPerPage'
         - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/SortDir'
       responses:
         '200':
           description: OK
@@ -602,6 +608,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/ItemsPerPage'
         - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/SortDir'
       responses:
         '200':
           description: OK
@@ -1132,7 +1140,7 @@ components:
       schema:
         type: integer
         minimum: 1
-      name: items_per_page
+      name: itemsPerPage
       in: query
       required: false
       description: How many items a single page should contain
@@ -1144,6 +1152,23 @@ components:
       in: query
       required: false
       description: The page to display (starting at 0)
+    Sort:
+      schema:
+        type: string
+      name: sort
+      in: query
+      required: false
+      description: The property to sort by
+    SortDir:
+      schema:
+        type: string
+        enum:
+          - asc
+          - desc
+      name: sortDir
+      in: query
+      required: false
+      description: The direction of the sort (asc - ascending, desc - descending)
   securitySchemes:
     Token:
       type: http

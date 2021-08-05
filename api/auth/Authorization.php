@@ -14,10 +14,10 @@ class Authorization {
 
     /**
      * Encrypts the password using the provided salt
-     * 
+     *
      * @param string $password
      * @param string $salt
-     * 
+     *
      * @return string The encrypted password
      */
     public static function encryptPassword($password, $salt) {
@@ -30,9 +30,9 @@ class Authorization {
 
     /**
      * Generates a new token for the given user
-     * 
+     *
      * @param User $user
-     * 
+     *
      * @return string|null The token or null if an error occured
      */
     public static function generateToken($user) {
@@ -52,9 +52,9 @@ class Authorization {
     /**
      * Checks whether the token is correct.
      * - If it is correct it sets the user
-     * 
+     *
      * @param string $token
-     * 
+     *
      * @return bool Whether the token was correct or not
      */
     public static function authorize($token) {
@@ -78,10 +78,10 @@ class Authorization {
      * Checks the credentials.
      * - If they are correct it sets the user, generates a token and returns it
      * - If they are incorrect it returns null
-     * 
+     *
      * @param string $email
      * @param string $password
-     * 
+     *
      * @return string|null The token or null, if incorrect
      */
     public static function login($email, $password) {
@@ -108,7 +108,7 @@ class Authorization {
 
     /**
      * Returns the user that is authorized or null if not authorized
-     * 
+     *
      * @return User|null
      */
     public static function user() {
@@ -117,7 +117,7 @@ class Authorization {
 
     /**
      * Whether the client is authorized
-     * 
+     *
      * @return bool
      */
     public static function isAuthorized() {
@@ -127,9 +127,9 @@ class Authorization {
     /**
      * Returns a middleware-function for the PAF-Router, which checks whether
      * authorization is provided and it is valid.
-     * 
+     *
      * @param bool $mustBeAuthorized Whether the authorization must succeed, to be able to request the route
-     * 
+     *
      * @return callable The middleware function
      */
     public static function middleware($mustBeAuthorized = true) {
@@ -139,16 +139,16 @@ class Authorization {
                     throw new UnauthorizedException();
                 }
 
-                $token_parts = explode(" ", $request["authorization"]); // token form: '<type> <token>'
+                $tokenParts = explode(" ", $request["authorization"]); // token form: '<type> <token>'
 
-                if (count($token_parts) != 2) {
+                if (count($tokenParts) != 2) {
                     throw new UnauthorizedException();
                 }
 
-                list($token_type, $token) = $token_parts;
+                list($tokenType, $token) = $tokenParts;
 
                 // accept only bearer tokens
-                if ($token_type !== "Bearer") {
+                if ($tokenType !== "Bearer") {
                     throw new UnauthorizedException();
                 }
 

@@ -36,7 +36,7 @@ export class PageHomeComponent {
   }
 
   reload = async (page: number) => {
-    let res = await this.api.getRecipes(page);
+    let res = await this.api.getRecipes({ page: page });
 
     if (res.isOK() && res.value) {
       this.results = res.value.total_items;

@@ -13,7 +13,7 @@ export class PageMyRecipesComponent {
   constructor(private api: ApiService, private user: UserService) {}
 
   reload = async (page: number) => {
-    let res = await this.api.getRecipesForUser(this.user.user!.id, page);
+    let res = await this.api.getRecipesForUser(this.user.user!.id, { page: page });
 
     if (res.isOK() && res.value) {
       this.results = res.value.total_items;

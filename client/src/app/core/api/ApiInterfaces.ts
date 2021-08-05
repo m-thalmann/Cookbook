@@ -86,3 +86,10 @@ export interface Pagination<T> {
   total_pages: number;
   items: T[];
 }
+
+export interface Options {
+  page?: number;
+  itemsPerPage?: number | null;
+  sort?: string | null;
+  sortDirection?: 'asc' | 'desc' | null;
+}

@@ -31,20 +31,16 @@
         </mat-form-field>
         <mat-form-field appearance="outline" color="primary" *ngIf="editPassword">
             <mat-label>Repeat password</mat-label>
-            <input matInput type="password" formControlName="password_confirm" />
-            <mat-error *ngIf="getFormError('password_confirm') != null">{{
-                getFormError('password_confirm')
-            }}</mat-error>
+            <input matInput type="password" formControlName="passwordConfirm" />
+            <mat-error *ngIf="getFormError('passwordConfirm') != null">{{ getFormError('passwordConfirm') }}</mat-error>
         </mat-form-field>
 
         <mat-divider style="margin-bottom: 1.5em"></mat-divider>
 
         <mat-form-field appearance="outline" color="primary">
             <mat-label>Confirm current password</mat-label>
-            <input matInput type="password" formControlName="current_password" />
-            <mat-error *ngIf="getFormError('current_password') != null">{{
-                getFormError('current_password')
-            }}</mat-error>
+            <input matInput type="password" formControlName="currentPassword" />
+            <mat-error *ngIf="getFormError('currentPassword') != null">{{ getFormError('currentPassword') }}</mat-error>
         </mat-form-field>
     </form>
     <p *ngIf="error" class="fg-warn">{{ error }}</p>

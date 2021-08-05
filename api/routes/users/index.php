@@ -1,6 +1,7 @@
 <?php
 
 use API\Auth\Authorization;
+use API\inc\Functions;
 use API\Models\Recipe;
 
 $group->get('/id/{{i:id}}/recipes', Authorization::middleware(false), function (
@@ -10,18 +11,12 @@ $group->get('/id/{{i:id}}/recipes', Authorization::middleware(false), function (
         Authorization::isAuthorized() &&
         Authorization::user()->id === $req["params"]["id"]
     ) {
-        return Recipe::query("userId = ?", [
-            Authorization::user()->id,
-        ])->pagination(
-            intval($_GET["items_per_page"] ?? 10),
-            intval($_GET["page"] ?? 0)
-        );
+        $query = Recipe::query("userId = ?", [Authorization::user()->id]);
     } else {
-        return Recipe::query("public = 1 AND userId = ?", [
+        $query = Recipe::query("public = 1 AND userId = ?", [
             $req["params"]["id"],
-        ])->pagination(
-            intval($_GET["items_per_page"] ?? 10),
-            intval($_GET["page"] ?? 0)
-        );
+        ]);
     }
+
+    return Functions::pagination(Functions::sort($query));
 });
