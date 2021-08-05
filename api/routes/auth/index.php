@@ -60,7 +60,7 @@ $group
             "token" => "Bearer $token",
         ]);
     })
-    ->put('/', Authorization::middleware(), function($req){ // TODO: document
+    ->put('/', Authorization::middleware(), function($req){
         $user = Authorization::user();
 
         $data = $req["post"] ?? [];
@@ -93,5 +93,3 @@ $group
     ->get('/registrationEnabled', function () {
         return Config::get("registration_enabled", true);
     });
-
-// TODO: edit user
