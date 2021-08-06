@@ -28,7 +28,7 @@ export class RecipeListComponent implements OnInit {
   error = false;
   private _page = 0;
 
-  private _sort: string = 'id';
+  private _sort: string = 'publishDate';
 
   recipes: Pagination<Recipe> | null = null;
 

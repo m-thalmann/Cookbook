@@ -88,6 +88,19 @@ class Recipe extends Model {
     public $cookTime;
 
     /**
+     * @prop
+     * @var timestamp
+     * @editable false
+     */
+    public $publishDate;
+
+    public function __construct(){
+        parent::__construct();
+
+        $this->editValue("publishDate", time(), false, true);
+    }
+
+    /**
      * The user model for the recipe
      */
     public function user() {
@@ -101,11 +114,11 @@ class Recipe extends Model {
     public function jsonSerialize($full = false) {
         $ret = array_merge(parent::jsonSerialize(), [
             "user" => $this->user(),
+            "imagesCount" => RecipeImage::getAmountForRecipe($this->id),
         ]);
 
         if ($full) {
             $ret["ingredients"] = Ingredient::getByRecipeId($this->id);
-            $ret["imagesCount"] = RecipeImage::getAmountForRecipe($this->id);
         }
 
         return $ret;

@@ -2,12 +2,11 @@
     <mat-form-field appearance="outline">
         <mat-label>Sort by</mat-label>
         <mat-select [value]="sort" (valueChange)="sortChange($event)" [disabled]="loading">
-            <mat-option value="id">Publish date</mat-option>
+            <mat-option value="publishDate">Publish date</mat-option>
             <mat-option value="name">Name</mat-option>
             <mat-option value="category">Category</mat-option>
             <mat-option value="public">Visibility</mat-option>
             <mat-option value="difficulty">Difficulty</mat-option>
-            <mat-option value="userId">User</mat-option>
         </mat-select>
         <mat-icon matPrefix>sort</mat-icon>
     </mat-form-field>

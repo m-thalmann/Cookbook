@@ -23,12 +23,13 @@ export interface Recipe {
   preparation: string | null;
   preparationTime: number | null;
   cookTime: number | null;
+  publishDate: number;
   user: User;
+  imagesCount: number;
 }
 
 export interface RecipeFull extends Recipe {
   ingredients: Ingredient[];
-  imagesCount: number;
 }
 
 export interface RecipeImage {
@@ -99,10 +100,9 @@ interface SortDirection {
 }
 
 export const RecipeSortDirection: SortDirection = {
-  id: 'desc',
+  publishDate: 'desc',
   name: 'asc',
   category: 'asc',
   public: 'desc',
   difficulty: 'asc',
-  userId: 'asc',
 };

@@ -21,6 +21,7 @@ CREATE TABLE `recipes` (
   `preparation` text,
   `preparationTime` float,
   `cookTime` float,
+  `publishDate` datetime NOT NULL,
 
   FOREIGN KEY (userId) REFERENCES users(id)
     ON UPDATE CASCADE ON DELETE CASCADE

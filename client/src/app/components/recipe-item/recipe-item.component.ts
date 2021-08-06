@@ -32,7 +32,7 @@ export class RecipeItemComponent {
   }
 
   get thumbnail() {
-    if (!this.recipe) {
+    if (!this.recipe || this.recipe.imagesCount === 0) {
       return FALLBACK_IMAGE;
     }
 

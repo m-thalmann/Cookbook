@@ -1039,8 +1039,16 @@ components:
           nullable: true
           minimum: 1
           description: Cooking/baking time in minutes
+        publishDate:
+          type: number
+          minimum: 0
+          description: Unix timestamp (seconds) of when the recipe was published
         user:
           $ref: '#/components/schemas/User'
+        imagesCount:
+          type: integer
+          minimum: 0
+          description: The amount of images available for this recipe
       required:
         - id
         - public
@@ -1052,7 +1060,9 @@ components:
         - preparation
         - preparationTime
         - cookTime
+        - publishDate
         - user
+        - imagesCount
     RecipeFull:
       title: Recipe with additional information
       allOf:
@@ -1063,13 +1073,8 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/Ingredient'
-            imagesCount:
-              type: integer
-              minimum: 0
-              description: The amount of images available for this recipe
           required:
             - ingredients
-            - imagesCount
     RecipeImage:
       title: Recipe-Image
       type: object
