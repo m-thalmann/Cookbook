@@ -76,14 +76,21 @@ class Recipe extends Model {
     /**
      * @prop
      * @min 1
-     * @var float|null
+     * @var integer|null
      */
     public $preparationTime;
 
     /**
      * @prop
      * @min 1
-     * @var float|null
+     * @var integer|null
+     */
+    public $restTime;
+
+    /**
+     * @prop
+     * @min 1
+     * @var integer|null
      */
     public $cookTime;
 

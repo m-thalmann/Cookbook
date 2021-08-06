@@ -76,6 +76,13 @@ h4 {
   background: mat-color($warn) !important;
 }
 
+.fg-whatsapp {
+  color: #25d366 !important;
+}
+.fg-telegram {
+  color: #0088cc !important;
+}
+
 .link {
   text-decoration: underline;
   cursor: pointer;
@@ -104,5 +111,11 @@ h4 {
 @media screen and (max-width: $mobile-width) {
   .hide-mobile {
     display: none !important;
+  }
+}
+
+@media print {
+  body {
+    background: transparent;
   }
 }

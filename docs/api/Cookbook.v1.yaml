@@ -337,6 +337,11 @@ paths:
                   nullable: true
                   minimum: 1
                   description: Preparation time in minutes
+                restTime:
+                  type: integer
+                  nullable: true
+                  minimum: 1
+                  description: Rest time in minutes
                 cookTime:
                   type: number
                   nullable: true
@@ -376,6 +381,7 @@ paths:
                 - difficulty
                 - preparation
                 - preparationTime
+                - restTime
                 - cookTime
                 - ingredients
       responses:
@@ -472,6 +478,11 @@ paths:
                   nullable: true
                   minimum: 1
                   description: Preparation time in minutes
+                restTime:
+                  type: integer
+                  nullable: true
+                  minimum: 1
+                  description: Rest time in minutes
                 cookTime:
                   type: number
                   nullable: true
@@ -1030,17 +1041,22 @@ components:
           nullable: true
           description: Descriptive explanation of the preparation-steps (in HTML format)
         preparationTime:
-          type: number
+          type: integer
           nullable: true
           minimum: 1
           description: Preparation time in minutes
+        restTime:
+          type: integer
+          nullable: true
+          minimum: 1
+          description: Rest time in minutes
         cookTime:
-          type: number
+          type: integer
           nullable: true
           minimum: 1
           description: Cooking/baking time in minutes
         publishDate:
-          type: number
+          type: integer
           minimum: 0
           description: Unix timestamp (seconds) of when the recipe was published
         user:
@@ -1059,6 +1075,7 @@ components:
         - difficulty
         - preparation
         - preparationTime
+        - restTime
         - cookTime
         - publishDate
         - user

@@ -1,0 +1,159 @@
+<ng-container *ngIf="recipe">
+    <h2>
+        <span>{{ recipe.name }}</span>
+        <mat-icon
+            class="visibility"
+            [matTooltip]="recipe.public ? 'Public' : 'Private'"
+            [matTooltipShowDelay]="500"
+            [inline]="true"
+        >
+            {{ recipe.public ? 'public' : 'lock' }}
+        </mat-icon>
+    </h2>
+    <span class="author">by {{ recipe.user.name }}</span>
+
+    <div class="information">
+        <mat-chip-list>
+            <a
+                mat-chip
+                [routerLink]="categoryURL"
+                *ngIf="recipe.category"
+                matTooltip="Category"
+                [matTooltipShowDelay]="500"
+            >
+                <mat-icon>menu_book</mat-icon> <span>{{ recipe.category }}</span>
+            </a>
+            <mat-chip [disabled]="true" *ngIf="totalTime" matTooltip="Total time" [matTooltipShowDelay]="500">
+                <mat-icon>timer</mat-icon> <span>{{ totalTime }}</span>
+            </mat-chip>
+            <mat-chip
+                [disabled]="true"
+                *ngIf="recipe.difficulty !== null"
+                matTooltip="Difficulty"
+                [matTooltipShowDelay]="500"
+                class="difficulty"
+            >
+                <mat-icon *ngFor="let i of [0, 1, 2, 3, 4]" [class.disabled]="recipe.difficulty < i">
+                    whatshot
+                </mat-icon>
+            </mat-chip>
+            <mat-chip [disabled]="true" matTooltip="Publish date" [matTooltipShowDelay]="500">
+                <mat-icon>today</mat-icon> <span>{{ recipe.publishDate * 1000 | date: 'MMM d, y HH:mm' }}</span>
+            </mat-chip>
+        </mat-chip-list>
+    </div>
+
+    <div class="actions">
+        <button mat-mini-fab [matMenuTriggerFor]="shareMenu" color="red" *ngIf="!hasShareApi">
+            <mat-icon>share</mat-icon>
+        </button>
+        <button mat-mini-fab (click)="doShare()" color="red" *ngIf="hasShareApi">
+            <mat-icon>share</mat-icon>
+        </button>
+        <button mat-mini-fab (click)="doPrint()" color="red"><mat-icon>print</mat-icon></button>
+
+        <button mat-raised-button color="accent" class="edit-button" *ngIf="isOwner">
+            <mat-icon>edit</mat-icon> Edit recipe
+        </button>
+    </div>
+
+    <div class="image-gallery" [class.fallback]="recipe.imagesCount === 0">
+        <div class="image">
+            <img [src]="currentRecipeImageURL" alt="Recipe image" />
+
+            <button
+                mat-icon-button
+                (click)="currentRecipeImageNumber = currentRecipeImageNumber - 1"
+                [disabled]="currentRecipeImageNumber === 0"
+            >
+                <mat-icon>navigate_before</mat-icon>
+            </button>
+            <button
+                mat-icon-button
+                (click)="currentRecipeImageNumber = currentRecipeImageNumber + 1"
+                [disabled]="recipe.imagesCount === 0 || currentRecipeImageNumber + 1 === recipe.imagesCount"
+            >
+                <mat-icon>navigate_next</mat-icon>
+            </button>
+
+            <span class="counter">
+                <mat-icon [inline]="true">photo_camera</mat-icon>
+                {{ currentRecipeImageNumber + 1 }}/{{ recipe.imagesCount > 0 ? recipe.imagesCount : 1 }}
+            </span>
+        </div>
+
+        <div class="preview">
+            <div
+                class="preview-image"
+                (click)="currentRecipeImageNumber = index"
+                [class.active]="currentRecipeImageNumber === index"
+                *ngFor="let url of recipeImagesURLs; let index = index"
+            >
+                <img [src]="url" alt="Recipe image preview" />
+            </div>
+        </div>
+    </div>
+
+    <div class="ingredients">
+        <h3>
+            <span>Ingredients for</span>
+            <input type="number" min="1" [value]="selectedPortions" (input)="setSelectedPortions($event)" />
+            <span>portions</span>
+        </h3>
+
+        <table>
+            <tbody>
+                <tr *ngFor="let ingredient of recipe.ingredients">
+                    <td>
+                        <ng-container *ngIf="ingredient.amount">
+                            {{ getCalculateIngredientAmount(ingredient.amount) }}
+                        </ng-container>
+                        <!-- TODO: amount-pipe -> round & e.g. 0.5 to 1/2 etc -->
+                        {{ ingredient.unit }}
+                    </td>
+                    <td>{{ ingredient.name }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="description" *ngIf="recipe.description">
+        <h3>Description</h3>
+        <p>{{ recipe.description }}</p>
+    </div>
+
+    <div class="preparation" *ngIf="recipe.preparation">
+        <h3>Preparation</h3>
+        <mat-chip-list *ngIf="recipe.preparationTime || recipe.cookTime">
+            <mat-chip [disabled]="true" *ngIf="recipe.preparationTime">
+                <mat-icon>timer</mat-icon> <span>Preparation time ~{{ recipe.preparationTime }} min</span>
+            </mat-chip>
+            <mat-chip [disabled]="true" *ngIf="recipe.restTime">
+                <mat-icon>timer</mat-icon> <span>Rest time ~{{ recipe.restTime }} min</span>
+            </mat-chip>
+            <mat-chip [disabled]="true" *ngIf="recipe.cookTime">
+                <mat-icon>timer</mat-icon> <span>Cooking-/Baking time ~{{ recipe.cookTime }} min</span>
+            </mat-chip>
+        </mat-chip-list>
+
+        <div [innerHTML]="recipe.preparation"></div>
+    </div>
+</ng-container>
+
+<mat-menu #shareMenu="matMenu">
+    <a mat-menu-item [href]="shareEmailLink" target="_blank" rel="noopener">
+        <mat-icon class="fg-accent">email</mat-icon> Email
+    </a>
+    <a mat-menu-item [href]="shareWhatsAppLink" target="_blank" rel="noopener">
+        <mat-icon svgIcon="whatsapp" class="fg-whatsapp"></mat-icon> WhatsApp
+    </a>
+    <a mat-menu-item [href]="shareTelegramLink" target="_blank" rel="noopener">
+        <mat-icon svgIcon="telegram" class="fg-telegram"></mat-icon> Telegram
+    </a>
+</mat-menu>
+
+<span class="icon-text fg-warn" *ngIf="error"><mat-icon>error</mat-icon><span>Error loading recipe</span></span>
+<div *ngIf="notFound">
+    <p class="icon-text fg-warn"><mat-icon>help_outline</mat-icon><span>Recipe not found</span></p>
+    <a routerLink="/home" mat-raised-button color="warn"><mat-icon>home</mat-icon> Go to home</a>
+</div>

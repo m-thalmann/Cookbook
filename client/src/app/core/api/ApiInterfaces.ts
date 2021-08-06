@@ -22,6 +22,7 @@ export interface Recipe {
   difficulty: number | null;
   preparation: string | null;
   preparationTime: number | null;
+  restTime: number | null;
   cookTime: number | null;
   publishDate: number;
   user: User;

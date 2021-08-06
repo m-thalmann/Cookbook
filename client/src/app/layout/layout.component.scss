@@ -280,3 +280,16 @@ main {
     border-radius: 0;
   }
 }
+
+@media print {
+  header {
+    display: none;
+  }
+
+  main {
+    margin: 0 !important;
+    padding: 0;
+    width: 100vw;
+    box-shadow: none;
+  }
+}

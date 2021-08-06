@@ -16,6 +16,7 @@ import { PaginatorComponent } from './components/paginator/paginator.component';
 import { SettingsDialogComponent } from './layout/components/settings-dialog/settings-dialog.component';
 import { PageMyRecipesComponent } from './pages/page-my-recipes/page-my-recipes.component';
 import { RecipeListComponent } from './components/recipe-list/recipe-list.component';
+import { PageRecipeComponent } from './pages/page-recipe/page-recipe.component';
 
 export function setupConfig(service: ConfigService) {
   return () => service.load();
@@ -34,6 +35,7 @@ export function setupConfig(service: ConfigService) {
     SettingsDialogComponent,
     PageMyRecipesComponent,
     RecipeListComponent,
+    PageRecipeComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, MaterialModule, HttpClientModule],
   providers: [

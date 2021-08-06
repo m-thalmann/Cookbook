@@ -14,6 +14,7 @@ import {
   Options,
   Pagination,
   Recipe,
+  RecipeFull,
   RecipeImage,
   SearchIngredient,
   User,
@@ -204,15 +205,15 @@ export class ApiService {
   }
 
   getRecipeById(id: number) {
-    return this.get<Recipe>(`${this.URL}/recipes/id/${id}`);
+    return this.get<RecipeFull>(`${this.URL}/recipes/id/${id}`);
   }
 
   createRecipe(recipe: NewRecipe) {
-    return this.post<Recipe>(`${this.URL}/recipes`, recipe);
+    return this.post<RecipeFull>(`${this.URL}/recipes`, recipe);
   }
 
   editRecipe(id: number, recipe: EditRecipe) {
-    return this.put<Recipe>(`${this.URL}/recipes/id/${id}`, recipe);
+    return this.put<RecipeFull>(`${this.URL}/recipes/id/${id}`, recipe);
   }
 
   deleteRecipe(id: number) {

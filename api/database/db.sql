@@ -19,8 +19,9 @@ CREATE TABLE `recipes` (
   `portions` int(11),
   `difficulty` int(11),
   `preparation` text,
-  `preparationTime` float,
-  `cookTime` float,
+  `preparationTime` int(11),
+  `restTime` int(11),
+  `cookTime` int(11),
   `publishDate` datetime NOT NULL,
 
   FOREIGN KEY (userId) REFERENCES users(id)

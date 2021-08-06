@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { ApiService } from 'src/app/core/api/api.service';
 import { Recipe } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
+import { slugify } from 'src/app/core/functions';
 
 const FALLBACK_IMAGE = 'assets/images/cookbook.svg';
 
@@ -18,9 +19,9 @@ export class RecipeItemComponent {
   constructor(private api: ApiService, private user: UserService) {}
 
   get recipeURL() {
-    if (this.disabled) return null;
+    if (this.disabled || !this.recipe) return null;
 
-    return '/recipes/' + this.recipe?.id;
+    return `/recipes/${this.recipe.id}/${slugify(this.recipe.name)}`;
   }
 
   get categoryURL() {
@@ -48,6 +49,9 @@ export class RecipeItemComponent {
 
     if (this.recipe?.preparationTime) {
       time += this.recipe.preparationTime;
+    }
+    if (this.recipe?.restTime) {
+      time += this.recipe.restTime;
     }
     if (this.recipe?.cookTime) {
       time += this.recipe.cookTime;
