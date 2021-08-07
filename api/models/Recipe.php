@@ -101,7 +101,7 @@ class Recipe extends Model {
      */
     public $publishDate;
 
-    public function __construct(){
+    public function __construct() {
         parent::__construct();
 
         $this->editValue("publishDate", time(), false, true);

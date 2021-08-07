@@ -1,5 +1,4 @@
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { Expression } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
@@ -243,6 +242,14 @@ export class ApiService {
   }
 
   // Recipe Images
+
+  getRecipeImage(id: number) {
+    return this.get<RecipeImage>(`${this.URL}/recipeImages/id/${id}`);
+  }
+
+  getRecipeImages(recipeId: number) {
+    return this.get<RecipeImage[]>(`${this.URL}/recipes/id/${recipeId}/images`);
+  }
 
   getRecipeImagesCount(recipeId: number) {
     return this.get<number>(`${this.URL}/recipes/id/${recipeId}/images/count`);

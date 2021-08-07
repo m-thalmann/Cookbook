@@ -884,6 +884,25 @@ paths:
         name: id
         in: path
         required: true
+    get:
+      summary: Return all recipe-images for this recipe
+      tags:
+        - RecipeImage
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecipeImage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      operationId: get-recipes-id-images
+      description: Return all recipe-images for this recipe (the client has to own it)
+      security:
+        - Token: []
     post:
       summary: Add a new recipe-image to a recipe
       tags:
@@ -943,6 +962,23 @@ paths:
         name: id
         in: path
         required: true
+    get:
+      summary: Get a specific recipe-image
+      tags:
+        - RecipeImage
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeImage'
+        '404':
+          description: Not found
+      operationId: get-recipeImages-id
+      description: Get a specific recipe-image
+      security:
+        - Token: []
     delete:
       summary: Delete a specific recipe-image
       tags:
@@ -954,6 +990,10 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           description: Not found
+      operationId: delete-recipeImages-id
+      description: Delete a specific recipe-image
+      security:
+        - Token: []
 components:
   schemas:
     User:

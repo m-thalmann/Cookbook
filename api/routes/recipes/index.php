@@ -190,6 +190,12 @@ $group
 
         return Response::created($ingredient);
     })
+    ->get('/id/{{i:id}}/images', Authorization::middleware(), function ($req) {
+        return RecipeImage::get(
+            "recipeId = ? AND recipeId IN (SELECT id FROM recipes WHERE userId = ?)",
+            [$req["params"]["id"], Authorization::user()->id]
+        );
+    })
     ->get(
         '/id/{{i:id}}/images/count',
         Authorization::middleware(false),
