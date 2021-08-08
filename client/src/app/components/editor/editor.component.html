@@ -1,0 +1,106 @@
+<div class="editor" [class.disabled]="disabled">
+    <div class="toolbar">
+        <div class="section">
+            <button
+                mat-icon-button
+                (click)="toggleBold()"
+                matTooltip="Bold"
+                matTooltipPosition="above"
+                [matTooltipDisabled]="disabled"
+                [disabled]="disabled"
+            >
+                <mat-icon>format_bold</mat-icon>
+            </button>
+            <button
+                mat-icon-button
+                (click)="toggleItalic()"
+                matTooltip="Italic"
+                matTooltipPosition="above"
+                [matTooltipDisabled]="disabled"
+                [disabled]="disabled"
+            >
+                <mat-icon>format_italic</mat-icon>
+            </button>
+            <button
+                mat-icon-button
+                (click)="toggleUnderline()"
+                matTooltip="Underline"
+                matTooltipPosition="above"
+                [matTooltipDisabled]="disabled"
+                [disabled]="disabled"
+            >
+                <mat-icon>format_underline</mat-icon>
+            </button>
+        </div>
+
+        <div class="section">
+            <button
+                mat-icon-button
+                (click)="toggleUnorderedList()"
+                matTooltip="Unordered list"
+                matTooltipPosition="above"
+                [matTooltipDisabled]="disabled"
+                [disabled]="disabled"
+            >
+                <mat-icon>format_list_bulleted</mat-icon>
+            </button>
+            <button
+                mat-icon-button
+                (click)="toggleOrderedList()"
+                matTooltip="Ordered list"
+                matTooltipPosition="above"
+                [matTooltipDisabled]="disabled"
+                [disabled]="disabled"
+            >
+                <mat-icon>format_list_numbered</mat-icon>
+            </button>
+        </div>
+
+        <div class="section">
+            <button
+                mat-icon-button
+                (click)="addLink()"
+                matTooltip="Add link"
+                matTooltipPosition="above"
+                [matTooltipDisabled]="disabled"
+                [disabled]="disabled"
+            >
+                <mat-icon>insert_link</mat-icon>
+            </button>
+            <button
+                mat-icon-button
+                (click)="removeLink()"
+                matTooltip="Remove link"
+                matTooltipPosition="above"
+                [matTooltipDisabled]="disabled"
+                [disabled]="disabled"
+            >
+                <mat-icon>link_off</mat-icon>
+            </button>
+        </div>
+
+        <div class="section">
+            <button
+                mat-icon-button
+                (click)="clearFormattings()"
+                matTooltip="Clear all formattings"
+                matTooltipPosition="above"
+                [matTooltipDisabled]="disabled"
+                [disabled]="disabled"
+            >
+                <mat-icon>format_clear</mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <div
+        class="content"
+        #content
+        [attr.contenteditable]="!disabled"
+        [innerHTML]="value"
+        (keyup)="update()"
+        (paste)="update()"
+        [attr.data-placeholder]="placeholder"
+        [class.empty]="isEmpty"
+    ></div>
+</div>

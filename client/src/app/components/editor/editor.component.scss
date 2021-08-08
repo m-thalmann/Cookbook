@@ -1,0 +1,40 @@
+@import '../../../variables.scss';
+
+.editor {
+  overflow: auto;
+  max-height: 25em;
+
+  border: 1px solid #{$foreground}50;
+  border-radius: 0.5em;
+
+  &.disabled {
+    opacity: 0.8;
+  }
+
+  .toolbar {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+
+    background-color: mat-color($primary);
+    color: mat-color($primary, default-contrast);
+
+    .section {
+      display: inline-block;
+      margin-right: 1em;
+    }
+  }
+
+  .content {
+    padding: 1em;
+    min-height: 3em;
+
+    &.empty:not(:focus)::before {
+      content: attr(data-placeholder);
+      cursor: text;
+      opacity: 0.5;
+    }
+  }
+}
