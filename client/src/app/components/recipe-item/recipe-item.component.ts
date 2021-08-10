@@ -69,8 +69,4 @@ export class RecipeItemComponent {
 
     return this.user.user?.id === this.recipe?.user.id;
   }
-
-  showEditDialog() {
-    // TODO:
-  }
 }

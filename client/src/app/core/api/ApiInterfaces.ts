@@ -54,6 +54,7 @@ export interface NewRecipe {
   difficulty: number | null;
   preparation: string | null;
   preparationTime: number | null;
+  restTime: number | null;
   cookTime: number | null;
   ingredients: NewIngredient[];
 }
@@ -73,6 +74,7 @@ export interface EditRecipe {
   difficulty?: number | null;
   preparation?: string | null;
   preparationTime?: number | null;
+  restTime?: number | null;
   cookTime?: number | null;
 }
 

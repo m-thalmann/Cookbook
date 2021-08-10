@@ -17,7 +17,13 @@ import { SettingsDialogComponent } from './layout/components/settings-dialog/set
 import { PageMyRecipesComponent } from './pages/page-my-recipes/page-my-recipes.component';
 import { RecipeListComponent } from './components/recipe-list/recipe-list.component';
 import { PageRecipeComponent } from './pages/page-recipe/page-recipe.component';
+import { CreateEditRecipeComponent } from './components/create-edit-recipe/create-edit-recipe.component';
+import { PageCreateRecipeComponent } from './pages/page-create-recipe/page-create-recipe.component';
+import { PageEditRecipeComponent } from './pages/page-edit-recipe/page-edit-recipe.component';
+import { EditRecipeInformationComponent } from './components/create-edit-recipe/components/edit-recipe-information/edit-recipe-information.component';
+import { EditRecipeImagesComponent } from './components/create-edit-recipe/components/edit-recipe-images/edit-recipe-images.component';
 import { EditorComponent } from './components/editor/editor.component';
+import { InputFocusDirective } from './core/directives/input-focus.directive';
 
 export function setupConfig(service: ConfigService) {
   return () => service.load();
@@ -37,7 +43,13 @@ export function setupConfig(service: ConfigService) {
     PageMyRecipesComponent,
     RecipeListComponent,
     PageRecipeComponent,
+    CreateEditRecipeComponent,
+    PageCreateRecipeComponent,
+    PageEditRecipeComponent,
+    EditRecipeInformationComponent,
+    EditRecipeImagesComponent,
     EditorComponent,
+    InputFocusDirective,
   ],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, MaterialModule, HttpClientModule],
   providers: [

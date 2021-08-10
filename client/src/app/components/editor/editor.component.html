@@ -100,6 +100,7 @@
         [innerHTML]="value"
         (keyup)="update()"
         (paste)="update()"
+        (keydown)="keydown($event)"
         [attr.data-placeholder]="placeholder"
         [class.empty]="isEmpty"
     ></div>

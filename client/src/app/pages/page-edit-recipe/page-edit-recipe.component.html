@@ -1,0 +1,5 @@
+<h2>Edit recipe</h2>
+
+<cb-create-edit-recipe [editRecipe]="editRecipe" *ngIf="editRecipe"></cb-create-edit-recipe>
+
+<span class="icon-text fg-warn" *ngIf="error"><mat-icon>error</mat-icon><span>Error loading recipe</span></span>

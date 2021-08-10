@@ -1,0 +1,94 @@
+@import '../../../../../variables.scss';
+
+.full-width {
+  width: 100%;
+  display: block;
+}
+
+mat-form-field {
+  display: inline-block;
+  margin-right: 0.5em;
+}
+
+.portions {
+  margin-right: 1.5em;
+}
+
+.difficulty {
+  display: inline-block;
+  margin-bottom: 1em;
+
+  .title {
+    margin-right: 0.5em;
+  }
+
+  span > * {
+    vertical-align: middle;
+  }
+
+  span span {
+    margin-right: 0.25em;
+  }
+}
+
+.times {
+  > * {
+    width: 17em;
+
+    input {
+      text-align: center;
+    }
+
+    span[matSuffix] {
+      position: relative;
+      top: -0.25em;
+      left: 0.25em;
+    }
+  }
+}
+
+.ingredients {
+  margin-bottom: 2em;
+
+  .ingredient-row {
+    &:not(:last-of-type) {
+      border-bottom: 1px solid #{$foreground}50;
+      border-radius: 0 0 5px 5px;
+
+      margin-bottom: 1em;
+    }
+
+    .ingredient-amount,
+    .ingredient-unit {
+      width: 7em;
+    }
+  }
+}
+
+.save {
+  .save-button {
+    margin-top: 2em;
+    margin-right: 1em;
+  }
+
+  mat-spinner {
+    vertical-align: middle;
+    display: inline-block;
+  }
+}
+
+@media screen and (max-width: $mobile-width) {
+  mat-form-field {
+    width: 100% !important;
+    display: block;
+  }
+
+  .ingredient-row {
+    text-align: center;
+    button {
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0 auto 1em auto;
+    }
+  }
+}

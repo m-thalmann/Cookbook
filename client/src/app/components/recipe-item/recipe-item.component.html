@@ -55,12 +55,7 @@
         </mat-chip-list>
     </div>
 
-    <button
-        mat-icon-button
-        class="edit-recipe"
-        (click)="$event.preventDefault(); $event.stopPropagation(); showEditDialog()"
-        *ngIf="isOwner"
-    >
+    <a routerLink="/edit/{{ recipe.id }}" mat-icon-button class="edit-recipe" *ngIf="isOwner">
         <mat-icon>edit</mat-icon>
-    </button>
+    </a>
 </a>

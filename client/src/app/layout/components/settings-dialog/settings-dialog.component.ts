@@ -111,9 +111,7 @@ export class SettingsDialogComponent {
   }
 
   getFormError(key: string) {
-    let err = getFormError(this.settingsForm.get(key));
-
-    return err;
+    return getFormError(this.settingsForm.get(key));
   }
 
   get editEmail() {

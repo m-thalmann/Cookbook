@@ -52,9 +52,9 @@
         </button>
         <button mat-mini-fab (click)="doPrint()" color="red"><mat-icon>print</mat-icon></button>
 
-        <button mat-raised-button color="accent" class="edit-button" *ngIf="isOwner">
+        <a routerLink="/edit/{{ recipe.id }}" mat-raised-button color="accent" class="edit-button" *ngIf="isOwner">
             <mat-icon>edit</mat-icon> Edit recipe
-        </button>
+        </a>
     </div>
 
     <div class="image-gallery" [class.fallback]="recipe.imagesCount === 0">
@@ -153,7 +153,3 @@
 </mat-menu>
 
 <span class="icon-text fg-warn" *ngIf="error"><mat-icon>error</mat-icon><span>Error loading recipe</span></span>
-<div *ngIf="notFound">
-    <p class="icon-text fg-warn"><mat-icon>help_outline</mat-icon><span>Recipe not found</span></p>
-    <a routerLink="/home" mat-raised-button color="warn"><mat-icon>home</mat-icon> Go to home</a>
-</div>

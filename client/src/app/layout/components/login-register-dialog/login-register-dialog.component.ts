@@ -75,9 +75,7 @@ export class LoginRegisterDialogComponent {
   }
 
   getFormError(key: string) {
-    let err = getFormError(this.loginForm.get(key));
-
-    return err;
+    return getFormError(this.loginForm.get(key));
   }
 
   /**
@@ -113,8 +111,7 @@ export class LoginRegisterDialogComponent {
 
         this.user.login(res.value.token, this.remember?.value);
 
-        await this.router.navigateByUrl('/home');
-        location.reload();
+        location.href = location.pathname;
       } else if (res.isNotFound()) {
         throw new Error('Username or password wrong!');
       } else if (res.isConflict()) {

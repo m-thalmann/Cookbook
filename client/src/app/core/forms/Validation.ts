@@ -12,7 +12,13 @@ export const getFormError = (field: AbstractControl | null) => {
       return "The passwords don't match";
     }
     if (field.hasError('maxlength')) {
-      return 'The entered value is too long';
+      return `The value is too long (max. ${field.getError('maxlength').requiredLength})`;
+    }
+    if (field.hasError('min')) {
+      return `The value is too small (min. ${field.getError('min').min})`;
+    }
+    if (field.hasError('max')) {
+      return `The value is too big (max. ${field.getError('max').max})`;
     }
   }
 

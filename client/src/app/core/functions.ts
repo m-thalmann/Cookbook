@@ -18,3 +18,23 @@ export function slugify(string: string) {
     .replace(/\-+/gm, '-')
     .replace(/-$/g, '');
 }
+
+/**
+ * If the supplied string is not null it is trimmed
+ * and if the length is 0 it is set to null
+ *
+ * @param string the string to trim and set null
+ *
+ * @returns the new string
+ */
+export function trimAndNull(string: string | null | undefined) {
+  if (typeof string !== 'undefined' && string !== null) {
+    string = string.trim();
+
+    if (string.length === 0) {
+      string = null;
+    }
+  }
+
+  return string;
+}

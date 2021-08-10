@@ -18,9 +18,7 @@ export class AuthGuard implements CanActivate {
    * @returns whether the user is allowed to request this route
    */
   canActivate(_: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const url = state.url.split('?')[0];
-
-    if (this.user.isLoggedin || !url.startsWith('/my')) {
+    if (this.user.isLoggedin) {
       return true;
     }
 

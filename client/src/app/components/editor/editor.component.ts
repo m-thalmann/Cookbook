@@ -37,6 +37,10 @@ export class EditorComponent implements ControlValueAccessor {
 
   registerOnTouched(fn: any) {}
 
+  setDisabledState(isDisabled: boolean) {
+    this.disabled = isDisabled;
+  }
+
   get isEmpty() {
     return this.lastValue === null || this.lastValue === '';
   }
@@ -87,6 +91,23 @@ export class EditorComponent implements ControlValueAccessor {
     document.execCommand('removeFormat', false, '');
     this.focus();
     this.update();
+  }
+
+  keydown(event: Event) {
+    if (event instanceof KeyboardEvent) {
+      if (event.key === 'Tab') {
+        event.preventDefault();
+      } else {
+        return;
+      }
+
+      if (!event.shiftKey) {
+        document.execCommand('indent', false, '');
+      } else {
+        document.execCommand('outdent', false, '');
+      }
+      this.update();
+    }
   }
 
   private focus() {

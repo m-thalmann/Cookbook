@@ -160,7 +160,7 @@ class Recipe extends Model {
             return self::get(
                 "id = ? AND id IN (SELECT id FROM recipes WHERE userId = ?)",
                 [$id, $userId]
-            );
+            )->getFirst();
         }
     }
 

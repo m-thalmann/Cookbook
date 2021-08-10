@@ -1,0 +1,15 @@
+<mat-vertical-stepper #stepper linear="true">
+    <mat-step [completed]="isEdit">
+        <ng-template matStepLabel>Edit information</ng-template>
+        <cb-edit-recipe-information
+            [editRecipe]="editRecipe"
+            (saved)="informationSaved($event)"
+        ></cb-edit-recipe-information>
+    </mat-step>
+
+    <mat-step>
+        <ng-template matStepLabel>Edit images</ng-template>
+
+        <cb-edit-recipe-images></cb-edit-recipe-images>
+    </mat-step>
+</mat-vertical-stepper>

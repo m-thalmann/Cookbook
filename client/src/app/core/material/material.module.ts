@@ -13,6 +13,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   declarations: [],
@@ -32,6 +35,9 @@ import { MatSelectModule } from '@angular/material/select';
     MatChipsModule,
     MatTooltipModule,
     MatSelectModule,
+    MatSliderModule,
+    MatStepperModule,
+    MatAutocompleteModule,
   ],
 })
 export class MaterialModule {}

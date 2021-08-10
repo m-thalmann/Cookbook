@@ -104,8 +104,6 @@ export class ApiService {
               panelClass: 'action-warn',
             });
           }
-
-          error = null;
         }
 
         return new ApiResponse<T>(e.status, null, error);

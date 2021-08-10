@@ -32,7 +32,11 @@ export class LayoutComponent implements AfterViewInit {
         share()
       )
       .subscribe((val) => {
-        this.smallHeader = val > 200;
+        if (this.smallHeader) {
+          this.smallHeader = val > 180;
+        } else {
+          this.smallHeader = val > 200;
+        }
       });
   }
 

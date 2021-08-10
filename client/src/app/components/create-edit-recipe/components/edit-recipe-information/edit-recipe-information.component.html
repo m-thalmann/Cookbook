@@ -1,0 +1,150 @@
+<form [formGroup]="recipeForm">
+    <h3>General information</h3>
+    <mat-form-field appearance="outline" color="primary" class="full-width">
+        <mat-label>Name</mat-label>
+        <mat-icon matPrefix>drive_file_rename_outline</mat-icon>
+        <input matInput formControlName="name" required />
+        <mat-error *ngIf="getFormError('name') != null">{{ getFormError('name') }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" color="primary">
+        <mat-label>Visibility</mat-label>
+        <mat-icon matPrefix>{{ public?.value ? 'public' : 'lock' }}</mat-icon>
+        <mat-select formControlName="public" required>
+            <mat-select-trigger>
+                {{ public?.value ? 'Public' : 'Private' }}
+            </mat-select-trigger>
+
+            <mat-option [value]="true"><mat-icon>public</mat-icon> Public</mat-option>
+            <mat-option [value]="false"><mat-icon>lock</mat-icon> Private</mat-option>
+        </mat-select>
+        <mat-error *ngIf="getFormError('public') != null">{{ getFormError('public') }}</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" color="primary">
+        <mat-label>Category</mat-label>
+        <mat-icon matPrefix>menu_book</mat-icon>
+        <input matInput formControlName="category" />
+        <mat-error *ngIf="getFormError('category') != null">{{ getFormError('category') }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" color="primary" class="full-width">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description"></textarea>
+        <mat-error *ngIf="getFormError('description') != null">{{ getFormError('description') }}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" color="primary" class="portions">
+        <mat-label>Portions</mat-label>
+        <mat-icon matPrefix>restaurant</mat-icon>
+        <input matInput formControlName="portions" type="number" />
+        <mat-error *ngIf="getFormError('portions') != null">{{ getFormError('portions') }}</mat-error>
+    </mat-form-field>
+
+    <div class="difficulty">
+        <span class="title">Difficulty</span>
+        <mat-slider
+            min="0"
+            max="5"
+            step="1"
+            formControlName="difficulty"
+            thumbLabel
+            [displayWith]="difficultyValue"
+        ></mat-slider>
+        <span>
+            <span *ngIf="difficulty?.value > 0">{{ difficulty?.value }}/5</span>
+            <span *ngIf="!difficulty?.value || difficulty?.value === 0">-/5</span>
+            <mat-icon>whatshot</mat-icon>
+        </span>
+    </div>
+
+    <div class="times">
+        <h3>Times (minutes)</h3>
+        <mat-form-field appearance="outline" color="primary">
+            <mat-label>Preparation time</mat-label>
+            <mat-icon matPrefix>timer</mat-icon>
+            <input matInput formControlName="preparationTime" type="number" />
+            <span matSuffix>min.</span>
+            <mat-error *ngIf="getFormError('preparationTime') != null">{{ getFormError('preparationTime') }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" color="primary">
+            <mat-label>Rest time</mat-label>
+            <mat-icon matPrefix>timer</mat-icon>
+            <input matInput formControlName="restTime" type="number" />
+            <span matSuffix>min.</span>
+            <mat-error *ngIf="getFormError('restTime') != null">{{ getFormError('restTime') }}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" color="primary">
+            <mat-label>Cooking-/Baking time</mat-label>
+            <mat-icon matPrefix>timer</mat-icon>
+            <input matInput formControlName="cookTime" type="number" />
+            <span matSuffix>min.</span>
+            <mat-error *ngIf="getFormError('cookTime') != null">{{ getFormError('cookTime') }}</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div class="ingredients">
+        <h3>Ingredients ({{ ingredients.length }})</h3>
+        <div
+            class="ingredient-row"
+            formArrayName="ingredients"
+            *ngFor="let item of ingredients['controls']; let i = index"
+        >
+            <div [formGroupName]="i">
+                <mat-form-field appearance="outline" color="primary" class="ingredient-name">
+                    <mat-label>Name</mat-label>
+                    <input
+                        matInput
+                        formControlName="name"
+                        required
+                        [cbFocus]="focusedIngredient === i"
+                        (keydown.enter)="$event.preventDefault(); addIngredient()"
+                    />
+                    <mat-error *ngIf="getFormError('name', i) != null">{{ getFormError('name', i) }}</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline" color="primary" class="ingredient-amount">
+                    <mat-label>Amount</mat-label>
+                    <input
+                        matInput
+                        formControlName="amount"
+                        type="number"
+                        (keydown.enter)="$event.preventDefault(); addIngredient()"
+                    />
+                    <mat-error *ngIf="getFormError('amount', i) != null">{{ getFormError('amount', i) }}</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline" color="primary" class="ingredient-unit">
+                    <mat-label>Unit</mat-label>
+                    <input matInput formControlName="unit" (keydown.enter)="$event.preventDefault(); addIngredient()" />
+                    <mat-error *ngIf="getFormError('unit', i) != null">{{ getFormError('unit', i) }}</mat-error>
+                </mat-form-field>
+                <button mat-icon-button (click)="removeIngredient(i)" [disabled]="saving" type="button">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <button mat-raised-button (click)="addIngredient()" color="primary" [disabled]="saving" type="button">
+            <mat-icon>add</mat-icon> Add ingredient
+        </button>
+    </div>
+
+    <h3>Preparation</h3>
+
+    <cb-editor formControlName="preparation" placeholder="Insert text..."></cb-editor>
+
+    <div class="save">
+        <button
+            mat-raised-button
+            (click)="save()"
+            color="primary"
+            class="save-button"
+            [disabled]="saving || recipeForm.invalid"
+        >
+            <ng-container *ngIf="isEdit"> <mat-icon>save</mat-icon> Save &amp; continue </ng-container>
+            <ng-container *ngIf="!isEdit"> <mat-icon>cloud_upload</mat-icon> Publish &amp; continue </ng-container>
+        </button>
+
+        <mat-spinner diameter="20" *ngIf="saving"></mat-spinner>
+
+        <span *ngIf="error" class="fg-warn">{{ error }}</span>
+    </div>
+</form>

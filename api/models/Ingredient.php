@@ -92,7 +92,7 @@ class Ingredient extends Model {
             return self::get(
                 "id = ? AND recipeId IN (SELECT id FROM recipes WHERE userId = ?)",
                 [$id, $userId]
-            );
+            )->getFirst();
         }
     }
 
@@ -106,12 +106,16 @@ class Ingredient extends Model {
      */
     public static function getByRecipeId($recipeId, $userId = null) {
         if ($userId === null) {
-            return self::get("recipeId = ?", [$recipeId]);
+            $query = self::query("recipeId = ?", [$recipeId]);
         } else {
-            return self::get(
+            $query = self::query(
                 "recipeId = ? AND recipeId IN (SELECT id FROM recipes WHERE userId = ?)",
                 [$recipeId, $userId]
             );
         }
+
+        $query->orderBy("name", "asc");
+
+        return $query->get();
     }
 }

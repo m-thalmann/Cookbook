@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/core/api/api.service';
 import { RecipeFull } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
@@ -14,7 +15,6 @@ const FALLBACK_IMAGE = 'assets/images/cookbook.svg';
 export class PageRecipeComponent implements OnInit {
   loading = false;
   error = false;
-  notFound = false;
 
   recipe: RecipeFull | null = null;
   recipeImagesURLs: string[] | null = null;
@@ -23,7 +23,13 @@ export class PageRecipeComponent implements OnInit {
 
   selectedPortions: number = 1;
 
-  constructor(private route: ActivatedRoute, private api: ApiService, private user: UserService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private api: ApiService,
+    private user: UserService,
+    private snackBar: MatSnackBar,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -114,7 +120,12 @@ export class PageRecipeComponent implements OnInit {
         }
       }
     } else if (res.isNotFound()) {
-      this.notFound = true;
+      this.snackBar.open('Recipe was not found', 'OK', {
+        panelClass: 'action-warn',
+        duration: 5000,
+      });
+
+      this.router.navigateByUrl('/home');
     } else {
       console.error('Error loading recipe:', res.error);
       this.error = true;
