@@ -1,9 +1,9 @@
 <?php
 
-namespace API\Auth;
+namespace API\auth;
 
-use API\Config\Config;
-use API\Models\User;
+use API\config\Config;
+use API\models\User;
 use PAF\Router\Response;
 
 class Authorization {

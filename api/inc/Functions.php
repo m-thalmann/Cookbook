@@ -2,7 +2,7 @@
 
 namespace API\inc;
 
-use API\Models\RecipeImage;
+use API\models\RecipeImage;
 use PAF\Model\PaginationResult;
 use PAF\Model\Query;
 use PAF\Router\Response;

@@ -1,6 +1,6 @@
 <?php
 
-namespace API\Auth;
+namespace API\auth;
 
 class UnauthorizedException extends \Exception {
     public function __construct($message = "Unauthorized") {

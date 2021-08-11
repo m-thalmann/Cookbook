@@ -1,8 +1,8 @@
 <?php
 
-use API\Auth\Authorization;
+use API\auth\Authorization;
 use API\inc\Functions;
-use API\Models\Recipe;
+use API\models\Recipe;
 
 $group->get('/id/{{i:id}}/recipes', Authorization::middleware(false), function (
     $req

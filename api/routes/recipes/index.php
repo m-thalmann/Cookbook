@@ -1,12 +1,12 @@
 <?php
 
-namespace API\Routes;
+namespace API\routes;
 
-use API\Auth\Authorization;
+use API\auth\Authorization;
 use API\inc\Functions;
-use API\Models\Ingredient;
-use API\Models\Recipe;
-use API\Models\RecipeImage;
+use API\models\Ingredient;
+use API\models\Recipe;
+use API\models\RecipeImage;
 use PAF\Model\DuplicateException;
 use PAF\Model\InvalidException;
 use PAF\Model\Model;

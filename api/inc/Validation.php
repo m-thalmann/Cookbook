@@ -1,6 +1,6 @@
 <?php
 
-namespace API\Inc;
+namespace API\inc;
 
 use PAF\Model\ValidationError;
 

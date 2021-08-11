@@ -1,9 +1,9 @@
 <?php
 
-namespace API\Routes;
+namespace API\routes;
 
-use API\Auth\Authorization;
-use API\Models\Ingredient;
+use API\auth\Authorization;
+use API\models\Ingredient;
 use PAF\Model\InvalidException;
 use PAF\Router\Response;
 

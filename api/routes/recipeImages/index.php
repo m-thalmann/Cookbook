@@ -1,8 +1,8 @@
 <?php
 
-use API\Auth\Authorization;
+use API\auth\Authorization;
 use API\inc\Functions;
-use API\Models\RecipeImage;
+use API\models\RecipeImage;
 use PAF\Router\Response;
 
 $group

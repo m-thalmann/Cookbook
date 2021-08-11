@@ -1,8 +1,8 @@
 <?php
 
-namespace API\Models;
+namespace API\models;
 
-use API\Inc\Validation;
+use API\inc\Validation;
 use PAF\Model\Model;
 
 /**

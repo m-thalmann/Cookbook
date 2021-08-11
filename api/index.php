@@ -2,7 +2,7 @@
 
 namespace API;
 
-use API\Config\Config;
+use API\config\Config;
 
 use PAF\Model\Database;
 use PAF\Router\Response;

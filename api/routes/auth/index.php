@@ -1,10 +1,10 @@
 <?php
 
-namespace API\Routes;
+namespace API\routes;
 
-use API\Auth\Authorization;
-use API\Config\Config;
-use API\Models\User;
+use API\auth\Authorization;
+use API\config\Config;
+use API\models\User;
 use PAF\Model\DuplicateException;
 use PAF\Model\InvalidException;
 use PAF\Router\Response;

@@ -1,9 +1,9 @@
 <?php
 
-namespace API\Models;
+namespace API\models;
 
-use API\Config\Config;
-use API\Inc\Validation;
+use API\config\Config;
+use API\inc\Validation;
 use PAF\Model\DuplicateException;
 use PAF\Model\Model;
 

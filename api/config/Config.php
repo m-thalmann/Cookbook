@@ -1,6 +1,6 @@
 <?php
 
-namespace API\Config;
+namespace API\config;
 
 class Config {
     private static $config = null;

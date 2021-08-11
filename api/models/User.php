@@ -1,9 +1,9 @@
 <?php
 
-namespace API\Models;
+namespace API\models;
 
-use API\Auth\Authorization;
-use API\Inc\Validation;
+use API\auth\Authorization;
+use API\inc\Validation;
 use PAF\Model\Model;
 
 /**
