@@ -116,13 +116,19 @@
                     <input matInput formControlName="unit" (keydown.enter)="$event.preventDefault(); addIngredient()" />
                     <mat-error *ngIf="getFormError('unit', i) != null">{{ getFormError('unit', i) }}</mat-error>
                 </mat-form-field>
-                <button mat-icon-button (click)="removeIngredient(i)" [disabled]="saving" type="button">
+                <button mat-icon-button (click)="removeIngredient(i)" [disabled]="saving || disabled" type="button">
                     <mat-icon>delete</mat-icon>
                 </button>
             </div>
         </div>
 
-        <button mat-raised-button (click)="addIngredient()" color="primary" [disabled]="saving" type="button">
+        <button
+            mat-raised-button
+            (click)="addIngredient()"
+            color="primary"
+            [disabled]="saving || disabled"
+            type="button"
+        >
             <mat-icon>add</mat-icon> Add ingredient
         </button>
     </div>
@@ -137,7 +143,7 @@
             (click)="save()"
             color="primary"
             class="save-button"
-            [disabled]="saving || recipeForm.invalid"
+            [disabled]="saving || recipeForm.invalid || disabled"
         >
             <ng-container *ngIf="isEdit"> <mat-icon>save</mat-icon> Save &amp; continue </ng-container>
             <ng-container *ngIf="!isEdit"> <mat-icon>cloud_upload</mat-icon> Publish &amp; continue </ng-container>

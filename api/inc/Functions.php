@@ -2,8 +2,10 @@
 
 namespace API\inc;
 
+use API\Models\RecipeImage;
 use PAF\Model\PaginationResult;
 use PAF\Model\Query;
+use PAF\Router\Response;
 
 class Functions {
     /**
@@ -36,5 +38,22 @@ class Functions {
         }
 
         return $query;
+    }
+
+    /**
+     * Generates a response containing the given RecipeImage
+     *
+     * @param RecipeImage $image
+     *
+     * @return Response the generated response with the image
+     */
+    public static function outputRecipeImage($image) {
+        $size = filesize($image->path);
+        $fp = fopen($image->path, 'rb');
+        $file = fread($fp, $size);
+
+        fclose($fp);
+
+        return Response::ok($file, $image->mimeType);
     }
 }

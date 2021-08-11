@@ -66,6 +66,14 @@ export class ApiService {
     };
   }
 
+  private get queryToken() {
+    if (this.user.isLoggedin && this.user.token) {
+      return `token=${encodeURIComponent(this.user.token)}`;
+    } else {
+      return null;
+    }
+  }
+
   /**
    * The api url from the config
    */
@@ -241,10 +249,6 @@ export class ApiService {
 
   // Recipe Images
 
-  getRecipeImage(id: number) {
-    return this.get<RecipeImage>(`${this.URL}/recipeImages/id/${id}`);
-  }
-
   getRecipeImages(recipeId: number) {
     return this.get<RecipeImage[]>(`${this.URL}/recipes/id/${recipeId}/images`);
   }
@@ -254,7 +258,15 @@ export class ApiService {
   }
 
   getRecipeImageURL(recipeId: number, number: number) {
-    return `${this.URL}/recipes/id/${recipeId}/images/number/${number}`;
+    let token = this.queryToken ? `?${this.queryToken}` : '';
+
+    return `${this.URL}/recipes/id/${recipeId}/images/number/${number}${token}`;
+  }
+
+  getRecipeImageURLById(id: number) {
+    let token = this.queryToken ? `?${this.queryToken}` : '';
+
+    return `${this.URL}/recipeImages/id/${id}${token}`;
   }
 
   addRecipeImage(recipeId: number, image: File) {

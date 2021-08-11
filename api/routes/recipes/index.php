@@ -154,7 +154,7 @@ $group
     ->delete('/id/{{i:id}}', Authorization::middleware(), function ($req) {
         if (
             Recipe::query(
-                "id = ? AND id IN (SELECT id FROM recipes WHERE userId = ?)",
+                "id = ? AND userId = ?",
                 [$req["params"]["id"], Authorization::user()->id]
             )->delete()
         ) {
@@ -242,15 +242,8 @@ $group
             }
 
 
-            $size = filesize($image->path);
 
-            $fp = fopen($image->path, 'rb');
-
-            $file = fread($fp, $size);
-
-            fclose($fp);
-
-            return Response::ok($file, $image->mimeType);
+            return Functions::outputRecipeImage($image);
         }
     )
     ->post('/id/{{i:id}}/images', Authorization::middleware(), function ($req) {

@@ -135,11 +135,17 @@ class Authorization {
     public static function middleware($mustBeAuthorized = true) {
         return function ($request, $next = null) use ($mustBeAuthorized) {
             try {
-                if ($request["authorization"] === null) {
+                if ($request["authorization"] === null && empty($_GET['token'])) {
                     throw new UnauthorizedException();
                 }
 
-                $tokenParts = explode(" ", $request["authorization"]); // token form: '<type> <token>'
+                $token = $request["authorization"];
+
+                if($token === null){
+                    $token = $_GET['token'];
+                }
+
+                $tokenParts = explode(" ", $token); // token form: '<type> <token>'
 
                 if (count($tokenParts) != 2) {
                     throw new UnauthorizedException();

@@ -1,0 +1,8 @@
+<h2 mat-dialog-title [class.warn]="!!data.error">{{ data.title }}</h2>
+
+<mat-dialog-content class="content" [innerHTML]="data.content"></mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button [mat-dialog-close]="false" *ngIf="!data.onlyOk" cdkFocusInitial>{{ btnDecline }}</button>
+    <button mat-button [mat-dialog-close]="true" [color]="data.warn ? 'warn' : 'default'">{{ btnConfirm }}</button>
+</mat-dialog-actions>

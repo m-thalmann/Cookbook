@@ -1,6 +1,10 @@
 <div class="actions" *ngIf="editRecipe">
-    <a mat-stroked-button [routerLink]="recipeURL"><mat-icon>visibility</mat-icon> View recipe</a>
-    <button mat-stroked-button (click)="deleteRecipe()" color="warn"><mat-icon>delete</mat-icon> Delete recipe</button>
+    <a mat-stroked-button [routerLink]="disabled ? null : recipeURL" [disabled]="disabled"
+        ><mat-icon>visibility</mat-icon> View recipe</a
+    >
+    <button mat-stroked-button (click)="deleteRecipe()" color="warn" [disabled]="disabled">
+        <mat-icon>delete</mat-icon> Delete recipe
+    </button>
 </div>
 
 <mat-vertical-stepper #stepper linear="true">
@@ -9,12 +13,17 @@
         <cb-edit-recipe-information
             [editRecipe]="editRecipe"
             (saved)="informationSaved($event)"
+            [disabled]="disabled"
         ></cb-edit-recipe-information>
     </mat-step>
 
     <mat-step>
         <ng-template matStepLabel>Edit images</ng-template>
 
-        <cb-edit-recipe-images></cb-edit-recipe-images>
+        <cb-edit-recipe-images
+            [recipeId]="editRecipe.id"
+            [disabled]="disabled"
+            *ngIf="editRecipe"
+        ></cb-edit-recipe-images>
     </mat-step>
 </mat-vertical-stepper>

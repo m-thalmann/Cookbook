@@ -1,6 +1,7 @@
 <?php
 
 use API\Auth\Authorization;
+use API\inc\Functions;
 use API\Models\RecipeImage;
 use PAF\Router\Response;
 
@@ -13,13 +14,13 @@ $group
             )->getFirst();
         } else {
             $recipeImage = RecipeImage::get(
-                "id = ? AND EXISTS (SELECT * FROM recipes WHERE id = recipeId AND public = 1",
+                "id = ? AND EXISTS (SELECT * FROM recipes WHERE id = recipeId AND public = 1)",
                 [$req["params"]["id"]]
             )->getFirst();
         }
 
         if ($recipeImage !== null) {
-            return $recipeImage;
+            return Functions::outputRecipeImage($recipeImage);
         } else {
             return Response::notFound();
         }

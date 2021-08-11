@@ -970,9 +970,10 @@ paths:
         '200':
           description: OK
           content:
-            application/json:
+            image/*:
               schema:
-                $ref: '#/components/schemas/RecipeImage'
+                type: string
+                format: binary
         '404':
           description: Not found
       operationId: get-recipeImages-id

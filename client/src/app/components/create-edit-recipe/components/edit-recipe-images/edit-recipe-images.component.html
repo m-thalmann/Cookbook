@@ -1,1 +1,31 @@
-<p>edit-recipe-images works!</p>
+<div class="actions">
+    <button
+        mat-stroked-button
+        [color]="error ? 'warn' : 'accent'"
+        (click)="fileInput.click()"
+        [disabled]="saving || disabled"
+    >
+        <mat-icon>file_upload</mat-icon> Upload new image
+    </button>
+    <mat-spinner color="accent" diameter="20" *ngIf="saving"></mat-spinner>
+    <span class="fg-warn" *ngIf="error">{{ error }}</span>
+    <input type="file" hidden (change)="uploadImage(fileInput.files)" #fileInput accept=".jpg,.jpeg,.jfif,.png,.gif" />
+</div>
+
+<div class="images">
+    <div class="image" *ngFor="let url of recipeImagesURLs; let index = index">
+        <img [src]="url" cbImageFallback alt="Recipe image" />
+        <button
+            mat-mini-fab
+            (click)="deleteImage(index)"
+            class="delete-button"
+            color="warn"
+            [disabled]="saving || loading || disabled"
+        >
+            <mat-icon>delete</mat-icon>
+        </button>
+    </div>
+    <p class="icon-text" *ngIf="recipeImagesURLs && recipeImagesURLs.length === 0">
+        <mat-icon>info</mat-icon><span>No images</span>
+    </p>
+</div>

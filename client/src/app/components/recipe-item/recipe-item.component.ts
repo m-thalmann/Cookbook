@@ -40,10 +40,6 @@ export class RecipeItemComponent {
     return this.api.getRecipeImageURL(this.recipe.id, 0);
   }
 
-  get fallbackImage() {
-    return FALLBACK_IMAGE;
-  }
-
   get totalTime() {
     let time = 0;
 

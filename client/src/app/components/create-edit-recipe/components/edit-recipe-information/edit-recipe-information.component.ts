@@ -37,6 +37,23 @@ export class EditRecipeInformationComponent {
     this._editRecipe = editRecipe;
   }
 
+  @Input()
+  set disabled(disabled: boolean){
+    if(!this.saving){
+      if(disabled){
+        this.recipeForm.disable();
+      }else{
+        this.recipeForm.enable();
+      }
+    }
+
+    this._disabled = disabled;
+  }
+
+  get disabled(){
+    return this._disabled;
+  }
+
   @Output() saved = new EventEmitter<RecipeFull | null>();
 
   recipeForm: FormGroup;
@@ -47,6 +64,8 @@ export class EditRecipeInformationComponent {
 
   saving = false;
   error: string | null = null;
+
+  private _disabled = false;
 
   private _editRecipe: RecipeFull | null = null;
 

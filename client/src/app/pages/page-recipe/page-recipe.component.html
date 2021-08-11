@@ -59,7 +59,7 @@
 
     <div class="image-gallery" [class.fallback]="recipe.imagesCount === 0">
         <div class="image">
-            <img [src]="currentRecipeImageURL" alt="Recipe image" />
+            <img [src]="currentRecipeImageURL" cbImageFallback alt="Recipe image" />
 
             <button
                 mat-icon-button
@@ -89,7 +89,9 @@
                 [class.active]="currentRecipeImageNumber === index"
                 *ngFor="let url of recipeImagesURLs; let index = index"
             >
-                <img [src]="url" alt="Recipe image preview" />
+                <div class="image">
+                    <img [src]="url" cbImageFallback alt="Recipe image preview" />
+                </div>
             </div>
         </div>
     </div>
