@@ -1,4 +1,4 @@
-@import '../../../variables.scss';
+@import 'variables.scss';
 
 .editor {
   overflow: auto;
@@ -18,7 +18,7 @@
     right: 0;
     z-index: 2;
 
-    background-color: mat-color($primary);
+    background: mat-color($primary);
     color: mat-color($primary, default-contrast);
 
     .section {

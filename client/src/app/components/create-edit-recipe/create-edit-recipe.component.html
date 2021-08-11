@@ -1,3 +1,8 @@
+<div class="actions" *ngIf="editRecipe">
+    <a mat-stroked-button [routerLink]="recipeURL"><mat-icon>visibility</mat-icon> View recipe</a>
+    <button mat-stroked-button (click)="deleteRecipe()" color="warn"><mat-icon>delete</mat-icon> Delete recipe</button>
+</div>
+
 <mat-vertical-stepper #stepper linear="true">
     <mat-step [completed]="isEdit">
         <ng-template matStepLabel>Edit information</ng-template>

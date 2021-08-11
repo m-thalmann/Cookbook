@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { MatStepper } from '@angular/material/stepper';
 import { RecipeFull } from 'src/app/core/api/ApiInterfaces';
+import { slugify } from 'src/app/core/functions';
 
 @Component({
   selector: 'cb-create-edit-recipe',
@@ -16,6 +17,16 @@ export class CreateEditRecipeComponent {
 
   get isEdit() {
     return this.editRecipe !== null;
+  }
+
+  get recipeURL() {
+    if (!this.editRecipe) return;
+
+    return `/recipes/${this.editRecipe.id}/${slugify(this.editRecipe.name)}`;
+  }
+
+  deleteRecipe() {
+    // TODO:
   }
 
   informationSaved(recipe: RecipeFull | null) {
