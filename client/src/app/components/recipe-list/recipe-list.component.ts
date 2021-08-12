@@ -16,10 +16,6 @@ export class RecipeListComponent implements OnInit {
   @Input() sortDirection: 'asc' | 'desc' = 'desc';
 
   @Input() reloadFunction!: (options: Options) => Promise<ApiResponse<Pagination<Recipe>>>;
-  @Input()
-  set doReload(doReloadFunction: EventEmitter<void> | null) {
-    doReloadFunction?.subscribe(() => this.reload());
-  }
 
   @Output() loadingChange = new EventEmitter<boolean>();
   @Output() errorChange = new EventEmitter<boolean>();

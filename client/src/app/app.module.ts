@@ -25,6 +25,7 @@ import { EditRecipeImagesComponent } from './components/create-edit-recipe/compo
 import { EditorComponent } from './components/editor/editor.component';
 import { InputFocusDirective } from './core/directives/input-focus.directive';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { PageSearchComponent } from './pages/page-search/page-search.component';
 
 export function setupConfig(service: ConfigService) {
   return () => service.load();
@@ -52,6 +53,7 @@ export function setupConfig(service: ConfigService) {
     EditorComponent,
     InputFocusDirective,
     ConfirmDialogComponent,
+    PageSearchComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, MaterialModule, HttpClientModule],
   providers: [

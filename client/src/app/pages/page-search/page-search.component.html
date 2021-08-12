@@ -1,0 +1,13 @@
+<h2>Search recipe</h2>
+<span class="results" *ngIf="results !== null">{{ results }} results</span>
+
+<mat-form-field appearance="outline" color="primary" class="search-field">
+    <mat-label>Search</mat-label>
+    <mat-icon matPrefix>search</mat-icon>
+    <input matInput [(ngModel)]="searchInput" (keyup.enter)="doSearch()" [disabled]="loading" />
+    <button matSuffix mat-icon-button (click)="doSearch()" [disabled]="loading" color="accent">
+        <mat-icon>arrow_forward</mat-icon>
+    </button>
+</mat-form-field>
+
+<cb-recipe-list [reloadFunction]="reload" sort="name" #recipeList *ngIf="search"></cb-recipe-list>

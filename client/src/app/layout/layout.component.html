@@ -7,9 +7,9 @@
         </nav>
 
         <div class="actions">
-            <button mat-icon-button>
+            <a routerLink="/search" mat-icon-button>
                 <mat-icon>search</mat-icon>
-            </button>
+            </a>
             <button mat-icon-button class="hide-desktop" (click)="toggleMenu()">
                 <mat-icon *ngIf="!showMenu">menu</mat-icon>
                 <mat-icon *ngIf="showMenu">close</mat-icon>

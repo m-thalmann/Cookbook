@@ -8,6 +8,7 @@ import { PageEditRecipeComponent } from './pages/page-edit-recipe/page-edit-reci
 import { PageHomeComponent } from './pages/page-home/page-home.component';
 import { PageMyRecipesComponent } from './pages/page-my-recipes/page-my-recipes.component';
 import { PageRecipeComponent } from './pages/page-recipe/page-recipe.component';
+import { PageSearchComponent } from './pages/page-search/page-search.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/home' },
@@ -18,6 +19,13 @@ const routes: Routes = [
     children: [
       { path: 'home', component: PageHomeComponent },
       { path: 'my', component: PageMyRecipesComponent, canActivate: [AuthGuard] },
+      {
+        path: 'search',
+        children: [
+          { path: '', component: PageSearchComponent },
+          { path: ':search', component: PageSearchComponent },
+        ],
+      },
       { path: 'recipes/:id/:slug', component: PageRecipeComponent },
       { path: 'create', component: PageCreateRecipeComponent, canActivate: [AuthGuard] },
       { path: 'edit/:id', component: PageEditRecipeComponent, canActivate: [AuthGuard] },
