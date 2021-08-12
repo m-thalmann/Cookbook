@@ -1630,7 +1630,7 @@ abstract class Model implements \JsonSerializable {
      * @return array The found annotations with the annotation name as key and the value as value (is null if only annotation exists)
      */
     private static function getDocInfo($doc) {
-        $rows = array_slice(explode("\r\n", $doc), 1, -1);
+        $rows = array_slice(explode(PHP_EOL, $doc), 1, -1);
 
         $info = [];
 
