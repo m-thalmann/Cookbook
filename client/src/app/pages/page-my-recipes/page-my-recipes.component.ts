@@ -20,6 +20,8 @@ export class PageMyRecipesComponent {
       this.results = res.value.total_items;
     } else {
       this.results = null;
+
+      console.error('Error loading recipes for user:', res.error);
     }
 
     return res;

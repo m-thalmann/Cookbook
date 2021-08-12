@@ -38,11 +38,11 @@ export class EditRecipeInformationComponent {
   }
 
   @Input()
-  set disabled(disabled: boolean){
-    if(!this.saving){
-      if(disabled){
+  set disabled(disabled: boolean) {
+    if (!this.saving) {
+      if (disabled) {
         this.recipeForm.disable();
-      }else{
+      } else {
         this.recipeForm.enable();
       }
     }
@@ -50,7 +50,7 @@ export class EditRecipeInformationComponent {
     this._disabled = disabled;
   }
 
-  get disabled(){
+  get disabled() {
     return this._disabled;
   }
 
@@ -276,13 +276,17 @@ export class EditRecipeInformationComponent {
 
       this.saved.emit(res.value);
 
-      this.snackBar.open('Successfully saved!', 'OK');
+      this.snackBar.open('Successfully saved!', 'OK', {
+        duration: 5000,
+      });
     } else {
       this.error = 'Error saving recipe';
 
       if (res.error?.info) {
         this.error += `: ${res.error.info}`;
       }
+
+      console.error('Error saving recipe:', res.error);
     }
 
     this.saving = false;

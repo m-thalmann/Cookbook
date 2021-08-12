@@ -51,6 +51,7 @@ export class EditRecipeImagesComponent {
         this.recipeImagesURLs = [];
       }
     } else {
+      console.error('Error loading recipe-images:', res.error);
       // TODO: error
     }
 
@@ -69,9 +70,12 @@ export class EditRecipeImagesComponent {
 
     if (res.isOK()) {
       await this.reload();
-      this.snackBar.open('Image was added successfully!', 'OK');
+      this.snackBar.open('Image was added successfully!', 'OK', {
+        duration: 5000,
+      });
     } else {
       this.error = res.error.info || 'Error uploading image';
+      console.error('Error adding recipe-image:', res.error);
     }
 
     this.saving = false;
@@ -85,12 +89,14 @@ export class EditRecipeImagesComponent {
 
       if (res.isOK()) {
         await this.reload();
-        this.snackBar.open('Image was deleted successfully!', 'OK');
+        this.snackBar.open('Image was deleted successfully!', 'OK', {
+          duration: 5000,
+        });
       } else {
         this.snackBar.open('Image could not be deleted!', 'OK', {
-          duration: 5000,
           panelClass: 'action-warn',
         });
+        console.error('Error deleting recipe-image:', res.error);
       }
 
       this.saving = false;

@@ -122,6 +122,7 @@ export class LoginRegisterDialogComponent {
       }
     } catch (e) {
       this.error = e.message || 'An error occured!';
+      console.error('Error on login/register:', res.error);
     }
 
     this.dialogRef.disableClose = false;

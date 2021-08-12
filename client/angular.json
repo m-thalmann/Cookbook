@@ -50,7 +50,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": ["src/favicon.ico", "src/.htaccess", "src/assets"],
             "styles": ["src/styles/styles.scss", "src/styles/variables.scss"],
             "stylePreprocessorOptions": {
               "includePaths": ["src/styles"]

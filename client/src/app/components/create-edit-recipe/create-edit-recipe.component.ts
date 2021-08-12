@@ -58,13 +58,15 @@ export class CreateEditRecipeComponent {
     let res = await this.api.deleteRecipe(this.editRecipe.id);
 
     if (res.isOK()) {
-      this.snackBar.open('Recipe deleted successfully!', 'OK');
+      this.snackBar.open('Recipe deleted successfully!', 'OK', {
+        duration: 5000,
+      });
       this.router.navigateByUrl('/home');
     } else {
       this.snackBar.open('Error deleting recipe!', 'OK', {
-        duration: 5000,
         panelClass: 'action-warn',
       });
+      console.error('Error deleting recipe:', res.error);
     }
 
     this.disabled = false;

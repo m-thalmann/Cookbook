@@ -43,6 +43,8 @@ export class PageHomeComponent {
       this.results = res.value.total_items;
     } else {
       this.results = null;
+
+      console.error('Error loading recipes:', res.error);
     }
 
     return res;

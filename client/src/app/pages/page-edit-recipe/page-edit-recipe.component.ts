@@ -44,7 +44,6 @@ export class PageEditRecipeComponent implements OnInit {
       } else {
         this.snackBar.open('You do not own this recipe', 'OK', {
           panelClass: 'action-warn',
-          duration: 5000,
         });
 
         this.router.navigateByUrl('/home');
@@ -58,6 +57,8 @@ export class PageEditRecipeComponent implements OnInit {
       this.router.navigateByUrl('/home');
     } else {
       this.error = true;
+
+      console.error('Error loading recipe:', res.error);
     }
 
     this.loading = false;

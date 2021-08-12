@@ -21,7 +21,12 @@
 
     <p class="icon-text" *ngIf="recipes.total_items === 0"><mat-icon>info</mat-icon><span>No recipes found</span></p>
 
-    <cb-paginator [(page)]="page" [pages]="recipes.total_pages" [disabled]="loading"></cb-paginator>
+    <cb-paginator
+        [(page)]="page"
+        [pages]="recipes.total_pages"
+        [disabled]="loading"
+        *ngIf="recipes.total_items > 0"
+    ></cb-paginator>
 </ng-container>
 
 <mat-spinner *ngIf="!recipes && !error" [diameter]="64"></mat-spinner>
