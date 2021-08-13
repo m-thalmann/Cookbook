@@ -47,8 +47,9 @@ try {
         Router::addRoutes()->get('/', function () {
             return "API v" . VERSION;
         });
-
+        
         Router::group('/auth', __DIR__ . '/routes/auth/index.php');
+        Router::group('/categories', __DIR__ . '/routes/categories/index.php');
         Router::group(
             '/ingredients',
             __DIR__ . '/routes/ingredients/index.php'

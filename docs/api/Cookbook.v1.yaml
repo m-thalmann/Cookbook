@@ -17,6 +17,7 @@ tags:
   - name: Recipe
   - name: Ingredient
   - name: RecipeImage
+  - name: Category
 paths:
   /auth:
     get:
@@ -101,6 +102,8 @@ paths:
                   - info
       operationId: put-auth
       description: Update the authenticated user
+      security:
+        - Token: []
     delete:
       summary: Deletes the authenticated user
       tags:
@@ -993,6 +996,26 @@ paths:
           description: Not found
       operationId: delete-recipeImages-id
       description: Delete a specific recipe-image
+      security:
+        - Token: []
+  /categories:
+    get:
+      summary: Return all available categories
+      tags:
+        - Category
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: 'Cakes'
+                uniqueItems: true
+      operationId: get-categories
+      description: Return all available categories
       security:
         - Token: []
 components:

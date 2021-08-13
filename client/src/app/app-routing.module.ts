@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './core/auth/auth.guard';
 import { LayoutComponent } from './layout/layout.component';
 import { LogoutComponent } from './pages/logout/logout.component';
+import { PageCategoriesComponent } from './pages/page-categories/page-categories.component';
 import { PageCreateRecipeComponent } from './pages/page-create-recipe/page-create-recipe.component';
 import { PageEditRecipeComponent } from './pages/page-edit-recipe/page-edit-recipe.component';
 import { PageHomeComponent } from './pages/page-home/page-home.component';
@@ -24,6 +25,13 @@ const routes: Routes = [
         children: [
           { path: '', component: PageSearchComponent },
           { path: ':search', component: PageSearchComponent },
+        ],
+      },
+      {
+        path: 'categories',
+        children: [
+          { path: '', component: PageCategoriesComponent },
+          { path: ':category', component: PageCategoriesComponent },
         ],
       },
       { path: 'recipes/:id/:slug', component: PageRecipeComponent },

@@ -279,4 +279,10 @@ export class ApiService {
   deleteRecipeImage(id: number) {
     return this.delete<any>(`${this.URL}/recipeImages/id/${id}`);
   }
+
+  // Categories
+
+  getCategories() {
+    return this.get<string[]>(`${this.URL}/categories`);
+  }
 }

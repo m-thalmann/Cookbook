@@ -36,17 +36,7 @@ export class PageHomeComponent {
     });
   }
 
-  reload = async (options: Options) => {
-    let res = await this.api.getRecipes(options);
-
-    if (res.isOK() && res.value) {
-      this.results = res.value.total_items;
-    } else {
-      this.results = null;
-
-      console.error('Error loading recipes:', res.error);
-    }
-
-    return res;
+  reload = (options: Options) => {
+    return this.api.getRecipes(options);
   };
 }

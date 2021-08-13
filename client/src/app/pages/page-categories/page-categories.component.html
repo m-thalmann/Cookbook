@@ -1,0 +1,25 @@
+<a routerLink="/categories" *ngIf="category" class="icon-text back-link">
+    <mat-icon>arrow_back</mat-icon><span>Go back to categories</span>
+</a>
+<h2 *ngIf="isOverview">Browse categories</h2>
+<h2 *ngIf="!isOverview">{{ category }}</h2>
+
+<ng-container *ngIf="isOverview">
+    <div class="categories">
+        <a [routerLink]="getCategoryURL(category)" class="category" *ngFor="let category of categories">
+            <img src="assets/images/cookbook.svg" alt="Category Icon" />
+            {{ category }}
+        </a>
+    </div>
+
+    <mat-spinner *ngIf="loadingCategories" [diameter]="64"></mat-spinner>
+
+    <p class="icon-text fg-warn" *ngIf="error"><mat-icon>error</mat-icon><span>Error loading recipes</span></p>
+    <p class="icon-text" *ngIf="categories && categories.length === 0">
+        <mat-icon>info</mat-icon><span>No categories found</span>
+    </p>
+</ng-container>
+
+<ng-container *ngIf="!isOverview">
+    <cb-recipe-list [reloadFunction]="reload" sort="name" *ngIf="category"></cb-recipe-list>
+</ng-container>

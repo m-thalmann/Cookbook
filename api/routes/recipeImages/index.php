@@ -1,5 +1,7 @@
 <?php
 
+namespace API\routes;
+
 use API\auth\Authorization;
 use API\inc\Functions;
 use API\models\RecipeImage;

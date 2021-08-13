@@ -15,10 +15,12 @@ export class RecipeListComponent implements OnInit {
   }
   @Input() sortDirection: 'asc' | 'desc' = 'desc';
 
-  @Input() reloadFunction!: (options: Options) => Promise<ApiResponse<Pagination<Recipe>>>;
+  @Input() reloadFunction!: (options: Options) => Promise<ApiResponse<Pagination<Recipe>>> | null;
 
   @Output() loadingChange = new EventEmitter<boolean>();
   @Output() errorChange = new EventEmitter<boolean>();
+
+  results: number | null = null;
 
   loading = false;
   error = false;
@@ -67,13 +69,19 @@ export class RecipeListComponent implements OnInit {
 
     let recipes = await this.reloadFunction({ page: this.page, sort: this.sort, sortDirection: this.sortDirection });
 
-    if (recipes.isOK()) {
-      this.recipes = recipes.value;
-    } else {
-      this.error = true;
-      this.errorChange.emit(this.loading);
+    if (recipes !== null) {
+      if (recipes.isOK()) {
+        this.recipes = recipes.value;
 
-      console.error('Error loading recipes:', recipes.error);
+        if (recipes.value) {
+          this.results = recipes.value.total_items;
+        }
+      } else {
+        this.error = true;
+        this.errorChange.emit(this.loading);
+
+        console.error('Error loading recipes:', recipes.error);
+      }
     }
 
     this.loading = false;
