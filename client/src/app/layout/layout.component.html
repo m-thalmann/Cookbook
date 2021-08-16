@@ -2,8 +2,13 @@
     <div class="container">
         <h1><img src="assets/images/cookbook.svg" alt="Cookbook Logo" /><span>Cookbook</span></h1>
 
-        <nav class="desktop-nav hide-mobile">
+        <nav class="desktop-nav hide-mobile" [class.loggedin]="isLoggedin">
             <ng-container *ngTemplateOutlet="navItems"></ng-container>
+            <a routerLink="/create" routerLinkActive="active" class="fg-accent create-recipe-link" *ngIf="isLoggedin">
+                <div>
+                    <mat-icon>add</mat-icon>
+                </div>
+            </a>
         </nav>
 
         <div class="actions">
@@ -31,6 +36,12 @@
 
     <nav class="mobile-nav hide-desktop" [class.show]="showMenu">
         <ng-container *ngTemplateOutlet="navItems"></ng-container>
+        <a routerLink="/create" routerLinkActive="active" class="fg-accent" *ngIf="isLoggedin">
+            <div>
+                <mat-icon>add</mat-icon>
+                <span>Create recipe</span>
+            </div>
+        </a>
         <div class="spacer"></div>
         <div class="account" *ngIf="isLoggedin">
             <div class="account-mail">

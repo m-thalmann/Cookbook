@@ -14,7 +14,7 @@
 
     <mat-spinner *ngIf="loadingCategories" [diameter]="64"></mat-spinner>
 
-    <p class="icon-text fg-warn" *ngIf="error"><mat-icon>error</mat-icon><span>Error loading recipes</span></p>
+    <p class="icon-text fg-warn" *ngIf="error"><mat-icon>error</mat-icon><span>Error loading categories</span></p>
     <p class="icon-text" *ngIf="categories && categories.length === 0">
         <mat-icon>info</mat-icon><span>No categories found</span>
     </p>
