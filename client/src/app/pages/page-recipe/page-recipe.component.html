@@ -61,20 +61,20 @@
         <div class="image">
             <img [src]="currentRecipeImageURL" cbImageFallback alt="Recipe image" />
 
-            <button
-                mat-icon-button
+            <div
+                class="gallery-navigation"
+                [class.disabled]="currentRecipeImageNumber === 0"
                 (click)="currentRecipeImageNumber = currentRecipeImageNumber - 1"
-                [disabled]="currentRecipeImageNumber === 0"
             >
                 <mat-icon>navigate_before</mat-icon>
-            </button>
-            <button
-                mat-icon-button
+            </div>
+            <div
+                class="gallery-navigation"
+                [class.disabled]="recipe.imagesCount === 0 || currentRecipeImageNumber + 1 === recipe.imagesCount"
                 (click)="currentRecipeImageNumber = currentRecipeImageNumber + 1"
-                [disabled]="recipe.imagesCount === 0 || currentRecipeImageNumber + 1 === recipe.imagesCount"
             >
                 <mat-icon>navigate_next</mat-icon>
-            </button>
+            </div>
 
             <span class="counter">
                 <mat-icon [inline]="true">photo_camera</mat-icon>
@@ -143,6 +143,7 @@
 </ng-container>
 
 <mat-menu #shareMenu="matMenu">
+    <button mat-menu-item (click)="copyLink()"><mat-icon class="fg-accent">link</mat-icon> Copy link</button>
     <a mat-menu-item [href]="shareEmailLink" target="_blank" rel="noopener">
         <mat-icon class="fg-accent">email</mat-icon> Email
     </a>

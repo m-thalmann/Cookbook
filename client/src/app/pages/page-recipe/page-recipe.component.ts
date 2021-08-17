@@ -1,3 +1,4 @@
+import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -28,7 +29,8 @@ export class PageRecipeComponent implements OnInit {
     private api: ApiService,
     private user: UserService,
     private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private clipboard: Clipboard
   ) {}
 
   ngOnInit() {
@@ -136,6 +138,14 @@ export class PageRecipeComponent implements OnInit {
 
   get hasShareApi() {
     return !!navigator.share;
+  }
+
+  copyLink() {
+    if (this.clipboard.copy(location.href)) {
+      this.snackBar.open('Successfully copied!', 'OK', {
+        duration: 5000,
+      });
+    }
   }
 
   get shareEmailLink() {
