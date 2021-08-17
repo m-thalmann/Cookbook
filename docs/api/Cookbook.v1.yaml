@@ -874,6 +874,8 @@ paths:
               schema:
                 type: string
                 format: binary
+        '304':
+          description: Not modified (if cached using the E-Tag)
         '404':
           description: Not found
       operationId: get-recipes-id-images-number
@@ -977,6 +979,8 @@ paths:
               schema:
                 type: string
                 format: binary
+        '304':
+          description: Not modified (if cached using the E-Tag)
         '404':
           description: Not found
       operationId: get-recipeImages-id

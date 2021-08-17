@@ -241,8 +241,6 @@ $group
                 return Response::notFound();
             }
 
-
-
             return Functions::outputRecipeImage($image);
         }
     )

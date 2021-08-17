@@ -47,8 +47,20 @@ class Functions {
      *
      * @return Response the generated response with the image
      */
-    public static function outputRecipeImage($image) {
+    public static function outputRecipeImage($image, $cacheable = true) {
         $size = filesize($image->path);
+
+        if($cacheable){
+            $etag = md5($image->id);
+
+            header("Cache-Control: private");
+            header("ETag: {$etag}");
+
+            if(!empty($_SERVER['HTTP_IF_NONE_MATCH']) && $etag === $_SERVER['HTTP_IF_NONE_MATCH']){
+                return new Response('', 304, 'text/plain');
+            }
+        }
+        
         $fp = fopen($image->path, 'rb');
         $file = fread($fp, $size);
 
