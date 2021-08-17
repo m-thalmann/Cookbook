@@ -30,7 +30,6 @@ try {
 
     // Constants
     define('ROOT_URL', Config::get('root_url'));
-    define('VERSION', Config::get('version'));
 
     define('ROOT_DIR', __DIR__);
 
@@ -44,10 +43,6 @@ try {
     // Routes
 
     try {
-        Router::addRoutes()->get('/', function () {
-            return "API v" . VERSION;
-        });
-        
         Router::group('/auth', __DIR__ . '/routes/auth/index.php');
         Router::group('/categories', __DIR__ . '/routes/categories/index.php');
         Router::group(

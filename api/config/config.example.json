@@ -1,5 +1,4 @@
 {
-  "version": "1.0.0",
   "root_url": "/api",
   "database": {
     "host": "localhost",
