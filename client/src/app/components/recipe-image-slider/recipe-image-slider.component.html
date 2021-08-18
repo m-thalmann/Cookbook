@@ -1,0 +1,38 @@
+<div class="image-slider" [class.fallback]="recipeImagesURLs && recipeImagesURLs.length === 0" *ngIf="recipeImagesURLs">
+    <div class="image">
+        <img [src]="currentRecipeImageURL" cbImageFallback alt="Recipe image" />
+
+        <div
+            class="slider-navigation"
+            [class.disabled]="currentRecipeImageNumber === 0"
+            (click)="currentRecipeImageNumber = currentRecipeImageNumber - 1"
+        >
+            <mat-icon>navigate_before</mat-icon>
+        </div>
+        <div
+            class="slider-navigation"
+            [class.disabled]="recipeImagesURLs.length === 0 || currentRecipeImageNumber + 1 === recipeImagesURLs.length"
+            (click)="currentRecipeImageNumber = currentRecipeImageNumber + 1"
+        >
+            <mat-icon>navigate_next</mat-icon>
+        </div>
+
+        <span class="counter">
+            <mat-icon [inline]="true">photo_camera</mat-icon>
+            {{ currentRecipeImageNumber + 1 }}/{{ recipeImagesURLs.length > 0 ? recipeImagesURLs.length : 1 }}
+        </span>
+    </div>
+
+    <div class="preview">
+        <div
+            class="preview-image"
+            (click)="currentRecipeImageNumber = index"
+            [class.active]="currentRecipeImageNumber === index"
+            *ngFor="let url of recipeImagesURLs; let index = index"
+        >
+            <div class="image">
+                <img [src]="url" cbImageFallback alt="Recipe image preview" />
+            </div>
+        </div>
+    </div>
+</div>

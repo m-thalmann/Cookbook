@@ -29,6 +29,7 @@ import { PageMyRecipesComponent } from './pages/page-my-recipes/page-my-recipes.
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { PageRecipeComponent } from './pages/page-recipe/page-recipe.component';
 import { PageSearchComponent } from './pages/page-search/page-search.component';
+import { RecipeImageSliderComponent } from './components/recipe-image-slider/recipe-image-slider.component';
 
 export function setupConfig(service: ConfigService) {
   return () => service.load();
@@ -60,6 +61,7 @@ export function setupConfig(service: ConfigService) {
     PageCategoriesComponent,
     PageNotFoundComponent,
     HcaptchaComponent,
+    RecipeImageSliderComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, MaterialModule, HttpClientModule],
   providers: [

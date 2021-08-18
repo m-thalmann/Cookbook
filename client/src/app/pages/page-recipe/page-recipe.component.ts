@@ -20,8 +20,6 @@ export class PageRecipeComponent implements OnInit {
   recipe: RecipeFull | null = null;
   recipeImagesURLs: string[] | null = null;
 
-  currentRecipeImageNumber = 0;
-
   selectedPortions: number = 1;
 
   constructor(
@@ -79,14 +77,6 @@ export class PageRecipeComponent implements OnInit {
     } else {
       return null;
     }
-  }
-
-  get currentRecipeImageURL() {
-    if (!this.recipeImagesURLs) {
-      return FALLBACK_IMAGE;
-    }
-
-    return this.recipeImagesURLs[this.currentRecipeImageNumber];
   }
 
   getCalculateIngredientAmount(amount: number) {
