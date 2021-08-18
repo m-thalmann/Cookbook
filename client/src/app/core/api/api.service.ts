@@ -171,11 +171,12 @@ export class ApiService {
     });
   }
 
-  registerUser(email: string, password: string, name: string) {
+  registerUser(email: string, password: string, name: string, hcaptchaToken: string | null) {
     return this.post<{ user: User; token: string; info: string }>(`${this.URL}/auth/register`, {
       email: email,
       password: password,
       name: name,
+      hcaptchaToken: hcaptchaToken ? hcaptchaToken : undefined,
     });
   }
 

@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { ApiService } from 'src/app/core/api/api.service';
 import { User } from 'src/app/core/api/ApiInterfaces';
 import { ApiResponse } from 'src/app/core/api/ApiResponse';
 import { UserService } from 'src/app/core/auth/user.service';
+import { ConfigService } from 'src/app/core/config/config.service';
 import { getFormError } from 'src/app/core/forms/Validation';
 
 @Component({
@@ -20,12 +20,16 @@ export class LoginRegisterDialogComponent {
 
   loginForm: FormGroup;
 
+  private hcaptchaToken: string | null = null;
+  private hcaptchaEnabled: boolean;
+
   constructor(
     private dialogRef: MatDialogRef<LoginRegisterDialogComponent>,
-    private router: Router,
     private fb: FormBuilder,
     private api: ApiService,
-    private user: UserService
+    private user: UserService,
+    private config: ConfigService,
+    private changeDetectionRef: ChangeDetectorRef
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
@@ -47,15 +51,20 @@ export class LoginRegisterDialogComponent {
       password: ['', Validators.required],
       passwordConfirm: [
         '',
-        () => {
-          if (!this.isLogin && this.password?.value != this.passwordConfirm?.value) {
-            return { passwordsMismatch: true };
+        (control: AbstractControl) => {
+          if (!this.isLogin) {
+            if (this.password?.value != this.passwordConfirm?.value) {
+              return { passwordsMismatch: true };
+            }
+            return Validators.required(control);
           }
           return null;
         },
       ],
       remember: [false],
     });
+
+    this.hcaptchaEnabled = this.config.get('hcaptcha.enabled', false);
   }
 
   get email() {
@@ -78,6 +87,14 @@ export class LoginRegisterDialogComponent {
     return getFormError(this.loginForm.get(key));
   }
 
+  get showHCaptcha() {
+    return !this.isLogin && this.hcaptchaEnabled;
+  }
+
+  get isHCaptchaValid() {
+    return this.isLogin || !this.hcaptchaEnabled || this.hcaptchaToken !== null;
+  }
+
   /**
    * Login/Register
    */
@@ -94,7 +111,7 @@ export class LoginRegisterDialogComponent {
     if (this.isLogin) {
       res = await this.api.loginUser(this.email?.value, this.password?.value);
     } else {
-      res = await this.api.registerUser(this.email?.value, this.password?.value, this.name?.value);
+      res = await this.api.registerUser(this.email?.value, this.password?.value, this.name?.value, this.hcaptchaToken);
     }
 
     this.loading = false;
@@ -139,5 +156,10 @@ export class LoginRegisterDialogComponent {
     this.password?.updateValueAndValidity();
     this.passwordConfirm?.updateValueAndValidity();
     this.remember?.updateValueAndValidity();
+  }
+
+  onCaptchaVerified(token: string) {
+    this.hcaptchaToken = token;
+    this.changeDetectionRef.detectChanges();
   }
 }

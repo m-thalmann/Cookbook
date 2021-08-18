@@ -36,7 +36,7 @@ try {
     // Router
     Router::setHeaders([
         "Access-Control-Allow-Headers" => "Content-Type, Authorization",
-        "Access-Control-Expose-Headers" => "X-Logout"
+        "Access-Control-Expose-Headers" => "X-Logout",
     ]);
 
     Router::init(ROOT_URL, true);

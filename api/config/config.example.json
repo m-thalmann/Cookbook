@@ -1,5 +1,6 @@
 {
   "root_url": "/api",
+  "production": true,
   "database": {
     "host": "localhost",
     "user": "root",
@@ -15,5 +16,9 @@
   "password": {
     "secret": "320fhjewkbgv430ghwogvwb132kr21bj"
   },
-  "registration_enabled": true
+  "registration_enabled": true,
+  "hcaptcha": {
+    "enabled": true,
+    "secret": "0x0000000000000000000000000000000000000000"
+  }
 }

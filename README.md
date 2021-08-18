@@ -51,7 +51,12 @@ Cookbook is a web application that stores all your favorite recipes. Self-hostin
   "password": {
     "secret": "<secret>" // secret used to hash the passwords
   },
-  "registration_enabled": true // whether users are allowed to register
+  "registration_enabled": true, // whether users are allowed to register
+  "hcaptcha": {
+    // hcaptcha data (see below)
+    "enabled": true,
+    "secret": "<hcaptcha secret>"
+  }
 }
 ```
 
@@ -59,10 +64,17 @@ Cookbook is a web application that stores all your favorite recipes. Self-hostin
 
 `image_store`: If this value is null, the `api/data` directory is used, otherwise the set path is used. Make sure that the web-user (`www-data`) is allowed to write and read from this directory.
 
+`hcaptcha`: hCaptcha is used to prevent bots from signing-up. Create a free account here: https://www.hcaptcha.com/signup-interstitial
+
 #### Client configuration
 
 ```jsonc
 {
-  "api_url": "http://localhost:80/api" // the URL at which the API is reachable
+  "api_url": "http://localhost:80/api", // the URL at which the API is reachable
+  "hcaptcha": {
+    // hcaptcha data (see above)
+    "enabled": true,
+    "site_key": "<hcaptcha site-key>"
+  }
 }
 ```

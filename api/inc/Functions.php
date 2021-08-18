@@ -2,6 +2,7 @@
 
 namespace API\inc;
 
+use API\config\Config;
 use API\models\RecipeImage;
 use PAF\Model\PaginationResult;
 use PAF\Model\Query;
@@ -70,5 +71,37 @@ class Functions {
         fclose($fp);
 
         return Response::ok($file, $image->mimeType);
+    }
+
+    /**
+     * Validate the h-captcha token
+     *
+     * @param string $token the token
+     *
+     * @return boolean whether it is valid or not
+     */
+    public static function validateHCaptcha($token) {
+        $verify = curl_init();
+        curl_setopt($verify, CURLOPT_URL, "https://hcaptcha.com/siteverify");
+        curl_setopt($verify, CURLOPT_POST, true);
+        curl_setopt(
+            $verify,
+            CURLOPT_POSTFIELDS,
+            http_build_query([
+                "secret" => Config::get("hcaptcha.secret"),
+                "response" => $token,
+            ])
+        );
+        curl_setopt($verify, CURLOPT_RETURNTRANSFER, true);
+
+        if (!Config::get("production", true)) {
+            curl_setopt($verify, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($verify, CURLOPT_SSL_VERIFYPEER, 0);
+        }
+
+        $response = curl_exec($verify);
+        $responseData = json_decode($response);
+
+        return $response && $responseData->success;
     }
 }

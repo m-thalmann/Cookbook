@@ -204,6 +204,9 @@ paths:
                   maxLength: 20
                 password:
                   type: string
+                hcaptchaToken:
+                  type: string
+                  description: The token received from a successfully solved hCaptcha (if enabled)
               required:
                 - email
                 - name
@@ -229,6 +232,16 @@ paths:
                   - token
         '400':
           $ref: '#/components/responses/ValidationError'
+        '403':
+          description: The hcaptchaToken was invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: hCaptcha-Token invalid
         '405':
           description: Registration is disabled
           content:

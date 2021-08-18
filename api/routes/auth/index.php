@@ -4,6 +4,7 @@ namespace API\routes;
 
 use API\auth\Authorization;
 use API\config\Config;
+use API\inc\Functions;
 use API\models\User;
 use PAF\Model\DuplicateException;
 use PAF\Model\InvalidException;
@@ -42,7 +43,25 @@ $group
             ]);
         }
 
-        $user = User::fromValues($req["post"] ? $req["post"] : []);
+        $data = $req["post"] ? $req["post"] : [];
+
+        if (Config::get("hcaptcha.enabled")) {
+            if (array_key_exists("hcaptchaToken", $data)) {
+                if (!Functions::validateHCaptcha($data["hcaptchaToken"])) {
+                    return Response::forbidden([
+                        "info" => "hCaptcha-Token invalid",
+                    ]);
+                }
+
+                unset($data["hcaptchaToken"]);
+            } else {
+                return Response::badRequest([
+                    "hcaptchaToken" => "hCaptcha-Token required",
+                ]);
+            }
+        }
+
+        $user = User::fromValues($data);
 
         try {
             $user->save();

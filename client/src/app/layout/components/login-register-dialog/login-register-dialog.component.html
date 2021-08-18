@@ -26,8 +26,15 @@
 
         <mat-slide-toggle color="primary" formControlName="remember">Remember me</mat-slide-toggle>
 
+        <cb-hcaptcha *ngIf="showHCaptcha" (verified)="onCaptchaVerified($event)"></cb-hcaptcha>
+
         <div class="form-footer">
-            <button mat-raised-button color="primary" (click)="action()" [disabled]="loading || !loginForm.valid">
+            <button
+                mat-raised-button
+                color="primary"
+                (click)="action()"
+                [disabled]="loading || !loginForm.valid || !isHCaptchaValid"
+            >
                 {{ isLogin ? 'Login' : 'Register' }}
             </button>
 

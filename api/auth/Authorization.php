@@ -174,7 +174,7 @@ class Authorization {
                 if ($mustBeAuthorized || $next === null) {
                     return Response::unauthorized(["info" => $e->getMessage()]);
                 }
-                if(!$mustBeAuthorized && $e->getMessage() === 'Expired'){
+                if (!$mustBeAuthorized && $e->getMessage() === 'Expired') {
                     header('X-Logout: true');
                 }
             }
