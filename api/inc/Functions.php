@@ -50,17 +50,20 @@ class Functions {
     public static function outputRecipeImage($image, $cacheable = true) {
         $size = filesize($image->path);
 
-        if($cacheable){
+        if ($cacheable) {
             $etag = md5($image->id);
 
             header("Cache-Control: private");
             header("ETag: {$etag}");
 
-            if(!empty($_SERVER['HTTP_IF_NONE_MATCH']) && $etag === $_SERVER['HTTP_IF_NONE_MATCH']){
+            if (
+                !empty($_SERVER['HTTP_IF_NONE_MATCH']) &&
+                $etag === $_SERVER['HTTP_IF_NONE_MATCH']
+            ) {
                 return new Response('', 304, 'text/plain');
             }
         }
-        
+
         $fp = fopen($image->path, 'rb');
         $file = fread($fp, $size);
 

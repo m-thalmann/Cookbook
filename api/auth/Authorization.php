@@ -135,13 +135,16 @@ class Authorization {
     public static function middleware($mustBeAuthorized = true) {
         return function ($request, $next = null) use ($mustBeAuthorized) {
             try {
-                if ($request["authorization"] === null && empty($_GET['token'])) {
+                if (
+                    $request["authorization"] === null &&
+                    empty($_GET['token'])
+                ) {
                     throw new UnauthorizedException();
                 }
 
                 $token = $request["authorization"];
 
-                if($token === null){
+                if ($token === null) {
                     $token = $_GET['token'];
                 }
 
@@ -170,6 +173,9 @@ class Authorization {
             } catch (UnauthorizedException $e) {
                 if ($mustBeAuthorized || $next === null) {
                     return Response::unauthorized(["info" => $e->getMessage()]);
+                }
+                if(!$mustBeAuthorized && $e->getMessage() === 'Expired'){
+                    header('X-Logout: true');
                 }
             }
 

@@ -98,13 +98,17 @@ export class ApiService {
 
       status = ret.status;
       value = ret.body;
+
+      if (ret.headers.has('X-Logout')) {
+        this.user.logout('unauthorized', null);
+      }
     } catch (e) {
       status = e.status;
       let error = e.error;
 
       if (status != 404) {
         if (status == 401 && this.user.isLoggedin) {
-          this.user.logoutReason('unauthorized');
+          this.user.logout('unauthorized');
         } else if (status == 403) {
           if (this.user.isLoggedin) {
             this.snackBar.open('You are not authorized to perform this action!', 'OK', {

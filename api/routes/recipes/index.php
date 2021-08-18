@@ -153,10 +153,10 @@ $group
     })
     ->delete('/id/{{i:id}}', Authorization::middleware(), function ($req) {
         if (
-            Recipe::query(
-                "id = ? AND userId = ?",
-                [$req["params"]["id"], Authorization::user()->id]
-            )->delete()
+            Recipe::query("id = ? AND userId = ?", [
+                $req["params"]["id"],
+                Authorization::user()->id,
+            ])->delete()
         ) {
             return Response::ok();
         } else {

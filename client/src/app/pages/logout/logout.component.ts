@@ -8,6 +8,6 @@ import { UserService } from 'src/app/core/auth/user.service';
 })
 export class LogoutComponent {
   constructor(private user: UserService) {
-    this.user.logoutReason('logout');
+    this.user.logout('logout');
   }
 }

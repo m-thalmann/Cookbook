@@ -76,6 +76,8 @@ paths:
                 $ref: '#/components/schemas/User'
         '400':
           $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
         '403':
           description: Old password is wrong
           content:
@@ -280,6 +282,9 @@ paths:
       responses:
         '200':
           description: OK
+          headers:
+            X-Logout:
+              $ref: '#/components/headers/xLogout'
           content:
             application/json:
               schema:
@@ -428,12 +433,18 @@ paths:
       responses:
         '200':
           description: OK
+          headers:
+            X-Logout:
+              $ref: '#/components/headers/xLogout'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/RecipeFull'
         '404':
           description: Recipe not found or not visible for the user
+          headers:
+            X-Logout:
+              $ref: '#/components/headers/xLogout'
       operationId: get-recipes-id
       description: Returns the recipe with the given id, if it is visible to the user
       security:
@@ -554,6 +565,9 @@ paths:
       responses:
         '200':
           description: OK
+          headers:
+            X-Logout:
+              $ref: '#/components/headers/xLogout'
           content:
             application/json:
               schema:
@@ -591,6 +605,9 @@ paths:
       responses:
         '200':
           description: OK
+          headers:
+            X-Logout:
+              $ref: '#/components/headers/xLogout'
           content:
             application/json:
               schema:
@@ -627,6 +644,9 @@ paths:
       responses:
         '200':
           description: OK
+          headers:
+            X-Logout:
+              $ref: '#/components/headers/xLogout'
           content:
             application/json:
               schema:
@@ -839,6 +859,9 @@ paths:
       responses:
         '200':
           description: OK
+          headers:
+            X-Logout:
+              $ref: '#/components/headers/xLogout'
           content:
             application/json:
               schema:
@@ -869,6 +892,9 @@ paths:
       responses:
         '200':
           description: OK
+          headers:
+            X-Logout:
+              $ref: '#/components/headers/xLogout'
           content:
             image/*:
               schema:
@@ -876,8 +902,14 @@ paths:
                 format: binary
         '304':
           description: Not modified (if cached using the E-Tag)
+          headers:
+            X-Logout:
+              $ref: '#/components/headers/xLogout'
         '404':
           description: Not found
+          headers:
+            X-Logout:
+              $ref: '#/components/headers/xLogout'
       operationId: get-recipes-id-images-number
       description: Return a single image for this recipe with the given number
       security:
@@ -974,6 +1006,9 @@ paths:
       responses:
         '200':
           description: OK
+          headers:
+            X-Logout:
+              $ref: '#/components/headers/xLogout'
           content:
             image/*:
               schema:
@@ -981,8 +1016,14 @@ paths:
                 format: binary
         '304':
           description: Not modified (if cached using the E-Tag)
+          headers:
+            X-Logout:
+              $ref: '#/components/headers/xLogout'
         '404':
           description: Not found
+          headers:
+            X-Logout:
+              $ref: '#/components/headers/xLogout'
       operationId: get-recipeImages-id
       description: Get a specific recipe-image
       security:
@@ -1010,6 +1051,9 @@ paths:
       responses:
         '200':
           description: OK
+          headers:
+            X-Logout:
+              $ref: '#/components/headers/xLogout'
           content:
             application/json:
               schema:
@@ -1259,6 +1303,12 @@ components:
       in: query
       required: false
       description: The direction of the sort (asc - ascending, desc - descending)
+  headers:
+    xLogout:
+      description: If set, the user should be logged out, since his token has expired
+      schema:
+        type: boolean
+      required: false
   securitySchemes:
     Token:
       type: http

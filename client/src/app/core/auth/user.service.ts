@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { User } from '../api/ApiInterfaces';
 import StorageNames from '../StorageNames';
@@ -11,7 +12,7 @@ export class UserService {
   private _user: User | null = null;
   private _token: string | null = null;
 
-  constructor(private router: Router, private dialog: MatDialog) {
+  constructor(private router: Router, private dialog: MatDialog, private snackBar: MatSnackBar) {
     this.loadToken();
   }
 
@@ -66,7 +67,7 @@ export class UserService {
         console.error(e);
 
         if (this.isLoggedin) {
-          this.logoutReason('badToken');
+          this.logout('badToken');
         } else {
           this.remove();
         }
@@ -80,7 +81,7 @@ export class UserService {
   private remove() {
     Object.values(StorageNames).forEach((storageName) => localStorage.removeItem(storageName));
 
-    document.cookie = `${StorageNames.Token}=; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
+    document.cookie = `${StorageNames.Token}=; samesite=strict; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
 
     this._user = this._token = null;
   }
@@ -116,23 +117,31 @@ export class UserService {
   /**
    * Logsout the user and removes him from storage and cookies
    *
+   * @param reason the reason for the logout
    * @param redirectPath the path to redirect the user to, after the logout (or no redirect if null)
    */
-  logout(redirectPath: string | null = '/home') {
+  logout(reason: string | null, redirectPath: string | null = '/home') {
     this.remove();
 
     this.dialog.closeAll();
 
     if (redirectPath !== null) this.router.navigateByUrl(redirectPath);
-  }
 
-  /**
-   * Logsout the user, removes him from storage and cookies and redirects him to the login page with a set reason
-   *
-   * @param reason the reason for the logout
-   */
-  logoutReason(reason: string) {
-    this.logout(`/home?reason=${reason}`);
+    switch (reason) {
+      case 'logout':
+        reason = 'Successfully logged out!';
+        break;
+      case 'badToken':
+      case 'unauthorized':
+        reason = 'You have to log back in!';
+        break;
+      default:
+        reason = 'You have been logged out';
+    }
+
+    this.snackBar.open(reason, 'OK', {
+      duration: 5000,
+    });
   }
 
   /**
