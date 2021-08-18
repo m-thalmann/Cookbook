@@ -22,7 +22,7 @@ $group
         }
 
         if ($recipeImage !== null) {
-            return Functions::outputRecipeImage($recipeImage);
+            return Functions::outputRecipeImage($recipeImage, true, $_GET["thumbnailWidth"] ?? null);
         } else {
             return Response::notFound();
         }

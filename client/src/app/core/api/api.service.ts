@@ -262,16 +262,42 @@ export class ApiService {
     return this.get<number>(`${this.URL}/recipes/id/${recipeId}/images/count`);
   }
 
-  getRecipeImageURL(recipeId: number, number: number) {
-    let token = this.queryToken ? `?${this.queryToken}` : '';
+  getRecipeImageURL(recipeId: number, number: number, thumbnailWidth: number | null = null) {
+    let query = [];
 
-    return `${this.URL}/recipes/id/${recipeId}/images/number/${number}${token}`;
+    if (this.queryToken) {
+      query.push(this.queryToken);
+    }
+    if (thumbnailWidth) {
+      query.push(`thumbnailWidth=${thumbnailWidth}`);
+    }
+
+    let queryString = '';
+
+    if (query.length > 0) {
+      queryString = `?${query.join('&')}`;
+    }
+
+    return `${this.URL}/recipes/id/${recipeId}/images/number/${number}${queryString}`;
   }
 
-  getRecipeImageURLById(id: number) {
-    let token = this.queryToken ? `?${this.queryToken}` : '';
+  getRecipeImageURLById(id: number, thumbnailWidth: number | null = null) {
+    let query = [];
 
-    return `${this.URL}/recipeImages/id/${id}${token}`;
+    if (this.queryToken) {
+      query.push(this.queryToken);
+    }
+    if (thumbnailWidth) {
+      query.push(`thumbnailWidth=${thumbnailWidth}`);
+    }
+
+    let queryString = '';
+
+    if (query.length > 0) {
+      queryString = `?${query.join('&')}`;
+    }
+
+    return `${this.URL}/recipeImages/id/${id}${queryString}`;
   }
 
   addRecipeImage(recipeId: number, image: File) {

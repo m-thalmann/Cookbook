@@ -28,7 +28,7 @@
             class="preview-image"
             (click)="currentRecipeImageNumber = index"
             [class.active]="currentRecipeImageNumber === index"
-            *ngFor="let url of recipeImagesURLs; let index = index"
+            *ngFor="let url of recipeImageThumbnailsURLs; let index = index"
         >
             <div class="image">
                 <img [src]="url" cbImageFallback alt="Recipe image preview" />

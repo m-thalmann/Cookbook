@@ -12,6 +12,8 @@ info:
 servers:
   - url: 'http://localhost:80'
     description: Dev
+  - url: 'http://localhost:80/api'
+    description: Dev /api
 tags:
   - name: User
   - name: Recipe
@@ -46,6 +48,7 @@ paths:
       description: Returns whether the user is authenticated or not
       security:
         - Token: []
+        - QueryToken: []
     put:
       summary: Update the authenticated user
       tags:
@@ -106,6 +109,7 @@ paths:
       description: Update the authenticated user
       security:
         - Token: []
+        - QueryToken: []
     delete:
       summary: Deletes the authenticated user
       tags:
@@ -121,6 +125,7 @@ paths:
       description: Deletes the authenticated user and all of its data
       security:
         - Token: []
+        - QueryToken: []
   /auth/login:
     post:
       summary: Authenticates the user and returns a token
@@ -315,6 +320,7 @@ paths:
       description: Return all visible recipes for the user, or only public recipes if no authentication is provided
       security:
         - Token: []
+        - QueryToken: []
     post:
       summary: Create a new recipe
       tags:
@@ -432,6 +438,7 @@ paths:
       description: Create a new recipe
       security:
         - Token: []
+        - QueryToken: []
   /recipes/id/{id}:
     parameters:
       - schema:
@@ -462,6 +469,7 @@ paths:
       description: Returns the recipe with the given id, if it is visible to the user
       security:
         - Token: []
+        - QueryToken: []
     put:
       summary: Update an existing recipe
       tags:
@@ -544,6 +552,7 @@ paths:
       description: Update an existing recipe
       security:
         - Token: []
+        - QueryToken: []
     delete:
       summary: Delete an existing recipe
       tags:
@@ -559,6 +568,7 @@ paths:
       description: Delete an existing recipe
       security:
         - Token: []
+        - QueryToken: []
   /recipes/search/{search}:
     parameters:
       - schema:
@@ -598,6 +608,7 @@ paths:
       description: Search for a recipe in the name and description
       security:
         - Token: []
+        - QueryToken: []
   /recipes/category/{category}:
     parameters:
       - schema:
@@ -638,6 +649,7 @@ paths:
       description: Return all recipes for a category
       security:
         - Token: []
+        - QueryToken: []
   /users/id/{id}/recipes:
     parameters:
       - schema:
@@ -677,6 +689,7 @@ paths:
       description: Return all recipes for a user (that are visible to the authenticated user)
       security:
         - Token: []
+        - QueryToken: []
   /recipes/id/{id}/ingredients:
     parameters:
       - schema:
@@ -743,6 +756,7 @@ paths:
       description: Add a new ingredient to a recipe
       security:
         - Token: []
+        - QueryToken: []
   /ingredients/search/{search}:
     parameters:
       - schema:
@@ -793,6 +807,7 @@ paths:
       description: Search for an ingredient in existing recipes of this user
       security:
         - Token: []
+        - QueryToken: []
   /ingredients/id/{id}:
     parameters:
       - schema:
@@ -843,6 +858,7 @@ paths:
       description: Update a specific ingredient
       security:
         - Token: []
+        - QueryToken: []
     delete:
       summary: Delete a specific ingredient
       tags:
@@ -858,6 +874,7 @@ paths:
       description: Delete a specific ingredient
       security:
         - Token: []
+        - QueryToken: []
   /recipes/id/{id}/images/count:
     parameters:
       - schema:
@@ -884,6 +901,7 @@ paths:
       description: Return the amount of available images for this recipe
       security:
         - Token: []
+        - QueryToken: []
   /recipes/id/{id}/images/number/{number}:
     parameters:
       - schema:
@@ -902,6 +920,8 @@ paths:
       summary: Return a single image for this recipe
       tags:
         - RecipeImage
+      parameters:
+        - $ref: '#/components/parameters/ThumbnailWidth'
       responses:
         '200':
           description: OK
@@ -927,6 +947,7 @@ paths:
       description: Return a single image for this recipe with the given number
       security:
         - Token: []
+        - QueryToken: []
   /recipes/id/{id}/images:
     parameters:
       - schema:
@@ -953,6 +974,7 @@ paths:
       description: Return all recipe-images for this recipe (the client has to own it)
       security:
         - Token: []
+        - QueryToken: []
     post:
       summary: Add a new recipe-image to a recipe
       tags:
@@ -1005,6 +1027,7 @@ paths:
       description: Add a new recipe-image to a recipe
       security:
         - Token: []
+        - QueryToken: []
   /recipeImages/id/{id}:
     parameters:
       - schema:
@@ -1016,6 +1039,8 @@ paths:
       summary: Get a specific recipe-image
       tags:
         - RecipeImage
+      parameters:
+        - $ref: '#/components/parameters/ThumbnailWidth'
       responses:
         '200':
           description: OK
@@ -1041,6 +1066,7 @@ paths:
       description: Get a specific recipe-image
       security:
         - Token: []
+        - QueryToken: []
     delete:
       summary: Delete a specific recipe-image
       tags:
@@ -1056,6 +1082,7 @@ paths:
       description: Delete a specific recipe-image
       security:
         - Token: []
+        - QueryToken: []
   /categories:
     get:
       summary: Return all available categories
@@ -1079,6 +1106,7 @@ paths:
       description: Return all available categories
       security:
         - Token: []
+        - QueryToken: []
 components:
   schemas:
     User:
@@ -1316,6 +1344,13 @@ components:
       in: query
       required: false
       description: The direction of the sort (asc - ascending, desc - descending)
+    ThumbnailWidth:
+      schema:
+        type: integer
+      name: thumbnailWidth
+      in: query
+      required: false
+      description: The width to scale the image to (or height if portrait)
   headers:
     xLogout:
       description: If set, the user should be logged out, since his token has expired
@@ -1326,3 +1361,8 @@ components:
     Token:
       type: http
       scheme: bearer
+    QueryToken:
+      type: apiKey
+      in: query
+      name: token
+      description: Bearer token

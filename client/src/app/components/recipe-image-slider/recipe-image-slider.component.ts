@@ -9,6 +9,7 @@ const FALLBACK_IMAGE = 'assets/images/cookbook.svg';
 })
 export class RecipeImageSliderComponent {
   @Input() recipeImagesURLs: string[] | null = null;
+  @Input() recipeImageThumbnailsURLs: string[] | null = null;
 
   currentRecipeImageNumber = 0;
 

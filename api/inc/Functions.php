@@ -45,12 +45,12 @@ class Functions {
      * Generates a response containing the given RecipeImage
      *
      * @param RecipeImage $image
+     * @param bool $cacheable whether the image can be cached
+     * @param integer|null $thumbnailWidth the width to scale the image to
      *
      * @return Response the generated response with the image
      */
-    public static function outputRecipeImage($image, $cacheable = true) {
-        $size = filesize($image->path);
-
+    public static function outputRecipeImage($image, $cacheable = true, $thumbnailWidth = null) {
         if ($cacheable) {
             $etag = md5($image->id);
 
@@ -64,6 +64,60 @@ class Functions {
                 return new Response('', 304, 'text/plain');
             }
         }
+
+        if($thumbnailWidth !== null){
+            switch($image->mimeType){
+                case "image/jpeg":
+                    $img = imagecreatefromjpeg($image->path);
+                    break;
+                case "image/png":
+                    $img = imagecreatefrompng($image->path);
+                    break;
+                case "image/gif":
+                    $img = imagecreatefromgif($image->path);
+                    break;
+            }
+    
+            list($width, $height) = getimagesize($image->path);
+    
+            $ratio = $height / $width;
+
+            if(($ratio >= 1 && $width > $thumbnailWidth) || ($ratio < 1 && $height > $thumbnailWidth)){
+                if($ratio < 1){
+                    $newHeight = $thumbnailWidth;
+                    $newWidth = $newHeight / $ratio;
+                }else{
+                    $newWidth = $thumbnailWidth;
+                    $newHeight = $newWidth * $ratio;
+                }
+
+                $img = imagescale($img, $newWidth, $newHeight);
+    
+                ob_start();
+    
+                switch($image->mimeType){
+                    case "image/jpeg":
+                        imagejpeg($img);
+                        break;
+                    case "image/png":
+                        imagepng($img);
+                        break;
+                    case "image/gif":
+                        imagegif($img);
+                        break;
+                }
+    
+                $imageOutput = ob_get_contents();
+    
+                ob_end_clean();
+    
+                imagedestroy($img);
+    
+                return Response::ok($imageOutput, $image->mimeType);
+            }
+        }
+
+        $size = filesize($image->path);
 
         $fp = fopen($image->path, 'rb');
         $file = fread($fp, $size);

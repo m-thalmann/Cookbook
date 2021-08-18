@@ -19,6 +19,7 @@ export class PageRecipeComponent implements OnInit {
 
   recipe: RecipeFull | null = null;
   recipeImagesURLs: string[] | null = null;
+  recipeImageThumbnailsURLs: string[] | null = null;
 
   selectedPortions: number = 1;
 
@@ -101,14 +102,17 @@ export class PageRecipeComponent implements OnInit {
       this.selectedPortions = res.value?.portions || 1;
 
       this.recipeImagesURLs = [];
+      this.recipeImageThumbnailsURLs = [];
 
       if (this.recipe) {
         if (this.recipe.imagesCount > 0) {
           for (let i = 0; i < this.recipe.imagesCount; i++) {
             this.recipeImagesURLs.push(this.api.getRecipeImageURL(this.recipe.id, i));
+            this.recipeImageThumbnailsURLs.push(this.api.getRecipeImageURL(this.recipe.id, i, 75));
           }
         } else {
           this.recipeImagesURLs.push(FALLBACK_IMAGE);
+          this.recipeImageThumbnailsURLs.push(FALLBACK_IMAGE);
         }
       }
     } else if (res.isNotFound()) {

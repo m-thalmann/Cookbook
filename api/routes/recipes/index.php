@@ -241,7 +241,7 @@ $group
                 return Response::notFound();
             }
 
-            return Functions::outputRecipeImage($image);
+            return Functions::outputRecipeImage($image, true, $_GET["thumbnailWidth"] ?? null);
         }
     )
     ->post('/id/{{i:id}}/images', Authorization::middleware(), function ($req) {
