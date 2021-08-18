@@ -8,6 +8,7 @@ import { PageCreateRecipeComponent } from './pages/page-create-recipe/page-creat
 import { PageEditRecipeComponent } from './pages/page-edit-recipe/page-edit-recipe.component';
 import { PageHomeComponent } from './pages/page-home/page-home.component';
 import { PageMyRecipesComponent } from './pages/page-my-recipes/page-my-recipes.component';
+import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { PageRecipeComponent } from './pages/page-recipe/page-recipe.component';
 import { PageSearchComponent } from './pages/page-search/page-search.component';
 
@@ -37,8 +38,10 @@ const routes: Routes = [
       { path: 'recipes/:id/:slug', component: PageRecipeComponent },
       { path: 'create', component: PageCreateRecipeComponent, canActivate: [AuthGuard] },
       { path: 'edit/:id', component: PageEditRecipeComponent, canActivate: [AuthGuard] },
+      { path: 'not-found', component: PageNotFoundComponent },
     ],
   },
+  { path: '**', redirectTo: '/not-found' },
 ];
 
 @NgModule({

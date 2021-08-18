@@ -27,6 +27,7 @@ import { InputFocusDirective } from './core/directives/input-focus.directive';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { PageSearchComponent } from './pages/page-search/page-search.component';
 import { PageCategoriesComponent } from './pages/page-categories/page-categories.component';
+import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 
 export function setupConfig(service: ConfigService) {
   return () => service.load();
@@ -56,6 +57,7 @@ export function setupConfig(service: ConfigService) {
     ConfirmDialogComponent,
     PageSearchComponent,
     PageCategoriesComponent,
+    PageNotFoundComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, MaterialModule, HttpClientModule],
   providers: [
