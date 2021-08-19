@@ -20,5 +20,18 @@
   "hcaptcha": {
     "enabled": true,
     "secret": "0x0000000000000000000000000000000000000000"
+  },
+  "mail": {
+    "smtp": {
+      "host": "smtp.example.com",
+      "port": "465",
+      "encrypted": true,
+      "username": "cookbook@example.com",
+      "password": "password"
+    },
+    "from": {
+      "mail": "cookbook@example.com",
+      "name": "Cookbook"
+    }
   }
 }

@@ -50,7 +50,11 @@ class Functions {
      *
      * @return Response the generated response with the image
      */
-    public static function outputRecipeImage($image, $cacheable = true, $thumbnailWidth = null) {
+    public static function outputRecipeImage(
+        $image,
+        $cacheable = true,
+        $thumbnailWidth = null
+    ) {
         if ($cacheable) {
             $etag = md5($image->id);
 
@@ -65,8 +69,8 @@ class Functions {
             }
         }
 
-        if($thumbnailWidth !== null){
-            switch($image->mimeType){
+        if ($thumbnailWidth !== null) {
+            switch ($image->mimeType) {
                 case "image/jpeg":
                     $img = imagecreatefromjpeg($image->path);
                     break;
@@ -77,25 +81,28 @@ class Functions {
                     $img = imagecreatefromgif($image->path);
                     break;
             }
-    
+
             list($width, $height) = getimagesize($image->path);
-    
+
             $ratio = $height / $width;
 
-            if(($ratio >= 1 && $width > $thumbnailWidth) || ($ratio < 1 && $height > $thumbnailWidth)){
-                if($ratio < 1){
+            if (
+                ($ratio >= 1 && $width > $thumbnailWidth) ||
+                ($ratio < 1 && $height > $thumbnailWidth)
+            ) {
+                if ($ratio < 1) {
                     $newHeight = $thumbnailWidth;
                     $newWidth = $newHeight / $ratio;
-                }else{
+                } else {
                     $newWidth = $thumbnailWidth;
                     $newHeight = $newWidth * $ratio;
                 }
 
                 $img = imagescale($img, $newWidth, $newHeight);
-    
+
                 ob_start();
-    
-                switch($image->mimeType){
+
+                switch ($image->mimeType) {
                     case "image/jpeg":
                         imagejpeg($img);
                         break;
@@ -106,13 +113,13 @@ class Functions {
                         imagegif($img);
                         break;
                 }
-    
+
                 $imageOutput = ob_get_contents();
-    
+
                 ob_end_clean();
-    
+
                 imagedestroy($img);
-    
+
                 return Response::ok($imageOutput, $image->mimeType);
             }
         }

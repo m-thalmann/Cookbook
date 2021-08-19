@@ -8,8 +8,6 @@ use PAF\Model\Database;
 use PAF\Router\Response;
 use PAF\Router\Router;
 
-error_reporting(E_ALL ^ E_WARNING);
-
 try {
     // Libraries
     require_once __DIR__ . '/lib/PAF/src/autoload.php';
@@ -17,6 +15,10 @@ try {
 
     // Autoload
     require_once __DIR__ . '/autoload.php';
+
+    if (Config::get("production", true)) {
+        error_reporting(E_ALL ^ E_WARNING);
+    }
 
     // Database
     Database::setDatabase(

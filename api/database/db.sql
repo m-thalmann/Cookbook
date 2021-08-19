@@ -13,7 +13,7 @@ CREATE TABLE `recipes` (
   `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `userId` int(11) NOT NULL,
   `public` boolean NOT NULL DEFAULT 0,
-  `name` varchar(20) NOT NULL,
+  `name` varchar(50) NOT NULL,
   `description` text,
   `category` varchar(10),
   `portions` int(11),

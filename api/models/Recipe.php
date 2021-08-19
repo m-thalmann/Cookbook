@@ -34,7 +34,7 @@ class Recipe extends Model {
 
     /**
      * @prop
-     * @maxLength 20
+     * @maxLength 50
      * @var string
      */
     public $name;
@@ -141,6 +141,7 @@ class Recipe extends Model {
             "difficulty" => ["Difficulty"],
             "preparation" => ["Preparation", true],
             "preparationTime" => ["Preparation time"],
+            "restTime" => ["Rest time"],
             "cookTime" => ["Cooking time"],
         ]);
     }
