@@ -1,12 +1,13 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ApiService } from 'src/app/core/api/api.service';
 import { User } from 'src/app/core/api/ApiInterfaces';
 import { ApiResponse } from 'src/app/core/api/ApiResponse';
 import { UserService } from 'src/app/core/auth/user.service';
 import { ConfigService } from 'src/app/core/config/config.service';
 import { getFormError } from 'src/app/core/forms/Validation';
+import { VerifyEmailDialogComponent } from './components/verify-email-dialog/verify-email-dialog.component';
 
 @Component({
   selector: 'cb-login-register-dialog',
@@ -15,6 +16,7 @@ import { getFormError } from 'src/app/core/forms/Validation';
 })
 export class LoginRegisterDialogComponent {
   isLogin = true;
+
   loading = false;
   error: string | null = null;
 
@@ -29,7 +31,8 @@ export class LoginRegisterDialogComponent {
     private api: ApiService,
     private user: UserService,
     private config: ConfigService,
-    private changeDetectionRef: ChangeDetectorRef
+    private changeDetectionRef: ChangeDetectorRef,
+    private dialog: MatDialog
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
@@ -106,7 +109,7 @@ export class LoginRegisterDialogComponent {
     this.loginForm.disable();
     this.dialogRef.disableClose = true;
 
-    let res: ApiResponse<{ user: User; token: string; info: string }>;
+    let res: ApiResponse<{ user: User; token?: string; info: string }>;
 
     if (this.isLogin) {
       res = await this.api.loginUser(this.email?.value, this.password?.value);
@@ -119,20 +122,41 @@ export class LoginRegisterDialogComponent {
 
     try {
       if (res.isOK() && res.value !== null) {
-        try {
-          UserService.parseUserFromToken(res.value.token);
-        } catch (e) {
-          console.error(e);
-          throw new Error();
+        if (this.isLogin && res.value.token) {
+          try {
+            UserService.parseUserFromToken(res.value.token);
+          } catch (e) {
+            console.error(e);
+            throw new Error();
+          }
+
+          this.user.login(res.value.token, this.remember?.value);
+
+          location.href = location.pathname;
+        } else {
+          this.isLogin = true;
+
+          this.action();
+          return;
         }
-
-        this.user.login(res.value.token, this.remember?.value);
-
-        location.href = location.pathname;
       } else if (res.isNotFound()) {
         throw new Error('Username or password wrong!');
       } else if (res.isConflict()) {
         throw new Error('This email is already taken!');
+      } else if (res.isForbidden() && this.isLogin) {
+        let verified = await this.dialog
+          .open(VerifyEmailDialogComponent, {
+            data: this.email?.value,
+          })
+          .afterClosed()
+          .toPromise();
+
+        if (verified) {
+          this.action();
+          return;
+        }
+
+        this.error = 'Email not verified';
       } else {
         let err = res.error || undefined;
         throw new Error(typeof err === 'object' ? err.info : err);
@@ -156,6 +180,8 @@ export class LoginRegisterDialogComponent {
     this.password?.updateValueAndValidity();
     this.passwordConfirm?.updateValueAndValidity();
     this.remember?.updateValueAndValidity();
+
+    this.error = null;
   }
 
   onCaptchaVerified(token: string) {

@@ -4,6 +4,7 @@ CREATE TABLE `users` (
   `name` varchar(20) NOT NULL,
   `password` varchar(64) NOT NULL,
   `passwordSalt` varchar(32) NOT NULL,
+  `verifyEmailCode` varchar(5),
   `lastUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
   UNIQUE(`email`)

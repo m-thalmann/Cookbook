@@ -52,10 +52,25 @@ Cookbook is a web application that stores all your favorite recipes. Self-hostin
     "secret": "<secret>" // secret used to hash the passwords
   },
   "registration_enabled": true, // whether users are allowed to register
+  "email_verification": true, // whether the email must be verified
   "hcaptcha": {
     // hcaptcha data (see below)
     "enabled": true,
     "secret": "<hcaptcha secret>"
+  },
+  "mail": {
+    // mail settings
+    "smtp": {
+      "host": "smtp.example.com",
+      "port": "465",
+      "encrypted": true,
+      "username": "cookbook@example.com",
+      "password": "password"
+    },
+    "from": {
+      "mail": "cookbook@example.com",
+      "name": "Cookbook"
+    }
   }
 }
 ```

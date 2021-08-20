@@ -65,7 +65,12 @@ class Authorization {
 
         $user = User::get("id = ?", [$id])->getFirst();
 
-        if ($user && $user->lastUpdated === $lastUpdated) {
+        if (
+            $user &&
+            $user->lastUpdated === $lastUpdated &&
+            (!Config::get("email_verification", false) ||
+                User::isEmailVerified($user))
+        ) {
             self::$user = $user;
 
             return true;
@@ -75,16 +80,14 @@ class Authorization {
     }
 
     /**
-     * Checks the credentials.
-     * - If they are correct it sets the user, generates a token and returns it
-     * - If they are incorrect it returns null
+     * Retrieves the user with the given credentials
      *
      * @param string $email
      * @param string $password
      *
-     * @return string|null The token or null, if incorrect
+     * @return User|null The user or null, if incorrect credentials
      */
-    public static function login($email, $password) {
+    public static function getUser($email, $password) {
         $user = User::get("email = :email", [
             "email" => $email,
         ])->getFirst();
@@ -93,6 +96,26 @@ class Authorization {
             $user &&
             $user->password ===
                 self::encryptPassword($password, $user->passwordSalt)
+        ) {
+            return $user;
+        }
+
+        return null;
+    }
+
+    /**
+     * Checks whether the user is allowed to login
+     * - If he is allowed the user is set, a token is generated and returned
+     * - If not, null is returned
+     *
+     * @param User $user
+     *
+     * @return string|null The token or null, if not allowed
+     */
+    public static function login($user) {
+        if (
+            !Config::get("email_verification", false) ||
+            User::isEmailVerified($user)
         ) {
             $token = self::generateToken($user);
 
@@ -174,7 +197,7 @@ class Authorization {
                 if ($mustBeAuthorized || $next === null) {
                     return Response::unauthorized(["info" => $e->getMessage()]);
                 }
-                if (!$mustBeAuthorized && $e->getMessage() === 'Expired') {
+                if (!$mustBeAuthorized && !empty($token)) {
                     header('X-Logout: true');
                 }
             }

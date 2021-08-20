@@ -65,4 +65,19 @@ class Mailer {
 
         return ob_get_clean();
     }
+
+    /**
+     * Sends an email verification email to the user
+     *
+     * @param User $user The user
+     *
+     * @return bool whether it was successfull or not
+     */
+    public static function sendEmailVerification($user) {
+        return self::send(
+            $user->email,
+            "Cookbook email verification",
+            "Hi {$user->name},<br />please use the following code to verify this email address:<br /><b>{$user->verifyEmailCode}</b>"
+        );
+    }
 }

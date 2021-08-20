@@ -50,6 +50,14 @@ class User extends Model {
 
     /**
      * @prop
+     * @var string|null
+     * @editable false
+     * @output false
+     */
+    public $verifyEmailCode;
+
+    /**
+     * @prop
      * @var timestamp|null
      * @editable false
      * @output false
@@ -69,6 +77,9 @@ class User extends Model {
                 );
 
                 break;
+            case 'email':
+                $this->generateVerifyEmailCode();
+                break;
         }
         parent::__set($property, $value);
     }
@@ -81,9 +92,27 @@ class User extends Model {
         $this->editValue(
             "passwordSalt",
             md5(random_int(PHP_INT_MIN, PHP_INT_MAX)),
-            true,
+            false,
             true
         );
+    }
+
+    public function generateVerifyEmailCode() {
+        $this->editValue(
+            "verifyEmailCode",
+            str_pad(random_int(0, 99999), 5, '0', STR_PAD_LEFT),
+            false,
+            true
+        );
+    }
+
+    public function verifyEmail($code) {
+        if (strcmp($this->verifyEmailCode, $code) === 0) {
+            $this->editValue("verifyEmailCode", null, false, true);
+            return true;
+        }
+
+        return false;
     }
 
     public static function getErrors($user) {
@@ -92,6 +121,10 @@ class User extends Model {
             "name" => ["Name", true],
             "password" => ["Password", true],
         ]);
+    }
+
+    public static function isEmailVerified($user) {
+        return !$user->isNew() && $user->verifyEmailCode === null;
     }
 
     /**

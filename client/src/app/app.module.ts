@@ -30,6 +30,7 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
 import { PageRecipeComponent } from './pages/page-recipe/page-recipe.component';
 import { PageSearchComponent } from './pages/page-search/page-search.component';
 import { RecipeImageSliderComponent } from './components/recipe-image-slider/recipe-image-slider.component';
+import { VerifyEmailDialogComponent } from './layout/components/login-register-dialog/components/verify-email-dialog/verify-email-dialog.component';
 
 export function setupConfig(service: ConfigService) {
   return () => service.load();
@@ -62,6 +63,7 @@ export function setupConfig(service: ConfigService) {
     PageNotFoundComponent,
     HcaptchaComponent,
     RecipeImageSliderComponent,
+    VerifyEmailDialogComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, MaterialModule, HttpClientModule],
   providers: [

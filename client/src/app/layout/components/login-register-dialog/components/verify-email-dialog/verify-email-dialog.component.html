@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>
+    <mat-icon>mark_email_read</mat-icon><br />Verify email<br /><small>{{ email }}</small>
+</h1>
+
+<div mat-dialog-content>
+    <input type="text" [(ngModel)]="code" maxlength="5" placeholder="Code" [disabled]="loading" />
+    <mat-spinner diameter="32" color="accent" *ngIf="loading"></mat-spinner>
+    <p *ngIf="error" class="fg-warn">{{ error }}</p>
+    <p>Did not get an email? <a (click)="resend()" [class.disabled]="loading">Resend</a> code</p>
+</div>

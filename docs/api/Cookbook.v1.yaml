@@ -176,6 +176,18 @@ paths:
                     example: Email and password expected
                 required:
                   - info
+        '403':
+          description: Email not verified
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: Email not verified
+                required:
+                  - info
         '404':
           description: Email or password wrong
           content:
@@ -229,12 +241,9 @@ paths:
                   info:
                     type: string
                     example: Authorized
-                  token:
-                    $ref: '#/components/schemas/JwtToken'
                 required:
                   - user
                   - info
-                  - token
         '400':
           $ref: '#/components/responses/ValidationError'
         '403':
@@ -273,6 +282,94 @@ paths:
                   - info
       operationId: post-auth-register
       description: Registers a new user and returns a token
+  /auth/verifyEmail:
+    post:
+      summary: Verify an email
+      tags:
+        - User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                code:
+                  type: string
+                  minLength: 5
+                  maxLength: 5
+                  example: 53012
+              required:
+                - email
+                - code
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Email and code expected
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: Email and code expected
+                required:
+                  - info
+        '403':
+          description: Verification code is wrong
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: Verification code is wrong
+                required:
+                  - info
+        '404':
+          description: Email not found or already verified
+      operationId: post-auth-verifyEmail
+      description: Verify an email
+  /auth/verifyEmail/resend:
+    post:
+      summary: Resend an verification-email
+      tags:
+        - User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+              required:
+                - email
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Email expected
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: Email and code expected
+                required:
+                  - info
+        '404':
+          description: Email not found or already verified
+      operationId: post-auth-verifyEmail
+      description: Verify an email
   /auth/registrationEnabled:
     get:
       summary: Returns whether the registration is enabled

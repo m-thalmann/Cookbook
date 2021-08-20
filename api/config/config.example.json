@@ -17,6 +17,7 @@
     "secret": "320fhjewkbgv430ghwogvwb132kr21bj"
   },
   "registration_enabled": true,
+  "email_verification": true,
   "hcaptcha": {
     "enabled": true,
     "secret": "0x0000000000000000000000000000000000000000"

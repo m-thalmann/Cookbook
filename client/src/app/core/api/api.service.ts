@@ -152,7 +152,7 @@ export class ApiService {
   private get<T>(url: string, httpOptions = this.httpOptions) {
     return this.handleResponse<T>(this.http.get<T>(url, httpOptions));
   }
-  private post<T>(url: string, data: any, httpOptions = this.httpOptions) {
+  private post<T>(url: string, data: any = {}, httpOptions = this.httpOptions) {
     return this.handleResponse<T>(this.http.post<T>(url, data, httpOptions));
   }
   private put<T>(url: string, data: any, httpOptions = this.httpOptions) {
@@ -172,7 +172,7 @@ export class ApiService {
   }
 
   registerUser(email: string, password: string, name: string, hcaptchaToken: string | null) {
-    return this.post<{ user: User; token: string; info: string }>(`${this.URL}/auth/register`, {
+    return this.post<{ user: User; info: string }>(`${this.URL}/auth/register`, {
       email: email,
       password: password,
       name: name,
@@ -190,6 +190,19 @@ export class ApiService {
 
   checkAuthentication() {
     return this.get<{ user: User; info: string }>(`${this.URL}/auth`);
+  }
+
+  verifyEmail(email: string, code: string) {
+    return this.post<any>(`${this.URL}/auth/verifyEmail`, {
+      email: email,
+      code: code,
+    });
+  }
+
+  resendVerificationEmail(email: string) {
+    return this.post<any>(`${this.URL}/auth/verifyEmail/resend`, {
+      email: email,
+    });
   }
 
   registrationEnabled() {
