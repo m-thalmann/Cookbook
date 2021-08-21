@@ -2,4 +2,6 @@
 
 <cb-create-edit-recipe [editRecipe]="editRecipe" *ngIf="editRecipe"></cb-create-edit-recipe>
 
+<mat-spinner *ngIf="!editRecipe" diameter="48"></mat-spinner>
+
 <span class="icon-text fg-warn" *ngIf="error"><mat-icon>error</mat-icon><span>Error loading recipe</span></span>

@@ -1,0 +1,53 @@
+@import 'variables.scss';
+
+ngx-skeleton-loader {
+  display: block;
+}
+
+:host {
+  display: block;
+
+  border: 1px solid #{$foreground}10;
+  border-radius: 0.75em;
+  padding: 1em;
+
+  .image-container {
+    display: inline-block;
+    width: 25%;
+    min-width: 12em;
+    margin-right: 1em;
+    text-align: center;
+
+    vertical-align: middle;
+  }
+
+  .content {
+    display: inline-block;
+    width: calc(75% - 1em);
+
+    vertical-align: middle;
+
+    .name {
+      height: 2em;
+    }
+  }
+
+  @media screen and (max-width: 820px) {
+    .content {
+      width: calc(75% - 2em);
+    }
+  }
+
+  @media screen and (max-width: $mobile-width) {
+    .image-container,
+    .content {
+      display: block;
+      width: 100%;
+    }
+
+    .image-container {
+      margin-right: 0;
+      margin-bottom: 1em;
+    }
+  }
+}

@@ -1,0 +1,22 @@
+ngx-skeleton-loader {
+  display: block;
+}
+
+.name {
+  height: 2em;
+}
+
+.image-slider,
+.ingredients {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.image-slider {
+  width: calc(60% - 1em);
+  margin-right: 1em;
+}
+
+.ingredients {
+  width: 40%;
+}

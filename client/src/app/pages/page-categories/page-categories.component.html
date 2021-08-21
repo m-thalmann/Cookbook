@@ -10,9 +10,15 @@
             <img src="assets/images/cookbook.svg" alt="Category Icon" />
             {{ category }}
         </a>
-    </div>
 
-    <mat-spinner *ngIf="loadingCategories" [diameter]="64"></mat-spinner>
+        <ng-container *ngIf="loadingCategories">
+            <ngx-skeleton-loader
+                [count]="6"
+                appearance="circle"
+                [theme]="{ height: '7em', width: '7em' }"
+            ></ngx-skeleton-loader>
+        </ng-container>
+    </div>
 
     <p class="icon-text fg-warn" *ngIf="error"><mat-icon>error</mat-icon><span>Error loading categories</span></p>
     <p class="icon-text" *ngIf="categories && categories.length === 0">

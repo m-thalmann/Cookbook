@@ -67,7 +67,11 @@ export class RecipeListComponent implements OnInit {
     this.error = false;
     this.errorChange.emit(this.loading);
 
-    let recipes = await this.reloadFunction({ page: this.page, sort: this.sort, sortDirection: this.sortDirection });
+    let recipes = await this.reloadFunction({
+      page: this.page,
+      sort: this.sort,
+      sortDirection: this.sortDirection,
+    });
 
     if (recipes !== null) {
       if (recipes.isOK()) {
