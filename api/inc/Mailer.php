@@ -67,7 +67,7 @@ class Mailer {
     }
 
     /**
-     * Sends an email verification email to the user
+     * Sends an email-verification email to the user
      *
      * @param User $user The user
      *
@@ -78,6 +78,22 @@ class Mailer {
             $user->email,
             "Cookbook email verification",
             "Hi {$user->name},<br />please use the following code to verify this email address:<br /><b>{$user->verifyEmailCode}</b>"
+        );
+    }
+
+    /**
+     * Sends an reset-password email to the user
+     *
+     * @param User $user The user
+     * @param string $token The token used to identify the user
+     *
+     * @return bool whether it was successfull or not
+     */
+    public static function sendResetPassword($user, $token) {
+        return self::send(
+            $user->email,
+            "Cookbook password reset",
+            "Hi {$user->name},<br />please use the following code to reset your password:<br /><b>{$token}</b>"
         );
     }
 }

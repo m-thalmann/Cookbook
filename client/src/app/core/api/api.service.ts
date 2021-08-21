@@ -209,6 +209,14 @@ export class ApiService {
     return this.get<boolean>(`${this.URL}/auth/registrationEnabled`);
   }
 
+  resetPassword(email: string, token: string, password: string) {
+    return this.post<any>(`${this.URL}/auth/resetPassword`, { email: email, token: token, password: password });
+  }
+
+  sendResetPasswordEmail(email: string) {
+    return this.post<any>(`${this.URL}/auth/resetPassword/send`, { email: email });
+  }
+
   // Recipe
 
   getRecipes(options: Options) {

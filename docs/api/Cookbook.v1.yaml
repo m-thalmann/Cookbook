@@ -306,7 +306,7 @@ paths:
                 - code
       responses:
         '200':
-          description: OK
+          description: OK (also if email does not exist or already verified)
         '400':
           description: Email and code expected
           content:
@@ -331,8 +331,6 @@ paths:
                     example: Verification code is wrong
                 required:
                   - info
-        '404':
-          description: Email not found or already verified
       operationId: post-auth-verifyEmail
       description: Verify an email
   /auth/verifyEmail/resend:
@@ -353,7 +351,7 @@ paths:
                 - email
       responses:
         '200':
-          description: OK
+          description: OK (also if email does not exist or already verified)
         '400':
           description: Email expected
           content:
@@ -366,8 +364,6 @@ paths:
                     example: Email and code expected
                 required:
                   - info
-        '404':
-          description: Email not found or already verified
       operationId: post-auth-verifyEmail
       description: Verify an email
   /auth/registrationEnabled:
@@ -384,6 +380,83 @@ paths:
                 type: boolean
       operationId: get-auth-registrationEnabled
       description: Returns whether the registration is enabled
+  /auth/resetPassword:
+    post:
+      summary: Reset a users password
+      tags:
+        - User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                token:
+                  type: string
+                  minLength: 32
+                  maxLength: 32
+                password:
+                  type: string
+                  description: The new password
+              required:
+                - email
+                - token
+                - password
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Email, token and password expected
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: Email, token and password expected
+                required:
+                  - info
+        '404':
+          description: Combination of email and token not found
+      operationId: post-auth-resetPassword
+      description: Reset a users password
+  /auth/resetPassword/send:
+    post:
+      summary: Sends a reset-password email
+      tags:
+        - User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+              required:
+                - email
+      responses:
+        '200':
+          description: OK (also if the email does not exist)
+        '400':
+          description: Email expected
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: Email expected
+                required:
+                  - info
+      operationId: post-auth-resetPassword-send
+      description: Sends a reset-password email to the given email if it exists in the database
   /recipes:
     get:
       summary: Return all visible recipes for the user

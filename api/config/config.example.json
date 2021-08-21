@@ -14,7 +14,8 @@
     "ttl": 604800
   },
   "password": {
-    "secret": "320fhjewkbgv430ghwogvwb132kr21bj"
+    "secret": "320fhjewkbgv430ghwogvwb132kr21bj",
+    "reset_ttl": 600
   },
   "registration_enabled": true,
   "email_verification": true,

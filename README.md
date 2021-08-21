@@ -49,7 +49,8 @@ Cookbook is a web application that stores all your favorite recipes. Self-hostin
     "ttl": 604800 // seconds after which a token expires
   },
   "password": {
-    "secret": "<secret>" // secret used to hash the passwords
+    "secret": "<secret>", // secret used to hash the passwords
+    "reset_ttl": 600 // seconds after which the password-reset-token expires
   },
   "registration_enabled": true, // whether users are allowed to register
   "email_verification": true, // whether the email must be verified

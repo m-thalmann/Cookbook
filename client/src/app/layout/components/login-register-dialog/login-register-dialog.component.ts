@@ -7,6 +7,7 @@ import { ApiResponse } from 'src/app/core/api/ApiResponse';
 import { UserService } from 'src/app/core/auth/user.service';
 import { ConfigService } from 'src/app/core/config/config.service';
 import { getFormError } from 'src/app/core/forms/Validation';
+import { ResetPasswordDialogComponent } from './components/reset-password-dialog/reset-password-dialog.component';
 import { VerifyEmailDialogComponent } from './components/verify-email-dialog/verify-email-dialog.component';
 
 @Component({
@@ -155,8 +156,6 @@ export class LoginRegisterDialogComponent {
           this.action();
           return;
         }
-
-        this.error = 'Email not verified';
       } else {
         let err = res.error || undefined;
         throw new Error(typeof err === 'object' ? err.info : err);
@@ -167,6 +166,13 @@ export class LoginRegisterDialogComponent {
     }
 
     this.dialogRef.disableClose = false;
+  }
+
+  /**
+   * Show the ResetPassword-Dialog
+   */
+  showResetPasswordDialog() {
+    this.dialog.open(ResetPasswordDialogComponent);
   }
 
   /**

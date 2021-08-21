@@ -31,6 +31,7 @@ import { PageRecipeComponent } from './pages/page-recipe/page-recipe.component';
 import { PageSearchComponent } from './pages/page-search/page-search.component';
 import { RecipeImageSliderComponent } from './components/recipe-image-slider/recipe-image-slider.component';
 import { VerifyEmailDialogComponent } from './layout/components/login-register-dialog/components/verify-email-dialog/verify-email-dialog.component';
+import { ResetPasswordDialogComponent } from './layout/components/login-register-dialog/components/reset-password-dialog/reset-password-dialog.component';
 
 export function setupConfig(service: ConfigService) {
   return () => service.load();
@@ -64,6 +65,7 @@ export function setupConfig(service: ConfigService) {
     HcaptchaComponent,
     RecipeImageSliderComponent,
     VerifyEmailDialogComponent,
+    ResetPasswordDialogComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, MaterialModule, HttpClientModule],
   providers: [

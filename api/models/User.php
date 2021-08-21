@@ -3,6 +3,7 @@
 namespace API\models;
 
 use API\auth\Authorization;
+use API\inc\Functions;
 use API\inc\Validation;
 use PAF\Model\Model;
 
@@ -91,7 +92,7 @@ class User extends Model {
     public function initSalt() {
         $this->editValue(
             "passwordSalt",
-            md5(random_int(PHP_INT_MIN, PHP_INT_MAX)),
+            Functions::getRandomString(),
             false,
             true
         );

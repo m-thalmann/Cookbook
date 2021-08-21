@@ -23,6 +23,10 @@
             <input matInput type="password" formControlName="passwordConfirm" />
             <mat-error *ngIf="getFormError('passwordConfirm') != null">{{ getFormError('passwordConfirm') }}</mat-error>
         </mat-form-field>
+        <p *ngIf="isLogin" style="margin-bottom: 1.25em">
+            Forgot your password?
+            <a (click)="showResetPasswordDialog()" class="link" [class.disabled]="loading">Reset password</a>
+        </p>
 
         <mat-slide-toggle color="primary" formControlName="remember">Remember me</mat-slide-toggle>
 

@@ -6,6 +6,7 @@ use API\auth\Authorization;
 use API\config\Config;
 use API\inc\Functions;
 use API\inc\Mailer;
+use API\models\ResetPassword;
 use API\models\User;
 use PAF\Model\DuplicateException;
 use PAF\Model\InvalidException;
@@ -151,7 +152,7 @@ $group
 
         if ($user instanceof User) {
             if ($user === null || User::isEmailVerified($user)) {
-                return Response::notFound();
+                return Response::ok();
             }
 
             if ($user->verifyEmail($data["code"])) {
@@ -177,7 +178,7 @@ $group
         $user = User::get("email = ?", [$data["email"]])->getFirst();
 
         if ($user === null || User::isEmailVerified($user)) {
-            return Response::notFound();
+            return Response::ok();
         }
 
         if (Mailer::sendEmailVerification($user)) {
@@ -188,4 +189,54 @@ $group
     })
     ->get('/registrationEnabled', function () {
         return Config::get("registration_enabled", true);
+    })
+    ->post('/resetPassword', function ($req) {
+        $data = $req["post"] ?? [];
+
+        if (
+            empty($data["email"]) ||
+            empty($data["token"]) ||
+            empty($data["password"])
+        ) {
+            return Response::badRequest([
+                "info" => "Email, token and password expected",
+            ]);
+        }
+
+        $resetPassword = ResetPassword::search($data["email"], $data["token"]);
+
+        if (!$resetPassword || !($user = $resetPassword->user())) {
+            return Response::notFound();
+        }
+
+        $resetPassword->delete();
+
+        $user->password = $data["password"];
+
+        if (!$user->save()) {
+            return Response::error();
+        }
+
+        return Response::ok();
+    })
+    ->post('/resetPassword/send', function ($req) {
+        $data = $req["post"] ?? [];
+
+        if (empty($data["email"])) {
+            return Response::badRequest(["info" => "Email expected"]);
+        }
+
+        $user = User::get("email = ?", [$data["email"]])->getFirst();
+
+        if ($user === null) {
+            return Response::ok();
+        }
+
+        $resetPassword = ResetPassword::generate($user);
+
+        if (Mailer::sendResetPassword($user, $resetPassword->token)) {
+            return Response::ok();
+        }
+
+        return Response::error();
     });

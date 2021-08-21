@@ -165,4 +165,13 @@ class Functions {
 
         return $response && $responseData->success;
     }
+
+    /**
+     * Generates a random 32-character string
+     *
+     * @return string
+     */
+    public static function getRandomString() {
+        return md5(random_int(PHP_INT_MIN, PHP_INT_MAX));
+    }
 }

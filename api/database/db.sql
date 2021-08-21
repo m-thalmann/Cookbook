@@ -10,6 +10,17 @@ CREATE TABLE `users` (
   UNIQUE(`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `reset_password` (
+  `userId` int(11) NOT NULL,
+  `token` varchar(32) NOT NULL,
+  `expires` datetime NOT NULL,
+
+  UNIQUE(userId, token),
+
+  FOREIGN KEY (userId) REFERENCES users(id)
+    ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `recipes` (
   `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `userId` int(11) NOT NULL,
