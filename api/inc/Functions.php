@@ -46,14 +46,14 @@ class Functions {
      *
      * @param RecipeImage $image
      * @param bool $cacheable whether the image can be cached
-     * @param integer|null $thumbnailWidth the width to scale the image to
+     * @param integer|null $maxSize the width/height to scale the image to
      *
      * @return Response the generated response with the image
      */
     public static function outputRecipeImage(
         $image,
         $cacheable = true,
-        $thumbnailWidth = null
+        $maxSize = null
     ) {
         if ($cacheable) {
             $etag = md5($image->id);
@@ -69,7 +69,8 @@ class Functions {
             }
         }
 
-        if ($thumbnailWidth !== null) {
+        // resize image
+        if ($maxSize !== null) {
             switch ($image->mimeType) {
                 case "image/jpeg":
                     $img = imagecreatefromjpeg($image->path);
@@ -84,18 +85,18 @@ class Functions {
 
             list($width, $height) = getimagesize($image->path);
 
-            $ratio = $height / $width;
+            $ratio = $width / $height;
 
             if (
-                ($ratio >= 1 && $width > $thumbnailWidth) ||
-                ($ratio < 1 && $height > $thumbnailWidth)
+                ($ratio >= 1 && $width > $maxSize) ||
+                ($ratio < 1 && $height > $maxSize)
             ) {
-                if ($ratio < 1) {
-                    $newHeight = $thumbnailWidth;
-                    $newWidth = $newHeight / $ratio;
+                if ($ratio >= 1) {
+                    $newWidth = $maxSize;
+                    $newHeight = $newWidth / $ratio;
                 } else {
-                    $newWidth = $thumbnailWidth;
-                    $newHeight = $newWidth * $ratio;
+                    $newHeight = $maxSize;
+                    $newWidth = $newHeight * $ratio;
                 }
 
                 $img = imagescale($img, $newWidth, $newHeight);

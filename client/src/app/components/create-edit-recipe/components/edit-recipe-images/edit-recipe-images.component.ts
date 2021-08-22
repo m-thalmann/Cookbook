@@ -45,7 +45,7 @@ export class EditRecipeImagesComponent {
       this.recipeImages = res.value;
       if (res.value) {
         this.recipeImagesURLs = res.value.map((image) => {
-          return this.api.getRecipeImageURLById(image.id);
+          return this.api.getRecipeImageURLById(image.id, 250);
         });
       } else {
         this.recipeImagesURLs = [];

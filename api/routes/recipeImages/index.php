@@ -25,7 +25,7 @@ $group
             return Functions::outputRecipeImage(
                 $recipeImage,
                 true,
-                $_GET["thumbnailWidth"] ?? null
+                $_GET["maxSize"] ?? null
             );
         } else {
             return Response::notFound();

@@ -244,7 +244,7 @@ $group
             return Functions::outputRecipeImage(
                 $image,
                 true,
-                $_GET["thumbnailWidth"] ?? null
+                $_GET["maxSize"] ?? null
             );
         }
     )

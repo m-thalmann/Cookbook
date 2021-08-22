@@ -283,14 +283,14 @@ export class ApiService {
     return this.get<number>(`${this.URL}/recipes/id/${recipeId}/images/count`);
   }
 
-  getRecipeImageURL(recipeId: number, number: number, thumbnailWidth: number | null = null) {
+  getRecipeImageURL(recipeId: number, number: number, maxSize: number | null = null) {
     let query = [];
 
     if (this.queryToken) {
       query.push(this.queryToken);
     }
-    if (thumbnailWidth) {
-      query.push(`thumbnailWidth=${thumbnailWidth}`);
+    if (maxSize) {
+      query.push(`maxSize=${maxSize}`);
     }
 
     let queryString = '';
@@ -302,14 +302,14 @@ export class ApiService {
     return `${this.URL}/recipes/id/${recipeId}/images/number/${number}${queryString}`;
   }
 
-  getRecipeImageURLById(id: number, thumbnailWidth: number | null = null) {
+  getRecipeImageURLById(id: number, maxSize: number | null = null) {
     let query = [];
 
     if (this.queryToken) {
       query.push(this.queryToken);
     }
-    if (thumbnailWidth) {
-      query.push(`thumbnailWidth=${thumbnailWidth}`);
+    if (maxSize) {
+      query.push(`maxSize=${maxSize}`);
     }
 
     let queryString = '';

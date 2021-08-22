@@ -62,10 +62,10 @@ export class RecipeListComponent implements OnInit {
 
   async reload() {
     this.loading = true;
-    this.loadingChange.emit(this.loading);
+    this.loadingChange.emit(false);
 
     this.error = false;
-    this.errorChange.emit(this.loading);
+    this.errorChange.emit(false);
 
     let recipes = await this.reloadFunction({
       page: this.page,
@@ -82,7 +82,7 @@ export class RecipeListComponent implements OnInit {
         }
       } else {
         this.error = true;
-        this.errorChange.emit(this.loading);
+        this.errorChange.emit(true);
 
         console.error('Error loading recipes:', recipes.error);
       }

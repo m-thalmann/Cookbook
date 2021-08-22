@@ -1091,7 +1091,7 @@ paths:
       tags:
         - RecipeImage
       parameters:
-        - $ref: '#/components/parameters/ThumbnailWidth'
+        - $ref: '#/components/parameters/MaxSize'
       responses:
         '200':
           description: OK
@@ -1210,7 +1210,7 @@ paths:
       tags:
         - RecipeImage
       parameters:
-        - $ref: '#/components/parameters/ThumbnailWidth'
+        - $ref: '#/components/parameters/MaxSize'
       responses:
         '200':
           description: OK
@@ -1514,10 +1514,10 @@ components:
       in: query
       required: false
       description: The direction of the sort (asc - ascending, desc - descending)
-    ThumbnailWidth:
+    MaxSize:
       schema:
         type: integer
-      name: thumbnailWidth
+      name: maxSize
       in: query
       required: false
       description: The width to scale the image to (or height if portrait)
