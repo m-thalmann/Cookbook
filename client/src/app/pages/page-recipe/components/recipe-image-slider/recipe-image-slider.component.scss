@@ -11,7 +11,7 @@ img {
 
   > .image {
     width: 100%;
-    height: calc(100% - 5em);
+    height: 25em;
     margin-bottom: 0.5em;
 
     text-align: center;
@@ -146,5 +146,11 @@ img {
         width: 100%;
       }
     }
+  }
+}
+
+@media print {
+  .preview {
+    display: none;
   }
 }

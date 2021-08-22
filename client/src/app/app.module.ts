@@ -13,7 +13,7 @@ import { EditorComponent } from './components/editor/editor.component';
 import { HcaptchaComponent } from './components/hcaptcha/hcaptcha.component';
 import { ImageComponent } from './components/image/image.component';
 import { PaginatorComponent } from './components/paginator/paginator.component';
-import { RecipeImageSliderComponent } from './components/recipe-image-slider/recipe-image-slider.component';
+import { RecipeImageSliderComponent } from './pages/page-recipe/components/recipe-image-slider/recipe-image-slider.component';
 import { RecipeItemComponent } from './components/recipe-item/recipe-item.component';
 import { SkeletonRecipeItemComponent } from './components/recipe-item/skeleton/skeleton-recipe-item.component';
 import { RecipeListComponent } from './components/recipe-list/recipe-list.component';

@@ -1,4 +1,4 @@
-<div class="image-slider" [class.empty]="recipeImagesURLs && recipeImagesURLs.length === 0" *ngIf="recipeImagesURLs">
+<div class="image-slider" *ngIf="recipeImagesURLs">
     <div class="image">
         <cb-image [src]="currentRecipeImageURL" alt="Recipe image"></cb-image>
 

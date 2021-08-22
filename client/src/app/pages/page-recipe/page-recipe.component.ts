@@ -6,8 +6,6 @@ import { ApiService } from 'src/app/core/api/api.service';
 import { RecipeFull } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
 
-const FALLBACK_IMAGE = 'assets/images/cookbook.svg';
-
 @Component({
   selector: 'cb-page-recipe',
   templateUrl: './page-recipe.component.html',
@@ -18,8 +16,6 @@ export class PageRecipeComponent implements OnInit {
   error = false;
 
   recipe: RecipeFull | null = null;
-  recipeImagesURLs: string[] | null = null;
-  recipeImageThumbnailsURLs: string[] | null = null;
 
   selectedPortions: number = 1;
 
@@ -100,21 +96,6 @@ export class PageRecipeComponent implements OnInit {
     if (res.isOK()) {
       this.recipe = res.value;
       this.selectedPortions = res.value?.portions || 1;
-
-      this.recipeImagesURLs = [];
-      this.recipeImageThumbnailsURLs = [];
-
-      if (this.recipe) {
-        if (this.recipe.imagesCount > 0) {
-          for (let i = 0; i < this.recipe.imagesCount; i++) {
-            this.recipeImagesURLs.push(this.api.getRecipeImageURL(this.recipe.id, i));
-            this.recipeImageThumbnailsURLs.push(this.api.getRecipeImageURL(this.recipe.id, i, 75));
-          }
-        } else {
-          this.recipeImagesURLs.push(FALLBACK_IMAGE);
-          this.recipeImageThumbnailsURLs.push(FALLBACK_IMAGE);
-        }
-      }
     } else if (res.isNotFound()) {
       this.snackBar.open('Recipe was not found', 'OK', {
         panelClass: 'action-warn',
