@@ -75,9 +75,8 @@
                 <tr *ngFor="let ingredient of recipe.ingredients">
                     <td>
                         <ng-container *ngIf="ingredient.amount">
-                            {{ getCalculateIngredientAmount(ingredient.amount) }}
+                            {{ getCalculateIngredientAmount(ingredient.amount) | amount }}
                         </ng-container>
-                        <!-- TODO: amount-pipe -> round & e.g. 0.5 to 1/2 etc -->
                         {{ ingredient.unit }}
                     </td>
                     <td>{{ ingredient.name }}</td>

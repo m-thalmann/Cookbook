@@ -13,13 +13,13 @@ import { EditorComponent } from './components/editor/editor.component';
 import { HcaptchaComponent } from './components/hcaptcha/hcaptcha.component';
 import { ImageComponent } from './components/image/image.component';
 import { PaginatorComponent } from './components/paginator/paginator.component';
-import { RecipeImageSliderComponent } from './pages/page-recipe/components/recipe-image-slider/recipe-image-slider.component';
 import { RecipeItemComponent } from './components/recipe-item/recipe-item.component';
 import { SkeletonRecipeItemComponent } from './components/recipe-item/skeleton/skeleton-recipe-item.component';
 import { RecipeListComponent } from './components/recipe-list/recipe-list.component';
 import { ConfigService } from './core/config/config.service';
 import { InputFocusDirective } from './core/directives/input-focus.directive';
 import { MaterialModule } from './core/material/material.module';
+import { AmountPipe } from './core/pipes/amount.pipe';
 import { ResetPasswordDialogComponent } from './layout/components/login-register-dialog/components/reset-password-dialog/reset-password-dialog.component';
 import { VerifyEmailDialogComponent } from './layout/components/login-register-dialog/components/verify-email-dialog/verify-email-dialog.component';
 import { LoginRegisterDialogComponent } from './layout/components/login-register-dialog/login-register-dialog.component';
@@ -32,6 +32,7 @@ import { PageEditRecipeComponent } from './pages/page-edit-recipe/page-edit-reci
 import { PageHomeComponent } from './pages/page-home/page-home.component';
 import { PageMyRecipesComponent } from './pages/page-my-recipes/page-my-recipes.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
+import { RecipeImageSliderComponent } from './pages/page-recipe/components/recipe-image-slider/recipe-image-slider.component';
 import { PageRecipeComponent } from './pages/page-recipe/page-recipe.component';
 import { SkeletonPageRecipeComponent } from './pages/page-recipe/skeleton/skeleton-page-recipe.component';
 import { PageSearchComponent } from './pages/page-search/page-search.component';
@@ -71,6 +72,7 @@ export function setupConfig(service: ConfigService) {
     SkeletonRecipeItemComponent,
     SkeletonPageRecipeComponent,
     ImageComponent,
+    AmountPipe,
   ],
   imports: [
     BrowserModule,
