@@ -57,14 +57,17 @@
     overflow: hidden;
     border-radius: 1em;
 
-    img {
-      border-radius: 1em;
+    cb-image {
       height: 100%;
 
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+
+      ::ng-deep > img {
+        border-radius: 1em;
+      }
     }
   }
 

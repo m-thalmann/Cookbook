@@ -14,7 +14,7 @@
 
 <div class="images">
     <div class="image" *ngFor="let url of recipeImagesURLs; let index = index">
-        <img [src]="url" cbImageFallback alt="Recipe image" />
+        <cb-image [src]="url" alt="Recipe image"></cb-image>
         <button
             mat-mini-fab
             (click)="deleteImage(index)"

@@ -6,7 +6,7 @@
     [routerLink]="recipeURL"
 >
     <div class="img-container">
-        <img [src]="thumbnail" cbImageFallback [alt]="recipe.name + '\'s image'" />
+        <cb-image [src]="thumbnail" [alt]="recipe.name + '\'s image'"></cb-image>
     </div>
 
     <div class="content">

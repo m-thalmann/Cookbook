@@ -87,6 +87,7 @@ h3 {
 .image-slider {
   width: calc(60% - 1em);
   margin-right: 1em;
+  height: 30em;
 }
 
 .ingredients {
@@ -164,7 +165,7 @@ h3 {
   }
 
   .image-slider {
-    &.fallback {
+    &.empty {
       display: none;
     }
 

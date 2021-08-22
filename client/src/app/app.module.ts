@@ -11,13 +11,13 @@ import { EditRecipeInformationComponent } from './components/create-edit-recipe/
 import { CreateEditRecipeComponent } from './components/create-edit-recipe/create-edit-recipe.component';
 import { EditorComponent } from './components/editor/editor.component';
 import { HcaptchaComponent } from './components/hcaptcha/hcaptcha.component';
+import { ImageComponent } from './components/image/image.component';
 import { PaginatorComponent } from './components/paginator/paginator.component';
 import { RecipeImageSliderComponent } from './components/recipe-image-slider/recipe-image-slider.component';
 import { RecipeItemComponent } from './components/recipe-item/recipe-item.component';
 import { SkeletonRecipeItemComponent } from './components/recipe-item/skeleton/skeleton-recipe-item.component';
 import { RecipeListComponent } from './components/recipe-list/recipe-list.component';
 import { ConfigService } from './core/config/config.service';
-import { ImageFallbackDirective } from './core/directives/image-fallback.directive';
 import { InputFocusDirective } from './core/directives/input-focus.directive';
 import { MaterialModule } from './core/material/material.module';
 import { ResetPasswordDialogComponent } from './layout/components/login-register-dialog/components/reset-password-dialog/reset-password-dialog.component';
@@ -48,7 +48,6 @@ export function setupConfig(service: ConfigService) {
     LoginRegisterDialogComponent,
     LogoutComponent,
     RecipeItemComponent,
-    ImageFallbackDirective,
     PaginatorComponent,
     SettingsDialogComponent,
     PageMyRecipesComponent,
@@ -71,6 +70,7 @@ export function setupConfig(service: ConfigService) {
     ResetPasswordDialogComponent,
     SkeletonRecipeItemComponent,
     SkeletonPageRecipeComponent,
+    ImageComponent,
   ],
   imports: [
     BrowserModule,

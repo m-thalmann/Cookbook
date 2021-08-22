@@ -1,6 +1,6 @@
-<div class="image-slider" [class.fallback]="recipeImagesURLs && recipeImagesURLs.length === 0" *ngIf="recipeImagesURLs">
+<div class="image-slider" [class.empty]="recipeImagesURLs && recipeImagesURLs.length === 0" *ngIf="recipeImagesURLs">
     <div class="image">
-        <img [src]="currentRecipeImageURL" cbImageFallback alt="Recipe image" />
+        <cb-image [src]="currentRecipeImageURL" alt="Recipe image"></cb-image>
 
         <div
             class="slider-navigation"
@@ -31,7 +31,7 @@
             *ngFor="let url of recipeImageThumbnailsURLs; let index = index"
         >
             <div class="image">
-                <img [src]="url" cbImageFallback alt="Recipe image preview" />
+                <cb-image [src]="url" alt="Recipe image preview"></cb-image>
             </div>
         </div>
     </div>
