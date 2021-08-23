@@ -1,8 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 import { ApiService } from 'src/app/core/api/api.service';
-import { EditIngredient, EditRecipe, NewRecipe, RecipeFull } from 'src/app/core/api/ApiInterfaces';
+import { EditIngredient, EditRecipe, ListIngredient, NewRecipe, RecipeFull } from 'src/app/core/api/ApiInterfaces';
 import { ApiResponse } from 'src/app/core/api/ApiResponse';
 import { getFormError } from 'src/app/core/forms/Validation';
 import { trimAndNull } from 'src/app/core/functions';
@@ -53,7 +56,7 @@ export class EditRecipeInformationComponent {
     return this._disabled;
   }
 
-  @Output() saved = new EventEmitter<RecipeFull | null>();
+  @Output() saved = new EventEmitter<{ recipe: RecipeFull | null; ingredientsError: boolean }>();
 
   recipeForm: FormGroup;
   ingredients: FormArray;
@@ -63,6 +66,13 @@ export class EditRecipeInformationComponent {
 
   saving = false;
   error: string | null = null;
+  ingredientsError = false; // used on edit
+
+  ingredientList: ListIngredient[] | null = null;
+  categoryList: string[] | null = null;
+
+  filteredIngredientLists: Observable<ListIngredient[]>[] = [];
+  filteredCategoryList: Observable<string[]> | null = null;
 
   private _disabled = false;
 
@@ -84,6 +94,9 @@ export class EditRecipeInformationComponent {
       cookTime: [this.editRecipe?.cookTime || null, [Validators.min(1)]],
       ingredients: this.ingredients,
     });
+
+    this.loadIngredientList();
+    this.loadCategoryList();
   }
 
   get isEdit() {
@@ -107,6 +120,31 @@ export class EditRecipeInformationComponent {
     }
 
     return getFormError(field);
+  }
+
+  async loadIngredientList() {
+    let res = await this.api.getIngredientsList();
+
+    if (res.isOK()) {
+      this.ingredientList = res.value;
+    }
+  }
+
+  async loadCategoryList() {
+    let res = await this.api.getCategories();
+
+    if (res.isOK()) {
+      this.categoryList = res.value;
+
+      this.filteredCategoryList = this.recipeForm.get('category')!.valueChanges.pipe(
+        startWith(''),
+        map((value: string) => {
+          const filterValue = value.toLowerCase();
+
+          return this.categoryList?.filter((option) => option.toLowerCase().includes(filterValue)) || [];
+        })
+      );
+    }
   }
 
   /**
@@ -142,6 +180,20 @@ export class EditRecipeInformationComponent {
     );
     this.ingredientIds.push(values ? values.id : null);
 
+    const filteredIngredientList = this.ingredients
+      .at(this.ingredients.length - 1)!
+      .get('name')!
+      .valueChanges.pipe(
+        startWith(''),
+        map((value: string) => {
+          const filterValue = value.toLowerCase();
+
+          return this.ingredientList?.filter((option) => option.name.toLowerCase().includes(filterValue)) || [];
+        })
+      );
+
+    this.filteredIngredientLists.push(filteredIngredientList);
+
     if (focus) {
       this.focusedIngredient = this.ingredients.length - 1;
     }
@@ -155,6 +207,21 @@ export class EditRecipeInformationComponent {
   removeIngredient(index: number) {
     this.ingredients.removeAt(index);
     this.ingredientIds.splice(index, 1);
+    this.filteredIngredientLists.splice(index, 1);
+  }
+
+  onAutocompleteIngredientSelected(index: number, event: MatAutocompleteSelectedEvent) {
+    const label = event.option.getLabel();
+
+    if (label.includes('|')) {
+      const unit = label.substring(label.lastIndexOf('|') + 3).trim();
+
+      if (
+        this.ingredientList?.some((ingredient) => ingredient.name === event.option.value && ingredient.unit === unit)
+      ) {
+        this.ingredients.at(index).get('unit')?.setValue(unit);
+      }
+    }
   }
 
   /**
@@ -165,6 +232,7 @@ export class EditRecipeInformationComponent {
 
     this.saving = true;
     this.error = null;
+    this.ingredientsError = false;
     this.recipeForm.disable();
 
     let values = this.recipeForm.value;
@@ -259,7 +327,17 @@ export class EditRecipeInformationComponent {
         }
       });
 
-      await Promise.all(ingredientPromises);
+      const ingredientsResults: ApiResponse<any>[] = await Promise.all(ingredientPromises);
+
+      this.ingredientsError = ingredientsResults.some((result) => !result.isOK());
+
+      if (this.ingredientsError) {
+        ingredientsResults.forEach((result) => {
+          if (!result.isOK()) {
+            console.error('Error saving ingredient:', result.error);
+          }
+        });
+      }
 
       // Updating recipe
 
@@ -273,9 +351,18 @@ export class EditRecipeInformationComponent {
         history.pushState('', '', `/edit/${res.value?.id}`); // change url without redirect
       }
 
-      this.saved.emit(res.value);
+      this.saved.emit({
+        recipe: res.value,
+        ingredientsError: this.ingredientsError,
+      });
 
-      this.snackBar.open('Successfully saved!', 'OK', {
+      let saveMessage = 'Successfully saved!';
+
+      if (this.ingredientsError) {
+        saveMessage = 'Successfully saved! Some ingredients could not be saved.';
+      }
+
+      this.snackBar.open(saveMessage, 'OK', {
         duration: 5000,
       });
     } else {

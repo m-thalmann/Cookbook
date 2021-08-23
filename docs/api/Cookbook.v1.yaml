@@ -927,16 +927,9 @@ paths:
       security:
         - Token: []
         - QueryToken: []
-  /ingredients/search/{search}:
-    parameters:
-      - schema:
-          type: string
-          minLength: 3
-        name: search
-        in: path
-        required: true
+  /ingredients/list:
     get:
-      summary: Search for an ingredient in existing recipes of this user
+      summary: Get all distinct ingredients for recipes the user owns
       tags:
         - Ingredient
       responses:
@@ -959,22 +952,10 @@ paths:
                   required:
                     - name
                     - unit
-        '400':
-          description: Search-string too short
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: Search must be at least 3 characters long
-                required:
-                  - info
         '401':
           $ref: '#/components/responses/Unauthorized'
-      operationId: get-ingredients-search
-      description: Search for an ingredient in existing recipes of this user
+      operationId: get-ingredients-list
+      description: Get all distinct ingredients for recipes the user owns
       security:
         - Token: []
         - QueryToken: []

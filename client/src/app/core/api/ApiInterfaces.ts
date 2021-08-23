@@ -78,7 +78,7 @@ export interface EditRecipe {
   cookTime?: number | null;
 }
 
-export interface SearchIngredient {
+export interface ListIngredient {
   name: string;
   unit: string | null;
 }

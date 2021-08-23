@@ -5,29 +5,20 @@ namespace API\routes;
 use API\auth\Authorization;
 use API\models\Ingredient;
 use PAF\Model\InvalidException;
+use PAF\Model\Model;
 use PAF\Router\Response;
 
 $group
-    ->get('/search/{{:search}}', Authorization::middleware(), function ($req) {
-        $search = $req["params"]["search"];
-
-        if (strlen($search) < 3) {
-            return Response::badRequest(
-                "Search must be at least 3 characters long"
-            );
-        }
-
-        $ingredients = Ingredient::getRaw(
-            "name LIKE ? AND recipeId IN (SELECT id FROM recipes WHERE userId = ?)",
-            ["%$search%", Authorization::user()->id]
+    ->get('/list', Authorization::middleware(), function () {
+        $stmt = Model::db()->prepare(
+            "SELECT DISTINCT `name`, `unit` FROM ingredients WHERE recipeId IN (SELECT id FROM recipes WHERE userId = ?)"
         );
 
-        return array_map(function ($ingredient) {
-            return [
-                "name" => $ingredient["name"],
-                "unit" => $ingredient["unit"],
-            ];
-        }, $ingredients);
+        if (!$stmt->execute([Authorization::user()->id])) {
+            return Response::error();
+        }
+
+        return $stmt->fetchAll();
     })
     ->put('/id/{{i:id}}', Authorization::middleware(), function ($req) {
         $ingredient = Ingredient::getById(

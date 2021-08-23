@@ -72,11 +72,13 @@ export class CreateEditRecipeComponent {
     this.disabled = false;
   }
 
-  informationSaved(recipe: RecipeFull | null) {
-    this.editRecipe = recipe;
+  informationSaved(save: { recipe: RecipeFull | null; ingredientsError: boolean }) {
+    this.editRecipe = save.recipe;
 
-    setTimeout(() => {
-      this.stepper.next();
-    }, 0);
+    if (!save.ingredientsError) {
+      setTimeout(() => {
+        this.stepper.next();
+      }, 0);
+    }
   }
 }

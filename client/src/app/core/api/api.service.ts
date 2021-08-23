@@ -15,7 +15,7 @@ import {
   Recipe,
   RecipeFull,
   RecipeImage,
-  SearchIngredient,
+  ListIngredient,
   User,
 } from './ApiInterfaces';
 import { ApiResponse } from './ApiResponse';
@@ -228,7 +228,9 @@ export class ApiService {
   }
 
   getRecipesForCategory(category: string, options: Options) {
-    return this.get<Pagination<Recipe>>(`${this.URL}/recipes/category/${category}${ApiService.getQueryString(options)}`);
+    return this.get<Pagination<Recipe>>(
+      `${this.URL}/recipes/category/${category}${ApiService.getQueryString(options)}`
+    );
   }
 
   getRecipesForUser(id: number, options: Options) {
@@ -265,12 +267,8 @@ export class ApiService {
     return this.delete<any>(`${this.URL}/ingredients/id/${id}`);
   }
 
-  searchIngredient(search: string) {
-    if (search.length < 3) {
-      return null;
-    }
-
-    return this.get<SearchIngredient[]>(`${this.URL}/ingredients/search/${search}`);
+  getIngredientsList() {
+    return this.get<ListIngredient[]>(`${this.URL}/ingredients/list`);
   }
 
   // Recipe Images
