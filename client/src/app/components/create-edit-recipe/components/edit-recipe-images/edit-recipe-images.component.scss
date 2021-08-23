@@ -7,8 +7,19 @@
     margin-right: 1em;
   }
 
-  mat-spinner {
+  .progress {
     display: inline-block;
+    width: 25%;
+
+    mat-progress-bar {
+      display: inline-block;
+      width: calc(100% - 4em);
+      margin-right: 1em;
+    }
+
+    > * {
+      vertical-align: middle;
+    }
   }
 
   > * {
@@ -42,5 +53,13 @@
       top: 0.5em;
       right: 0.5em;
     }
+  }
+}
+
+@media screen and (max-width: $mobile-width) {
+  .actions .progress {
+    display: block;
+    margin-top: 1em;
+    width: 100%;
   }
 }

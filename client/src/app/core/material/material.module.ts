@@ -17,6 +17,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [],
@@ -40,6 +41,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
     MatStepperModule,
     MatAutocompleteModule,
     ClipboardModule,
+    MatProgressBarModule,
   ],
 })
 export class MaterialModule {}

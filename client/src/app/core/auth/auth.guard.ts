@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    this.snackBar.open('You need to login to view this page!', 'OK', {
+    this.snackBar.open('You need to log in to view this page!', 'OK', {
       panelClass: 'action-warn',
     });
 

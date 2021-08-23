@@ -7,7 +7,12 @@
     >
         <mat-icon>file_upload</mat-icon> Upload new image
     </button>
-    <mat-spinner color="accent" diameter="20" *ngIf="saving"></mat-spinner>
+
+    <div class="progress" *ngIf="saving && uploadProgress !== null">
+        <mat-progress-bar mode="determinate" [value]="uploadProgress" color="accent"></mat-progress-bar>
+        <span>{{ uploadProgress }}%</span>
+    </div>
+
     <span class="fg-warn" *ngIf="error">{{ error }}</span>
     <input type="file" hidden (change)="uploadImage(fileInput.files)" #fileInput accept=".jpg,.jpeg,.jfif,.png,.gif" />
 </div>

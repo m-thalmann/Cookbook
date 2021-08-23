@@ -1,13 +1,15 @@
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { UserService } from '../auth/user.service';
 import { ConfigService } from '../config/config.service';
 import {
   EditIngredient,
   EditRecipe,
   Ingredient,
+  ListIngredient,
   NewIngredient,
   NewRecipe,
   Options,
@@ -15,7 +17,6 @@ import {
   Recipe,
   RecipeFull,
   RecipeImage,
-  ListIngredient,
   User,
 } from './ApiInterfaces';
 import { ApiResponse } from './ApiResponse';
@@ -51,7 +52,7 @@ export class ApiService {
     };
   }
 
-  private get httpOptionsImageUpload(): { observe: 'response'; headers: HttpHeaders } {
+  private get httpOptionsImageUpload(): { observe: 'events'; headers: HttpHeaders; reportProgress: boolean } {
     let headers = new HttpHeaders();
 
     let token = this.user.token;
@@ -61,8 +62,9 @@ export class ApiService {
     }
 
     return {
-      observe: 'response',
+      observe: 'events',
       headers: headers,
+      reportProgress: true,
     };
   }
 
@@ -103,27 +105,32 @@ export class ApiService {
         this.user.logout('unauthorized', null);
       }
     } catch (e) {
-      status = e.status;
-      let error = e.error;
-
-      if (status != 404) {
-        if (status == 401 && this.user.isLoggedin) {
-          this.user.logout('unauthorized');
-        } else if (status == 403) {
-          if (this.user.isLoggedin) {
-            this.snackBar.open('You are not authorized to perform this action!', 'OK', {
-              duration: 10000,
-              panelClass: 'action-warn',
-            });
-          }
-        }
-
-        return new ApiResponse<T>(e.status, null, error);
-      }
-      value = error;
+      return this.handleError(e);
     }
 
     return new ApiResponse<T>(status, value);
+  }
+
+  private handleError<T>(e: HttpErrorResponse) {
+    let status = e.status;
+    let error = e.error;
+
+    if (status != 404) {
+      if (status == 401 && this.user.isLoggedin) {
+        this.user.logout('unauthorized');
+      } else if (status == 403) {
+        if (this.user.isLoggedin) {
+          this.snackBar.open('You are not authorized to perform this action!', 'OK', {
+            duration: 10000,
+            panelClass: 'action-warn',
+          });
+        }
+      }
+
+      return new ApiResponse<T>(e.status, null, error);
+    }
+
+    return new ApiResponse<T>(status, error);
   }
 
   private static getQueryString(options: Options) {
@@ -323,7 +330,26 @@ export class ApiService {
     const fd = new FormData();
     fd.append('image', image, image.name);
 
-    return this.post<RecipeImage>(`${this.URL}/recipes/id/${recipeId}/images`, fd, this.httpOptionsImageUpload);
+    return this.http
+      .post<RecipeImage>(`${this.URL}/recipes/id/${recipeId}/images`, fd, this.httpOptionsImageUpload)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return of(this.handleError<RecipeImage>(error));
+        }),
+        map((event) => {
+          if (event instanceof ApiResponse) {
+            return event;
+          } else {
+            switch (event.type) {
+              case HttpEventType.UploadProgress:
+                return Math.round((event.loaded / event.total!) * 100);
+              case HttpEventType.Response:
+                return new ApiResponse<RecipeImage>(event.status, event.body);
+            }
+          }
+          return null;
+        })
+      );
   }
 
   deleteRecipeImage(id: number) {

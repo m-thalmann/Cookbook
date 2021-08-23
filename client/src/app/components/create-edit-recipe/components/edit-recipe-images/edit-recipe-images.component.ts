@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApiService } from 'src/app/core/api/api.service';
 import { RecipeImage } from 'src/app/core/api/ApiInterfaces';
+import { ApiResponse } from 'src/app/core/api/ApiResponse';
 
 @Component({
   selector: 'cb-edit-recipe-images',
@@ -28,6 +29,8 @@ export class EditRecipeImagesComponent {
   loading = false;
   saving = false;
   error: string | null = null;
+
+  uploadProgress: number | null = null;
 
   recipeImages: RecipeImage[] | null = null;
   recipeImagesURLs: string[] | null = null;
@@ -65,20 +68,26 @@ export class EditRecipeImagesComponent {
 
     this.saving = true;
     this.error = null;
+    this.uploadProgress = 0;
 
-    let res = await this.api.addRecipeImage(this.recipeId, files[0]);
+    this.api.addRecipeImage(this.recipeId, files[0]).subscribe(async (event) => {
+      if (event instanceof ApiResponse) {
+        if (event.isOK()) {
+          await this.reload();
+          this.snackBar.open('Image was added successfully!', 'OK', {
+            duration: 5000,
+          });
+        } else {
+          this.error = event.error.info || 'Error uploading image';
+          console.error('Error adding recipe-image:', event.error);
+        }
 
-    if (res.isOK()) {
-      await this.reload();
-      this.snackBar.open('Image was added successfully!', 'OK', {
-        duration: 5000,
-      });
-    } else {
-      this.error = res.error.info || 'Error uploading image';
-      console.error('Error adding recipe-image:', res.error);
-    }
-
-    this.saving = false;
+        this.saving = false;
+        this.uploadProgress = null;
+      } else if (typeof event === 'number') {
+        this.uploadProgress = event;
+      }
+    });
   }
 
   async deleteImage(index: number) {
