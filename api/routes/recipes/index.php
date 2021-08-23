@@ -25,7 +25,6 @@ $group
         return Functions::pagination(Functions::sort($query));
     })
     ->get('/id/{{i:id}}', Authorization::middleware(false), function ($req) {
-        $recipe = null;
         if (Authorization::isAuthorized()) {
             $recipe = Recipe::get("id = ? AND (public = 1 OR userId = ?)", [
                 $req["params"]["id"],

@@ -35,7 +35,7 @@ export class EditorComponent implements ControlValueAccessor {
     this.propagateChange = fn;
   }
 
-  registerOnTouched(fn: any) {}
+  registerOnTouched(_: any) {}
 
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
@@ -87,7 +87,7 @@ export class EditorComponent implements ControlValueAccessor {
     this.update();
   }
 
-  clearFormattings() {
+  clearFormatting() {
     document.execCommand('removeFormat', false, '');
     this.focus();
     this.update();

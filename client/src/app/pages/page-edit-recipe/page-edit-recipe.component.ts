@@ -46,7 +46,7 @@ export class PageEditRecipeComponent implements OnInit {
           panelClass: 'action-warn',
         });
 
-        this.router.navigateByUrl('/home');
+        await this.router.navigateByUrl('/home');
       }
     } else if (res.isNotFound()) {
       this.snackBar.open('Recipe was not found', 'OK', {
@@ -54,7 +54,7 @@ export class PageEditRecipeComponent implements OnInit {
         duration: 5000,
       });
 
-      this.router.navigateByUrl('/home');
+      await this.router.navigateByUrl('/home');
     } else {
       this.error = true;
 

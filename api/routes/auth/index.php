@@ -54,7 +54,7 @@ $group
             ]);
         }
 
-        $data = $req["post"] ? $req["post"] : [];
+        $data = $req["post"] ?? [];
 
         if (Config::get("hcaptcha.enabled")) {
             if (array_key_exists("hcaptchaToken", $data)) {
@@ -150,7 +150,7 @@ $group
 
         $user = User::get("email = ?", [$data["email"]])->getFirst();
 
-        if ($user instanceof User) {
+        if ($user === null || $user instanceof User) {
             if ($user === null || User::isEmailVerified($user)) {
                 return Response::ok();
             }

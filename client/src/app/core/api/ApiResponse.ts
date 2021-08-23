@@ -1,7 +1,8 @@
 export class ApiResponse<T> {
   /**
    * @param status the http status
-   * @param value the received value, or null if an error occured
+   * @param value the received value, or null if an error occurred
+   * @param error the received value on error
    */
   constructor(
     public readonly status: number,

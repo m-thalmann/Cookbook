@@ -24,7 +24,7 @@ export class LoginRegisterDialogComponent {
   loginForm: FormGroup;
 
   private hcaptchaToken: string | null = null;
-  private hcaptchaEnabled: boolean;
+  private readonly hcaptchaEnabled: boolean;
 
   constructor(
     private dialogRef: MatDialogRef<LoginRegisterDialogComponent>,
@@ -137,7 +137,7 @@ export class LoginRegisterDialogComponent {
         } else {
           this.isLogin = true;
 
-          this.action();
+          await this.action();
           return;
         }
       } else if (res.isNotFound()) {
@@ -153,7 +153,7 @@ export class LoginRegisterDialogComponent {
           .toPromise();
 
         if (verified) {
-          this.action();
+          await this.action();
           return;
         }
       } else {
@@ -161,7 +161,7 @@ export class LoginRegisterDialogComponent {
         throw new Error(typeof err === 'object' ? err.info : err);
       }
     } catch (e) {
-      this.error = e.message || 'An error occured!';
+      this.error = e.message || 'An error occurred!';
       console.error('Error on login/register:', res.error);
     }
 

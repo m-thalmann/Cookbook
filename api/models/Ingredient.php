@@ -3,6 +3,7 @@
 namespace API\models;
 
 use API\inc\Validation;
+use PAF\Model\Collection;
 use PAF\Model\Model;
 
 /**
@@ -114,7 +115,7 @@ class Ingredient extends Model {
             );
         }
 
-        $query->orderBy("name", "asc");
+        $query->orderBy("name");
 
         return $query->get();
     }

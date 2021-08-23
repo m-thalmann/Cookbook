@@ -61,7 +61,7 @@ export class CreateEditRecipeComponent {
       this.snackBar.open('Recipe deleted successfully!', 'OK', {
         duration: 5000,
       });
-      this.router.navigateByUrl('/home');
+      await this.router.navigateByUrl('/home');
     } else {
       this.snackBar.open('Error deleting recipe!', 'OK', {
         panelClass: 'action-warn',

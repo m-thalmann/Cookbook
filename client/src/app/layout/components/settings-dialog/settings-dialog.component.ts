@@ -216,7 +216,7 @@ export class SettingsDialogComponent {
         throw new Error(res.error?.info || undefined);
       }
     } catch (e) {
-      this.error = e.message || 'An error occured!';
+      this.error = e.message || 'An error occurred!';
       console.error('Error saving settings:', res.error);
     }
   }

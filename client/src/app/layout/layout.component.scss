@@ -5,7 +5,7 @@ $mobile-nav-items: 6;
 header {
   background: $header-background;
   color: $header-foreground;
-  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.6);
 
   position: sticky;
   top: 0;
@@ -207,7 +207,7 @@ header {
     }
 
     > :last-child {
-      box-shadow: 0px 10px 10px -10px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.6);
     }
   }
 
@@ -226,7 +226,7 @@ header {
 main {
   background: $background;
   color: $foreground;
-  box-shadow: 0px 0px 10px -5px rgba(0, 0, 0, 0.75);
+  box-shadow: 0 0 10px -5px rgba(0, 0, 0, 0.75);
 
   padding: 1em 1em;
   margin: 1.5em auto !important;

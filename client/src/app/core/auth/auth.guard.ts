@@ -13,7 +13,7 @@ export class AuthGuard implements CanActivate {
    * Returns whether the currently authenticated user is allowed to request this route
    * If the user is not allowed, it will be redirected to the home page and shown an error
    *
-   * @param route
+   * @param _
    * @param state
    * @returns whether the user is allowed to request this route
    */

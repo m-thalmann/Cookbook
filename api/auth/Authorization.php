@@ -33,7 +33,7 @@ class Authorization {
      *
      * @param User $user
      *
-     * @return string|null The token or null if an error occured
+     * @return string|null The token or null if an error occurred
      */
     public static function generateToken($user) {
         if ($user instanceof User) {
@@ -104,7 +104,7 @@ class Authorization {
     }
 
     /**
-     * Checks whether the user is allowed to login
+     * Checks whether the user is allowed to log in
      * - If he is allowed the user is set, a token is generated and returned
      * - If not, null is returned
      *
@@ -149,7 +149,7 @@ class Authorization {
 
     /**
      * Returns a middleware-function for the PAF-Router, which checks whether
-     * authorization is provided and it is valid.
+     * authorization is provided, and it is valid.
      *
      * @param bool $mustBeAuthorized Whether the authorization must succeed, to be able to request the route
      *
@@ -197,7 +197,7 @@ class Authorization {
                 if ($mustBeAuthorized || $next === null) {
                     return Response::unauthorized(["info" => $e->getMessage()]);
                 }
-                if (!$mustBeAuthorized && !empty($token)) {
+                if (!empty($token)) {
                     header('X-Logout: true');
                 }
             }

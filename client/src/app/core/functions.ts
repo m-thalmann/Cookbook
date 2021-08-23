@@ -1,3 +1,5 @@
+import { Recipe } from './api/ApiInterfaces';
+
 /**
  * Generates a slug out of a string by:
  * - removing whitespace on start/end
@@ -15,7 +17,7 @@ export function slugify(string: string) {
     .toLowerCase()
     .replace(/\s+/gm, '-')
     .replace(/[^a-z0-9\-]/gm, '')
-    .replace(/\-+/gm, '-')
+    .replace(/-+/gm, '-')
     .replace(/-$/g, '');
 }
 
@@ -37,4 +39,30 @@ export function trimAndNull(string: string | null | undefined) {
   }
 
   return string;
+}
+
+/**
+ * Calculates the total time needed for this recipe
+ *
+ * @param recipe the recipe
+ * @returns The total time string
+ */
+export function calculateTotalTime(recipe: Recipe | null) {
+  let time = 0;
+
+  if (recipe?.preparationTime) {
+    time += recipe.preparationTime;
+  }
+  if (recipe?.restTime) {
+    time += recipe.restTime;
+  }
+  if (recipe?.cookTime) {
+    time += recipe.cookTime;
+  }
+
+  if (time > 0) {
+    return time + ' min';
+  } else {
+    return null;
+  }
 }

@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { ApiService } from 'src/app/core/api/api.service';
 import { Recipe } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
-import { slugify } from 'src/app/core/functions';
+import { calculateTotalTime, slugify } from 'src/app/core/functions';
 
 const FALLBACK_IMAGE = 'assets/images/cookbook.svg';
 
@@ -41,23 +41,7 @@ export class RecipeItemComponent {
   }
 
   get totalTime() {
-    let time = 0;
-
-    if (this.recipe?.preparationTime) {
-      time += this.recipe.preparationTime;
-    }
-    if (this.recipe?.restTime) {
-      time += this.recipe.restTime;
-    }
-    if (this.recipe?.cookTime) {
-      time += this.recipe.cookTime;
-    }
-
-    if (time > 0) {
-      return time + ' min';
-    } else {
-      return null;
-    }
+    return calculateTotalTime(this.recipe);
   }
 
   get isOwner() {

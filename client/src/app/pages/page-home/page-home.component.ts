@@ -8,8 +8,6 @@ import { Options } from 'src/app/core/api/ApiInterfaces';
   styleUrls: ['./page-home.component.scss'],
 })
 export class PageHomeComponent {
-  results: number | null = null;
-
   constructor(private api: ApiService) {}
 
   reload = (options: Options) => {

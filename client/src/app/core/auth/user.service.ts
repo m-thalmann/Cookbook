@@ -17,9 +17,8 @@ export class UserService {
   }
 
   /**
-   * Stores the user and token
+   * Stores the token
    *
-   * @param user the user to store
    * @param token the token of the user
    * @param save whether to store the token
    */
@@ -58,9 +57,7 @@ export class UserService {
 
     if (token) {
       try {
-        let user: User = UserService.parseUserFromToken(token);
-
-        this._user = user;
+        this._user = UserService.parseUserFromToken(token);
 
         this._token = token;
       } catch (e) {
@@ -108,14 +105,14 @@ export class UserService {
   }
 
   /**
-   * Whether the user is loggedin
+   * Whether the user is logged in
    */
   get isLoggedin() {
     return this.token != null;
   }
 
   /**
-   * Logsout the user and removes him from storage and cookies
+   * Logs out the user and removes him from storage and cookies
    *
    * @param reason the reason for the logout
    * @param redirectPath the path to redirect the user to, after the logout (or no redirect if null)

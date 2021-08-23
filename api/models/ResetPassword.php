@@ -4,7 +4,6 @@ namespace API\models;
 
 use API\config\Config;
 use API\inc\Functions;
-use API\inc\Validation;
 use PAF\Model\Model;
 
 /**
@@ -45,7 +44,7 @@ class ResetPassword extends Model {
      *
      * @param User $user The user
      *
-     * @return ResetPassword|false The generated instance or false if an error occured
+     * @return ResetPassword|false The generated instance or false if an error occurred
      */
     public static function generate($user) {
         $resetPassword = self::create([
@@ -75,12 +74,10 @@ class ResetPassword extends Model {
     public static function search($email, $token) {
         self::clearExpired();
 
-        $resetPassword = self::get(
+        return self::get(
             "userId = (SELECT id FROM users WHERE email = ?) AND token = ? AND expires >= CURRENT_TIMESTAMP",
             [$email, $token]
         )->getFirst();
-
-        return $resetPassword;
     }
 
     /**

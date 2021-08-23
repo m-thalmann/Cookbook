@@ -68,9 +68,7 @@ class User extends Model {
     public function __set($property, $value) {
         switch ($property) {
             case 'password':
-                if ($this->passwordSalt === null) {
-                    $this->initSalt();
-                }
+                $this->generateSalt();
 
                 $value = Authorization::encryptPassword(
                     $value,
@@ -86,10 +84,10 @@ class User extends Model {
     }
 
     /**
-     * Initializes the salt of the user with a random string.
-     * This function is called automatically, when the password is set (and the salt is empty)
+     * Generates the salt of the user with a random string.
+     * This function is called automatically, when the password is set
      */
-    public function initSalt() {
+    private function generateSalt() {
         $this->editValue(
             "passwordSalt",
             Functions::getRandomString(),

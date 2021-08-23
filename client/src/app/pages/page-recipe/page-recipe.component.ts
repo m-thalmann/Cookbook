@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/core/api/api.service';
 import { RecipeFull } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
+import { calculateTotalTime } from 'src/app/core/functions';
 
 @Component({
   selector: 'cb-page-recipe',
@@ -57,23 +58,7 @@ export class PageRecipeComponent implements OnInit {
   }
 
   get totalTime() {
-    let time = 0;
-
-    if (this.recipe?.preparationTime) {
-      time += this.recipe.preparationTime;
-    }
-    if (this.recipe?.restTime) {
-      time += this.recipe.restTime;
-    }
-    if (this.recipe?.cookTime) {
-      time += this.recipe.cookTime;
-    }
-
-    if (time > 0) {
-      return time + ' min';
-    } else {
-      return null;
-    }
+    return calculateTotalTime(this.recipe);
   }
 
   getCalculateIngredientAmount(amount: number) {
@@ -102,7 +87,7 @@ export class PageRecipeComponent implements OnInit {
         duration: 5000,
       });
 
-      this.router.navigateByUrl('/home');
+      await this.router.navigateByUrl('/home');
     } else {
       console.error('Error loading recipe:', res.error);
       this.error = true;

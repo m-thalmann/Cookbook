@@ -59,7 +59,7 @@ class Functions {
             $etag = md5($image->id);
 
             header("Cache-Control: private");
-            header("ETag: {$etag}");
+            header("ETag: $etag");
 
             if (
                 !empty($_SERVER['HTTP_IF_NONE_MATCH']) &&
@@ -81,6 +81,8 @@ class Functions {
                 case "image/gif":
                     $img = imagecreatefromgif($image->path);
                     break;
+                default:
+                    return Response::error("Bad image-type");
             }
 
             list($width, $height) = getimagesize($image->path);

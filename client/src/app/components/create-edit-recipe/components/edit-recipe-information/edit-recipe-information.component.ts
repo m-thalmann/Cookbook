@@ -1,9 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs/operators';
 import { ApiService } from 'src/app/core/api/api.service';
-import { EditIngredient, EditRecipe, NewRecipe, RecipeFull, SearchIngredient } from 'src/app/core/api/ApiInterfaces';
+import { EditIngredient, EditRecipe, NewRecipe, RecipeFull } from 'src/app/core/api/ApiInterfaces';
 import { ApiResponse } from 'src/app/core/api/ApiResponse';
 import { getFormError } from 'src/app/core/forms/Validation';
 import { trimAndNull } from 'src/app/core/functions';

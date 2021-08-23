@@ -52,7 +52,7 @@ export class EditRecipeImagesComponent {
       }
     } else {
       console.error('Error loading recipe-images:', res.error);
-      // TODO: error
+      this.error = 'Error loading recipe-images';
     }
 
     this.loading = false;

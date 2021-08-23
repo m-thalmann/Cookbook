@@ -50,7 +50,7 @@ export class LayoutComponent implements AfterViewInit {
 
   scrollToTop() {
     (function smoothscroll() {
-      var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      let currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
       if (currentScroll > 0) {
         window.requestAnimationFrame(smoothscroll);
         window.scrollTo(0, currentScroll - currentScroll / 8);

@@ -3,6 +3,7 @@
 namespace API\models;
 
 use API\inc\Validation;
+use PAF\Model\Collection;
 use PAF\Model\Model;
 
 /**

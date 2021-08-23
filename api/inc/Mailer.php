@@ -3,6 +3,7 @@
 namespace API\inc;
 
 use API\config\Config;
+use API\models\User;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 
@@ -15,7 +16,7 @@ class Mailer {
      * @param string $subject The subject
      * @param string $content The (HTML-)content
      *
-     * @return bool whether it was successfull or not
+     * @return bool whether it was successful or not
      */
     public static function send($to, $subject, $content) {
         $mail = new PHPMailer(true);
@@ -71,29 +72,29 @@ class Mailer {
      *
      * @param User $user The user
      *
-     * @return bool whether it was successfull or not
+     * @return bool whether it was successful or not
      */
     public static function sendEmailVerification($user) {
         return self::send(
             $user->email,
             "Cookbook email verification",
-            "Hi {$user->name},<br />please use the following code to verify this email address:<br /><b>{$user->verifyEmailCode}</b>"
+            "Hi $user->name,<br />please use the following code to verify this email address:<br /><b>$user->verifyEmailCode</b>"
         );
     }
 
     /**
-     * Sends an reset-password email to the user
+     * Sends a reset-password email to the user
      *
      * @param User $user The user
      * @param string $token The token used to identify the user
      *
-     * @return bool whether it was successfull or not
+     * @return bool whether it was successful or not
      */
     public static function sendResetPassword($user, $token) {
         return self::send(
             $user->email,
             "Cookbook password reset",
-            "Hi {$user->name},<br />please use the following code to reset your password:<br /><b>{$token}</b>"
+            "Hi $user->name,<br />please use the following code to reset your password:<br /><b>$token</b>"
         );
     }
 }

@@ -126,7 +126,7 @@ export class ApiService {
     return new ApiResponse<T>(status, value);
   }
 
-  private getQueryString(options: Options) {
+  private static getQueryString(options: Options) {
     let query = [];
 
     if (typeof options.page !== 'undefined') {
@@ -220,19 +220,19 @@ export class ApiService {
   // Recipe
 
   getRecipes(options: Options) {
-    return this.get<Pagination<Recipe>>(`${this.URL}/recipes${this.getQueryString(options)}`);
+    return this.get<Pagination<Recipe>>(`${this.URL}/recipes${ApiService.getQueryString(options)}`);
   }
 
   searchRecipes(search: string, options: Options) {
-    return this.get<Pagination<Recipe>>(`${this.URL}/recipes/search/${search}${this.getQueryString(options)}`);
+    return this.get<Pagination<Recipe>>(`${this.URL}/recipes/search/${search}${ApiService.getQueryString(options)}`);
   }
 
   getRecipesForCategory(category: string, options: Options) {
-    return this.get<Pagination<Recipe>>(`${this.URL}/recipes/category/${category}${this.getQueryString(options)}`);
+    return this.get<Pagination<Recipe>>(`${this.URL}/recipes/category/${category}${ApiService.getQueryString(options)}`);
   }
 
   getRecipesForUser(id: number, options: Options) {
-    return this.get<Pagination<Recipe>>(`${this.URL}/users/id/${id}/recipes${this.getQueryString(options)}`);
+    return this.get<Pagination<Recipe>>(`${this.URL}/users/id/${id}/recipes${ApiService.getQueryString(options)}`);
   }
 
   getRecipeById(id: number) {
