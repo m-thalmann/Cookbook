@@ -37,7 +37,7 @@ export class RecipeItemComponent {
       return FALLBACK_IMAGE;
     }
 
-    return this.api.getRecipeImageURL(this.recipe.id, 0, 250);
+    return this.api.getRecipeImageURL(this.recipe.id, 0, 350);
   }
 
   get totalTime() {

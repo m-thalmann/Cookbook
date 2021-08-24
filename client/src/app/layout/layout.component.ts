@@ -4,6 +4,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { fromEvent } from 'rxjs';
 import { map, share, throttleTime } from 'rxjs/operators';
 import { UserService } from '../core/auth/user.service';
+import { SeoService } from '../core/seo/seo.service';
 import { LoginRegisterDialogComponent } from './components/login-register-dialog/login-register-dialog.component';
 import { SettingsDialogComponent } from './components/settings-dialog/settings-dialog.component';
 
@@ -16,10 +17,12 @@ export class LayoutComponent implements AfterViewInit {
   showMenu = false;
   smallHeader = false;
 
-  constructor(public user: UserService, private dialog: MatDialog, private router: Router) {
+  constructor(public user: UserService, private dialog: MatDialog, private router: Router, private seo: SeoService) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.showMenu = false;
+
+        this.seo.generateTags();
       }
     });
   }

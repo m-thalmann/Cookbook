@@ -6,6 +6,7 @@ import { ApiService } from 'src/app/core/api/api.service';
 import { RecipeFull } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
 import { calculateTotalTime } from 'src/app/core/functions';
+import { SeoService } from 'src/app/core/seo/seo.service';
 
 @Component({
   selector: 'cb-page-recipe',
@@ -26,7 +27,8 @@ export class PageRecipeComponent implements OnInit {
     private user: UserService,
     private snackBar: MatSnackBar,
     private router: Router,
-    private clipboard: Clipboard
+    private clipboard: Clipboard,
+    private seo: SeoService
   ) {}
 
   ngOnInit() {
@@ -81,6 +83,19 @@ export class PageRecipeComponent implements OnInit {
     if (res.isOK()) {
       this.recipe = res.value;
       this.selectedPortions = res.value?.portions || 1;
+
+      // set seo information
+      if (res.value) {
+        this.seo.setTitle(res.value.name);
+
+        if (res.value.description) {
+          this.seo.setDescription(res.value.description);
+        }
+
+        if (res.value.imagesCount > 0 && res.value.public) {
+          this.seo.setImage(this.api.getRecipeImageURL(res.value.id, 0, 500, false));
+        }
+      }
     } else if (res.isNotFound()) {
       this.snackBar.open('Recipe was not found', 'OK', {
         panelClass: 'action-warn',
