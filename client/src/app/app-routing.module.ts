@@ -49,6 +49,12 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         data: { title: 'Edit recipe' },
       },
+      {
+        path: 'admin',
+        loadChildren: () => import('./pages/admin/admin.module').then((m) => m.AdminModule),
+        canActivate: [AuthGuard],
+        data: { admin: true },
+      },
       { path: 'not-found', component: PageNotFoundComponent, data: { title: 'Page not found' } },
     ],
   },

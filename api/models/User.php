@@ -68,6 +68,14 @@ class User extends Model {
 
     /**
      * @prop
+     * @var boolean
+     * @editable false
+     * @output false
+     */
+    public $isAdmin = false;
+
+    /**
+     * @prop
      * @var timestamp|null
      * @editable false
      * @output false

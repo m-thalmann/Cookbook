@@ -1,8 +1,12 @@
 <a routerLink="/categories" *ngIf="category" class="icon-text back-link">
     <mat-icon>arrow_back</mat-icon><span>Go back to categories</span>
 </a>
-<h2 *ngIf="isOverview">Browse categories</h2>
-<h2 *ngIf="!isOverview">{{ category }}</h2>
+<h2 class="icon-text">
+    <mat-icon>menu_book</mat-icon>
+
+    <span *ngIf="isOverview">Browse categories</span>
+    <span *ngIf="!isOverview">{{ category }}</span>
+</h2>
 
 <ng-container *ngIf="isOverview">
     <div class="categories">

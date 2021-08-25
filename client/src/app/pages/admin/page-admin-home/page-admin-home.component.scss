@@ -1,0 +1,34 @@
+.container {
+  a {
+    display: inline-block;
+    padding: 1em;
+    margin: 0 1em 1em 0;
+
+    border: 1px solid #ccc;
+    border-radius: 0.25em;
+
+    color: inherit;
+    text-decoration: none;
+
+    transition: box-shadow 0.2s;
+
+    &:hover {
+      box-shadow: 0 0 15px -5px rgba(0, 0, 0, 0.6);
+    }
+
+    mat-icon,
+    span {
+      text-align: center;
+      display: block;
+    }
+
+    mat-icon {
+      font-size: 3rem;
+      height: 3rem;
+      width: 3rem;
+
+      margin: 0 auto;
+      margin-bottom: 1rem;
+    }
+  }
+}

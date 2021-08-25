@@ -4,6 +4,10 @@ export interface User {
   name: string;
 }
 
+export interface AuthUser extends User {
+  isAdmin: boolean;
+}
+
 export interface Ingredient {
   id: number;
   recipeId: number;

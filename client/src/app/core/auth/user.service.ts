@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { User } from '../api/ApiInterfaces';
+import { AuthUser } from '../api/ApiInterfaces';
 import StorageNames from '../StorageNames';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private _user: User | null = null;
+  private _user: AuthUser | null = null;
   private _token: string | null = null;
 
   constructor(private router: Router, private dialog: MatDialog, private snackBar: MatSnackBar) {
@@ -144,18 +144,21 @@ export class UserService {
   /**
    * Parses the user from a jwt token
    *
-   * @throws If the token is not formatted correctly
    * @param token The jwt token
+   *
+   * @throws If the token is not formatted correctly
+   *
    * @returns The parsed user
    */
-  static parseUserFromToken(token: string): User | never {
+  static parseUserFromToken(token: string): AuthUser {
     let tokenPayload = JSON.parse(atob(token.split('.')[1]));
 
     if (
       !(
         typeof tokenPayload.user_id === 'number' &&
         typeof tokenPayload.user_email === 'string' &&
-        typeof tokenPayload.user_name === 'string'
+        typeof tokenPayload.user_name === 'string' &&
+        typeof tokenPayload.user_isAdmin === 'boolean'
       )
     ) {
       throw new Error('Token does not contain correct user data');
@@ -165,6 +168,7 @@ export class UserService {
       id: tokenPayload.user_id,
       email: tokenPayload.user_email,
       name: tokenPayload.user_name,
+      isAdmin: tokenPayload.user_isAdmin,
     };
   }
 }

@@ -13,16 +13,22 @@ export class AuthGuard implements CanActivate {
    * Returns whether the currently authenticated user is allowed to request this route
    * If the user is not allowed, it will be redirected to the home page and shown an error
    *
+   * @param route
    * @param _
-   * @param state
    * @returns whether the user is allowed to request this route
    */
-  canActivate(_: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+  canActivate(route: ActivatedRouteSnapshot, _: RouterStateSnapshot) {
+    let error: string | null = null;
+
     if (this.user.isLoggedin) {
-      return true;
+      if (!route.data.admin || this.user.user?.isAdmin) {
+        return true;
+      } else {
+        error = 'You are not authorized to view this page!';
+      }
     }
 
-    this.snackBar.open('You need to log in to view this page!', 'OK', {
+    this.snackBar.open(error || 'You need to log in to view this page!', 'OK', {
       panelClass: 'action-warn',
     });
 

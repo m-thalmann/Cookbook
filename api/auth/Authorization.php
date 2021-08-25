@@ -41,6 +41,7 @@ class Authorization {
                 "user_id" => $user->id,
                 "user_email" => $user->email,
                 "user_name" => $user->name,
+                "user_isAdmin" => $user->isAdmin,
                 "user_lastUpdated" => $user->lastUpdated,
                 "exp" => time() + Config::get('token.ttl'),
             ]);
@@ -155,8 +156,8 @@ class Authorization {
      *
      * @return callable The middleware function
      */
-    public static function middleware($mustBeAuthorized = true) {
-        return function ($request, $next = null) use ($mustBeAuthorized) {
+    public static function middleware($mustBeAuthorized = true, $mustBeAdmin = false) {
+        return function ($request, $next = null) use ($mustBeAuthorized, $mustBeAdmin) {
             try {
                 if (
                     $request["authorization"] === null &&
@@ -192,6 +193,10 @@ class Authorization {
                     throw new UnauthorizedException("Expired");
                 } catch (\Exception $e) {
                     throw new UnauthorizedException();
+                }
+
+                if($mustBeAdmin && !self::$user->isAdmin){
+                    throw new UnauthorizedException("Must be admin");
                 }
             } catch (UnauthorizedException $e) {
                 if ($mustBeAuthorized || $next === null) {
