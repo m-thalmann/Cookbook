@@ -37,7 +37,11 @@ export class PageSearchComponent implements OnInit {
   }
 
   doSearch() {
-    this.router.navigate(['search', this.searchInput]);
+    let search = this.searchInput?.trim();
+
+    if (search) {
+      this.router.navigate(['search', search]);
+    }
   }
 
   reload = async (options: Options) => {

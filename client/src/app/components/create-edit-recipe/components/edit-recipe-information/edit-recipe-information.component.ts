@@ -221,6 +221,8 @@ export class EditRecipeInformationComponent {
       ) {
         this.ingredients.at(index).get('unit')?.setValue(unit);
       }
+    } else {
+      this.ingredients.at(index).get('unit')?.setValue('');
     }
   }
 

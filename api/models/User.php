@@ -125,6 +125,7 @@ class User extends Model {
             if($this->verifyEmailCodeExpires >= time()){
                 if (strcmp($this->verifyEmailCode, $code) === 0) {
                     $this->editValue("verifyEmailCode", null, false, true);
+                    $this->editValue("verifyEmailCodeExpires", null, false, true);
                     return true;
                 }
             }else{

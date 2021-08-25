@@ -55,6 +55,10 @@ class Functions {
         $cacheable = true,
         $maxSize = null
     ) {
+        if(!is_file($image->path)){
+            return Response::notFound();
+        }
+
         if ($cacheable) {
             $etag = md5($image->id);
 
