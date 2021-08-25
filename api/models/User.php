@@ -3,6 +3,7 @@
 namespace API\models;
 
 use API\auth\Authorization;
+use API\config\Config;
 use API\inc\Functions;
 use API\inc\Validation;
 use PAF\Model\Model;
@@ -63,6 +64,14 @@ class User extends Model {
      * @editable false
      * @output false
      */
+    public $verifyEmailCodeExpires;
+
+    /**
+     * @prop
+     * @var timestamp|null
+     * @editable false
+     * @output false
+     */
     public $lastUpdated;
 
     public function __set($property, $value) {
@@ -103,12 +112,24 @@ class User extends Model {
             false,
             true
         );
+        $this->editValue(
+            "verifyEmailCodeExpires",
+            time() + Config::get("email_verification.ttl", 3600),
+            false,
+            true
+        );
     }
 
     public function verifyEmail($code) {
-        if (strcmp($this->verifyEmailCode, $code) === 0) {
-            $this->editValue("verifyEmailCode", null, false, true);
-            return true;
+        if(!User::isEmailVerified($this)){
+            if($this->verifyEmailCodeExpires >= time()){
+                if (strcmp($this->verifyEmailCode, $code) === 0) {
+                    $this->editValue("verifyEmailCode", null, false, true);
+                    return true;
+                }
+            }else{
+                return false; // expired
+            }
         }
 
         return false;

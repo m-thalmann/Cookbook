@@ -75,10 +75,12 @@ class Mailer {
      * @return bool whether it was successful or not
      */
     public static function sendEmailVerification($user) {
+        $expires = date('d.m.Y H:i', $user->verifyEmailCodeExpires);
+
         return self::send(
             $user->email,
             "Cookbook email verification",
-            "Hi $user->name,<br />please use the following code to verify this email address:<br /><b>$user->verifyEmailCode</b>"
+            "Hi $user->name,<br />please use the following code to verify this email address:<br /><b>$user->verifyEmailCode</b><br />It will expire at <i>$expires</i>"
         );
     }
 

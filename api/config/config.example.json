@@ -18,7 +18,10 @@
     "reset_ttl": 600
   },
   "registration_enabled": true,
-  "email_verification": true,
+  "email_verification": {
+    "enabled": true,
+    "ttl": 3600
+  },
   "hcaptcha": {
     "enabled": true,
     "secret": "0x0000000000000000000000000000000000000000"

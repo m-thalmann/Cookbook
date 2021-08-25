@@ -320,7 +320,7 @@ paths:
                 required:
                   - info
         '403':
-          description: Verification code is wrong
+          description: Verification code is wrong or has expired
           content:
             application/json:
               schema:
@@ -328,7 +328,7 @@ paths:
                 properties:
                   info:
                     type: string
-                    example: Verification code is wrong
+                    example: Verification code is wrong or has expired
                 required:
                   - info
       operationId: post-auth-verifyEmail

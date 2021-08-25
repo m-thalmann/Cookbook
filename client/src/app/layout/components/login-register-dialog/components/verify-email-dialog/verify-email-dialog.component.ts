@@ -49,7 +49,7 @@ export class VerifyEmailDialogComponent {
       this.code = '';
 
       if (res.isForbidden()) {
-        this.error = 'Verification code is wrong';
+        this.error = 'Verification code is wrong or has expired';
       } else {
         this.error = 'Error verifying email';
       }

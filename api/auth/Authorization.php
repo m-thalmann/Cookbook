@@ -68,7 +68,7 @@ class Authorization {
         if (
             $user &&
             $user->lastUpdated === $lastUpdated &&
-            (!Config::get("email_verification", false) ||
+            (!Config::get("email_verification.enabled", false) ||
                 User::isEmailVerified($user))
         ) {
             self::$user = $user;
@@ -114,7 +114,7 @@ class Authorization {
      */
     public static function login($user) {
         if (
-            !Config::get("email_verification", false) ||
+            !Config::get("email_verification.enabled", false) ||
             User::isEmailVerified($user)
         ) {
             $token = self::generateToken($user);

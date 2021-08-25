@@ -86,7 +86,7 @@ $group
             ]);
         }
 
-        if (Config::get("email_verification")) {
+        if (Config::get("email_verification.enabled")) {
             if (!Mailer::sendEmailVerification($user)) {
                 Model::db()->rollBack();
 
@@ -161,7 +161,7 @@ $group
                 }
             } else {
                 return Response::forbidden([
-                    "info" => "Verification code is wrong",
+                    "info" => "Verification code is wrong or has expired",
                 ]);
             }
         }
@@ -177,8 +177,13 @@ $group
 
         $user = User::get("email = ?", [$data["email"]])->getFirst();
 
-        if ($user === null || User::isEmailVerified($user)) {
+        if (!($user instanceof User) || User::isEmailVerified($user)) {
             return Response::ok();
+        }
+
+        if($user->verifyEmailCodeExpires < time()){
+            $user->generateVerifyEmailCode();
+            $user->save();
         }
 
         if (Mailer::sendEmailVerification($user)) {

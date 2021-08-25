@@ -54,7 +54,10 @@ class ResetPassword extends Model {
         ]);
 
         if ($resetPassword->save()) {
-            ResetPassword::deleteByQuery("userId = ? AND token != ?", [$user->id, $resetPassword->token]);
+            ResetPassword::deleteByQuery("userId = ? AND token != ?", [
+                $user->id,
+                $resetPassword->token,
+            ]);
 
             return $resetPassword;
         }
