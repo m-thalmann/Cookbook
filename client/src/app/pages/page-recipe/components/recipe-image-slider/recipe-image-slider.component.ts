@@ -18,8 +18,8 @@ export class RecipeImageSliderComponent {
     if (recipe) {
       if (recipe.imagesCount > 0) {
         for (let i = 0; i < recipe.imagesCount; i++) {
-          this.recipeImagesURLs.push(this.api.getRecipeImageURL(recipe.id, i, 960));
-          this.recipeImageThumbnailsURLs.push(this.api.getRecipeImageURL(recipe.id, i, 75));
+          this.recipeImagesURLs.push(this.api.getRecipeImageURL(recipe.id, i, 960, !recipe.public));
+          this.recipeImageThumbnailsURLs.push(this.api.getRecipeImageURL(recipe.id, i, 75, !recipe.public));
         }
       } else {
         this.recipeImagesURLs.push(FALLBACK_IMAGE);

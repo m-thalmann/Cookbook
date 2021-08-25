@@ -1,21 +1,27 @@
 <div class="image-slider" *ngIf="recipeImagesURLs">
     <div class="image">
-        <cb-image [src]="currentRecipeImageURL" alt="Recipe image"></cb-image>
+        <ng-container *ngFor="let recipeImage of recipeImagesURLs; let i = index">
+            <cb-image [src]="recipeImage" alt="Recipe image" *ngIf="i === currentRecipeImageNumber"></cb-image>
+        </ng-container>
 
-        <div
+        <button
+            mat-mini-fab
             class="slider-navigation"
-            [class.disabled]="currentRecipeImageNumber === 0"
+            color="accent"
+            [disabled]="currentRecipeImageNumber === 0"
             (click)="currentRecipeImageNumber = currentRecipeImageNumber - 1"
         >
             <mat-icon>navigate_before</mat-icon>
-        </div>
-        <div
+        </button>
+        <button
+            mat-mini-fab
             class="slider-navigation"
-            [class.disabled]="recipeImagesURLs.length === 0 || currentRecipeImageNumber + 1 === recipeImagesURLs.length"
+            color="accent"
+            [disabled]="recipeImagesURLs.length === 0 || currentRecipeImageNumber + 1 === recipeImagesURLs.length"
             (click)="currentRecipeImageNumber = currentRecipeImageNumber + 1"
         >
             <mat-icon>navigate_next</mat-icon>
-        </div>
+        </button>
 
         <span class="counter">
             <mat-icon [inline]="true">photo_camera</mat-icon>

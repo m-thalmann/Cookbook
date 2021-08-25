@@ -8,14 +8,28 @@ const DEFAULT_IMAGE = 'assets/images/image_placeholder.svg';
   styleUrls: ['./image.component.scss'],
 })
 export class ImageComponent {
-  @Input() src!: string;
+  @Input()
+  set src(src: string) {
+    if (this._src !== src) {
+      this.loading = true;
+    }
+
+    this._src = src;
+  }
+
   @Input() alt: string = '';
 
   @Input() fallback: string = DEFAULT_IMAGE;
 
+  private _src: string = '';
+
   loading = true;
 
   constructor() {}
+
+  get src() {
+    return this._src;
+  }
 
   onLoad() {
     this.loading = false;

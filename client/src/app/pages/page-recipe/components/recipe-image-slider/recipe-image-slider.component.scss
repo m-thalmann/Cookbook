@@ -22,10 +22,12 @@ img {
     position: relative;
     overflow: hidden;
 
-    cb-image {
-      min-height: 10em;
+    white-space: nowrap;
 
+    cb-image {
       ::ng-deep > img {
+        min-height: 10em;
+
         &[src$='.svg'] {
           height: 20em;
         }
@@ -33,46 +35,15 @@ img {
     }
 
     .slider-navigation {
-      display: flex;
-      align-items: center;
-
       position: absolute;
-      top: 0;
-      bottom: 0;
-      padding: 1em;
-
-      z-index: 2;
-
-      transition: color 0.2s, background 0.2s, opacity 0.2s;
-
-      cursor: pointer;
-      user-select: none;
-
-      text-shadow: -1px 0 mat-color($primary), 0 -1px mat-color($primary), 1px 0 mat-color($primary),
-        0 1px mat-color($primary);
-      color: mat-color($primary, default-contrast);
-      opacity: 0;
-
-      &:hover {
-        &:nth-of-type(1) {
-          background: linear-gradient(to right, #{mat-color($primary)}75 0%, #{mat-color($primary)}10 100%);
-        }
-
-        &:nth-of-type(2) {
-          background: linear-gradient(to right, #{mat-color($primary)}10 0%, #{mat-color($primary)}75 100%);
-        }
-      }
-
-      &.disabled {
-        pointer-events: none;
-        text-shadow: 0 0 1px #000000;
-      }
+      top: 50%;
+      transform: translateY(-50%);
 
       &:nth-of-type(1) {
-        left: 0;
+        left: 1em;
       }
       &:nth-of-type(2) {
-        right: 0;
+        right: 1em;
       }
     }
 
@@ -95,6 +66,7 @@ img {
       }
     }
 
+    .slider-navigation,
     .counter {
       opacity: 0;
       transition: opacity 0.2s;
@@ -146,6 +118,12 @@ img {
         width: 100%;
       }
     }
+  }
+}
+
+@media screen and (max-width: $mobile-width) {
+  .image-slider > .image {
+    height: 15em;
   }
 }
 
