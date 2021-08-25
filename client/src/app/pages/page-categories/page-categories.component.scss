@@ -41,4 +41,12 @@ mat-spinner {
       display: block;
     }
   }
+
+  cb-skeleton {
+    display: inline-block;
+    margin-right: 1em;
+
+    width: 7em;
+    height: 7em;
+  }
 }

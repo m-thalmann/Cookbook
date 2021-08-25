@@ -2,7 +2,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
@@ -16,6 +15,7 @@ import { PaginatorComponent } from './components/paginator/paginator.component';
 import { RecipeItemComponent } from './components/recipe-item/recipe-item.component';
 import { SkeletonRecipeItemComponent } from './components/recipe-item/skeleton/skeleton-recipe-item.component';
 import { RecipeListComponent } from './components/recipe-list/recipe-list.component';
+import { SkeletonComponent } from './components/skeleton/skeleton.component';
 import { ConfigService } from './core/config/config.service';
 import { InputFocusDirective } from './core/directives/input-focus.directive';
 import { MaterialModule } from './core/material/material.module';
@@ -73,15 +73,9 @@ export function setupConfig(service: ConfigService) {
     SkeletonPageRecipeComponent,
     ImageComponent,
     AmountPipe,
+    SkeletonComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MaterialModule,
-    HttpClientModule,
-    NgxSkeletonLoaderModule,
-  ],
+  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, MaterialModule, HttpClientModule],
   providers: [
     {
       provide: APP_INITIALIZER,

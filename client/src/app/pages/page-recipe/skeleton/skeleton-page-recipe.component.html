@@ -1,35 +1,53 @@
-<ngx-skeleton-loader class="name" [theme]="{ width: '16em' }"></ngx-skeleton-loader>
-<ngx-skeleton-loader class="author" [theme]="{ width: '12em' }"></ngx-skeleton-loader>
+<cb-skeleton class="name"></cb-skeleton>
+<cb-skeleton class="author"></cb-skeleton>
 
 <div class="information">
-    <ngx-skeleton-loader [theme]="{ width: '8em', marginRight: '1em' }" [count]="4"></ngx-skeleton-loader>
+    <cb-skeleton chip></cb-skeleton>
+    <cb-skeleton chip></cb-skeleton>
+    <cb-skeleton chip></cb-skeleton>
+    <cb-skeleton chip></cb-skeleton>
 </div>
 
-<ngx-skeleton-loader [count]="2" appearance="circle"></ngx-skeleton-loader>
+<div class="actions">
+    <cb-skeleton circle></cb-skeleton>
+    <cb-skeleton circle></cb-skeleton>
+</div>
 
 <div class="image-slider">
-    <ngx-skeleton-loader [theme]="{ height: '25em' }"></ngx-skeleton-loader>
+    <cb-skeleton class="image"></cb-skeleton>
 
-    <ngx-skeleton-loader
-        [theme]="{ height: '4em', width: '4em', marginRight: '0.5em' }"
-        [count]="4"
-    ></ngx-skeleton-loader>
+    <cb-skeleton class="preview"></cb-skeleton>
+    <cb-skeleton class="preview"></cb-skeleton>
+    <cb-skeleton class="preview"></cb-skeleton>
+    <cb-skeleton class="preview"></cb-skeleton>
 </div>
 
 <div class="ingredients">
-    <ngx-skeleton-loader [theme]="{ width: '75%', height: '2em' }"></ngx-skeleton-loader>
+    <cb-skeleton class="title"></cb-skeleton>
 
-    <ngx-skeleton-loader [theme]="{ height: '2em', marginBottom: '1.5em' }" [count]="4"></ngx-skeleton-loader>
+    <cb-skeleton class="ingredient"></cb-skeleton>
+    <cb-skeleton class="ingredient"></cb-skeleton>
+    <cb-skeleton class="ingredient"></cb-skeleton>
+    <cb-skeleton class="ingredient"></cb-skeleton>
 </div>
 
 <div class="description">
-    <ngx-skeleton-loader [theme]="{ width: '16em' }"></ngx-skeleton-loader>
-    <ngx-skeleton-loader></ngx-skeleton-loader>
+    <cb-skeleton class="title"></cb-skeleton>
+    <cb-skeleton></cb-skeleton>
 </div>
 
 <div class="preparation">
-    <ngx-skeleton-loader [theme]="{ width: '16em' }"></ngx-skeleton-loader>
-    <ngx-skeleton-loader [theme]="{ width: '16em', marginRight: '1em' }" [count]="3"></ngx-skeleton-loader>
+    <cb-skeleton class="title"></cb-skeleton>
 
-    <ngx-skeleton-loader [count]="5"></ngx-skeleton-loader>
+    <div class="information">
+        <cb-skeleton chip></cb-skeleton>
+        <cb-skeleton chip></cb-skeleton>
+        <cb-skeleton chip></cb-skeleton>
+    </div>
+
+    <cb-skeleton></cb-skeleton>
+    <cb-skeleton></cb-skeleton>
+    <cb-skeleton></cb-skeleton>
+    <cb-skeleton></cb-skeleton>
+    <cb-skeleton style="width: 80%"></cb-skeleton>
 </div>

@@ -1,9 +1,5 @@
 @import 'variables.scss';
 
-ngx-skeleton-loader {
-  display: block;
-}
-
 :host {
   display: block;
 
@@ -19,6 +15,13 @@ ngx-skeleton-loader {
     text-align: center;
 
     vertical-align: middle;
+
+    cb-skeleton {
+      height: 12em;
+      width: 12em;
+
+      margin: 0 auto;
+    }
   }
 
   .content {
@@ -28,7 +31,19 @@ ngx-skeleton-loader {
     vertical-align: middle;
 
     .name {
-      height: 2em;
+      margin-bottom: 0.5em;
+      width: 16em;
+    }
+
+    .author {
+      width: 12em;
+    }
+
+    .chips cb-skeleton {
+      display: inline-block;
+      width: 8em;
+      margin-right: 1em;
+      margin-bottom: 0;
     }
   }
 
@@ -48,6 +63,10 @@ ngx-skeleton-loader {
     .image-container {
       margin-right: 0;
       margin-bottom: 1em;
+
+      > cb-skeleton {
+        margin: 0 auto;
+      }
     }
   }
 }

@@ -1,13 +1,16 @@
 <div class="image-container">
-    <ngx-skeleton-loader appearance="circle" [theme]="{ height: '12em', width: '12em' }"></ngx-skeleton-loader>
+    <cb-skeleton circle></cb-skeleton>
 </div>
 
 <div class="content">
-    <ngx-skeleton-loader class="name" [theme]="{ width: '16em' }"></ngx-skeleton-loader>
-    <ngx-skeleton-loader class="author" [theme]="{ width: '12em' }"></ngx-skeleton-loader>
-    <ngx-skeleton-loader class="description"></ngx-skeleton-loader>
+    <cb-skeleton class="name"></cb-skeleton>
+    <cb-skeleton class="author"></cb-skeleton>
+    <cb-skeleton class="description"></cb-skeleton>
 
     <div class="chips">
-        <ngx-skeleton-loader [theme]="{ width: '8em', marginRight: '1em' }" [count]="4"></ngx-skeleton-loader>
+        <cb-skeleton chip></cb-skeleton>
+        <cb-skeleton chip></cb-skeleton>
+        <cb-skeleton chip></cb-skeleton>
+        <cb-skeleton chip></cb-skeleton>
     </div>
 </div>

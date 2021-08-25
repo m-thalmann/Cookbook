@@ -12,11 +12,12 @@
         </a>
 
         <ng-container *ngIf="loadingCategories">
-            <ngx-skeleton-loader
-                [count]="6"
-                appearance="circle"
-                [theme]="{ height: '7em', width: '7em' }"
-            ></ngx-skeleton-loader>
+            <cb-skeleton circle></cb-skeleton>
+            <cb-skeleton circle></cb-skeleton>
+            <cb-skeleton circle></cb-skeleton>
+            <cb-skeleton circle></cb-skeleton>
+            <cb-skeleton circle></cb-skeleton>
+            <cb-skeleton circle></cb-skeleton>
         </ng-container>
     </div>
 
