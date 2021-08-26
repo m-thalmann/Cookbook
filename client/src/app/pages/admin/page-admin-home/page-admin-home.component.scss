@@ -1,10 +1,12 @@
 .container {
+@import 'variables.scss';
+
   a {
     display: inline-block;
     padding: 1em;
     margin: 0 1em 1em 0;
 
-    border: 1px solid #ccc;
+    border: 1px solid #{$foreground}20;
     border-radius: 0.25em;
 
     color: inherit;

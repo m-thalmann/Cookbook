@@ -46,6 +46,7 @@ try {
     // Routes
 
     try {
+        Router::group('/admin', __DIR__ . '/routes/admin/index.php');
         Router::group('/auth', __DIR__ . '/routes/auth/index.php');
         Router::group('/categories', __DIR__ . '/routes/categories/index.php');
         Router::group(
@@ -60,7 +61,7 @@ try {
         Router::group('/users', __DIR__ . '/routes/users/index.php');
 
         if (!Router::execute()) {
-            throw new \Exception('Method not found');
+            Router::output(Response::notImplemented('Method not found'));
         }
     } catch (\InvalidArgumentException $e) {
         Router::output(Response::badRequest($e->getMessage()));

@@ -100,6 +100,22 @@ class User extends Model {
         parent::__set($property, $value);
     }
 
+    public function jsonSerialize($full = false) {
+        $ret = parent::jsonSerialize();
+
+        if ($full) {
+            $ret = array_merge($ret, [
+                "emailVerified" =>
+                    !Config::get("email_verification.enabled", false) ||
+                    self::isEmailVerified($this),
+                "isAdmin" => $this->isAdmin,
+                "lastUpdated" => $this->lastUpdated,
+            ]);
+        }
+
+        return $ret;
+    }
+
     /**
      * Generates the salt of the user with a random string.
      * This function is called automatically, when the password is set
@@ -128,15 +144,24 @@ class User extends Model {
         );
     }
 
+    public function setIsAdmin($isAdmin) {
+        $this->editValue("isAdmin", $isAdmin, true, true);
+    }
+
     public function verifyEmail($code) {
-        if(!User::isEmailVerified($this)){
-            if($this->verifyEmailCodeExpires >= time()){
+        if (!User::isEmailVerified($this)) {
+            if ($this->verifyEmailCodeExpires >= time()) {
                 if (strcmp($this->verifyEmailCode, $code) === 0) {
                     $this->editValue("verifyEmailCode", null, false, true);
-                    $this->editValue("verifyEmailCodeExpires", null, false, true);
+                    $this->editValue(
+                        "verifyEmailCodeExpires",
+                        null,
+                        false,
+                        true
+                    );
                     return true;
                 }
-            }else{
+            } else {
                 return false; // expired
             }
         }

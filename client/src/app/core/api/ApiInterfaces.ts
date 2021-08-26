@@ -8,6 +8,11 @@ export interface AuthUser extends User {
   isAdmin: boolean;
 }
 
+export interface UserFull extends AuthUser {
+  emailVerified: boolean;
+  lastUpdated: number;
+}
+
 export interface Ingredient {
   id: number;
   recipeId: number;

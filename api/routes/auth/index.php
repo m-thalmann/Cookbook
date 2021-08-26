@@ -181,7 +181,7 @@ $group
             return Response::ok();
         }
 
-        if($user->verifyEmailCodeExpires < time()){
+        if ($user->verifyEmailCodeExpires < time()) {
             $user->generateVerifyEmailCode();
             $user->save();
         }

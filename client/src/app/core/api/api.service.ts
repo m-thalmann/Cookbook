@@ -18,6 +18,7 @@ import {
   RecipeFull,
   RecipeImage,
   User,
+  UserFull,
 } from './ApiInterfaces';
 import { ApiResponse } from './ApiResponse';
 
@@ -360,5 +361,24 @@ export class ApiService {
 
   getCategories() {
     return this.get<string[]>(`${this.URL}/categories`);
+  }
+
+  // Admin
+
+  get admin() {
+    return {
+      getUsers: (options: Options) => {
+        return this.get<Pagination<UserFull>>(`${this.URL}/admin/users${ApiService.getQueryString(options)}`);
+      },
+      updateUser: (userId: number, values: { email?: string; name?: string; password?: string; isAdmin?: boolean }) => {
+        return this.put<UserFull>(`${this.URL}/admin/users/id/${userId}`, values);
+      },
+      deleteUser: (userId: number) => {
+        return this.delete<any>(`${this.URL}/admin/users/id/${userId}`);
+      },
+      resetUserPassword: (userId: number) => {
+        return this.post<{ user: UserFull; password: string }>(`${this.URL}/admin/users/id/${userId}/resetPassword`);
+      },
+    };
   }
 }

@@ -55,7 +55,7 @@ class Functions {
         $cacheable = true,
         $maxSize = null
     ) {
-        if(!is_file($image->path)){
+        if (!is_file($image->path)) {
             return Response::notFound();
         }
 

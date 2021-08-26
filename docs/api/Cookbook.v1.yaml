@@ -20,6 +20,7 @@ tags:
   - name: Ingredient
   - name: RecipeImage
   - name: Category
+  - name: Admin
 paths:
   /auth:
     get:
@@ -1258,6 +1259,163 @@ paths:
       security:
         - Token: []
         - QueryToken: []
+  /admin/users:
+    get:
+      summary: Returns all users
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Pagination'
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/UserFull'
+                    required:
+                      - items
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      operationId: get-admin-users
+      description: Returns all users
+      security:
+        - Token: []
+        - QueryToken: []
+  /admin/users/id/{id}:
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    put:
+      summary: Update a user
+      tags:
+        - Admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                name:
+                  type: string
+                password:
+                  type: string
+                isAdmin:
+                  type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserFull'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: You can't update yourself
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: You can't update yourself
+                required:
+                  - info
+        '404':
+          description: User not found
+        '409':
+          description: A user with this email already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: A user with this email already exists
+                required:
+                  - info
+      operationId: put-admin-users-id
+      description: Update a user
+      security:
+        - Token: []
+        - QueryToken: []
+    delete:
+      summary: Delete a user
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: You can't delete yourself
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: You can't delete yourself
+                required:
+                  - info
+      operationId: delete-admin-users-id
+      description: Delete a user
+      security:
+        - Token: []
+        - QueryToken: []
+  /admin/users/id/{id}/resetPassword:
+    parameters:
+      - schema:
+          type: integer
+        name: id
+        in: path
+        required: true
+    post:
+      summary: Reset a users password
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/UserFull'
+                  password:
+                    type: string
+                required:
+                  - user
+                  - password
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: User not found
+      operationId: post-admin-users-id-resetPassword
+      description: Reset a users password
+      security:
+        - Token: []
+        - QueryToken: []
 components:
   schemas:
     User:
@@ -1277,6 +1435,24 @@ components:
         - id
         - email
         - name
+    UserFull:
+      title: User with additional information
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          properties:
+            emailVerified:
+              type: boolean
+            isAdmin:
+              type: boolean
+            lastUpdated:
+              type: integer
+              minimum: 0
+              description: Unix timestamp (seconds) of when the user was last modified
+          required:
+            - emailVerified
+            - isAdmin
+            - lastUpdated
     Ingredient:
       title: Ingredient
       type: object

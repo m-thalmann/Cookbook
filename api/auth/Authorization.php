@@ -156,8 +156,14 @@ class Authorization {
      *
      * @return callable The middleware function
      */
-    public static function middleware($mustBeAuthorized = true, $mustBeAdmin = false) {
-        return function ($request, $next = null) use ($mustBeAuthorized, $mustBeAdmin) {
+    public static function middleware(
+        $mustBeAuthorized = true,
+        $mustBeAdmin = false
+    ) {
+        return function ($request, $next = null) use (
+            $mustBeAuthorized,
+            $mustBeAdmin
+        ) {
             try {
                 if (
                     $request["authorization"] === null &&
@@ -195,7 +201,7 @@ class Authorization {
                     throw new UnauthorizedException();
                 }
 
-                if($mustBeAdmin && !self::$user->isAdmin){
+                if ($mustBeAdmin && !self::$user->isAdmin) {
                     throw new UnauthorizedException("Must be admin");
                 }
             } catch (UnauthorizedException $e) {

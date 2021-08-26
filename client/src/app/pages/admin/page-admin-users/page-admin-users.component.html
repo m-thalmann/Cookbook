@@ -1,2 +1,141 @@
-<h2 class="icon-text"><mat-icon>manage_accounts</mat-icon><span>Admin users</span></h2>
-<!-- TODO: implement admin users -->
+<a routerLink="/admin" class="icon-text back-link">
+    <mat-icon>arrow_back</mat-icon><span>Go back to admin area</span>
+</a>
+
+<h2 class="icon-text">
+    <mat-icon>manage_accounts</mat-icon><span>Admin users</span>
+    <mat-spinner
+        *ngIf="tableData.length > 0 && loading"
+        color="accent"
+        diameter="24"
+        class="inline-block"
+        style="margin-left: 1em"
+    ></mat-spinner>
+</h2>
+
+<!-- TODO: add user button, reload button & search -->
+
+<div class="table_container mat-elevation-z8">
+    <table
+        mat-table
+        [dataSource]="tableData"
+        matSort
+        matSortDisableClear
+        matSortActive="id"
+        matSortDirection="asc"
+        [class.loading]="loading"
+    >
+        <!-- Column definitions -->
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+            <td mat-cell *matCellDef="let user">{{ user.id }}</td>
+        </ng-container>
+        <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+            <td mat-cell *matCellDef="let user">
+                <a href="mailto:{{ user.email }}">{{ user.email }}</a>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+            <td mat-cell *matCellDef="let user">{{ user.name }}</td>
+        </ng-container>
+        <ng-container matColumnDef="emailVerified">
+            <th mat-header-cell *matHeaderCellDef>Email verified</th>
+            <td mat-cell *matCellDef="let user">
+                <mat-icon [color]="user.emailVerified ? 'accent' : 'warn'">
+                    {{ user.emailVerified ? 'check' : 'clear' }}
+                </mat-icon>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="isAdmin">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Admin</th>
+            <td mat-cell *matCellDef="let user">
+                <mat-icon color="accent" *ngIf="user.isAdmin"> check </mat-icon>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="lastUpdated">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Last modified</th>
+            <td mat-cell *matCellDef="let user" [matTooltip]="(user.lastUpdated * 1000 | date: 'MMM d, y HH:mm') || ''">
+                {{ user.lastUpdated * 1000 | date }}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="admin">
+            <th mat-header-cell *matHeaderCellDef style="width: 4em"></th>
+            <td mat-cell *matCellDef="let user" style="text-align: center">
+                <button
+                    mat-icon-button
+                    [matMenuTriggerFor]="adminMenu"
+                    [matMenuTriggerData]="{ id: user.id }"
+                    [disabled]="loading || isCurrentUser(user.id)"
+                >
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="paginator">
+            <td mat-footer-cell *matFooterCellDef [colSpan]="displayedColumns.length">
+                <mat-paginator
+                    [length]="users?.total_items"
+                    [pageSizeOptions]="[10, 25, 100]"
+                    [disabled]="loading"
+                ></mat-paginator>
+            </td>
+        </ng-container>
+
+        <!-- No rows -->
+        <tr class="mat-row" *matNoDataRow>
+            <td
+                class="mat-cell"
+                style="text-align: center"
+                [colSpan]="displayedColumns.length"
+                *ngIf="!loading && !error"
+            >
+                No users found
+            </td>
+            <td class="mat-cell" [colSpan]="displayedColumns.length" *ngIf="loading">
+                <mat-spinner diameter="28" style="margin: 0 auto"></mat-spinner>
+            </td>
+            <td class="mat-cell warn" style="text-align: center" [colSpan]="displayedColumns.length" *ngIf="error">
+                <span class="icon-text"> <mat-icon color="warn">error</mat-icon><span>Error loading users</span> </span>
+            </td>
+        </tr>
+
+        <!-- Rows -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr mat-footer-row *matFooterRowDef="['paginator']; sticky: true"></tr>
+    </table>
+</div>
+
+<mat-menu #adminMenu="matMenu">
+    <ng-template matMenuContent let-id="id">
+        <button
+            mat-menu-item
+            [matMenuTriggerFor]="adminPasswordMenu"
+            [matMenuTriggerData]="{ id: id }"
+            [disabled]="isCurrentUser(id)"
+        >
+            <mat-icon>password</mat-icon>
+            <span>Password</span>
+        </button>
+        <button mat-menu-item (click)="deleteUser(id)" [disabled]="isCurrentUser(id)">
+            <mat-icon [color]="isCurrentUser(id) ? '' : 'warn'">delete</mat-icon>
+            <span [class]="isCurrentUser(id) ? '' : 'fg-warn'">Delete user</span>
+        </button>
+    </ng-template>
+</mat-menu>
+
+<mat-menu #adminPasswordMenu="matMenu">
+    <ng-template matMenuContent let-id="id">
+        <button mat-menu-item (click)="showEditPasswordDialog(id)">
+            <mat-icon>edit</mat-icon>
+            <span>Edit password</span>
+        </button>
+        <button mat-menu-item (click)="resetPassword(id)">
+            <mat-icon>settings_backup_restore</mat-icon>
+            <span>Reset password</span>
+        </button>
+    </ng-template>
+</mat-menu>

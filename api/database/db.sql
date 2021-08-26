@@ -5,7 +5,7 @@ CREATE TABLE `users` (
   `password` varchar(64) NOT NULL,
   `passwordSalt` varchar(32) NOT NULL,
   `verifyEmailCode` varchar(5),
-  `verifyEmailCodeExpires` datetime NOT NULL,
+  `verifyEmailCodeExpires` datetime,
   `isAdmin` boolean NOT NULL DEFAULT 0,
   `lastUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
