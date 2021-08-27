@@ -134,7 +134,7 @@ export class ApiService {
     return new ApiResponse<T>(status, error);
   }
 
-  private static getQueryString(options: Options) {
+  private static getOptionsQuery(options: Options) {
     let query = [];
 
     if (typeof options.page !== 'undefined') {
@@ -150,11 +150,19 @@ export class ApiService {
       query.push(`sortDir=${options.sortDirection}`);
     }
 
+    return query;
+  }
+
+  private static buildQueryString(query: string[]) {
     if (query.length > 0) {
       return `?${query.join('&')}`;
     }
 
     return '';
+  }
+
+  private static buildOptionsQueryString(options: Options) {
+    return ApiService.buildQueryString(ApiService.getOptionsQuery(options));
   }
 
   private get<T>(url: string, httpOptions = this.httpOptions) {
@@ -228,21 +236,25 @@ export class ApiService {
   // Recipe
 
   getRecipes(options: Options) {
-    return this.get<Pagination<Recipe>>(`${this.URL}/recipes${ApiService.getQueryString(options)}`);
+    return this.get<Pagination<Recipe>>(`${this.URL}/recipes${ApiService.buildOptionsQueryString(options)}`);
   }
 
   searchRecipes(search: string, options: Options) {
-    return this.get<Pagination<Recipe>>(`${this.URL}/recipes/search/${search}${ApiService.getQueryString(options)}`);
+    return this.get<Pagination<Recipe>>(
+      `${this.URL}/recipes/search/${search}${ApiService.buildOptionsQueryString(options)}`
+    );
   }
 
   getRecipesForCategory(category: string, options: Options) {
     return this.get<Pagination<Recipe>>(
-      `${this.URL}/recipes/category/${category}${ApiService.getQueryString(options)}`
+      `${this.URL}/recipes/category/${category}${ApiService.buildOptionsQueryString(options)}`
     );
   }
 
   getRecipesForUser(id: number, options: Options) {
-    return this.get<Pagination<Recipe>>(`${this.URL}/users/id/${id}/recipes${ApiService.getQueryString(options)}`);
+    return this.get<Pagination<Recipe>>(
+      `${this.URL}/users/id/${id}/recipes${ApiService.buildOptionsQueryString(options)}`
+    );
   }
 
   getRecipeById(id: number) {
@@ -367,8 +379,23 @@ export class ApiService {
 
   get admin() {
     return {
-      getUsers: (options: Options) => {
-        return this.get<Pagination<UserFull>>(`${this.URL}/admin/users${ApiService.getQueryString(options)}`);
+      getUsers: (search: string | null, options: Options) => {
+        let query = ApiService.getOptionsQuery(options);
+
+        if (search) {
+          query.push(`search=${encodeURIComponent(search)}`);
+        }
+
+        return this.get<Pagination<UserFull>>(`${this.URL}/admin/users${ApiService.buildQueryString(query)}`);
+      },
+      createUser: (email: string, password: string, name: string, isAdmin = false, verifyEmail = true) => {
+        return this.post<UserFull>(`${this.URL}/admin/users`, {
+          email: email,
+          password: password,
+          name: name,
+          isAdmin: isAdmin,
+          verifyEmail: verifyEmail,
+        });
       },
       updateUser: (userId: number, values: { email?: string; name?: string; password?: string; isAdmin?: boolean }) => {
         return this.put<UserFull>(`${this.URL}/admin/users/id/${userId}`, values);

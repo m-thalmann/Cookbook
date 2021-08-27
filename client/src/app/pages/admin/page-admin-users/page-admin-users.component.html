@@ -13,8 +13,40 @@
     ></mat-spinner>
 </h2>
 
-<!-- TODO: add user button, reload button & search -->
+<div class="actions">
+    <button mat-raised-button color="accent" (click)="createUser()" [disabled]="loading">
+        <mat-icon [inline]="true">person_add</mat-icon> Create user
+    </button>
+    <button mat-icon-button (click)="loadUsers()" [disabled]="loading"><mat-icon>refresh</mat-icon></button>
+</div>
 
+<div class="search">
+    <mat-form-field appearance="outline">
+        <mat-label>Search</mat-label>
+        <input
+            matInput
+            placeholder="E.g. max.muster, Admin, ..."
+            [(ngModel)]="search"
+            [disabled]="loading"
+            (keyup.enter)="applySearch()"
+        />
+        <button
+            mat-button
+            matSuffix
+            mat-icon-button
+            *ngIf="search"
+            aria-label="Clear"
+            (click)="search = ''; applySearch()"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-form-field>
+    <button mat-icon-button (click)="applySearch()" [disabled]="loading || search.length === 0">
+        <mat-icon>search</mat-icon>
+    </button>
+</div>
+
+<!-- TODO: editable rows -->
 <div class="table_container mat-elevation-z8">
     <table
         mat-table
@@ -129,7 +161,7 @@
 
 <mat-menu #adminPasswordMenu="matMenu">
     <ng-template matMenuContent let-id="id">
-        <button mat-menu-item (click)="showEditPasswordDialog(id)">
+        <button mat-menu-item (click)="editPassword(id)">
             <mat-icon>edit</mat-icon>
             <span>Edit password</span>
         </button>

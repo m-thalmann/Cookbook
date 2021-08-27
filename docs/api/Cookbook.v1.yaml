@@ -282,7 +282,7 @@ paths:
                 required:
                   - info
       operationId: post-auth-register
-      description: Registers a new user and returns a token
+      description: Registers a new user
   /auth/verifyEmail:
     post:
       summary: Verify an email
@@ -1264,6 +1264,13 @@ paths:
       summary: Returns all users
       tags:
         - Admin
+      parameters:
+        - schema:
+            type: string
+          name: search
+          in: query
+          required: false
+          description: Search by name and email
       responses:
         '200':
           description: OK
@@ -1287,6 +1294,55 @@ paths:
       security:
         - Token: []
         - QueryToken: []
+    post:
+      summary: Create a new user
+      tags:
+        - Admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                name:
+                  type: string
+                  maxLength: 20
+                password:
+                  type: string
+                isAdmin:
+                  type: boolean
+                verifyEmail:
+                  type: boolean
+              required:
+                - email
+                - name
+                - password
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserFull'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '409':
+          description: A user with this email already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: A user with this email already exists
+                required:
+                  - info
+      operationId: post-admin-users
+      description: Create a new user
   /admin/users/id/{id}:
     parameters:
       - schema:

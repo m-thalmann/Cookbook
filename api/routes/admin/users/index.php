@@ -3,16 +3,27 @@
 namespace API\routes\admin;
 
 use API\auth\Authorization;
+use API\config\Config;
 use API\inc\Functions;
+use API\inc\Mailer;
 use API\models\User;
 use PAF\Model\DuplicateException;
 use PAF\Model\InvalidException;
+use PAF\Model\Model;
 use PAF\Router\Response;
 
 $group
     ->get('/', Authorization::middleware(true, true), function () {
+        $query = "1";
+
+        if (!empty($_GET['search'])) {
+            $search = "%" . urldecode($_GET['search']) . "%";
+
+            $query = "email LIKE '$search' OR name LIKE '$search'";
+        }
+
         $ret = Functions::pagination(
-            Functions::sort(User::query())
+            Functions::sort(User::query($query))
         )->jsonSerialize();
 
         $ret["items"] = array_map(function ($user) {
@@ -20,6 +31,56 @@ $group
         }, $ret["items"]->toArray());
 
         return $ret;
+    })
+    ->post('/', Authorization::middleware(true, true), function ($req) {
+        $data = $req["post"] ?? [];
+
+        $verifyEmail = true;
+        $isAdmin = false;
+
+        if (array_key_exists("isAdmin", $data)) {
+            $isAdmin = $data["isAdmin"];
+            unset($data["isAdmin"]);
+        }
+        if (array_key_exists("verifyEmail", $data)) {
+            $verifyEmail = $data["verifyEmail"];
+            unset($data["verifyEmail"]);
+        }
+
+        Model::db()->beginTransaction();
+
+        $user = User::fromValues($data);
+
+        if($isAdmin){
+            $user->setIsAdmin(true);
+        }
+        if(!$verifyEmail){
+            $user->clearEmailVerification();
+        }
+
+        try {
+            $user->save();
+        } catch (InvalidException $e) {
+            return Response::badRequest(User::getErrors($user));
+        } catch (DuplicateException $e) {
+            return Response::conflict([
+                "info" => "A user with this email already exists",
+            ]);
+        }
+
+        if ($verifyEmail && Config::get("email_verification.enabled")) {
+            if (!Mailer::sendEmailVerification($user)) {
+                Model::db()->rollBack();
+
+                return Response::error([
+                    "info" => "Error sending verification-email",
+                ]);
+            }
+        }
+
+        Model::db()->commit();
+
+        return Response::created($user->jsonSerialize(true));
     })
     ->put('/id/{{i:id}}', Authorization::middleware(true, true), function (
         $req

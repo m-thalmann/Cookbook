@@ -1,28 +1,34 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
+import { InputDialogComponent } from 'src/app/components/input-dialog/input-dialog.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { Options, Pagination, UserFull } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
+import { CreateUserDialogComponent } from './components/create-user-dialog/create-user-dialog.component';
 
 @Component({
   selector: 'cb-page-admin-users',
   templateUrl: './page-admin-users.component.html',
   styleUrls: ['./page-admin-users.component.scss'],
 })
-export class PageAdminUsersComponent implements OnInit, AfterViewInit {
+export class PageAdminUsersComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   displayedColumns: string[] = ['id', 'email', 'name', 'emailVerified', 'isAdmin', 'lastUpdated', 'admin'];
 
-  loading = false;
+  loading = true;
   error = false;
 
   users: Pagination<UserFull> | null = null;
+
+  search = '';
+
+  private _search: string | null = null;
 
   constructor(
     private api: ApiService,
@@ -31,11 +37,9 @@ export class PageAdminUsersComponent implements OnInit, AfterViewInit {
     private snackBar: MatSnackBar
   ) {}
 
-  ngOnInit() {
-    this.loadUsers();
-  }
-
   ngAfterViewInit() {
+    this.loadUsers();
+
     this.sort.sortChange.subscribe(() => {
       this.paginator.pageIndex = 0;
       this.loadUsers();
@@ -44,6 +48,19 @@ export class PageAdminUsersComponent implements OnInit, AfterViewInit {
     this.paginator.page.subscribe(() => {
       this.loadUsers();
     });
+  }
+
+  applySearch() {
+    let search: string | null = this.search.trim();
+
+    if (search.length === 0) {
+      search = null;
+    }
+
+    if (search !== this._search) {
+      this._search = search;
+      this.loadUsers();
+    }
   }
 
   async loadUsers() {
@@ -65,7 +82,7 @@ export class PageAdminUsersComponent implements OnInit, AfterViewInit {
       options.sortDirection = 'asc';
     }
 
-    let res = await this.api.admin.getUsers(options);
+    let res = await this.api.admin.getUsers(this._search, options);
 
     if (res.isOK()) {
       this.users = res.value;
@@ -89,8 +106,40 @@ export class PageAdminUsersComponent implements OnInit, AfterViewInit {
     return this.tableData.findIndex((user) => user.id === id);
   }
 
-  async showEditPasswordDialog(id: number) {
-    // TODO: show edit-password-dialog
+  async editPassword(id: number) {
+    this.loading = true;
+
+    let newPassword = await this.dialog
+      .open(InputDialogComponent, {
+        data: {
+          title: 'Enter new password',
+          type: 'password',
+        },
+      })
+      .afterClosed()
+      .toPromise();
+
+    if (!newPassword) {
+      this.loading = false;
+      return;
+    }
+
+    let res = await this.api.admin.updateUser(id, { password: newPassword });
+
+    if (res.isOK()) {
+      this.snackBar.open('New password set successfully', 'OK', {
+        duration: 5000,
+      });
+
+      await this.loadUsers();
+    } else {
+      this.snackBar.open('Error setting new password!', 'OK', {
+        panelClass: 'action-warn',
+      });
+      console.error('Error setting new password:', res.error);
+    }
+
+    this.loading = false;
   }
 
   async resetPassword(id: number) {
@@ -117,6 +166,14 @@ export class PageAdminUsersComponent implements OnInit, AfterViewInit {
     }
 
     this.loading = false;
+  }
+
+  async createUser() {
+    let saved = await this.dialog.open(CreateUserDialogComponent).afterClosed().toPromise();
+
+    if (saved) {
+      this.loadUsers();
+    }
   }
 
   async deleteUser(id: number) {

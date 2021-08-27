@@ -152,13 +152,7 @@ class User extends Model {
         if (!User::isEmailVerified($this)) {
             if ($this->verifyEmailCodeExpires >= time()) {
                 if (strcmp($this->verifyEmailCode, $code) === 0) {
-                    $this->editValue("verifyEmailCode", null, false, true);
-                    $this->editValue(
-                        "verifyEmailCodeExpires",
-                        null,
-                        false,
-                        true
-                    );
+                    $this->clearEmailVerification();
                     return true;
                 }
             } else {
@@ -167,6 +161,16 @@ class User extends Model {
         }
 
         return false;
+    }
+
+    public function clearEmailVerification(){
+        $this->editValue("verifyEmailCode", null, false, true);
+        $this->editValue(
+            "verifyEmailCodeExpires",
+            null,
+            false,
+            true
+        );
     }
 
     public static function getErrors($user) {

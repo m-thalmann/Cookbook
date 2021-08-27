@@ -36,6 +36,7 @@ import { RecipeImageSliderComponent } from './pages/page-recipe/components/recip
 import { PageRecipeComponent } from './pages/page-recipe/page-recipe.component';
 import { SkeletonPageRecipeComponent } from './pages/page-recipe/skeleton/skeleton-page-recipe.component';
 import { PageSearchComponent } from './pages/page-search/page-search.component';
+import { InputDialogComponent } from './components/input-dialog/input-dialog.component';
 
 export function setupConfig(service: ConfigService) {
   return () => service.load();
@@ -74,6 +75,7 @@ export function setupConfig(service: ConfigService) {
     ImageComponent,
     AmountPipe,
     SkeletonComponent,
+    InputDialogComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, MaterialModule, HttpClientModule],
   providers: [
