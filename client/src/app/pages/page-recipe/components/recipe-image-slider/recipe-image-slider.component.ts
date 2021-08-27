@@ -33,13 +33,7 @@ export class RecipeImageSliderComponent {
 
   currentRecipeImageNumber = 0;
 
-  constructor(private api: ApiService) {}
-
-  get currentRecipeImageURL() {
-    if (!this.recipeImagesURLs || this.recipeImagesURLs.length === 0) {
-      return FALLBACK_IMAGE;
-    }
-
-    return this.recipeImagesURLs[this.currentRecipeImageNumber];
+  constructor(private api: ApiService) {
   }
+
 }

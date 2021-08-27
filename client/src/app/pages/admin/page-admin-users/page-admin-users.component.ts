@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -28,6 +29,12 @@ export class PageAdminUsersComponent implements AfterViewInit {
 
   search = '';
 
+  editUserId: number | null = null;
+  editUserValues = {
+    email: new FormControl('', [Validators.email, Validators.required]),
+    name: new FormControl('', Validators.required),
+  };
+
   private _search: string | null = null;
 
   constructor(
@@ -36,6 +43,20 @@ export class PageAdminUsersComponent implements AfterViewInit {
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {}
+
+  setEditUser(user: UserFull | null) {
+    if (user === null) {
+      this.editUserId = null;
+    } else {
+      this.editUserId = user.id;
+      this.editUserValues.email.setValue(user.email);
+      this.editUserValues.name.setValue(user.name);
+    }
+  }
+
+  get isEditUserValid() {
+    return this.editUserId !== null && this.editUserValues.email.valid && this.editUserValues.name.valid;
+  }
 
   ngAfterViewInit() {
     this.loadUsers();
@@ -213,5 +234,89 @@ export class PageAdminUsersComponent implements AfterViewInit {
     }
 
     this.loading = false;
+  }
+
+  async toggleAdmin(id: number) {
+    if (this.loading || this.isCurrentUser(id) || this.editUserId === id) {
+      return;
+    }
+
+    let index = this.getUserIndex(id);
+
+    if (index === -1) return;
+
+    let user = this.tableData[index];
+
+    let doEditAdmin = await this.dialog
+      .open(ConfirmDialogComponent, {
+        data: {
+          title: user.isAdmin ? 'Revoke admin role?' : 'Grant admin role?',
+          content: `Are you sure you want to ${
+            user.isAdmin ? 'revoke the admin role from' : 'grant the admin role to'
+          } this user: "${user.email}"?`,
+        },
+      })
+      .afterClosed()
+      .toPromise();
+
+    if (!doEditAdmin) return;
+
+    this.loading = true;
+
+    let res = await this.api.admin.updateUser(id, { isAdmin: !user.isAdmin });
+
+    if (res.isOK()) {
+      this.snackBar.open('User updated successfully!', 'OK', {
+        duration: 5000,
+      });
+      await this.loadUsers();
+    } else {
+      this.snackBar.open('Error updating user!', 'OK', {
+        panelClass: 'action-warn',
+      });
+      console.error('Error updating user:', res.error);
+    }
+
+    this.loading = false;
+  }
+
+  async editUser() {
+    let index = this.getUserIndex(this.editUserId || -1);
+    if (index === -1) return;
+
+    let user = this.tableData[index];
+
+    let email: string | undefined = this.editUserValues.email.value;
+    let name: string | undefined = this.editUserValues.name.value;
+
+    if (email === user.email) {
+      email = undefined;
+    }
+    if (name === user.name) {
+      name = undefined;
+    }
+
+    if (email || name) {
+      this.loading = true;
+
+      let res = await this.api.admin.updateUser(user.id, { email: email, name: name });
+
+      if (res.isOK()) {
+        this.snackBar.open('User updated successfully!', 'OK', {
+          duration: 5000,
+        });
+        this.editUserId = null;
+        await this.loadUsers();
+      } else {
+        this.snackBar.open('Error updating user!', 'OK', {
+          panelClass: 'action-warn',
+        });
+        console.error('Error updating user:', res.error);
+      }
+
+      this.loading = false;
+    } else {
+      this.editUserId = null;
+    }
   }
 }

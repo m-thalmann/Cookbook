@@ -65,12 +65,29 @@
         <ng-container matColumnDef="email">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
             <td mat-cell *matCellDef="let user">
-                <a href="mailto:{{ user.email }}">{{ user.email }}</a>
+                <ng-container *ngIf="editUserId !== user.id">
+                    <a href="mailto:{{ user.email }}">{{ user.email }}</a>
+                </ng-container>
+                <ng-container *ngIf="editUserId === user.id">
+                    <input
+                        class="edit-user-input"
+                        type="email"
+                        [formControl]="editUserValues.email"
+                        placeholder="Email"
+                    />
+                </ng-container>
             </td>
         </ng-container>
         <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-            <td mat-cell *matCellDef="let user">{{ user.name }}</td>
+            <td mat-cell *matCellDef="let user">
+                <ng-container *ngIf="editUserId !== user.id">
+                    {{ user.name }}
+                </ng-container>
+                <ng-container *ngIf="editUserId === user.id">
+                    <input class="edit-user-input" type="text" [formControl]="editUserValues.name" placeholder="Name" />
+                </ng-container>
+            </td>
         </ng-container>
         <ng-container matColumnDef="emailVerified">
             <th mat-header-cell *matHeaderCellDef>Email verified</th>
@@ -83,7 +100,12 @@
         <ng-container matColumnDef="isAdmin">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Admin</th>
             <td mat-cell *matCellDef="let user">
-                <mat-icon color="accent" *ngIf="user.isAdmin"> check </mat-icon>
+                <mat-checkbox
+                    [checked]="user.isAdmin"
+                    color="accent"
+                    [disabled]="loading || isCurrentUser(user.id) || editUserId === user.id"
+                    (click)="$event.preventDefault(); toggleAdmin(user.id)"
+                ></mat-checkbox>
             </td>
         </ng-container>
         <ng-container matColumnDef="lastUpdated">
@@ -95,14 +117,29 @@
         <ng-container matColumnDef="admin">
             <th mat-header-cell *matHeaderCellDef style="width: 4em"></th>
             <td mat-cell *matCellDef="let user" style="text-align: center">
-                <button
-                    mat-icon-button
-                    [matMenuTriggerFor]="adminMenu"
-                    [matMenuTriggerData]="{ id: user.id }"
-                    [disabled]="loading || isCurrentUser(user.id)"
-                >
-                    <mat-icon>more_vert</mat-icon>
-                </button>
+                <ng-container *ngIf="editUserId !== user.id">
+                    <button
+                        mat-icon-button
+                        [matMenuTriggerFor]="adminMenu"
+                        [matMenuTriggerData]="{ user: user }"
+                        [disabled]="loading || isCurrentUser(user.id)"
+                    >
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                </ng-container>
+                <ng-container *ngIf="editUserId === user.id">
+                    <button
+                        mat-icon-button
+                        [disabled]="loading || !isEditUserValid"
+                        color="accent"
+                        (click)="editUser()"
+                    >
+                        <mat-icon>check</mat-icon>
+                    </button>
+                    <button mat-icon-button [disabled]="loading" (click)="setEditUser(null)" color="warn">
+                        <mat-icon>clear</mat-icon>
+                    </button>
+                </ng-container>
             </td>
         </ng-container>
 
@@ -142,19 +179,23 @@
 </div>
 
 <mat-menu #adminMenu="matMenu">
-    <ng-template matMenuContent let-id="id">
+    <ng-template matMenuContent let-user="user">
+        <button mat-menu-item (click)="setEditUser(user)" [disabled]="isCurrentUser(user.id)">
+            <mat-icon>edit</mat-icon>
+            <span>Edit user</span>
+        </button>
         <button
             mat-menu-item
             [matMenuTriggerFor]="adminPasswordMenu"
-            [matMenuTriggerData]="{ id: id }"
-            [disabled]="isCurrentUser(id)"
+            [matMenuTriggerData]="{ id: user.id }"
+            [disabled]="isCurrentUser(user.id)"
         >
             <mat-icon>password</mat-icon>
             <span>Password</span>
         </button>
-        <button mat-menu-item (click)="deleteUser(id)" [disabled]="isCurrentUser(id)">
-            <mat-icon [color]="isCurrentUser(id) ? '' : 'warn'">delete</mat-icon>
-            <span [class]="isCurrentUser(id) ? '' : 'fg-warn'">Delete user</span>
+        <button mat-menu-item (click)="deleteUser(user.id)" [disabled]="isCurrentUser(user.id)">
+            <mat-icon [color]="isCurrentUser(user.id) ? '' : 'warn'">delete</mat-icon>
+            <span [class]="isCurrentUser(user.id) ? '' : 'fg-warn'">Delete user</span>
         </button>
     </ng-template>
 </mat-menu>

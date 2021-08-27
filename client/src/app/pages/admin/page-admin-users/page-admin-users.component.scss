@@ -1,3 +1,5 @@
+@import 'variables.scss';
+
 .back-link {
   margin-bottom: 0.5em;
   display: block;
@@ -42,6 +44,21 @@
     &.loading {
       opacity: 0.5;
       pointer-events: none;
+    }
+
+    .edit-user-input {
+      display: block;
+      padding: 0.5em;
+
+      border-radius: 0.25em;
+      border: 1px solid #{$foreground}50;
+
+      transition: border 0.2s;
+
+      &:focus {
+        outline: none;
+        border: 1px solid mat-color($primary);
+      }
     }
   }
 }
