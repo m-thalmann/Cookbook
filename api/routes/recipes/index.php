@@ -14,27 +14,21 @@ use PAF\Router\Response;
 
 $group
     ->get('/', Authorization::middleware(false), function () {
-        if (Authorization::isAuthorized()) {
-            $query = Recipe::query("public = 1 OR userId = ?", [
-                Authorization::user()->id,
-            ]);
-        } else {
-            $query = Recipe::query("public = 1");
-        }
+        $query = Recipe::getQueryForUser("1", [], Authorization::user(), false);
 
         return Functions::pagination(Functions::sort($query));
     })
     ->get('/id/{{i:id}}', Authorization::middleware(false), function ($req) {
-        if (Authorization::isAuthorized()) {
-            $recipe = Recipe::get("id = ? AND (public = 1 OR userId = ?)", [
-                $req["params"]["id"],
-                Authorization::user()->id,
-            ])->getFirst();
-        } else {
-            $recipe = Recipe::get("id = ? AND public = 1", [
-                $req["params"]["id"],
-            ])->getFirst();
-        }
+        $recipe = Recipe::getQueryForUser(
+            "id = :id",
+            [
+                "id" => $req["params"]["id"],
+            ],
+            Authorization::user(),
+            false
+        )
+            ->get()
+            ->getFirst();
 
         if ($recipe !== null) {
             return $recipe->jsonSerialize(true);
@@ -47,36 +41,26 @@ $group
     ) {
         $search = "%{$req["params"]["search"]}%";
 
-        if (Authorization::isAuthorized()) {
-            $query = Recipe::query(
-                "(name LIKE :search OR description LIKE :search) AND (public = 1 OR userId = :userId)",
-                [
-                    "search" => $search,
-                    "userId" => Authorization::user()->id,
-                ]
-            );
-        } else {
-            $query = Recipe::query(
-                "(name LIKE :search OR description LIKE :search) AND public = 1",
-                ["search" => $search]
-            );
-        }
+        $query = Recipe::getQueryForUser(
+            "name LIKE :search OR description LIKE :search",
+            ["search" => $search],
+            Authorization::user(),
+            false
+        );
 
         return Functions::pagination(Functions::sort($query));
     })
     ->get('/category/{{:name}}', Authorization::middleware(false), function (
         $req
     ) {
-        if (Authorization::isAuthorized()) {
-            $query = Recipe::query(
-                "category = ? AND (public = 1 OR userId = ?)",
-                [$req["params"]["name"], Authorization::user()->id]
-            );
-        } else {
-            $query = Recipe::query("category = ? AND public = 1", [
-                $req["params"]["name"],
-            ]);
-        }
+        $query = Recipe::getQueryForUser(
+            "category = :category",
+            [
+                "category" => $req["params"]["name"],
+            ],
+            Authorization::user(),
+            false
+        );
 
         return Functions::pagination(Functions::sort($query));
     })
@@ -127,7 +111,7 @@ $group
     ->put('/id/{{i:id}}', Authorization::middleware(), function ($req) {
         $recipe = Recipe::getById(
             $req["params"]["id"],
-            Authorization::user()->id
+            Authorization::user()->isAdmin ? null : Authorization::user()->id
         );
 
         if ($recipe === null) {
@@ -151,12 +135,16 @@ $group
         return $recipe->jsonSerialize(true);
     })
     ->delete('/id/{{i:id}}', Authorization::middleware(), function ($req) {
-        if (
-            Recipe::query("id = ? AND userId = ?", [
-                $req["params"]["id"],
-                Authorization::user()->id,
-            ])->delete()
-        ) {
+        $query = Recipe::getQueryForUser(
+            "id = :id",
+            [
+                "id" => $req["params"]["id"],
+            ],
+            Authorization::user(),
+            true
+        );
+
+        if ($query->delete()) {
             return Response::ok();
         } else {
             return Response::error();
@@ -170,7 +158,9 @@ $group
         if (
             !$ingredient->setRecipeId(
                 $req["params"]["id"],
-                Authorization::user()->id
+                Authorization::user()->isAdmin
+                    ? null
+                    : Authorization::user()->id
             )
         ) {
             return Response::notFound();
@@ -190,51 +180,39 @@ $group
         return Response::created($ingredient);
     })
     ->get('/id/{{i:id}}/images', Authorization::middleware(), function ($req) {
-        return RecipeImage::get(
-            "recipeId = ? AND recipeId IN (SELECT id FROM recipes WHERE userId = ?)",
-            [$req["params"]["id"], Authorization::user()->id]
-        );
+        return RecipeImage::getQueryForUser(
+            "recipeId = :id",
+            ["id" => $req["params"]["id"]],
+            Authorization::user(),
+            true
+        )->get();
     })
     ->get(
         '/id/{{i:id}}/images/count',
         Authorization::middleware(false),
         function ($req) {
-            if (Authorization::isAuthorized()) {
-                return RecipeImage::query(
-                    "recipeId = ? AND EXISTS (SELECT * FROM recipes WHERE id = recipeId AND (public = 1 OR userId = ?))",
-                    [$req["params"]["id"], Authorization::user()->id]
-                )->count();
-            } else {
-                return RecipeImage::query(
-                    "recipeId = ? AND recipeId IN (SELECT id FROM recipes WHERE public = 1)",
-                    [$req["params"]["id"]]
-                )->count();
-            }
+            return RecipeImage::query(
+                "recipeId = :id",
+                ["id" => $req["params"]["id"]],
+                Authorization::user(),
+                false
+            )->count();
         }
     )
     ->get(
         '/id/{{i:id}}/images/number/{{i:number}}',
         Authorization::middleware(false),
         function ($req) {
-            if (Authorization::isAuthorized()) {
-                $image = RecipeImage::query(
-                    "recipeId = ? AND EXISTS (SELECT * FROM recipes WHERE id = recipeId AND (public = 1 OR userId = ?))",
-                    [$req["params"]["id"], Authorization::user()->id]
-                )
-                    ->limit(1)
-                    ->offset($req["params"]["number"])
-                    ->get()
-                    ->getFirst();
-            } else {
-                $image = RecipeImage::query(
-                    "recipeId = ? AND recipeId IN (SELECT id FROM recipes WHERE public = 1)",
-                    [$req["params"]["id"]]
-                )
-                    ->limit(1)
-                    ->offset($req["params"]["number"])
-                    ->get()
-                    ->getFirst();
-            }
+            $image = RecipeImage::query(
+                "recipeId = :id",
+                ["id" => $req["params"]["id"]],
+                Authorization::user(),
+                false
+            )
+                ->limit(1)
+                ->offset($req["params"]["number"])
+                ->get()
+                ->getFirst();
 
             if ($image === null) {
                 return Response::notFound();
@@ -249,10 +227,14 @@ $group
     )
     ->post('/id/{{i:id}}/images', Authorization::middleware(), function ($req) {
         if (
-            Recipe::query("id = ? AND userId = ?", [
-                $req["params"]["id"],
-                Authorization::user()->id,
-            ])->count() === 0
+            Recipe::getQueryForUser(
+                "id = :id",
+                [
+                    "id" => $req["params"]["id"],
+                ],
+                Authorization::user(),
+                true
+            )->count() === 0
         ) {
             return Response::notFound();
         }

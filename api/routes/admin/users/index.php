@@ -15,15 +15,15 @@ use PAF\Router\Response;
 $group
     ->get('/', Authorization::middleware(true, true), function () {
         $query = "1";
+        $queryValues = [];
 
         if (!empty($_GET['search'])) {
-            $search = "%" . urldecode($_GET['search']) . "%";
-
-            $query = "email LIKE '$search' OR name LIKE '$search'";
+            $query = "email LIKE :search OR name LIKE :search";
+            $queryValues["search"] = "%" . urldecode($_GET['search']) . "%";
         }
 
         $ret = Functions::pagination(
-            Functions::sort(User::query($query))
+            Functions::sort(User::query($query, $queryValues))
         )->jsonSerialize();
 
         $ret["items"] = array_map(function ($user) {

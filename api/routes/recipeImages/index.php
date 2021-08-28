@@ -9,17 +9,14 @@ use PAF\Router\Response;
 
 $group
     ->get('/id/{{i:id}}', Authorization::middleware(false), function ($req) {
-        if (Authorization::isAuthorized()) {
-            $recipeImage = RecipeImage::get(
-                "id = ? AND EXISTS (SELECT * FROM recipes WHERE id = recipeId AND (public = 1 OR userId = ?))",
-                [$req["params"]["id"], Authorization::user()->id]
-            )->getFirst();
-        } else {
-            $recipeImage = RecipeImage::get(
-                "id = ? AND EXISTS (SELECT * FROM recipes WHERE id = recipeId AND public = 1)",
-                [$req["params"]["id"]]
-            )->getFirst();
-        }
+        $recipeImage = RecipeImage::getQueryForUser(
+            "id = :id",
+            ["id" => $req["params"]["id"]],
+            Authorization::user(),
+            false
+        )
+            ->get()
+            ->getFirst();
 
         if ($recipeImage !== null) {
             return Functions::outputRecipeImage(
@@ -35,7 +32,9 @@ $group
         if (
             RecipeImage::deleteById(
                 $req["params"]["id"],
-                Authorization::user()->id
+                Authorization::user()->isAdmin
+                    ? null
+                    : Authorization::user()->id
             )
         ) {
             return Response::ok();

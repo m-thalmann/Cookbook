@@ -8,7 +8,7 @@ use PAF\Router\Response;
 
 class Authorization {
     /**
-     * @var User The authenticated user
+     * @var User|null The authenticated user
      */
     private static $user = null;
 

@@ -23,7 +23,7 @@ $group
     ->put('/id/{{i:id}}', Authorization::middleware(), function ($req) {
         $ingredient = Ingredient::getById(
             $req["params"]["id"],
-            Authorization::user()->id
+            Authorization::user()->isAdmin ? null : Authorization::user()->id
         );
 
         if ($ingredient === null) {
@@ -42,10 +42,11 @@ $group
     })
     ->delete('/id/{{i:id}}', Authorization::middleware(), function ($req) {
         if (
-            Ingredient::query(
-                "id = ? AND recipeId IN (SELECT id FROM recipes WHERE userId = ?)",
-                [$req["params"]["id"], Authorization::user()->id]
-            )->delete()
+            Ingredient::getQueryForUser("id = :id", [
+                "id" => $req["params"]["id"],
+                Authorization::user(),
+                true,
+            ])->delete()
         ) {
             return Response::ok();
         } else {

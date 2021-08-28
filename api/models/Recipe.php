@@ -176,4 +176,37 @@ class Recipe extends Model {
     public static function getByUserId($userId) {
         return self::get("userId = ?", [$userId]);
     }
+
+    /**
+     * Returns a recipe-query-object for the given query, that the user has access to
+     *
+     * @param string $whereClause The sql-where-clause for the query
+     * @param array $values The values inserted safely into the query (named parameters)
+     * @param User|null $user The user that has to be able to access the recipe
+     * @param boolean $canEdit Whether the user needs to be able to edit the recipe or not (admin/owner)
+     */
+    public static function getQueryForUser(
+        $whereClause = "1",
+        $values = [],
+        $user = null,
+        $canEdit = false
+    ) {
+        if ($user === null) {
+            if ($canEdit) {
+                $whereClause = "0";
+            } else {
+                $whereClause = "($whereClause) AND public = 1";
+            }
+        } elseif (!$user->isAdmin) {
+            if ($canEdit) {
+                $whereClause = "($whereClause) AND userId = :userId";
+            } else {
+                $whereClause = "($whereClause) AND (userId = :userId OR public = 1)";
+            }
+
+            $values["userId"] = $user->id;
+        }
+
+        return self::query($whereClause, $values);
+    }
 }
