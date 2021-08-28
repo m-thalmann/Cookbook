@@ -397,7 +397,10 @@ export class ApiService {
           verifyEmail: verifyEmail,
         });
       },
-      updateUser: (userId: number, values: { email?: string; name?: string; password?: string; isAdmin?: boolean }) => {
+      updateUser: (
+        userId: number,
+        values: { email?: string; name?: string; password?: string; isAdmin?: boolean; emailVerified?: boolean }
+      ) => {
         return this.put<UserFull>(`${this.URL}/admin/users/id/${userId}`, values);
       },
       deleteUser: (userId: number) => {

@@ -236,16 +236,10 @@ export class PageAdminUsersComponent implements AfterViewInit {
     this.loading = false;
   }
 
-  async toggleAdmin(id: number) {
-    if (this.loading || this.isCurrentUser(id) || this.editUserId === id) {
+  async toggleAdmin(user: UserFull) {
+    if (this.loading || this.isCurrentUser(user.id) || this.editUserId === user.id) {
       return;
     }
-
-    let index = this.getUserIndex(id);
-
-    if (index === -1) return;
-
-    let user = this.tableData[index];
 
     let doEditAdmin = await this.dialog
       .open(ConfirmDialogComponent, {
@@ -263,7 +257,31 @@ export class PageAdminUsersComponent implements AfterViewInit {
 
     this.loading = true;
 
-    let res = await this.api.admin.updateUser(id, { isAdmin: !user.isAdmin });
+    let res = await this.api.admin.updateUser(user.id, { isAdmin: !user.isAdmin });
+
+    if (res.isOK()) {
+      this.snackBar.open('User updated successfully!', 'OK', {
+        duration: 5000,
+      });
+      await this.loadUsers();
+    } else {
+      this.snackBar.open('Error updating user!', 'OK', {
+        panelClass: 'action-warn',
+      });
+      console.error('Error updating user:', res.error);
+    }
+
+    this.loading = false;
+  }
+
+  async toggleEmailVerified(user: UserFull) {
+    if (this.loading || this.isCurrentUser(user.id) || this.editUserId === user.id) {
+      return;
+    }
+
+    this.loading = true;
+
+    let res = await this.api.admin.updateUser(user.id, { emailVerified: !user.emailVerified });
 
     if (res.isOK()) {
       this.snackBar.open('User updated successfully!', 'OK', {

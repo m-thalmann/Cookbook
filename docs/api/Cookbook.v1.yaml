@@ -1369,6 +1369,9 @@ paths:
                   type: string
                 isAdmin:
                   type: boolean
+                emailVerified:
+                  type: boolean
+                  description: Whether the email is verified or not
       responses:
         '200':
           description: OK

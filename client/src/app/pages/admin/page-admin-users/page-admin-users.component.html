@@ -46,7 +46,6 @@
     </button>
 </div>
 
-<!-- TODO: editable rows -->
 <div class="table_container mat-elevation-z8">
     <table
         mat-table
@@ -90,21 +89,25 @@
             </td>
         </ng-container>
         <ng-container matColumnDef="emailVerified">
-            <th mat-header-cell *matHeaderCellDef>Email verified</th>
-            <td mat-cell *matCellDef="let user">
-                <mat-icon [color]="user.emailVerified ? 'accent' : 'warn'">
-                    {{ user.emailVerified ? 'check' : 'clear' }}
-                </mat-icon>
+            <th mat-header-cell *matHeaderCellDef style="text-align: center">Email verified</th>
+            <td mat-cell *matCellDef="let user" style="text-align: center">
+                <mat-checkbox
+                    [checked]="user.emailVerified"
+                    color="accent"
+                    [disabled]="loading || isCurrentUser(user.id) || editUserId === user.id"
+                    (click)="$event.preventDefault(); toggleEmailVerified(user)"
+                ></mat-checkbox>
             </td>
         </ng-container>
         <ng-container matColumnDef="isAdmin">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Admin</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 6em">Admin</th>
             <td mat-cell *matCellDef="let user">
                 <mat-checkbox
                     [checked]="user.isAdmin"
                     color="accent"
                     [disabled]="loading || isCurrentUser(user.id) || editUserId === user.id"
-                    (click)="$event.preventDefault(); toggleAdmin(user.id)"
+                    (click)="$event.preventDefault(); toggleAdmin(user)"
+                    style="margin-left: 0.75em"
                 ></mat-checkbox>
             </td>
         </ng-container>

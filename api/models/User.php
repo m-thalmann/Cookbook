@@ -163,14 +163,9 @@ class User extends Model {
         return false;
     }
 
-    public function clearEmailVerification(){
+    public function clearEmailVerification() {
         $this->editValue("verifyEmailCode", null, false, true);
-        $this->editValue(
-            "verifyEmailCodeExpires",
-            null,
-            false,
-            true
-        );
+        $this->editValue("verifyEmailCodeExpires", null, false, true);
     }
 
     public static function getErrors($user) {

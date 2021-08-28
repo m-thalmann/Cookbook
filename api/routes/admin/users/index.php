@@ -51,10 +51,10 @@ $group
 
         $user = User::fromValues($data);
 
-        if($isAdmin){
+        if ($isAdmin) {
             $user->setIsAdmin(true);
         }
-        if(!$verifyEmail){
+        if (!$verifyEmail) {
             $user->clearEmailVerification();
         }
 
@@ -100,6 +100,18 @@ $group
         if (array_key_exists("isAdmin", $data)) {
             $user->setIsAdmin($data["isAdmin"]);
             unset($data["isAdmin"]);
+        }
+        if (array_key_exists("emailVerified", $data)) {
+            if ($data["emailVerified"]) {
+                if (!User::isEmailVerified($user)) {
+                    $user->clearEmailVerification();
+                }
+            } else {
+                if (User::isEmailVerified($user)) {
+                    $user->generateVerifyEmailCode();
+                }
+            }
+            unset($data["emailVerified"]);
         }
 
         $user->editValues($data, true);
