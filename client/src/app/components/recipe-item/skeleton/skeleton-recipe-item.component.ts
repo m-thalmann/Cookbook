@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'cb-skeleton-recipe-item',
@@ -6,5 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./skeleton-recipe-item.component.scss'],
 })
 export class SkeletonRecipeItemComponent {
+  @Input() compact = false;
+
   constructor() {}
 }

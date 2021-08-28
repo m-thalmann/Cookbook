@@ -52,7 +52,7 @@
         </button>
         <button mat-mini-fab (click)="doPrint()" color="red"><mat-icon>print</mat-icon></button>
 
-        <a routerLink="/edit/{{ recipe.id }}" mat-raised-button color="accent" class="edit-button" *ngIf="isOwner">
+        <a routerLink="/edit/{{ recipe.id }}" mat-raised-button color="accent" class="edit-button" *ngIf="canEdit">
             <mat-icon>edit</mat-icon> Edit recipe
         </a>
     </div>

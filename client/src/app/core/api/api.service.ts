@@ -388,6 +388,9 @@ export class ApiService {
 
         return this.get<Pagination<UserFull>>(`${this.URL}/admin/users${ApiService.buildQueryString(query)}`);
       },
+      getUser: (id: number) => {
+        return this.get<UserFull>(`${this.URL}/admin/users/id/${id}`);
+      },
       createUser: (email: string, password: string, name: string, isAdmin = false, verifyEmail = true) => {
         return this.post<UserFull>(`${this.URL}/admin/users`, {
           email: email,
@@ -408,6 +411,18 @@ export class ApiService {
       },
       resetUserPassword: (userId: number) => {
         return this.post<{ user: UserFull; password: string }>(`${this.URL}/admin/users/id/${userId}/resetPassword`);
+      },
+      getRecipes: (search: string | null, filterUserId: number | null, options: Options) => {
+        let query = ApiService.getOptionsQuery(options);
+
+        if (search) {
+          query.push(`search=${encodeURIComponent(search)}`);
+        }
+        if (filterUserId) {
+          query.push(`filterUserId=${filterUserId}`);
+        }
+
+        return this.get<Pagination<Recipe>>(`${this.URL}/admin/recipes${ApiService.buildQueryString(query)}`);
       },
     };
   }

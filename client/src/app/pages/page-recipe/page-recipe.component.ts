@@ -71,8 +71,8 @@ export class PageRecipeComponent implements OnInit {
     return calculated.toFixed(2).replace(/(?:0*|\.0*)$/g, '');
   }
 
-  get isOwner() {
-    return this.recipe && this.user.user?.id === this.recipe.user.id;
+  get canEdit() {
+    return this.recipe && (this.user.user?.isAdmin || this.user.user?.id === this.recipe.user.id);
   }
 
   async load(id: number) {

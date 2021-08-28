@@ -1,8 +1,8 @@
-<div class="image-container">
+<div class="image-container" [class.compact]="compact">
     <cb-skeleton circle></cb-skeleton>
 </div>
 
-<div class="content">
+<div class="content" [class.compact]="compact">
     <cb-skeleton class="name"></cb-skeleton>
     <cb-skeleton class="author"></cb-skeleton>
     <cb-skeleton class="description"></cb-skeleton>

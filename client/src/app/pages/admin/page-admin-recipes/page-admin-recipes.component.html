@@ -1,0 +1,25 @@
+<a routerLink="/admin" class="icon-text back-link">
+    <mat-icon>arrow_back</mat-icon><span>Go back to admin area</span>
+</a>
+
+<h2 class="icon-text"><mat-icon>menu_book</mat-icon><span>Admin recipes</span></h2>
+
+<div class="filter">
+    <mat-form-field appearance="outline" color="primary" class="search-field">
+        <mat-label>Search</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput [(ngModel)]="searchInput" (keyup.enter)="doSearch()" [disabled]="loading" />
+        <button matSuffix mat-icon-button (click)="doSearch()" [disabled]="loading" color="accent">
+            <mat-icon>arrow_forward</mat-icon>
+        </button>
+    </mat-form-field>
+    <br />
+    <mat-chip-list *ngIf="filterUserId">
+        <mat-chip [removable]="true">
+            <span>User: {{ filterUser?.name }} ({{ filterUserId }})</span>
+            <mat-icon matChipRemove routerLink="/admin/recipes">cancel</mat-icon>
+        </mat-chip>
+    </mat-chip-list>
+</div>
+
+<cb-recipe-list [reloadFunction]="reload.bind(this)" sort="name" [compact]="true" #recipeList></cb-recipe-list>

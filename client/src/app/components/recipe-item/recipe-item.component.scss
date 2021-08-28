@@ -13,7 +13,7 @@
 
   transition: box-shadow 0.1s, border-color 0.2s, opacity 0.05s;
 
-  &.owner {
+  &.can-edit {
     .content {
       width: calc(75% - 3.5rem);
     }
@@ -32,6 +32,16 @@
       right: 0;
       bottom: 0;
       z-index: 1;
+    }
+  }
+
+  &.compact {
+    .img-container {
+      height: 5em;
+    }
+
+    .content .description {
+      display: none;
     }
   }
 

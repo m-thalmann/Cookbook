@@ -5,7 +5,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ApiService } from 'src/app/core/api/api.service';
-import { EditIngredient, EditRecipe, ListIngredient, NewRecipe, RecipeFull } from 'src/app/core/api/ApiInterfaces';
+import {
+  EditIngredient,
+  EditRecipe,
+  Ingredient,
+  ListIngredient,
+  NewRecipe,
+  RecipeFull,
+} from 'src/app/core/api/ApiInterfaces';
 import { ApiResponse } from 'src/app/core/api/ApiResponse';
 import { getFormError } from 'src/app/core/forms/Validation';
 import { trimAndNull } from 'src/app/core/functions';
@@ -185,8 +192,8 @@ export class EditRecipeInformationComponent {
       .get('name')!
       .valueChanges.pipe(
         startWith(''),
-        map((value: string) => {
-          const filterValue = value.toLowerCase();
+        map((value: string | ListIngredient) => {
+          const filterValue = value.toString().toLowerCase();
 
           return this.ingredientList?.filter((option) => option.name.toLowerCase().includes(filterValue)) || [];
         })
@@ -210,20 +217,11 @@ export class EditRecipeInformationComponent {
     this.filteredIngredientLists.splice(index, 1);
   }
 
-  onAutocompleteIngredientSelected(index: number, event: MatAutocompleteSelectedEvent) {
-    const label = event.option.getLabel();
+  async onAutocompleteIngredientSelected(index: number, event: MatAutocompleteSelectedEvent) {
+    let ingredient = event.option.value;
 
-    if (label.includes('|')) {
-      const unit = label.substring(label.lastIndexOf('|') + 3).trim();
-
-      if (
-        this.ingredientList?.some((ingredient) => ingredient.name === event.option.value && ingredient.unit === unit)
-      ) {
-        this.ingredients.at(index).get('unit')?.setValue(unit);
-      }
-    } else {
-      this.ingredients.at(index).get('unit')?.setValue('');
-    }
+    this.ingredients.at(index).get('name')?.setValue(ingredient.name);
+    this.ingredients.at(index).get('unit')?.setValue(ingredient.unit);
   }
 
   /**
@@ -343,7 +341,11 @@ export class EditRecipeInformationComponent {
 
       // Updating recipe
 
-      res = await this.api.editRecipe(this._editRecipe.id, <EditRecipe>recipe);
+      if (Object.keys(recipe).length > 0) {
+        res = await this.api.editRecipe(this._editRecipe.id, <EditRecipe>recipe);
+      } else {
+        res = new ApiResponse<RecipeFull>(200, this._editRecipe);
+      }
     } else {
       res = await this.api.createRecipe(<NewRecipe>recipe);
     }
@@ -352,6 +354,8 @@ export class EditRecipeInformationComponent {
       if (!this.isEdit) {
         history.pushState('', '', `/edit/${res.value?.id}`); // change url without redirect
       }
+
+      this.editRecipe = res.value;
 
       this.saved.emit({
         recipe: res.value,

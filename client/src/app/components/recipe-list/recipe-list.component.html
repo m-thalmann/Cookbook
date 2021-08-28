@@ -20,7 +20,13 @@
 </div>
 
 <ng-container *ngIf="recipes">
-    <cb-recipe-item *ngFor="let recipe of recipes.items" [recipe]="recipe" [disabled]="loading"></cb-recipe-item>
+    <cb-recipe-item
+        *ngFor="let recipe of recipes.items"
+        [recipe]="recipe"
+        [disabled]="loading"
+        [compact]="compact"
+        [class.compact]="compact"
+    ></cb-recipe-item>
 
     <p class="icon-text" *ngIf="recipes.total_items === 0"><mat-icon>info</mat-icon><span>No recipes found</span></p>
 
@@ -33,11 +39,11 @@
 </ng-container>
 
 <ng-container *ngIf="!recipes && !error">
-    <cb-skeleton-recipe-item></cb-skeleton-recipe-item>
-    <cb-skeleton-recipe-item></cb-skeleton-recipe-item>
-    <cb-skeleton-recipe-item></cb-skeleton-recipe-item>
-    <cb-skeleton-recipe-item></cb-skeleton-recipe-item>
-    <cb-skeleton-recipe-item></cb-skeleton-recipe-item>
+    <cb-skeleton-recipe-item [compact]="compact" [class.compact]="compact"></cb-skeleton-recipe-item>
+    <cb-skeleton-recipe-item [compact]="compact" [class.compact]="compact"></cb-skeleton-recipe-item>
+    <cb-skeleton-recipe-item [compact]="compact" [class.compact]="compact"></cb-skeleton-recipe-item>
+    <cb-skeleton-recipe-item [compact]="compact" [class.compact]="compact"></cb-skeleton-recipe-item>
+    <cb-skeleton-recipe-item [compact]="compact" [class.compact]="compact"></cb-skeleton-recipe-item>
 </ng-container>
 
 <p class="icon-text fg-warn" *ngIf="error"><mat-icon>error</mat-icon><span>Error loading recipes</span></p>

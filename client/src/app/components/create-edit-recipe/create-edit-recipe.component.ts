@@ -5,6 +5,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/core/api/api.service';
 import { RecipeFull } from 'src/app/core/api/ApiInterfaces';
+import { UserService } from 'src/app/core/auth/user.service';
 import { slugify } from 'src/app/core/functions';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
@@ -24,7 +25,8 @@ export class CreateEditRecipeComponent {
     private api: ApiService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    public user: UserService
   ) {}
 
   get isEdit() {

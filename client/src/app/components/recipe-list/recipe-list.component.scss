@@ -22,6 +22,10 @@ cb-recipe-item,
 cb-skeleton-recipe-item {
   margin-bottom: 1em;
   display: block;
+
+  &.compact {
+    margin-bottom: 0.5em;
+  }
 }
 
 cb-paginator {

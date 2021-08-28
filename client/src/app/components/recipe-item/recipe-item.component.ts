@@ -14,6 +14,7 @@ const FALLBACK_IMAGE = 'assets/images/cookbook.svg';
 export class RecipeItemComponent {
   @Input() recipe: Recipe | null = null;
 
+  @Input() compact = false;
   @Input() disabled: boolean = false;
 
   constructor(private api: ApiService, private user: UserService) {}
@@ -45,8 +46,12 @@ export class RecipeItemComponent {
   }
 
   get isOwner() {
+    return this.recipe && this.user.user?.id === this.recipe.user.id;
+  }
+
+  get canEdit() {
     if (!this.recipe) return false;
 
-    return this.user.user?.id === this.recipe?.user.id;
+    return this.user.user?.isAdmin || this.user.user?.id === this.recipe.user.id;
   }
 }

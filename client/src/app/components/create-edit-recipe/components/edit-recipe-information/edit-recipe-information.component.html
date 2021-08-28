@@ -130,8 +130,8 @@
                         (optionSelected)="onAutocompleteIngredientSelected(i, $event)"
                     >
                         <mat-option
-                            *ngFor="let option of filteredIngredientLists[i] | async"
-                            [value]="option.name"
+                            *ngFor="let option of filteredIngredientLists[i] | async; let index = index"
+                            [value]="option"
                             class="autocomplete-option"
                         >
                             <span class="vertical-align-middle">

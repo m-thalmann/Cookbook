@@ -1271,6 +1271,10 @@ paths:
           in: query
           required: false
           description: Search by name and email
+        - $ref: '#/components/parameters/ItemsPerPage'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/SortDir'
       responses:
         '200':
           description: OK
@@ -1343,6 +1347,9 @@ paths:
                   - info
       operationId: post-admin-users
       description: Create a new user
+      security:
+        - Token: []
+        - QueryToken: []
   /admin/users/id/{id}:
     parameters:
       - schema:
@@ -1350,6 +1357,26 @@ paths:
         name: id
         in: path
         required: true
+    get:
+      summary: Get user by id
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserFull'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: User not found
+      operationId: get-admin-users-id
+      description: Get specific user by id
+      security:
+        - Token: []
+        - QueryToken: []
     put:
       summary: Update a user
       tags:
@@ -1472,6 +1499,51 @@ paths:
           description: User not found
       operationId: post-admin-users-id-resetPassword
       description: Reset a users password
+      security:
+        - Token: []
+        - QueryToken: []
+  /admin/recipes:
+    get:
+      summary: Returns all recipes
+      tags:
+        - Admin
+      parameters:
+        - schema:
+            type: string
+          name: search
+          in: query
+          required: false
+          description: Search by name, description and category
+        - schema:
+            type: integer
+          name: filterUserId
+          in: query
+          required: false
+          description: Only retrieve recipes for the user with this id
+        - $ref: '#/components/parameters/ItemsPerPage'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Sort'
+        - $ref: '#/components/parameters/SortDir'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Pagination'
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Recipe'
+                    required:
+                      - items
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      operationId: get-admin-recipes
+      description: Returns all recipes
       security:
         - Token: []
         - QueryToken: []

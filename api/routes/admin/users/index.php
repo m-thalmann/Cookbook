@@ -32,6 +32,15 @@ $group
 
         return $ret;
     })
+    ->get('/id/{{i:id}}', Authorization::middleware(true, true), function($req){
+        $user = User::getById($req["params"]["id"]);
+
+        if($user === null){
+            return Response::notFound();
+        }
+
+        return $user->jsonSerialize(true);
+    })
     ->post('/', Authorization::middleware(true, true), function ($req) {
         $data = $req["post"] ?? [];
 

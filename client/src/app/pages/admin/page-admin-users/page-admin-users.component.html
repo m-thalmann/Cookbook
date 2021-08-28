@@ -196,6 +196,15 @@
             <mat-icon>password</mat-icon>
             <span>Password</span>
         </button>
+        <a
+            routerLink="/admin/recipes"
+            [queryParams]="{ userId: user.id }"
+            mat-menu-item
+            [disabled]="isCurrentUser(user.id)"
+        >
+            <mat-icon>visibility</mat-icon>
+            <span>View user recipes</span>
+        </a>
         <button mat-menu-item (click)="deleteUser(user.id)" [disabled]="isCurrentUser(user.id)">
             <mat-icon [color]="isCurrentUser(user.id) ? '' : 'warn'">delete</mat-icon>
             <span [class]="isCurrentUser(user.id) ? '' : 'fg-warn'">Delete user</span>

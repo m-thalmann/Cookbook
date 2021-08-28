@@ -17,6 +17,8 @@ export class RecipeListComponent implements OnInit {
 
   @Input() reloadFunction!: (options: Options) => Promise<ApiResponse<Pagination<Recipe>>> | null;
 
+  @Input() compact = false;
+
   @Output() loadingChange = new EventEmitter<boolean>();
   @Output() errorChange = new EventEmitter<boolean>();
 

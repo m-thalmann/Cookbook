@@ -39,7 +39,7 @@ export class PageEditRecipeComponent implements OnInit {
     let res = await this.api.getRecipeById(id);
 
     if (res.isOK()) {
-      if (res.value && res.value.user.id === this.user.user?.id) {
+      if (res.value && (this.user.user?.isAdmin || res.value.user.id === this.user.user?.id)) {
         this.editRecipe = res.value;
       } else {
         this.snackBar.open('You do not own this recipe', 'OK', {
