@@ -181,4 +181,32 @@ class Functions {
     public static function getRandomString() {
         return md5(random_int(PHP_INT_MIN, PHP_INT_MAX));
     }
+
+    /**
+     * Returns the total directory size in mega-bytes
+     *
+     * @param string $path the directory's path
+     *
+     * @return float the total directory size
+     */
+    public static function getDirectorySize($path) {
+        $size = 0; // size in bytes
+
+        $files = scandir($path);
+
+        foreach ($files as $filename) {
+            if ($filename !== ".." && $filename !== ".") {
+                $file = "$path/$filename";
+
+                if (is_dir($file)) {
+                    $subdirectorySize = self::getDirectorySize($file);
+                    $size += $subdirectorySize;
+                } elseif (is_file($file)) {
+                    $size += filesize($file);
+                }
+            }
+        }
+
+        return round($size / pow(1024, 2), 2);
+    }
 }

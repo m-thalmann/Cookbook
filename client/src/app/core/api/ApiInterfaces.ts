@@ -92,6 +92,19 @@ export interface ListIngredient {
   unit: string | null;
 }
 
+export interface ServerInformation {
+  users: {
+    unverified: number;
+    admins: number;
+    total: number;
+  };
+  recipes: {
+    private: number;
+    total: number;
+  };
+  imagesSize: number;
+}
+
 export interface Pagination<T> {
   page: number;
   items_per_page: number;
@@ -100,7 +113,7 @@ export interface Pagination<T> {
   items: T[];
 }
 
-export interface Options {
+export interface ApiOptions {
   page?: number;
   itemsPerPage?: number | null;
   sort?: string | null;

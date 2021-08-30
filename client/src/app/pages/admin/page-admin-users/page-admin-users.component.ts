@@ -7,7 +7,7 @@ import { MatSort } from '@angular/material/sort';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 import { InputDialogComponent } from 'src/app/components/input-dialog/input-dialog.component';
 import { ApiService } from 'src/app/core/api/api.service';
-import { Options, Pagination, UserFull } from 'src/app/core/api/ApiInterfaces';
+import { ApiOptions, Pagination, UserFull } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
 import { CreateUserDialogComponent } from './components/create-user-dialog/create-user-dialog.component';
 
@@ -88,7 +88,7 @@ export class PageAdminUsersComponent implements AfterViewInit {
     this.error = false;
     this.loading = true;
 
-    let options: Options = {};
+    let options: ApiOptions = {};
 
     if (this.paginator) {
       options.itemsPerPage = this.paginator.pageSize;

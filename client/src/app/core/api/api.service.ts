@@ -12,13 +12,14 @@ import {
   ListIngredient,
   NewIngredient,
   NewRecipe,
-  Options,
+  ApiOptions,
   Pagination,
   Recipe,
   RecipeFull,
   RecipeImage,
   User,
   UserFull,
+  ServerInformation,
 } from './ApiInterfaces';
 import { ApiResponse } from './ApiResponse';
 
@@ -134,7 +135,7 @@ export class ApiService {
     return new ApiResponse<T>(status, error);
   }
 
-  private static getOptionsQuery(options: Options) {
+  private static getOptionsQuery(options: ApiOptions) {
     let query = [];
 
     if (typeof options.page !== 'undefined') {
@@ -161,7 +162,7 @@ export class ApiService {
     return '';
   }
 
-  private static buildOptionsQueryString(options: Options) {
+  private static buildOptionsQueryString(options: ApiOptions) {
     return ApiService.buildQueryString(ApiService.getOptionsQuery(options));
   }
 
@@ -235,23 +236,23 @@ export class ApiService {
 
   // Recipe
 
-  getRecipes(options: Options) {
+  getRecipes(options: ApiOptions) {
     return this.get<Pagination<Recipe>>(`${this.URL}/recipes${ApiService.buildOptionsQueryString(options)}`);
   }
 
-  searchRecipes(search: string, options: Options) {
+  searchRecipes(search: string, options: ApiOptions) {
     return this.get<Pagination<Recipe>>(
       `${this.URL}/recipes/search/${search}${ApiService.buildOptionsQueryString(options)}`
     );
   }
 
-  getRecipesForCategory(category: string, options: Options) {
+  getRecipesForCategory(category: string, options: ApiOptions) {
     return this.get<Pagination<Recipe>>(
       `${this.URL}/recipes/category/${category}${ApiService.buildOptionsQueryString(options)}`
     );
   }
 
-  getRecipesForUser(id: number, options: Options) {
+  getRecipesForUser(id: number, options: ApiOptions) {
     return this.get<Pagination<Recipe>>(
       `${this.URL}/users/id/${id}/recipes${ApiService.buildOptionsQueryString(options)}`
     );
@@ -379,7 +380,7 @@ export class ApiService {
 
   get admin() {
     return {
-      getUsers: (search: string | null, options: Options) => {
+      getUsers: (search: string | null, options: ApiOptions) => {
         let query = ApiService.getOptionsQuery(options);
 
         if (search) {
@@ -412,7 +413,7 @@ export class ApiService {
       resetUserPassword: (userId: number) => {
         return this.post<{ user: UserFull; password: string }>(`${this.URL}/admin/users/id/${userId}/resetPassword`);
       },
-      getRecipes: (search: string | null, filterUserId: number | null, options: Options) => {
+      getRecipes: (search: string | null, filterUserId: number | null, options: ApiOptions) => {
         let query = ApiService.getOptionsQuery(options);
 
         if (search) {
@@ -423,6 +424,9 @@ export class ApiService {
         }
 
         return this.get<Pagination<Recipe>>(`${this.URL}/admin/recipes${ApiService.buildQueryString(query)}`);
+      },
+      getServerInformation: () => {
+        return this.get<ServerInformation>(`${this.URL}/admin/information`);
       },
     };
   }

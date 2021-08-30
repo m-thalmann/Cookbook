@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from 'src/app/core/api/api.service';
-import { Options } from 'src/app/core/api/ApiInterfaces';
+import { ApiOptions } from 'src/app/core/api/ApiInterfaces';
 
 @Component({
   selector: 'cb-page-categories',
@@ -32,7 +32,7 @@ export class PageCategoriesComponent {
     return this.category === null;
   }
 
-  reload = (options: Options) => {
+  reload = (options: ApiOptions) => {
     if (this.category) {
       return this.api.getRecipesForCategory(this.category, options);
     }

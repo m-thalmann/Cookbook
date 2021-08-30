@@ -32,10 +32,12 @@ $group
 
         return $ret;
     })
-    ->get('/id/{{i:id}}', Authorization::middleware(true, true), function($req){
+    ->get('/id/{{i:id}}', Authorization::middleware(true, true), function (
+        $req
+    ) {
         $user = User::getById($req["params"]["id"]);
 
-        if($user === null){
+        if ($user === null) {
             return Response::notFound();
         }
 

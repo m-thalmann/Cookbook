@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ApiService } from 'src/app/core/api/api.service';
-import { Options } from 'src/app/core/api/ApiInterfaces';
+import { ApiOptions } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { UserService } from 'src/app/core/auth/user.service';
 export class PageMyRecipesComponent {
   constructor(private api: ApiService, private user: UserService) {}
 
-  reload = (options: Options) => {
+  reload = (options: ApiOptions) => {
     return this.api.getRecipesForUser(this.user.user!.id, options);
   };
 }

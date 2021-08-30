@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Options, Pagination, Recipe, RecipeSortDirection } from 'src/app/core/api/ApiInterfaces';
+import { ApiOptions, Pagination, Recipe, RecipeSortDirection } from 'src/app/core/api/ApiInterfaces';
 import { ApiResponse } from 'src/app/core/api/ApiResponse';
 
 @Component({
@@ -15,7 +15,7 @@ export class RecipeListComponent implements OnInit {
   }
   @Input() sortDirection: 'asc' | 'desc' = 'desc';
 
-  @Input() reloadFunction!: (options: Options) => Promise<ApiResponse<Pagination<Recipe>>> | null;
+  @Input() reloadFunction!: (options: ApiOptions) => Promise<ApiResponse<Pagination<Recipe>>> | null;
 
   @Input() compact = false;
 

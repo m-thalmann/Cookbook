@@ -1,5 +1,35 @@
 @import 'variables.scss';
 
+.dashboard {
+  margin-bottom: 1em;
+
+  > div {
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+
+    width: calc(100% / 3 - 10px);
+
+    h4 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    > h5 {
+      font-size: 1rem;
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .additional {
+      > span {
+        display: block;
+        margin-bottom: 0.25em;
+      }
+    }
+  }
+}
+
 .navigation {
   a {
     display: inline-block;
@@ -30,6 +60,19 @@
       width: 3rem;
 
       margin: 0 auto 1rem;
+    }
+  }
+}
+
+@media screen and (max-width: $mobile-width) {
+  .dashboard > div {
+    display: block;
+    width: 100%;
+    margin-bottom: 2rem;
+
+    &:not(:last-of-type) {
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #{$foreground}20;
     }
   }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RecipeListComponent } from 'src/app/components/recipe-list/recipe-list.component';
 import { ApiService } from 'src/app/core/api/api.service';
-import { Options } from 'src/app/core/api/ApiInterfaces';
+import { ApiOptions } from 'src/app/core/api/ApiInterfaces';
 
 @Component({
   selector: 'cb-page-search',
@@ -44,7 +44,7 @@ export class PageSearchComponent implements OnInit {
     }
   }
 
-  reload = async (options: Options) => {
+  reload = async (options: ApiOptions) => {
     this.loading = true;
 
     let res = await this.api.searchRecipes(this.search!, options);

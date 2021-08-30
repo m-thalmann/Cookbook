@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ApiService } from 'src/app/core/api/api.service';
-import { Options } from 'src/app/core/api/ApiInterfaces';
+import { ApiOptions } from 'src/app/core/api/ApiInterfaces';
 
 @Component({
   selector: 'cb-page-home',
@@ -10,7 +10,7 @@ import { Options } from 'src/app/core/api/ApiInterfaces';
 export class PageHomeComponent {
   constructor(private api: ApiService) {}
 
-  reload = (options: Options) => {
+  reload = (options: ApiOptions) => {
     return this.api.getRecipes(options);
   };
 }

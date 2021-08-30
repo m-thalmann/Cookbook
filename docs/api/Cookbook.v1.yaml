@@ -1547,6 +1547,67 @@ paths:
       security:
         - Token: []
         - QueryToken: []
+  /admin/information:
+    get:
+      summary: Get server information
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: object
+                    properties:
+                      unverified:
+                        type: integer
+                        minimum: 0
+                        description: Amount of unverified users
+                      admins:
+                        type: integer
+                        minimum: 0
+                        description: Amount of admin users
+                      total:
+                        type: integer
+                        minimum: 0
+                        description: Total amount of users
+                    required:
+                      - unverified
+                      - admins
+                      - total
+                  recipes:
+                    type: object
+                    properties:
+                      private:
+                        type: integer
+                        minimum: 0
+                        description: Amount of private recipes
+                      total:
+                        type: integer
+                        minimum: 0
+                        description: Total amount of recipes
+                    required:
+                      - private
+                      - total
+                  imagesSize:
+                    type: number
+                    minimum: 0
+                    description: Total size of images in MB
+                required:
+                  - users
+                  - recipes
+                  - imagesSize
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      operationId: get-admin-information
+      description: Get server information
+      security:
+        - Token: []
+        - QueryToken: []
 components:
   schemas:
     User:

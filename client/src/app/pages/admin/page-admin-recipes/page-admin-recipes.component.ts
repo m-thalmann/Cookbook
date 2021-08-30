@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RecipeListComponent } from 'src/app/components/recipe-list/recipe-list.component';
 import { ApiService } from 'src/app/core/api/api.service';
-import { Options, User } from 'src/app/core/api/ApiInterfaces';
+import { ApiOptions, User } from 'src/app/core/api/ApiInterfaces';
 
 @Component({
   selector: 'cb-page-admin-recipes',
@@ -60,7 +60,7 @@ export class PageAdminRecipesComponent {
     this.recipeListComponent.reload();
   }
 
-  async reload(options: Options) {
+  async reload(options: ApiOptions) {
     this.loading = true;
     let res = await this.api.admin.getRecipes(this.search, this.filterUserId, options);
     this.loading = false;

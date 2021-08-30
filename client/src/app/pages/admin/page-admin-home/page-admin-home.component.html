@@ -1,8 +1,57 @@
 <h2 class="icon-text"><mat-icon>admin_panel_settings</mat-icon><span>Admin area</span></h2>
 
-<!-- TODO: dashboard -->
+<div class="dashboard">
+    <h3>Server information</h3>
+
+    <mat-spinner *ngIf="loading" [diameter]="32"></mat-spinner>
+
+    <ng-container *ngIf="!loading && serverInformation">
+        <div>
+            <h4 class="icon-text">
+                <mat-icon>person</mat-icon><span>{{ serverInformation.users.total }}</span>
+            </h4>
+            <h5>Total users</h5>
+
+            <div class="additional">
+                <span class="icon-text">
+                    <mat-icon>remove_moderator</mat-icon>
+                    <span>Unverified: {{ serverInformation.users.unverified }}</span>
+                </span>
+                <span class="icon-text">
+                    <mat-icon>security</mat-icon> <span>Admins: {{ serverInformation.users.admins }}</span>
+                </span>
+            </div>
+        </div>
+        <div>
+            <h4 class="icon-text">
+                <mat-icon>restaurant_menu</mat-icon><span>{{ serverInformation.recipes.total }}</span>
+            </h4>
+            <h5>Total recipes</h5>
+
+            <div class="additional">
+                <span class="icon-text">
+                    <mat-icon>public</mat-icon> <span>Public: {{ serverInformation.recipes.private }}</span>
+                </span>
+                <span class="icon-text">
+                    <mat-icon>lock</mat-icon>
+                    <span>Private: {{ serverInformation.recipes.total - serverInformation.recipes.private }}</span>
+                </span>
+            </div>
+        </div>
+        <div>
+            <h4 class="icon-text">
+                <mat-icon>image</mat-icon><span>{{ serverInformation.imagesSize }} MB</span>
+            </h4>
+            <h5>Total image size</h5>
+        </div>
+    </ng-container>
+
+    <p class="fg-warn" *ngIf="error"></p>
+</div>
 
 <div class="navigation">
+    <h3>Settings</h3>
+
     <a routerLink="/admin/users">
         <mat-icon color="accent">manage_accounts</mat-icon>
         <span>Manage users</span>
@@ -10,5 +59,13 @@
     <a routerLink="/admin/recipes">
         <mat-icon color="accent">menu_book</mat-icon>
         <span>Manage recipes</span>
+    </a>
+    <a routerLink="/admin/export-import">
+        <mat-icon color="accent">import_export</mat-icon>
+        <span>Export / Import</span>
+    </a>
+    <a routerLink="/admin/server">
+        <mat-icon color="accent">miscellaneous_services</mat-icon>
+        <span>Server settings</span>
     </a>
 </div>
