@@ -37,6 +37,37 @@ class Config {
 
         return $curr;
     }
+
+    /**
+     * Returns the loaded config
+     * 
+     * @param array Hidden paths that are not returned
+     * 
+     * @return mixed|null The loaded config
+     */
+    public static function getConfig($hiddenPaths = []){
+        $config = self::$config;
+
+        foreach($hiddenPaths as $hiddenPath){
+            $curr = &$config;
+
+            $path = explode('.', $hiddenPath);
+
+            for($i = 0; $i < count($path); $i++){
+                if (!isset($curr[$path[$i]])) {
+                    break;
+                }
+    
+                if($i + 1 < count($path)){
+                    $curr = &$curr[$path[$i]];
+                }else{
+                    unset($curr[$path[$i]]);
+                }
+            }
+        }
+
+        return $config;
+    }
 }
 
 Config::load(__DIR__ . "/config.json");

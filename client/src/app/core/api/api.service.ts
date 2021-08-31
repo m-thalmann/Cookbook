@@ -20,6 +20,7 @@ import {
   User,
   UserFull,
   ServerInformation,
+  ServerConfig,
 } from './ApiInterfaces';
 import { ApiResponse } from './ApiResponse';
 
@@ -427,6 +428,9 @@ export class ApiService {
       },
       getServerInformation: () => {
         return this.get<ServerInformation>(`${this.URL}/admin/information`);
+      },
+      getServerConfig: () => {
+        return this.get<ServerConfig>(`${this.URL}/admin/server/config`);
       },
     };
   }

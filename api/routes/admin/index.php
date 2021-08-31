@@ -9,6 +9,7 @@ use API\models\RecipeImage;
 use API\models\User;
 
 $group->group('/recipes', __DIR__ . '/recipes/index.php');
+$group->group('/server', __DIR__ . '/server/index.php');
 $group->group('/users', __DIR__ . '/users/index.php');
 
 $group->get('/information', Authorization::middleware(true, true), function () {

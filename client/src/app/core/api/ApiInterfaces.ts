@@ -105,6 +105,44 @@ export interface ServerInformation {
   imagesSize: number;
 }
 
+export interface ServerConfig {
+  root_url: string;
+  production: boolean;
+  database: {
+    host: string;
+    user: string;
+    database: string;
+    charset: string;
+  };
+  image_store: string;
+  token: {
+    ttl: number;
+  };
+  password: {
+    reset_ttl: number;
+  };
+  registration_enabled: boolean;
+  email_verification: {
+    enabled: boolean;
+    ttl: number;
+  };
+  hcaptcha: {
+    enabled: boolean;
+  };
+  mail: {
+    smtp: {
+      host: string;
+      port: number;
+      encrypted: boolean;
+      username: string;
+    };
+    from: {
+      mail: string;
+      name: string;
+    };
+  };
+}
+
 export interface Pagination<T> {
   page: number;
   items_per_page: number;

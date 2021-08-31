@@ -7,9 +7,10 @@ import { PageAdminHomeComponent } from './page-admin-home/page-admin-home.compon
 import { PageAdminRecipesComponent } from './page-admin-recipes/page-admin-recipes.component';
 import { CreateUserDialogComponent } from './page-admin-users/components/create-user-dialog/create-user-dialog.component';
 import { PageAdminUsersComponent } from './page-admin-users/page-admin-users.component';
+import { PageAdminServerComponent } from './page-admin-server/page-admin-server.component';
 
 @NgModule({
-  declarations: [PageAdminUsersComponent, PageAdminHomeComponent, CreateUserDialogComponent, PageAdminRecipesComponent],
+  declarations: [PageAdminUsersComponent, PageAdminHomeComponent, CreateUserDialogComponent, PageAdminRecipesComponent, PageAdminServerComponent],
   imports: [CoreModule, CommonModule, AdminRoutingModule, ComponentsModule],
 })
 export class AdminModule {}

@@ -1,0 +1,141 @@
+<a routerLink="/admin" class="icon-text back-link">
+    <mat-icon>arrow_back</mat-icon><span>Go back to admin area</span>
+</a>
+
+<h2 class="icon-text"><mat-icon>miscellaneous_services</mat-icon><span>Admin server</span></h2>
+
+<mat-spinner *ngIf="!serverConfig && !error" [diameter]="32"></mat-spinner>
+<p class="fg-warn" *ngIf="error">Error loading server config</p>
+
+<ng-container *ngIf="serverConfig && !error">
+    <details>
+        <summary>JSON Config</summary>
+        <pre>{{ serverConfig | json }}</pre>
+    </details>
+
+    <div class="config">
+        <h3>Basic</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Setting</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Root URL</td>
+                    <td>{{ serverConfig.root_url }}</td>
+                </tr>
+                <tr>
+                    <td>Production</td>
+                    <td>{{ serverConfig.production }}</td>
+                </tr>
+                <tr>
+                    <td>Image store path</td>
+                    <td>{{ serverConfig.image_store ? serverConfig.image_store : 'Default' }}</td>
+                </tr>
+                <tr>
+                    <td>Registration enabled</td>
+                    <td>{{ serverConfig.registration_enabled }}</td>
+                </tr>
+                <tr>
+                    <td>Email verification enabled</td>
+                    <td>{{ serverConfig.email_verification.enabled }}</td>
+                </tr>
+                <tr *ngIf="serverConfig.email_verification.enabled">
+                    <td>Email verification ttl (Time to live)</td>
+                    <td>{{ serverConfig.email_verification.ttl }} seconds</td>
+                </tr>
+                <tr>
+                    <td>hCaptcha enabled</td>
+                    <td>{{ serverConfig.hcaptcha.enabled }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Database</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Setting</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Host</td>
+                    <td>{{ serverConfig.database.host }}</td>
+                </tr>
+                <tr>
+                    <td>User</td>
+                    <td>{{ serverConfig.database.user }}</td>
+                </tr>
+                <tr>
+                    <td>Database</td>
+                    <td>{{ serverConfig.database.database }}</td>
+                </tr>
+                <tr>
+                    <td>Charset</td>
+                    <td>{{ serverConfig.database.charset }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Authentication</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Setting</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Token TTL (Time to live)</td>
+                    <td>{{ serverConfig.token.ttl }} seconds</td>
+                </tr>
+                <tr>
+                    <td>Password-reset TTL (Time to live)</td>
+                    <td>{{ serverConfig.password.reset_ttl }} seconds</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Mail</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Setting</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>SMTP Host</td>
+                    <td>{{ serverConfig.mail.smtp.host }}</td>
+                </tr>
+                <tr>
+                    <td>SMTP Port</td>
+                    <td>{{ serverConfig.mail.smtp.port }}</td>
+                </tr>
+                <tr>
+                    <td>SMTP Encrypted</td>
+                    <td>{{ serverConfig.mail.smtp.encrypted }}</td>
+                </tr>
+                <tr>
+                    <td>SMTP Username</td>
+                    <td>{{ serverConfig.mail.smtp.username }}</td>
+                </tr>
+                <tr>
+                    <td>Sender mail</td>
+                    <td>{{ serverConfig.mail.from.mail }}</td>
+                </tr>
+                <tr>
+                    <td>Sender name</td>
+                    <td>{{ serverConfig.mail.from.name }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</ng-container>

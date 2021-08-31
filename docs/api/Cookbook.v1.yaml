@@ -1608,6 +1608,128 @@ paths:
       security:
         - Token: []
         - QueryToken: []
+  /admin/server/config:
+    get:
+      summary: Get server config
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  root_url:
+                    type: string
+                  production:
+                    type: boolean
+                  database:
+                    type: object
+                    properties:
+                      host:
+                        type: string
+                      user:
+                        type: string
+                      database:
+                        type: string
+                      charset:
+                        type: string
+                    required:
+                      - host
+                      - user
+                      - database
+                      - charset
+                  image_store:
+                    type: string
+                    nullable: true
+                  token:
+                    type: object
+                    properties:
+                      ttl:
+                        type: integer
+                        minimum: 0
+                    required:
+                      - ttl
+                  password:
+                    type: object
+                    properties:
+                      reset_ttl:
+                        type: integer
+                        minimum: 0
+                    required:
+                      - reset_ttl
+                  registration_enabled:
+                    type: boolean
+                  email_verification:
+                    type: object
+                    properties:
+                      enabled:
+                        type: boolean
+                      ttl:
+                        type: integer
+                        minimum: 0
+                    required:
+                      - enabled
+                      - ttl
+                  hcaptcha:
+                    type: object
+                    properties:
+                      enabled:
+                        type: boolean
+                    required:
+                      - enabled
+                  mail:
+                    type: object
+                    properties:
+                      smtp:
+                        type: object
+                        properties:
+                          host:
+                            type: string
+                          port:
+                            type: integer
+                          encrypted:
+                            type: boolean
+                          username:
+                            type: string
+                        required:
+                          - host
+                          - port
+                          - encrypted
+                          - username
+                      from:
+                        type: object
+                        properties:
+                          mail:
+                            type: string
+                          name:
+                            type: string
+                        required:
+                          - mail
+                          - name
+                    required:
+                      - smtp
+                      - from
+                required:
+                  - root_url
+                  - production
+                  - database
+                  - image_store
+                  - token
+                  - password
+                  - registration_enabled
+                  - email_verification
+                  - hcaptcha
+                  - mail
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      operationId: get-admin-server-config
+      description: Get server config
+      security:
+        - Token: []
+        - QueryToken: []
 components:
   schemas:
     User:
