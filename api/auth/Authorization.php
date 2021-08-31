@@ -174,7 +174,7 @@ class Authorization {
 
                 $token = $request["authorization"];
 
-                if ($token === null) {
+                if (empty($token)) {
                     $token = $_GET['token'];
                 }
 

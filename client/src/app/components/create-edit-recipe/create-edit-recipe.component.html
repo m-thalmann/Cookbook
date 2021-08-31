@@ -1,6 +1,6 @@
 <div class="actions" *ngIf="editRecipe">
     <p *ngIf="editRecipe && user.user?.id !== editRecipe.user.id" class="owner">
-        <strong>Owner:</strong> {{ editRecipe.user.name }} ({{ editRecipe.user.id }})
+        <strong>Owner:</strong> {{ editRecipe.user.name }} (ID: {{ editRecipe.user.id }})
     </p>
     <a mat-stroked-button [routerLink]="disabled ? null : recipeURL" [disabled]="disabled"
         ><mat-icon>visibility</mat-icon> View recipe</a

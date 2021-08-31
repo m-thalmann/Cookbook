@@ -135,6 +135,12 @@ $group
         return $user;
     })
     ->delete('/', Authorization::middleware(), function () {
+        if(Authorization::user()->isAdmin){
+            if(User::query("isAdmin = 1")->count() === 1){
+                return Response::forbidden(["info" => "You are the last admin"]);
+            }
+        }
+
         if (User::query("id = ?", [Authorization::user()->id])->delete()) {
             return Response::ok();
         } else {

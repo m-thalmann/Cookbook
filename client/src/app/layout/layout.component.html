@@ -51,10 +51,10 @@
             <button mat-button (click)="showMenu = false; showSettingsDialog()">
                 <mat-icon>settings</mat-icon> Settings
             </button>
-            <button routerLink="/admin" mat-button (click)="showMenu = false" *ngIf="user.user?.isAdmin">
+            <a routerLink="/admin" mat-button (click)="showMenu = false" *ngIf="user.user?.isAdmin">
                 <mat-icon>admin_panel_settings</mat-icon> Admin area
-            </button>
-            <button routerLink="/logout" mat-button color="warn"><mat-icon>logout</mat-icon> Logout</button>
+            </a>
+            <a routerLink="/logout" mat-button color="warn"><mat-icon>logout</mat-icon> Logout</a>
         </div>
         <div class="account" *ngIf="!isLoggedin">
             <button mat-button color="accent" (click)="showMenu = false; showLoginRegisterDialog()">
@@ -103,10 +103,8 @@
 <mat-menu #userMenu="matMenu" xPosition="before" class="hide-mobile">
     <div mat-menu-item [disabled]="true"><mat-icon>email</mat-icon> {{ user.user?.email }}</div>
     <button mat-menu-item (click)="showSettingsDialog()"><mat-icon>settings</mat-icon> Settings</button>
-    <button routerLink="/admin" mat-menu-item *ngIf="user.user?.isAdmin">
+    <a routerLink="/admin" mat-menu-item *ngIf="user.user?.isAdmin">
         <mat-icon>admin_panel_settings</mat-icon> Admin area
-    </button>
-    <button routerLink="/logout" mat-menu-item class="fg-warn">
-        <mat-icon class="fg-warn">logout</mat-icon> Logout
-    </button>
+    </a>
+    <a routerLink="/logout" mat-menu-item class="fg-warn"> <mat-icon class="fg-warn">logout</mat-icon> Logout </a>
 </mat-menu>

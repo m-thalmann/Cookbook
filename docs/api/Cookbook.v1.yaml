@@ -120,6 +120,18 @@ paths:
           description: OK
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: You are the last admin (can't be deleted)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: You are the last admin
+                required:
+                  - info
         '500':
           description: Something went wrong
       operationId: delete-auth

@@ -148,7 +148,7 @@ header {
       display: block;
     }
 
-    a {
+    a:not([mat-button]) {
       color: inherit;
       text-decoration: none;
 
