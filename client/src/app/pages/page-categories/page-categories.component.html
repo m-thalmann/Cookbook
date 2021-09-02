@@ -10,18 +10,18 @@
 
 <ng-container *ngIf="isOverview">
     <div class="categories">
-        <a [routerLink]="getCategoryURL(category)" class="category" *ngFor="let category of categories">
-            <img src="assets/images/cookbook.svg" alt="Category Icon" />
-            {{ category }}
+        <a [routerLink]="getCategoryURL(category.name)" class="category" *ngFor="let category of categories">
+            <cb-image [src]="getThumbnailUrl(category.thumbnailRecipeId)"></cb-image>
+            <span>
+                {{ category.name }}
+            </span>
         </a>
 
         <ng-container *ngIf="loadingCategories">
-            <cb-skeleton circle></cb-skeleton>
-            <cb-skeleton circle></cb-skeleton>
-            <cb-skeleton circle></cb-skeleton>
-            <cb-skeleton circle></cb-skeleton>
-            <cb-skeleton circle></cb-skeleton>
-            <cb-skeleton circle></cb-skeleton>
+            <cb-skeleton></cb-skeleton>
+            <cb-skeleton></cb-skeleton>
+            <cb-skeleton></cb-skeleton>
+            <cb-skeleton></cb-skeleton>
         </ng-container>
     </div>
 

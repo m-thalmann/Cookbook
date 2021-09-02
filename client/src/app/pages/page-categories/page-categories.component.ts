@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from 'src/app/core/api/api.service';
-import { ApiOptions } from 'src/app/core/api/ApiInterfaces';
+import { ApiOptions, CategoryInformation } from 'src/app/core/api/ApiInterfaces';
 
 @Component({
   selector: 'cb-page-categories',
@@ -11,7 +11,7 @@ import { ApiOptions } from 'src/app/core/api/ApiInterfaces';
 export class PageCategoriesComponent {
   category: string | null = null;
 
-  categories: string[] | null = null;
+  categories: CategoryInformation[] | null = null;
 
   loadingCategories = false;
   error = false;
@@ -58,5 +58,13 @@ export class PageCategoriesComponent {
 
   getCategoryURL(category: string) {
     return '/categories/' + encodeURIComponent(category);
+  }
+
+  getThumbnailUrl(recipeId: number | null) {
+    if (recipeId !== null) {
+      return this.api.getRecipeImageURL(recipeId, 0, 500);
+    } else {
+      return 'assets/images/cookbook.svg';
+    }
   }
 }

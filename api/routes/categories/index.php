@@ -3,6 +3,7 @@
 namespace API\routes;
 
 use API\auth\Authorization;
+use API\models\Recipe;
 use PAF\Model\Model;
 
 $group->get('/', Authorization::middleware(false), function () {
@@ -24,6 +25,24 @@ $group->get('/', Authorization::middleware(false), function () {
     }
 
     return array_map(function ($category) {
-        return $category["category"];
+        $thumbnailRecipeData = Recipe::getQueryForUser(
+            "category = :category AND EXISTS (SELECT * FROM recipe_images WHERE recipeId = recipes.id)",
+            ["category" => $category["category"]],
+            Authorization::user(),
+            false
+        )
+            ->limit(1)
+            ->getRaw(false);
+
+        $thumbnailRecipe = null;
+
+        if ($thumbnailRecipeData && count($thumbnailRecipeData) > 0) {
+            $thumbnailRecipe = $thumbnailRecipeData[0]["id"];
+        }
+
+        return [
+            "name" => $category["category"],
+            "thumbnailRecipeId" => $thumbnailRecipe,
+        ];
     }, $stmt->fetchAll());
 });

@@ -1263,8 +1263,19 @@ paths:
               schema:
                 type: array
                 items:
-                  type: string
-                  example: 'Cakes'
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: 'Cakes'
+                    thumbnailRecipeId:
+                      type: integer
+                      nullable: true
+                      minimum: 0
+                      description: The id of the recipe to take the thumbnail-image from
+                  required:
+                    - name
+                    - thumbnailRecipeId
                 uniqueItems: true
       operationId: get-categories
       description: Return all available categories

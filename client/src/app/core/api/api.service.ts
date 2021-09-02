@@ -21,6 +21,7 @@ import {
   UserFull,
   ServerInformation,
   ServerConfig,
+  CategoryInformation,
 } from './ApiInterfaces';
 import { ApiResponse } from './ApiResponse';
 
@@ -374,7 +375,7 @@ export class ApiService {
   // Categories
 
   getCategories() {
-    return this.get<string[]>(`${this.URL}/categories`);
+    return this.get<CategoryInformation[]>(`${this.URL}/categories`);
   }
 
   // Admin

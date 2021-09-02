@@ -140,8 +140,8 @@ export class EditRecipeInformationComponent {
   async loadCategoryList() {
     let res = await this.api.getCategories();
 
-    if (res.isOK()) {
-      this.categoryList = res.value;
+    if (res.isOK() && res.value) {
+      this.categoryList = res.value.map((categoryInfo) => categoryInfo.name);
 
       this.filteredCategoryList = this.recipeForm.get('category')!.valueChanges.pipe(
         startWith(''),

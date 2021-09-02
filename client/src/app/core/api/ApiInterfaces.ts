@@ -92,6 +92,11 @@ export interface ListIngredient {
   unit: string | null;
 }
 
+export interface CategoryInformation {
+  name: string;
+  thumbnailRecipeId: number | null;
+}
+
 export interface ServerInformation {
   users: {
     unverified: number;
