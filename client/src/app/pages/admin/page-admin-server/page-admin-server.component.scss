@@ -5,8 +5,22 @@
   display: block;
 }
 
+mat-spinner {
+  margin: 0 auto 1em;
+}
+
+h2 mat-spinner {
+  margin: 0 0 0 1em;
+  display: inline-block;
+}
+
 details {
   margin-bottom: 1em;
+
+  summary {
+    cursor: pointer;
+    text-align: center;
+  }
 
   pre {
     padding: 1em;
@@ -18,25 +32,51 @@ details {
   }
 }
 
-table {
-  width: 100%;
-  max-width: 500px;
-
-  margin-bottom: 1em;
-
-  border-collapse: collapse;
-
-  th {
-    font-weight: 500;
+.config {
+  &.loading {
+    table {
+      opacity: 0.5;
+    }
   }
 
-  th,
-  td {
-    border: 1px solid #{$foreground}25;
-    padding: 0.25em 0.5em;
+  h3 {
+    text-align: center;
   }
 
-  tbody tr:nth-child(odd) {
-    background: #{$foreground}20;
+  table {
+    width: 100%;
+    max-width: 500px;
+
+    margin: 0 auto 1em;
+
+    border-collapse: collapse;
+
+    th {
+      font-weight: 500;
+
+      &:last-child {
+        width: 3.5em;
+      }
+    }
+
+    td:last-child {
+      button {
+        height: 1.5rem;
+
+        mat-icon {
+          font-size: 1rem;
+        }
+      }
+    }
+
+    th,
+    td {
+      border: 1px solid #{$foreground}25;
+      padding: 0.25em 0.5em;
+    }
+
+    tbody tr:nth-child(odd) {
+      background: #{$foreground}20;
+    }
   }
 }

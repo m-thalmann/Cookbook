@@ -108,7 +108,7 @@ export class ApiService {
       if (ret.headers.has('X-Logout')) {
         this.user.logout('unauthorized', null);
       }
-    } catch (e) {
+    } catch (e: any) {
       return this.handleError(e);
     }
 
@@ -432,6 +432,9 @@ export class ApiService {
       },
       getServerConfig: () => {
         return this.get<ServerConfig>(`${this.URL}/admin/server/config`);
+      },
+      updateServerConfig: (path: string, value: any) => {
+        return this.put<any>(`${this.URL}/admin/server/config`, { path: path, value: value });
       },
     };
   }

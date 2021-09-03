@@ -2,7 +2,11 @@
     <mat-icon>arrow_back</mat-icon><span>Go back to admin area</span>
 </a>
 
-<h2 class="icon-text"><mat-icon>miscellaneous_services</mat-icon><span>Admin server</span></h2>
+<h2 class="icon-text">
+    <mat-icon>miscellaneous_services</mat-icon>
+    <span>Admin server</span>
+    <mat-spinner *ngIf="loading" [diameter]="24"></mat-spinner>
+</h2>
 
 <mat-spinner *ngIf="!serverConfig && !error" [diameter]="32"></mat-spinner>
 <p class="fg-warn" *ngIf="error">Error loading server config</p>
@@ -13,43 +17,96 @@
         <pre>{{ serverConfig | json }}</pre>
     </details>
 
-    <div class="config">
+    <div class="config" [class.loading]="loading">
         <h3 class="icon-text"><mat-icon>tune</mat-icon><span>Basic</span></h3>
         <table>
             <thead>
                 <tr>
                     <th>Setting</th>
                     <th>Value</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>Root URL</td>
                     <td>{{ serverConfig.root_url }}</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td>Production</td>
-                    <td>{{ serverConfig.production | json }}</td>
+                    <td>
+                        <select [value]="serverConfig.production" disabled>
+                            <option value="true">yes</option>
+                            <option value="false">no</option>
+                        </select>
+                    </td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td>Image store path</td>
                     <td>{{ serverConfig.image_store ? serverConfig.image_store : 'Default' }}</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td>Registration enabled</td>
-                    <td>{{ serverConfig.registration_enabled | json }}</td>
+                    <td>
+                        <select
+                            [value]="serverConfig.registration_enabled"
+                            (change)="updateValueFromEvent('registration_enabled', $event)"
+                            [disabled]="loading"
+                        >
+                            <option value="true">yes</option>
+                            <option value="false">no</option>
+                        </select>
+                    </td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td>Email verification enabled</td>
-                    <td>{{ serverConfig['email_verification.enabled'] | json }}</td>
+                    <td>
+                        <select
+                            [value]="serverConfig['email_verification.enabled']"
+                            (change)="updateValueFromEvent('email_verification.enabled', $event)"
+                            [disabled]="loading"
+                        >
+                            <option value="true">yes</option>
+                            <option value="false">no</option>
+                        </select>
+                    </td>
+                    <td></td>
                 </tr>
                 <tr *ngIf="serverConfig['email_verification.enabled']">
                     <td>Email verification ttl (Time to live)</td>
                     <td>{{ serverConfig['email_verification.ttl'] }} seconds</td>
+                    <td>
+                        <button (click)="openEditDialog('email_verification.ttl', 'number')" [disabled]="loading">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
                 </tr>
                 <tr>
                     <td>hCaptcha enabled</td>
-                    <td>{{ serverConfig['hcaptcha.enabled'] | json }}</td>
+                    <td>
+                        <select
+                            [value]="serverConfig['hcaptcha.enabled']"
+                            (change)="updateValueFromEvent('hcaptcha.enabled', $event)"
+                            [disabled]="loading"
+                        >
+                            <option value="true">yes</option>
+                            <option value="false">no</option>
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr *ngIf="serverConfig['hcaptcha.enabled']">
+                    <td>hCaptcha secret</td>
+                    <td [innerHTML]="getHTMLBullets(16)"></td>
+                    <td>
+                        <button (click)="openEditDialog('hcaptcha.secret')" [disabled]="loading">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -60,24 +117,34 @@
                 <tr>
                     <th>Setting</th>
                     <th>Value</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>Host</td>
                     <td>{{ serverConfig['database.host'] }}</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td>User</td>
                     <td>{{ serverConfig['database.user'] }}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Password</td>
+                    <td [innerHTML]="getHTMLBullets(10)"></td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td>Database</td>
                     <td>{{ serverConfig['database.database'] }}</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td>Charset</td>
                     <td>{{ serverConfig['database.charset'] }}</td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>
@@ -88,16 +155,45 @@
                 <tr>
                     <th>Setting</th>
                     <th>Value</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
+                    <td>Token secret</td>
+                    <td [innerHTML]="getHTMLBullets(16)"></td>
+                    <td>
+                        <button (click)="openEditDialog('token.secret')" [disabled]="loading">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
                     <td>Token TTL (Time to live)</td>
                     <td>{{ serverConfig['token.ttl'] }} seconds</td>
+                    <td>
+                        <button (click)="openEditDialog('token.ttl', 'number')" [disabled]="loading">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Password secret</td>
+                    <td [innerHTML]="getHTMLBullets(16)"></td>
+                    <td>
+                        <button (click)="openEditDialog('password.secret')" [disabled]="loading">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
                 </tr>
                 <tr>
                     <td>Password-reset TTL (Time to live)</td>
                     <td>{{ serverConfig['password.reset_ttl'] }} seconds</td>
+                    <td>
+                        <button (click)="openEditDialog('password.reset_ttl', 'number')" [disabled]="loading">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -108,32 +204,79 @@
                 <tr>
                     <th>Setting</th>
                     <th>Value</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>SMTP Host</td>
                     <td>{{ serverConfig['mail.smtp.host'] }}</td>
+                    <td>
+                        <button (click)="openEditDialog('mail.smtp.host')" [disabled]="loading">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
                 </tr>
                 <tr>
                     <td>SMTP Port</td>
-                    <td>{{ serverConfig['mail.smtp.port'] }}</td>
+                    <td>
+                        {{ serverConfig['mail.smtp.port'] }}
+                    </td>
+                    <td>
+                        <button (click)="openEditDialog('mail.smtp.port', 'number')" [disabled]="loading">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
                 </tr>
                 <tr>
                     <td>SMTP Encrypted</td>
-                    <td>{{ serverConfig['mail.smtp.encrypted'] | json }}</td>
+                    <td>
+                        <select
+                            [value]="serverConfig['mail.smtp.encrypted']"
+                            (change)="updateValueFromEvent('mail.smtp.encrypted', $event)"
+                            [disabled]="loading"
+                        >
+                            <option value="true">yes</option>
+                            <option value="false">no</option>
+                        </select>
+                    </td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td>SMTP Username</td>
                     <td>{{ serverConfig['mail.smtp.username'] }}</td>
+                    <td>
+                        <button (click)="openEditDialog('mail.smtp.username')" [disabled]="loading">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>SMTP Password</td>
+                    <td [innerHTML]="getHTMLBullets(10)"></td>
+                    <td>
+                        <button (click)="openEditDialog('mail.smtp.password', 'password')" [disabled]="loading">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
                 </tr>
                 <tr>
                     <td>Sender mail</td>
                     <td>{{ serverConfig['mail.from.mail'] }}</td>
+                    <td>
+                        <button (click)="openEditDialog('mail.from.mail')" [disabled]="loading">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
                 </tr>
                 <tr>
                     <td>Sender name</td>
                     <td>{{ serverConfig['mail.from.name'] }}</td>
+                    <td>
+                        <button (click)="openEditDialog('mail.from.name')" [disabled]="loading">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>

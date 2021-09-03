@@ -2,44 +2,7 @@
 
 namespace API\config;
 
-use PAF\Model\Database;
-
 class Config {
-    const KEYS = [
-        "root_url",
-        "production",
-        "database.host",
-        "database.user",
-        "database.password",
-        "database.database",
-        "database.charset",
-        "image_store",
-        "token.secret",
-        "token.ttl",
-        "password.secret",
-        "password.reset_ttl",
-        "registration_enabled",
-        "email_verification.enabled",
-        "email_verification.ttl",
-        "hcaptcha.enabled",
-        "hcaptcha.secret",
-        "mail.smtp.host",
-        "mail.smtp.port",
-        "mail.smtp.encrypted",
-        "mail.smtp.username",
-        "mail.smtp.password",
-        "mail.from.mail",
-        "mail.from.name",
-    ];
-
-    const HIDDEN_KEYS = [
-        "database.password",
-        "token.secret",
-        "password.secret",
-        "hcaptcha.secret",
-        "mail.smtp.password",
-    ];
-
     private static $baseConfig = null;
     private static $config = null;
 
@@ -62,47 +25,11 @@ class Config {
 
     /**
      * Loads the config from the database
+     *
+     * @see ConfigSettings::loadConfig()
      */
     private static function loadConfig() {
-        self::$config = null;
-
-        $db = Database::get();
-
-        $stmt = $db->query("SELECT * FROM config");
-
-        if ($stmt === false) {
-            throw new \Exception('Config could not be loaded');
-        }
-
-        $config = [];
-
-        foreach ($stmt->fetchAll() as $row) {
-            $value = null;
-
-            if ($row["value"] !== null) {
-                switch ($row["datatype"]) {
-                    case 'boolean':
-                        $value = strcmp($row["value"], "true") === 0;
-                        break;
-                    case 'integer':
-                        $value = intval($row["value"]);
-                        break;
-                    case 'number':
-                        $value = floatval($row["value"]);
-                        break;
-                    default:
-                        $value = $row["value"];
-                }
-            }
-
-            $config[$row["key"]] = [
-                "key" => $row["key"],
-                "value" => $value,
-                "datatype" => $row["datatype"],
-            ];
-        }
-
-        self::$config = $config;
+        self::$config = ConfigSettings::loadConfig();
     }
 
     /**
@@ -120,6 +47,13 @@ class Config {
 
         if (array_key_exists($path, self::$config)) {
             return self::$config[$path]["value"];
+        }
+
+        if (
+            array_key_exists($path, ConfigSettings::SETTINGS) &&
+            !ConfigSettings::SETTINGS[$path]["baseConfig"]
+        ) {
+            return ConfigSettings::SETTINGS[$path]["defaultValue"];
         }
 
         return self::getBaseConfig($path, $default);
@@ -162,6 +96,27 @@ class Config {
         }
 
         return $config;
+    }
+
+    /**
+     * Edits a config-value and reloads the values on success
+     *
+     * @param string $path The config-path
+     * @param mixed $value The value to set
+     *
+     * @see ConfigSettings::saveConfigValue()
+     *
+     * @throws \InvalidArgumentException If the path is not editable
+     *
+     * @return boolean Whether the value was saved or not
+     */
+    public static function edit($path, $value) {
+        if (ConfigSettings::saveConfigValue($path, $value)) {
+            self::loadConfig();
+            return true;
+        }
+
+        return false;
     }
 }
 

@@ -1713,6 +1713,64 @@ paths:
       security:
         - Token: []
         - QueryToken: []
+    put:
+      summary: Update server config
+      tags:
+        - Admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                path:
+                  type: string
+                  description: The config-path
+                  example: database.user
+                value:
+                  oneOf:
+                    - type: string
+                    - type: boolean
+                    - type: number
+                  description: The new value
+                  example: cookbook
+              required:
+                - path
+                - value
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Path and/or value missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: Path and/or value missing
+                required:
+                  - info
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Setting not editable (is base-config-value)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: Setting not editable
+                required:
+                  - info
+      operationId: put-admin-server-config
+      description: Update server config
+      security:
+        - Token: []
+        - QueryToken: []
 components:
   schemas:
     User:

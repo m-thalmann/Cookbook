@@ -10,7 +10,13 @@ import { PageAdminUsersComponent } from './page-admin-users/page-admin-users.com
 import { PageAdminServerComponent } from './page-admin-server/page-admin-server.component';
 
 @NgModule({
-  declarations: [PageAdminUsersComponent, PageAdminHomeComponent, CreateUserDialogComponent, PageAdminRecipesComponent, PageAdminServerComponent],
+  declarations: [
+    PageAdminUsersComponent,
+    PageAdminHomeComponent,
+    CreateUserDialogComponent,
+    PageAdminRecipesComponent,
+    PageAdminServerComponent,
+  ],
   imports: [CoreModule, CommonModule, AdminRoutingModule, ComponentsModule],
 })
 export class AdminModule {}
