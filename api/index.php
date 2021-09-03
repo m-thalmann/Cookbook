@@ -16,22 +16,22 @@ try {
     // Autoload
     require_once __DIR__ . '/autoload.php';
 
-    if (Config::get("production", true)) {
+    if (Config::getBaseConfig("production", true)) {
         error_reporting(E_ALL ^ E_WARNING);
     }
 
     // Database
     Database::setDatabase(
         'mysql',
-        Config::get('database.host'),
-        Config::get('database.database'),
-        Config::get('database.user'),
-        Config::get('database.password'),
-        Config::get('database.charset')
+        Config::getBaseConfig('database.host'),
+        Config::getBaseConfig('database.database'),
+        Config::getBaseConfig('database.user'),
+        Config::getBaseConfig('database.password'),
+        Config::getBaseConfig('database.charset')
     );
 
     // Constants
-    define('ROOT_URL', Config::get('root_url'));
+    define('ROOT_URL', Config::getBaseConfig('root_url'));
 
     define('ROOT_DIR', __DIR__);
 

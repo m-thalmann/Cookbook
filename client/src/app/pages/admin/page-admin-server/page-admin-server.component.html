@@ -29,7 +29,7 @@
                 </tr>
                 <tr>
                     <td>Production</td>
-                    <td>{{ serverConfig.production }}</td>
+                    <td>{{ serverConfig.production | json }}</td>
                 </tr>
                 <tr>
                     <td>Image store path</td>
@@ -37,19 +37,19 @@
                 </tr>
                 <tr>
                     <td>Registration enabled</td>
-                    <td>{{ serverConfig.registration_enabled }}</td>
+                    <td>{{ serverConfig.registration_enabled | json }}</td>
                 </tr>
                 <tr>
                     <td>Email verification enabled</td>
-                    <td>{{ serverConfig.email_verification.enabled }}</td>
+                    <td>{{ serverConfig['email_verification.enabled'] | json }}</td>
                 </tr>
-                <tr *ngIf="serverConfig.email_verification.enabled">
+                <tr *ngIf="serverConfig['email_verification.enabled']">
                     <td>Email verification ttl (Time to live)</td>
-                    <td>{{ serverConfig.email_verification.ttl }} seconds</td>
+                    <td>{{ serverConfig['email_verification.ttl'] }} seconds</td>
                 </tr>
                 <tr>
                     <td>hCaptcha enabled</td>
-                    <td>{{ serverConfig.hcaptcha.enabled }}</td>
+                    <td>{{ serverConfig['hcaptcha.enabled'] | json }}</td>
                 </tr>
             </tbody>
         </table>
@@ -65,19 +65,19 @@
             <tbody>
                 <tr>
                     <td>Host</td>
-                    <td>{{ serverConfig.database.host }}</td>
+                    <td>{{ serverConfig['database.host'] }}</td>
                 </tr>
                 <tr>
                     <td>User</td>
-                    <td>{{ serverConfig.database.user }}</td>
+                    <td>{{ serverConfig['database.user'] }}</td>
                 </tr>
                 <tr>
                     <td>Database</td>
-                    <td>{{ serverConfig.database.database }}</td>
+                    <td>{{ serverConfig['database.database'] }}</td>
                 </tr>
                 <tr>
                     <td>Charset</td>
-                    <td>{{ serverConfig.database.charset }}</td>
+                    <td>{{ serverConfig['database.charset'] }}</td>
                 </tr>
             </tbody>
         </table>
@@ -93,11 +93,11 @@
             <tbody>
                 <tr>
                     <td>Token TTL (Time to live)</td>
-                    <td>{{ serverConfig.token.ttl }} seconds</td>
+                    <td>{{ serverConfig['token.ttl'] }} seconds</td>
                 </tr>
                 <tr>
                     <td>Password-reset TTL (Time to live)</td>
-                    <td>{{ serverConfig.password.reset_ttl }} seconds</td>
+                    <td>{{ serverConfig['password.reset_ttl'] }} seconds</td>
                 </tr>
             </tbody>
         </table>
@@ -113,27 +113,27 @@
             <tbody>
                 <tr>
                     <td>SMTP Host</td>
-                    <td>{{ serverConfig.mail.smtp.host }}</td>
+                    <td>{{ serverConfig['mail.smtp.host'] }}</td>
                 </tr>
                 <tr>
                     <td>SMTP Port</td>
-                    <td>{{ serverConfig.mail.smtp.port }}</td>
+                    <td>{{ serverConfig['mail.smtp.port'] }}</td>
                 </tr>
                 <tr>
                     <td>SMTP Encrypted</td>
-                    <td>{{ serverConfig.mail.smtp.encrypted }}</td>
+                    <td>{{ serverConfig['mail.smtp.encrypted'] | json }}</td>
                 </tr>
                 <tr>
                     <td>SMTP Username</td>
-                    <td>{{ serverConfig.mail.smtp.username }}</td>
+                    <td>{{ serverConfig['mail.smtp.username'] }}</td>
                 </tr>
                 <tr>
                     <td>Sender mail</td>
-                    <td>{{ serverConfig.mail.from.mail }}</td>
+                    <td>{{ serverConfig['mail.from.mail'] }}</td>
                 </tr>
                 <tr>
                     <td>Sender name</td>
-                    <td>{{ serverConfig.mail.from.name }}</td>
+                    <td>{{ serverConfig['mail.from.name'] }}</td>
                 </tr>
             </tbody>
         </table>

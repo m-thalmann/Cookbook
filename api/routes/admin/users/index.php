@@ -7,9 +7,9 @@ use API\config\Config;
 use API\inc\Functions;
 use API\inc\Mailer;
 use API\models\User;
+use PAF\Model\Database;
 use PAF\Model\DuplicateException;
 use PAF\Model\InvalidException;
-use PAF\Model\Model;
 use PAF\Router\Response;
 
 $group
@@ -58,7 +58,7 @@ $group
             unset($data["verifyEmail"]);
         }
 
-        Model::db()->beginTransaction();
+        Database::get()->beginTransaction();
 
         $user = User::fromValues($data);
 
@@ -81,7 +81,7 @@ $group
 
         if ($verifyEmail && Config::get("email_verification.enabled")) {
             if (!Mailer::sendEmailVerification($user)) {
-                Model::db()->rollBack();
+                Database::get()->rollBack();
 
                 return Response::error([
                     "info" => "Error sending verification-email",
@@ -89,7 +89,7 @@ $group
             }
         }
 
-        Model::db()->commit();
+        Database::get()->commit();
 
         return Response::created($user->jsonSerialize(true));
     })

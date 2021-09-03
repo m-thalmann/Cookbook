@@ -4,13 +4,13 @@ namespace API\routes;
 
 use API\auth\Authorization;
 use API\models\Ingredient;
+use PAF\Model\Database;
 use PAF\Model\InvalidException;
-use PAF\Model\Model;
 use PAF\Router\Response;
 
 $group
     ->get('/list', Authorization::middleware(), function () {
-        $stmt = Model::db()->prepare(
+        $stmt = Database::get()->prepare(
             "SELECT DISTINCT `name`, `unit` FROM ingredients WHERE recipeId IN (SELECT id FROM recipes WHERE userId = ?)"
         );
 

@@ -1648,104 +1648,64 @@ paths:
                     type: string
                   production:
                     type: boolean
-                  database:
-                    type: object
-                    properties:
-                      host:
-                        type: string
-                      user:
-                        type: string
-                      database:
-                        type: string
-                      charset:
-                        type: string
-                    required:
-                      - host
-                      - user
-                      - database
-                      - charset
+                  database.host:
+                    type: string
+                  database.user:
+                    type: string
+                  database.database:
+                    type: string
+                  database.charset:
+                    type: string
                   image_store:
                     type: string
                     nullable: true
-                  token:
-                    type: object
-                    properties:
-                      ttl:
-                        type: integer
-                        minimum: 0
-                    required:
-                      - ttl
-                  password:
-                    type: object
-                    properties:
-                      reset_ttl:
-                        type: integer
-                        minimum: 0
-                    required:
-                      - reset_ttl
+                  token.ttl:
+                    type: integer
+                    minimum: 0
+                  password.reset_ttl:
+                    type: integer
+                    minimum: 0
                   registration_enabled:
                     type: boolean
-                  email_verification:
-                    type: object
-                    properties:
-                      enabled:
-                        type: boolean
-                      ttl:
-                        type: integer
-                        minimum: 0
-                    required:
-                      - enabled
-                      - ttl
-                  hcaptcha:
-                    type: object
-                    properties:
-                      enabled:
-                        type: boolean
-                    required:
-                      - enabled
-                  mail:
-                    type: object
-                    properties:
-                      smtp:
-                        type: object
-                        properties:
-                          host:
-                            type: string
-                          port:
-                            type: integer
-                          encrypted:
-                            type: boolean
-                          username:
-                            type: string
-                        required:
-                          - host
-                          - port
-                          - encrypted
-                          - username
-                      from:
-                        type: object
-                        properties:
-                          mail:
-                            type: string
-                          name:
-                            type: string
-                        required:
-                          - mail
-                          - name
-                    required:
-                      - smtp
-                      - from
+                  email_verification.enabled:
+                    type: boolean
+                  email_verification.ttl:
+                    type: integer
+                    minimum: 0
+                  hcaptcha.enabled:
+                    type: boolean
+                  mail.smtp.host:
+                    type: string
+                  mail.smtp.port:
+                    type: integer
+                  mail.smtp.encrypted:
+                    type: boolean
+                  mail.smtp.username:
+                    type: string
+                  mail.from.mail:
+                    type: string
+                  mail.from.name:
+                    type: string
                 required:
                   - root_url
                   - production
-                  - database
+                  - database.host
+                  - database.user
+                  - database.database
+                  - database.charset
                   - image_store
-                  - token
-                  - password
+                  - token.ttl
+                  - password.reset_ttl
                   - registration_enabled
-                  - email_verification
-                  - hcaptcha
-                  - mail
+                  - email_verification.enabled
+                  - email_verification.ttl
+                  - hcaptcha.enabled
+                  - mail.smtp.host
+                  - mail.smtp.port
+                  - mail.smtp.encrypted
+                  - mail.smtp.username
+                  - mail.from.mail
+                  - mail.from.name
         '401':
           $ref: '#/components/responses/Unauthorized'
       operationId: get-admin-server-config

@@ -1,3 +1,9 @@
+CREATE TABLE `config` (
+  `key` varchar(50) NOT NULL PRIMARY KEY,
+  `value` text,
+  `datatype` enum('string', 'boolean', 'integer', 'number')
+)
+
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `email` varchar(100) NOT NULL,

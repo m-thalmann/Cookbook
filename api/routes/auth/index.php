@@ -8,9 +8,9 @@ use API\inc\Functions;
 use API\inc\Mailer;
 use API\models\ResetPassword;
 use API\models\User;
+use PAF\Model\Database;
 use PAF\Model\DuplicateException;
 use PAF\Model\InvalidException;
-use PAF\Model\Model;
 use PAF\Router\Response;
 
 $group
@@ -72,7 +72,7 @@ $group
             }
         }
 
-        Model::db()->beginTransaction();
+        Database::get()->beginTransaction();
 
         $user = User::fromValues($data);
 
@@ -88,7 +88,7 @@ $group
 
         if (Config::get("email_verification.enabled")) {
             if (!Mailer::sendEmailVerification($user)) {
-                Model::db()->rollBack();
+                Database::get()->rollBack();
 
                 return Response::error([
                     "info" => "Error sending verification-email",
@@ -96,7 +96,7 @@ $group
             }
         }
 
-        Model::db()->commit();
+        Database::get()->commit();
 
         return Response::created([
             "info" => "Authorized",
@@ -135,9 +135,11 @@ $group
         return $user;
     })
     ->delete('/', Authorization::middleware(), function () {
-        if(Authorization::user()->isAdmin){
-            if(User::query("isAdmin = 1")->count() === 1){
-                return Response::forbidden(["info" => "You are the last admin"]);
+        if (Authorization::user()->isAdmin) {
+            if (User::query("isAdmin = 1")->count() === 1) {
+                return Response::forbidden([
+                    "info" => "You are the last admin",
+                ]);
             }
         }
 

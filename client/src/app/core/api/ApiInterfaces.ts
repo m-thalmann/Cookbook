@@ -113,39 +113,23 @@ export interface ServerInformation {
 export interface ServerConfig {
   root_url: string;
   production: boolean;
-  database: {
-    host: string;
-    user: string;
-    database: string;
-    charset: string;
-  };
-  image_store: string;
-  token: {
-    ttl: number;
-  };
-  password: {
-    reset_ttl: number;
-  };
+  'database.host': string;
+  'database.user': string;
+  'database.database': string;
+  'database.charset': string;
+  image_store: string | null;
+  'token.ttl': number;
+  'password.reset_ttl': number;
   registration_enabled: boolean;
-  email_verification: {
-    enabled: boolean;
-    ttl: number;
-  };
-  hcaptcha: {
-    enabled: boolean;
-  };
-  mail: {
-    smtp: {
-      host: string;
-      port: number;
-      encrypted: boolean;
-      username: string;
-    };
-    from: {
-      mail: string;
-      name: string;
-    };
-  };
+  'email_verification.enabled': boolean;
+  'email_verification.ttl': number;
+  'hcaptcha.enabled': boolean;
+  'mail.smtp.host': string;
+  'mail.smtp.port': number;
+  'mail.smtp.encrypted': boolean;
+  'mail.smtp.username': string;
+  'mail.from.mail': string;
+  'mail.from.name': string;
 }
 
 export interface Pagination<T> {

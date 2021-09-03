@@ -2,30 +2,139 @@
 
 namespace API\config;
 
+use PAF\Model\Database;
+
 class Config {
+    const KEYS = [
+        "root_url",
+        "production",
+        "database.host",
+        "database.user",
+        "database.password",
+        "database.database",
+        "database.charset",
+        "image_store",
+        "token.secret",
+        "token.ttl",
+        "password.secret",
+        "password.reset_ttl",
+        "registration_enabled",
+        "email_verification.enabled",
+        "email_verification.ttl",
+        "hcaptcha.enabled",
+        "hcaptcha.secret",
+        "mail.smtp.host",
+        "mail.smtp.port",
+        "mail.smtp.encrypted",
+        "mail.smtp.username",
+        "mail.smtp.password",
+        "mail.from.mail",
+        "mail.from.name",
+    ];
+
+    const HIDDEN_KEYS = [
+        "database.password",
+        "token.secret",
+        "password.secret",
+        "hcaptcha.secret",
+        "mail.smtp.password",
+    ];
+
+    private static $baseConfig = null;
     private static $config = null;
 
-    public static function load($file) {
-        if (self::$config !== null) {
+    /**
+     * Loads the base-config from the json-file
+     *
+     * @param string $file The path to the json-config-file
+     */
+    public static function loadBaseConfig($file) {
+        if (self::$baseConfig !== null) {
             return;
         }
 
-        self::$config = @json_decode(file_get_contents($file), true);
+        self::$baseConfig = @json_decode(file_get_contents($file), true);
 
-        if (self::$config === null || self::$config === false) {
-            throw new \Exception('Config could not be loaded');
+        if (self::$baseConfig === null || self::$baseConfig === false) {
+            throw new \Exception('Base-Config could not be loaded');
         }
     }
 
     /**
-     * Gets a value from the config
+     * Loads the config from the database
+     */
+    private static function loadConfig() {
+        self::$config = null;
+
+        $db = Database::get();
+
+        $stmt = $db->query("SELECT * FROM config");
+
+        if ($stmt === false) {
+            throw new \Exception('Config could not be loaded');
+        }
+
+        $config = [];
+
+        foreach ($stmt->fetchAll() as $row) {
+            $value = null;
+
+            if ($row["value"] !== null) {
+                switch ($row["datatype"]) {
+                    case 'boolean':
+                        $value = strcmp($row["value"], "true") === 0;
+                        break;
+                    case 'integer':
+                        $value = intval($row["value"]);
+                        break;
+                    case 'number':
+                        $value = floatval($row["value"]);
+                        break;
+                    default:
+                        $value = $row["value"];
+                }
+            }
+
+            $config[$row["key"]] = [
+                "key" => $row["key"],
+                "value" => $value,
+                "datatype" => $row["datatype"],
+            ];
+        }
+
+        self::$config = $config;
+    }
+
+    /**
+     * Gets a value from the config (first checking the values from the database)
      *
      * @param string $path The path to the value; if nested use '.'
+     * @param mixed $default The default value to return, if the path is not found
      *
      * @return mixed|null The value or null if not found
      */
     public static function get($path, $default = null) {
-        $curr = &self::$config;
+        if (self::$config === null) {
+            self::loadConfig();
+        }
+
+        if (array_key_exists($path, self::$config)) {
+            return self::$config[$path]["value"];
+        }
+
+        return self::getBaseConfig($path, $default);
+    }
+
+    /**
+     * Gets a value from the base-config
+     *
+     * @param string $path The path to the value; if nested use '.'
+     * @param mixed $default The default value to return, if the path is not found
+     *
+     * @return mixed|null The value or null if not found
+     */
+    public static function getBaseConfig($path, $default = null) {
+        $curr = &self::$baseConfig;
 
         foreach (explode('.', $path) as $key) {
             if (!isset($curr[$key])) {
@@ -39,35 +148,21 @@ class Config {
     }
 
     /**
-     * Returns the loaded config
-     * 
-     * @param array Hidden paths that are not returned
-     * 
-     * @return mixed|null The loaded config
+     * Gets multiple values from the config (first checking the values from the database)
+     *
+     * @param string[] $paths The paths to the values; if nested use '.'
+     *
+     * @return array The values
      */
-    public static function getConfig($hiddenPaths = []){
-        $config = self::$config;
+    public static function getConfig($paths) {
+        $config = [];
 
-        foreach($hiddenPaths as $hiddenPath){
-            $curr = &$config;
-
-            $path = explode('.', $hiddenPath);
-
-            for($i = 0; $i < count($path); $i++){
-                if (!isset($curr[$path[$i]])) {
-                    break;
-                }
-    
-                if($i + 1 < count($path)){
-                    $curr = &$curr[$path[$i]];
-                }else{
-                    unset($curr[$path[$i]]);
-                }
-            }
+        foreach ($paths as $path) {
+            $config[$path] = self::get($path);
         }
 
         return $config;
     }
 }
 
-Config::load(__DIR__ . "/config.json");
+Config::loadBaseConfig(__DIR__ . "/config.json");

@@ -8,35 +8,5 @@
     "database": "database_name",
     "charset": "utf8"
   },
-  "image_store": null,
-  "token": {
-    "secret": "86nYFNtuqMxGCG3v7TQuoFhgMSwil3hP",
-    "ttl": 604800
-  },
-  "password": {
-    "secret": "320fhjewkbgv430ghwogvwb132kr21bj",
-    "reset_ttl": 600
-  },
-  "registration_enabled": true,
-  "email_verification": {
-    "enabled": true,
-    "ttl": 3600
-  },
-  "hcaptcha": {
-    "enabled": true,
-    "secret": "0x0000000000000000000000000000000000000000"
-  },
-  "mail": {
-    "smtp": {
-      "host": "smtp.example.com",
-      "port": "465",
-      "encrypted": true,
-      "username": "cookbook@example.com",
-      "password": "password"
-    },
-    "from": {
-      "mail": "cookbook@example.com",
-      "name": "Cookbook"
-    }
-  }
+  "image_store": null
 }

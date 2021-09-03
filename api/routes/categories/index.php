@@ -4,22 +4,22 @@ namespace API\routes;
 
 use API\auth\Authorization;
 use API\models\Recipe;
-use PAF\Model\Model;
+use PAF\Model\Database;
 
 $group->get('/', Authorization::middleware(false), function () {
     if (Authorization::isAuthorized()) {
         if (Authorization::user()->isAdmin) {
-            $stmt = Model::db()->query(
+            $stmt = Database::get()->query(
                 "SELECT DISTINCT category FROM recipes WHERE category IS NOT NULL ORDER BY category ASC"
             );
         } else {
-            $stmt = Model::db()->prepare(
+            $stmt = Database::get()->prepare(
                 "SELECT DISTINCT category FROM recipes WHERE category IS NOT NULL AND (public = 1 OR userId = ?) ORDER BY category ASC"
             );
             $stmt->execute([Authorization::user()->id]);
         }
     } else {
-        $stmt = Model::db()->query(
+        $stmt = Database::get()->query(
             "SELECT DISTINCT category FROM recipes WHERE category IS NOT NULL AND public = 1 ORDER BY category ASC"
         );
     }

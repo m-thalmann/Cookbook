@@ -7,9 +7,9 @@ use API\inc\Functions;
 use API\models\Ingredient;
 use API\models\Recipe;
 use API\models\RecipeImage;
+use PAF\Model\Database;
 use PAF\Model\DuplicateException;
 use PAF\Model\InvalidException;
-use PAF\Model\Model;
 use PAF\Router\Response;
 
 $group
@@ -65,7 +65,7 @@ $group
         return Functions::pagination(Functions::sort($query));
     })
     ->post('/', Authorization::middleware(), function ($req) {
-        Model::db()->beginTransaction();
+        Database::get()->beginTransaction();
 
         $data = $req["post"] ?? [];
 
@@ -80,7 +80,7 @@ $group
         try {
             $recipe->save();
         } catch (InvalidException $e) {
-            Model::db()->rollBack();
+            Database::get()->rollBack();
             return Response::badRequest(Recipe::getErrors($recipe));
         }
 
@@ -92,7 +92,7 @@ $group
             try {
                 $ingredient->save();
             } catch (InvalidException $e) {
-                Model::db()->rollBack();
+                Database::get()->rollBack();
                 return Response::badRequest([
                     "ingredients" => Ingredient::getErrors($ingredient),
                 ]);
@@ -104,7 +104,7 @@ $group
             }
         }
 
-        Model::db()->commit();
+        Database::get()->commit();
 
         return Response::created($recipe->jsonSerialize(true));
     })
