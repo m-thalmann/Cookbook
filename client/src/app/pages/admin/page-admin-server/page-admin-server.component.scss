@@ -32,7 +32,11 @@ table {
 
   th,
   td {
-    border: 1px solid #ccc;
+    border: 1px solid #{$foreground}25;
     padding: 0.25em 0.5em;
+  }
+
+  tbody tr:nth-child(odd) {
+    background: #{$foreground}20;
   }
 }

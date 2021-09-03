@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { RecipeFull } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
@@ -10,11 +11,13 @@ import { UserService } from 'src/app/core/auth/user.service';
   templateUrl: './page-edit-recipe.component.html',
   styleUrls: ['./page-edit-recipe.component.scss'],
 })
-export class PageEditRecipeComponent implements OnInit {
+export class PageEditRecipeComponent implements OnInit, OnDestroy {
   editRecipe: RecipeFull | null = null;
 
   loading = false;
   error = false;
+
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -25,11 +28,13 @@ export class PageEditRecipeComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.params.subscribe((params) => {
-      if (!this.loading && (!this.editRecipe || this.editRecipe.id !== params.id)) {
-        this.load(params.id);
-      }
-    });
+    this.subscriptions.push(
+      this.route.params.subscribe((params) => {
+        if (!this.loading && (!this.editRecipe || this.editRecipe.id !== params.id)) {
+          this.load(params.id);
+        }
+      })
+    );
   }
 
   async load(id: number) {
@@ -62,5 +67,9 @@ export class PageEditRecipeComponent implements OnInit {
     }
 
     this.loading = false;
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

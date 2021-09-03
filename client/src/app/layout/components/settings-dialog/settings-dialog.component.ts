@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { UserService } from 'src/app/core/auth/user.service';
 import { getFormError } from 'src/app/core/forms/Validation';
@@ -11,7 +12,7 @@ import { getFormError } from 'src/app/core/forms/Validation';
   templateUrl: './settings-dialog.component.html',
   styleUrls: ['./settings-dialog.component.scss'],
 })
-export class SettingsDialogComponent {
+export class SettingsDialogComponent implements OnDestroy {
   settingsForm: FormGroup;
 
   private _editEmail = false;
@@ -20,6 +21,8 @@ export class SettingsDialogComponent {
 
   saving = false;
   error: string | null = null;
+
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -87,11 +90,15 @@ export class SettingsDialogComponent {
       }
     );
 
-    this.password?.valueChanges.subscribe(() => {
-      if (this.passwordConfirm) {
-        this.passwordConfirm.updateValueAndValidity();
-      }
-    });
+    if (this.password) {
+      this.subscriptions.push(
+        this.password.valueChanges.subscribe(() => {
+          if (this.passwordConfirm) {
+            this.passwordConfirm.updateValueAndValidity();
+          }
+        })
+      );
+    }
   }
 
   get email() {
@@ -215,9 +222,13 @@ export class SettingsDialogComponent {
       } else {
         throw new Error(res.error?.info || undefined);
       }
-    } catch (e) {
+    } catch (e: any) {
       this.error = e.message || 'An error occurred!';
       console.error('Error saving settings:', res.error);
     }
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

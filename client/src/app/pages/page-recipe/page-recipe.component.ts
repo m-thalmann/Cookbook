@@ -1,7 +1,8 @@
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { RecipeFull } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
@@ -13,13 +14,15 @@ import { SeoService } from 'src/app/core/seo/seo.service';
   templateUrl: './page-recipe.component.html',
   styleUrls: ['./page-recipe.component.scss'],
 })
-export class PageRecipeComponent implements OnInit {
+export class PageRecipeComponent implements OnInit, OnDestroy {
   loading = false;
   error = false;
 
   recipe: RecipeFull | null = null;
 
   selectedPortions: number = 1;
+
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -32,11 +35,13 @@ export class PageRecipeComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.params.subscribe((params) => {
-      if (!this.loading) {
-        this.load(params.id);
-      }
-    });
+    this.subscriptions.push(
+      this.route.params.subscribe((params) => {
+        if (!this.loading) {
+          this.load(params.id);
+        }
+      })
+    );
   }
 
   setSelectedPortions(selectedPortions: Event) {
@@ -149,5 +154,9 @@ export class PageRecipeComponent implements OnInit {
 
   doPrint() {
     window.print();
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

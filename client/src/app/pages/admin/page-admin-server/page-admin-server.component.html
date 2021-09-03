@@ -9,12 +9,12 @@
 
 <ng-container *ngIf="serverConfig && !error">
     <details>
-        <summary>JSON Config</summary>
+        <summary class="icon-text"><mat-icon>code</mat-icon><span>JSON Config</span></summary>
         <pre>{{ serverConfig | json }}</pre>
     </details>
 
     <div class="config">
-        <h3>Basic</h3>
+        <h3 class="icon-text"><mat-icon>tune</mat-icon><span>Basic</span></h3>
         <table>
             <thead>
                 <tr>
@@ -54,7 +54,7 @@
             </tbody>
         </table>
 
-        <h3>Database</h3>
+        <h3 class="icon-text"><mat-icon>storage</mat-icon><span>Database</span></h3>
         <table>
             <thead>
                 <tr>
@@ -82,7 +82,7 @@
             </tbody>
         </table>
 
-        <h3>Authentication</h3>
+        <h3 class="icon-text"><mat-icon>shield</mat-icon><span>Authentication</span></h3>
         <table>
             <thead>
                 <tr>
@@ -102,7 +102,7 @@
             </tbody>
         </table>
 
-        <h3>Mail</h3>
+        <h3 class="icon-text"><mat-icon>email</mat-icon><span>Mail</span></h3>
         <table>
             <thead>
                 <tr>

@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { getFormError } from 'src/app/core/forms/Validation';
 
@@ -10,11 +11,13 @@ import { getFormError } from 'src/app/core/forms/Validation';
   templateUrl: './create-user-dialog.component.html',
   styleUrls: ['./create-user-dialog.component.scss'],
 })
-export class CreateUserDialogComponent {
+export class CreateUserDialogComponent implements OnDestroy {
   createForm: FormGroup;
 
   saving = false;
   error: string | null = null;
+
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -42,11 +45,15 @@ export class CreateUserDialogComponent {
       verifyEmail: [true],
     });
 
-    this.password?.valueChanges.subscribe(() => {
-      if (this.passwordConfirm) {
-        this.passwordConfirm.updateValueAndValidity();
-      }
-    });
+    if (this.password) {
+      this.subscriptions.push(
+        this.password.valueChanges.subscribe(() => {
+          if (this.passwordConfirm) {
+            this.passwordConfirm.updateValueAndValidity();
+          }
+        })
+      );
+    }
   }
 
   get email() {
@@ -108,9 +115,13 @@ export class CreateUserDialogComponent {
       } else {
         throw new Error(res.error?.info || undefined);
       }
-    } catch (e) {
+    } catch (e: any) {
       this.error = e.message || 'An error occurred!';
       console.error('Error creating user:', res.error);
     }
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

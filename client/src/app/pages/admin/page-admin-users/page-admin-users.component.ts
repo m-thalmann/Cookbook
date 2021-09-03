@@ -1,9 +1,10 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
+import { Subscription } from 'rxjs';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 import { InputDialogComponent } from 'src/app/components/input-dialog/input-dialog.component';
 import { ApiService } from 'src/app/core/api/api.service';
@@ -16,7 +17,7 @@ import { CreateUserDialogComponent } from './components/create-user-dialog/creat
   templateUrl: './page-admin-users.component.html',
   styleUrls: ['./page-admin-users.component.scss'],
 })
-export class PageAdminUsersComponent implements AfterViewInit {
+export class PageAdminUsersComponent implements AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -36,6 +37,8 @@ export class PageAdminUsersComponent implements AfterViewInit {
   };
 
   private _search: string | null = null;
+
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private api: ApiService,
@@ -61,14 +64,18 @@ export class PageAdminUsersComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.loadUsers();
 
-    this.sort.sortChange.subscribe(() => {
-      this.paginator.pageIndex = 0;
-      this.loadUsers();
-    });
+    this.subscriptions.push(
+      this.sort.sortChange.subscribe(() => {
+        this.paginator.pageIndex = 0;
+        this.loadUsers();
+      })
+    );
 
-    this.paginator.page.subscribe(() => {
-      this.loadUsers();
-    });
+    this.subscriptions.push(
+      this.paginator.page.subscribe(() => {
+        this.loadUsers();
+      })
+    );
   }
 
   applySearch() {
@@ -336,5 +343,9 @@ export class PageAdminUsersComponent implements AfterViewInit {
     } else {
       this.editUserId = null;
     }
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

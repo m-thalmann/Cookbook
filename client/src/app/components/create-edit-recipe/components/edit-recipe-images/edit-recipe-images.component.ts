@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { RecipeImage } from 'src/app/core/api/ApiInterfaces';
 import { ApiResponse } from 'src/app/core/api/ApiResponse';
@@ -9,7 +10,7 @@ import { ApiResponse } from 'src/app/core/api/ApiResponse';
   templateUrl: './edit-recipe-images.component.html',
   styleUrls: ['./edit-recipe-images.component.scss'],
 })
-export class EditRecipeImagesComponent {
+export class EditRecipeImagesComponent implements OnDestroy {
   @Input()
   set recipeId(recipeId: number | null) {
     this._recipeId = recipeId;
@@ -34,6 +35,8 @@ export class EditRecipeImagesComponent {
 
   recipeImages: RecipeImage[] | null = null;
   recipeImagesURLs: string[] | null = null;
+
+  private subscriptions: Subscription[] = [];
 
   constructor(private api: ApiService, private snackBar: MatSnackBar) {}
 
@@ -70,24 +73,26 @@ export class EditRecipeImagesComponent {
     this.error = null;
     this.uploadProgress = 0;
 
-    this.api.addRecipeImage(this.recipeId, files[0]).subscribe(async (event) => {
-      if (event instanceof ApiResponse) {
-        if (event.isOK()) {
-          await this.reload();
-          this.snackBar.open('Image was added successfully!', 'OK', {
-            duration: 5000,
-          });
-        } else {
-          this.error = event.error.info || 'Error uploading image';
-          console.error('Error adding recipe-image:', event.error);
-        }
+    this.subscriptions.push(
+      this.api.addRecipeImage(this.recipeId, files[0]).subscribe(async (event) => {
+        if (event instanceof ApiResponse) {
+          if (event.isOK()) {
+            await this.reload();
+            this.snackBar.open('Image was added successfully!', 'OK', {
+              duration: 5000,
+            });
+          } else {
+            this.error = event.error.info || 'Error uploading image';
+            console.error('Error adding recipe-image:', event.error);
+          }
 
-        this.saving = false;
-        this.uploadProgress = null;
-      } else if (typeof event === 'number') {
-        this.uploadProgress = event;
-      }
-    });
+          this.saving = false;
+          this.uploadProgress = null;
+        } else if (typeof event === 'number') {
+          this.uploadProgress = event;
+        }
+      })
+    );
   }
 
   async deleteImage(index: number) {
@@ -110,5 +115,9 @@ export class EditRecipeImagesComponent {
 
       this.saving = false;
     }
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { ApiOptions, CategoryInformation } from 'src/app/core/api/ApiInterfaces';
 
@@ -8,7 +9,7 @@ import { ApiOptions, CategoryInformation } from 'src/app/core/api/ApiInterfaces'
   templateUrl: './page-categories.component.html',
   styleUrls: ['./page-categories.component.scss'],
 })
-export class PageCategoriesComponent {
+export class PageCategoriesComponent implements OnDestroy {
   category: string | null = null;
 
   categories: CategoryInformation[] | null = null;
@@ -16,16 +17,20 @@ export class PageCategoriesComponent {
   loadingCategories = false;
   error = false;
 
+  private subscriptions: Subscription[] = [];
+
   constructor(private route: ActivatedRoute, private api: ApiService) {
-    this.route.params.subscribe((params) => {
-      if (params.category) {
-        this.category = decodeURIComponent(params.category);
-        this.categories = null;
-      } else {
-        this.loadCategories();
-        this.category = null;
-      }
-    });
+    this.subscriptions.push(
+      this.route.params.subscribe((params) => {
+        if (params.category) {
+          this.category = decodeURIComponent(params.category);
+          this.categories = null;
+        } else {
+          this.loadCategories();
+          this.category = null;
+        }
+      })
+    );
   }
 
   get isOverview() {
@@ -66,5 +71,9 @@ export class PageCategoriesComponent {
     } else {
       return 'assets/images/cookbook.svg';
     }
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

@@ -1,7 +1,7 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NavigationEnd, Router } from '@angular/router';
-import { fromEvent } from 'rxjs';
+import { fromEvent, Subscription } from 'rxjs';
 import { map, share, throttleTime } from 'rxjs/operators';
 import { UserService } from '../core/auth/user.service';
 import { SeoService } from '../core/seo/seo.service';
@@ -13,34 +13,40 @@ import { SettingsDialogComponent } from './components/settings-dialog/settings-d
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
 })
-export class LayoutComponent implements AfterViewInit {
+export class LayoutComponent implements AfterViewInit, OnDestroy {
   showMenu = false;
   smallHeader = false;
 
-  constructor(public user: UserService, private dialog: MatDialog, private router: Router, private seo: SeoService) {
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.showMenu = false;
+  private subscriptions: Subscription[] = [];
 
-        this.seo.generateTags();
-      }
-    });
+  constructor(public user: UserService, private dialog: MatDialog, private router: Router, private seo: SeoService) {
+    this.subscriptions.push(
+      this.router.events.subscribe((event) => {
+        if (event instanceof NavigationEnd) {
+          this.showMenu = false;
+
+          this.seo.generateTags();
+        }
+      })
+    );
   }
 
   ngAfterViewInit() {
-    fromEvent(window, 'scroll')
-      .pipe(
-        throttleTime(10),
-        map(() => window.pageYOffset),
-        share()
-      )
-      .subscribe((val) => {
-        if (this.smallHeader) {
-          this.smallHeader = val > 180;
-        } else {
-          this.smallHeader = val > 200;
-        }
-      });
+    this.subscriptions.push(
+      fromEvent(window, 'scroll')
+        .pipe(
+          throttleTime(10),
+          map(() => window.pageYOffset),
+          share()
+        )
+        .subscribe((val) => {
+          if (this.smallHeader) {
+            this.smallHeader = val > 180;
+          } else {
+            this.smallHeader = val > 200;
+          }
+        })
+    );
   }
 
   get isLoggedin() {
@@ -69,5 +75,9 @@ export class LayoutComponent implements AfterViewInit {
     this.dialog.open(LoginRegisterDialogComponent, {
       width: '400px',
     });
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

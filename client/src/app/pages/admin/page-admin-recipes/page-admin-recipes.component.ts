@@ -1,5 +1,6 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { RecipeListComponent } from 'src/app/components/recipe-list/recipe-list.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { ApiOptions, User } from 'src/app/core/api/ApiInterfaces';
@@ -9,7 +10,7 @@ import { ApiOptions, User } from 'src/app/core/api/ApiInterfaces';
   templateUrl: './page-admin-recipes.component.html',
   styleUrls: ['./page-admin-recipes.component.scss'],
 })
-export class PageAdminRecipesComponent {
+export class PageAdminRecipesComponent implements OnDestroy {
   @ViewChild('recipeList') recipeListComponent!: RecipeListComponent;
 
   loading = true;
@@ -20,19 +21,23 @@ export class PageAdminRecipesComponent {
   filterUserId: number | null = null;
   filterUser: User | null = null;
 
-  constructor(private api: ApiService, private route: ActivatedRoute) {
-    this.route.queryParams.subscribe((params) => {
-      if (params.userId) {
-        this.filterUserId = params.userId;
-      } else {
-        this.filterUserId = null;
-      }
-      this.loadFilterUser();
+  private subscriptions: Subscription[] = [];
 
-      if (!this.loading) {
-        this.recipeListComponent.reload();
-      }
-    });
+  constructor(private api: ApiService, private route: ActivatedRoute) {
+    this.subscriptions.push(
+      this.route.queryParams.subscribe((params) => {
+        if (params.userId) {
+          this.filterUserId = params.userId;
+        } else {
+          this.filterUserId = null;
+        }
+        this.loadFilterUser();
+
+        if (!this.loading) {
+          this.recipeListComponent.reload();
+        }
+      })
+    );
   }
 
   async loadFilterUser() {
@@ -66,5 +71,9 @@ export class PageAdminRecipesComponent {
     this.loading = false;
 
     return res;
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }
