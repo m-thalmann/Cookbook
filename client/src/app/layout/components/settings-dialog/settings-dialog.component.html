@@ -43,6 +43,11 @@
             <mat-error *ngIf="getFormError('currentPassword') != null">{{ getFormError('currentPassword') }}</mat-error>
         </mat-form-field>
     </form>
+
+    <button mat-raised-button color="warn" style="margin-bottom: 1em" (click)="deleteUser()" [disabled]="saving">
+        <mat-icon>delete</mat-icon>Delete account
+    </button>
+
     <p *ngIf="error" class="fg-warn">{{ error }}</p>
 </mat-dialog-content>
 

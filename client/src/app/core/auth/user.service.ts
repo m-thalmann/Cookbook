@@ -132,6 +132,9 @@ export class UserService {
       case 'unauthorized':
         reason = 'You have to log back in!';
         break;
+      case 'accountDeleted':
+        reason = 'Account deleted successfully!';
+        break;
       default:
         reason = 'You have been logged out';
     }

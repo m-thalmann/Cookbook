@@ -1,8 +1,9 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
+import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { UserService } from 'src/app/core/auth/user.service';
 import { getFormError } from 'src/app/core/forms/Validation';
@@ -29,7 +30,8 @@ export class SettingsDialogComponent implements OnDestroy {
     private api: ApiService,
     private user: UserService,
     private dialogRef: MatDialogRef<SettingsDialogComponent>,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {
     this.settingsForm = this.fb.group(
       {
@@ -226,6 +228,44 @@ export class SettingsDialogComponent implements OnDestroy {
       this.error = e.message || 'An error occurred!';
       console.error('Error saving settings:', res.error);
     }
+  }
+
+  async deleteUser() {
+    let doDelete = await this.dialog
+      .open(ConfirmDialogComponent, {
+        data: {
+          title: 'Delete account?',
+          content: `Are you sure you want to delete your account and all your recipes? This action is not reversible`,
+          warn: true,
+        },
+      })
+      .afterClosed()
+      .toPromise();
+
+    if (!doDelete) return;
+
+    this.saving = true;
+    this.settingsForm.disable();
+
+    let res = await this.api.deleteUser();
+
+    if (res.isOK()) {
+      this.user.logout('accountDeleted', '/home');
+    } else {
+      let error = '';
+
+      if (res.error.info) {
+        error = ': ' + res.error.info;
+      }
+
+      this.snackBar.open('Error deleting account' + error, 'OK', {
+        panelClass: 'action-warn',
+      });
+      console.error('Error deleting account:', res.error);
+    }
+
+    this.saving = false;
+    this.settingsForm.enable();
   }
 
   ngOnDestroy() {
