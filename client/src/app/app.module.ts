@@ -14,14 +14,9 @@ import { SettingsDialogComponent } from './layout/components/settings-dialog/set
 import { LayoutComponent } from './layout/layout.component';
 import { LogoutComponent } from './pages/logout/logout.component';
 import { PageCategoriesComponent } from './pages/page-categories/page-categories.component';
-import { PageCreateRecipeComponent } from './pages/page-create-recipe/page-create-recipe.component';
-import { PageEditRecipeComponent } from './pages/page-edit-recipe/page-edit-recipe.component';
 import { PageHomeComponent } from './pages/page-home/page-home.component';
 import { PageMyRecipesComponent } from './pages/page-my-recipes/page-my-recipes.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
-import { RecipeImageSliderComponent } from './pages/page-recipe/components/recipe-image-slider/recipe-image-slider.component';
-import { PageRecipeComponent } from './pages/page-recipe/page-recipe.component';
-import { SkeletonPageRecipeComponent } from './pages/page-recipe/skeleton/skeleton-page-recipe.component';
 import { PageSearchComponent } from './pages/page-search/page-search.component';
 
 export function setupConfig(service: ConfigService) {
@@ -37,16 +32,11 @@ export function setupConfig(service: ConfigService) {
     LogoutComponent,
     SettingsDialogComponent,
     PageMyRecipesComponent,
-    PageRecipeComponent,
-    PageCreateRecipeComponent,
-    PageEditRecipeComponent,
     PageSearchComponent,
     PageCategoriesComponent,
     PageNotFoundComponent,
-    RecipeImageSliderComponent,
     VerifyEmailDialogComponent,
     ResetPasswordDialogComponent,
-    SkeletonPageRecipeComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, HttpClientModule, ComponentsModule, CoreModule],
   providers: [

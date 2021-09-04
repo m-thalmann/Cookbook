@@ -7,7 +7,7 @@ import { ApiService } from 'src/app/core/api/api.service';
 import { RecipeFull } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
 import { calculateTotalTime } from 'src/app/core/functions';
-import { SeoService } from 'src/app/core/seo/seo.service';
+import { SeoService } from 'src/app/core/services/seo.service';
 
 @Component({
   selector: 'cb-page-recipe',

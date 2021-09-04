@@ -4,7 +4,12 @@
 
         <nav class="desktop-nav hide-mobile" [class.loggedin]="isLoggedin">
             <ng-container *ngTemplateOutlet="navItems"></ng-container>
-            <a routerLink="/create" routerLinkActive="active" class="fg-accent create-recipe-link" *ngIf="isLoggedin">
+            <a
+                routerLink="/recipes/create"
+                routerLinkActive="active"
+                class="fg-accent create-recipe-link"
+                *ngIf="isLoggedin"
+            >
                 <div>
                     <mat-icon>add</mat-icon>
                 </div>
@@ -36,7 +41,7 @@
 
     <nav class="mobile-nav hide-desktop" [class.show]="showMenu">
         <ng-container *ngTemplateOutlet="navItems"></ng-container>
-        <a routerLink="/create" routerLinkActive="active" class="fg-accent" *ngIf="isLoggedin">
+        <a routerLink="/recipes/create" routerLinkActive="active" class="fg-accent" *ngIf="isLoggedin">
             <div>
                 <mat-icon>add</mat-icon>
                 <span>Create recipe</span>

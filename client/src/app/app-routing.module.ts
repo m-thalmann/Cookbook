@@ -1,15 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './core/auth/auth.guard';
+import { PreloadService } from './core/services/preload.service';
 import { LayoutComponent } from './layout/layout.component';
 import { LogoutComponent } from './pages/logout/logout.component';
 import { PageCategoriesComponent } from './pages/page-categories/page-categories.component';
-import { PageCreateRecipeComponent } from './pages/page-create-recipe/page-create-recipe.component';
-import { PageEditRecipeComponent } from './pages/page-edit-recipe/page-edit-recipe.component';
 import { PageHomeComponent } from './pages/page-home/page-home.component';
 import { PageMyRecipesComponent } from './pages/page-my-recipes/page-my-recipes.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
-import { PageRecipeComponent } from './pages/page-recipe/page-recipe.component';
 import { PageSearchComponent } from './pages/page-search/page-search.component';
 
 const routes: Routes = [
@@ -36,18 +34,10 @@ const routes: Routes = [
           { path: ':category', component: PageCategoriesComponent, data: { titleFromParam: 'category' } },
         ],
       },
-      { path: 'recipes/:id/:slug', component: PageRecipeComponent },
       {
-        path: 'create',
-        component: PageCreateRecipeComponent,
-        canActivate: [AuthGuard],
-        data: { title: 'Create recipe' },
-      },
-      {
-        path: 'edit/:id',
-        component: PageEditRecipeComponent,
-        canActivate: [AuthGuard],
-        data: { title: 'Edit recipe' },
+        path: 'recipes',
+        loadChildren: () => import('./pages/recipes/recipes.module').then((m) => m.RecipesModule),
+        data: { preload: true, delay: true },
       },
       {
         path: 'admin',
@@ -62,7 +52,11 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes, {
+      preloadingStrategy: PreloadService,
+    }),
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

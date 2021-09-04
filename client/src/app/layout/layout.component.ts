@@ -1,10 +1,10 @@
-import { AfterViewInit, Component, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, NgZone, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NavigationEnd, Router } from '@angular/router';
 import { fromEvent, Subscription } from 'rxjs';
 import { map, share, throttleTime } from 'rxjs/operators';
 import { UserService } from '../core/auth/user.service';
-import { SeoService } from '../core/seo/seo.service';
+import { SeoService } from '../core/services/seo.service';
 import { LoginRegisterDialogComponent } from './components/login-register-dialog/login-register-dialog.component';
 import { SettingsDialogComponent } from './components/settings-dialog/settings-dialog.component';
 
@@ -19,7 +19,13 @@ export class LayoutComponent implements AfterViewInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-  constructor(public user: UserService, private dialog: MatDialog, private router: Router, private seo: SeoService) {
+  constructor(
+    public user: UserService,
+    private dialog: MatDialog,
+    private router: Router,
+    private seo: SeoService,
+    private ngZone: NgZone
+  ) {
     this.subscriptions.push(
       this.router.events.subscribe((event) => {
         if (event instanceof NavigationEnd) {
@@ -32,21 +38,30 @@ export class LayoutComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.subscriptions.push(
-      fromEvent(window, 'scroll')
-        .pipe(
-          throttleTime(10),
-          map(() => window.pageYOffset),
-          share()
-        )
-        .subscribe((val) => {
-          if (this.smallHeader) {
-            this.smallHeader = val > 180;
-          } else {
-            this.smallHeader = val > 200;
-          }
-        })
-    );
+    this.ngZone.runOutsideAngular(() => {
+      this.subscriptions.push(
+        fromEvent(window, 'scroll')
+          .pipe(
+            throttleTime(10),
+            map(() => window.pageYOffset),
+            share()
+          )
+          .subscribe((val) => {
+            let smallHeader = this.smallHeader;
+            if (this.smallHeader) {
+              smallHeader = val > 180;
+            } else {
+              smallHeader = val > 200;
+            }
+
+            if (smallHeader !== this.smallHeader) {
+              this.ngZone.run(() => {
+                this.smallHeader = smallHeader;
+              });
+            }
+          })
+      );
+    });
   }
 
   get isLoggedin() {

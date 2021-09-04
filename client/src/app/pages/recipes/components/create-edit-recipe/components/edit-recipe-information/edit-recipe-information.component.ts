@@ -352,7 +352,7 @@ export class EditRecipeInformationComponent {
 
     if (res.isOK()) {
       if (!this.isEdit) {
-        history.pushState('', '', `/edit/${res.value?.id}`); // change url without redirect
+        history.pushState('', '', `/recipes/edit/${res.value?.id}`); // change url without redirect
       }
 
       this.editRecipe = res.value;
