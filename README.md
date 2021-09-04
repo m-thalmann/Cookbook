@@ -32,6 +32,8 @@ Cookbook is a web application that stores all your favorite recipes. Self-hostin
 
 #### API configuration
 
+`api/config/config.json` (base-config):
+
 ```jsonc
 {
   "root_url": "/api", // the URL-Suffix at which the API is reachable
@@ -43,49 +45,44 @@ Cookbook is a web application that stores all your favorite recipes. Self-hostin
     "database": "database_name",
     "charset": "utf8"
   },
-  "image_store": null, // the directory where the uploaded images are stored (see below)
-  "token": {
-    "secret": "<secret>", // secret used to encode the JWT tokens
-    "ttl": 604800 // seconds after which a token expires
-  },
-  "password": {
-    "secret": "<secret>", // secret used to hash the passwords
-    "reset_ttl": 600 // seconds after which the password-reset-token expires
-  },
-  "registration_enabled": true, // whether users are allowed to register
-  "email_verification": {
-    "enabled": true, // whether the email must be verified
-    "ttl": 3600 // seconds after which the email-verification-token expires
-  },
-  "hcaptcha": {
-    // hcaptcha data (see below)
-    "enabled": true,
-    "secret": "<hcaptcha secret>"
-  },
-  "mail": {
-    // mail settings
-    "smtp": {
-      "host": "smtp.example.com",
-      "port": "465",
-      "encrypted": true,
-      "username": "cookbook@example.com",
-      "password": "password"
-    },
-    "from": {
-      "mail": "cookbook@example.com",
-      "name": "Cookbook"
-    }
-  }
+  "image_store": null // the directory where the uploaded images are stored (see below)
 }
 ```
 
+`image_store`: If this value is null, the `api/data` directory is used, otherwise the set path is used. Make sure that the web-user (`www-data`) is allowed to write and read from this directory.
+
+The rest of the configuration is stored in the database-table `config`:
+
+| Key                          | Datatype          | Description                                                     |
+| ---------------------------- | ----------------- | --------------------------------------------------------------- |
+| `token.secret`               | `string`          | Secret used to encode the JWT tokens (**Attention: see below**) |
+| `token.ttl`                  | `integer` (>= 60) | Seconds after which a token expires                             |
+| `password.secret`            | `string`          | Secret used to hash the passwords (**Attention: see below**)    |
+| `password.reset_ttl`         | `integer` (>= 60) | Seconds after which the password-reset-token expires            |
+| `registration_enabled`       | `boolean`         | Whether users are allowed to register                           |
+| `email_verification.enabled` | `boolean`         | Whether the email must be verified                              |
+| `email_verification.ttl`     | `integer` (>= 60) | Seconds after which the email-verification-token expires        |
+| `hcaptcha.enabled`           | `boolean`         | Whether the hCaptcha is enabled (see below)                     |
+| `hcpatcha.secret`            | `string`          | The hCaptcha secret (see below)                                 |
+| `mail.smtp.host`             | `string`          | SMTP Host                                                       |
+| `mail.smtp.port`             | `string`          | SMTP Port                                                       |
+| `mail.smtp.encrypted`        | `boolean`         | Whether the SMTP connection is encrypted                        |
+| `mail.smtp.username`         | `string`          | SMTP Username                                                   |
+| `mail.from.mail`             | `string` (email)  | The sender-email                                                |
+| `mail.from.name`             | `string`          | The senders name                                                |
+
 **Important**: Make sure to change the secrets to a long, random string
 
-`image_store`: If this value is null, the `api/data` directory is used, otherwise the set path is used. Make sure that the web-user (`www-data`) is allowed to write and read from this directory.
+**Attention:**
+
+- If the `token.secret` is changed, all users will be forcefully logged out
+- If the `password.secret` is changed, the passwords in the database are no longer valid and all users need to reset their password
 
 `hcaptcha`: hCaptcha is used to prevent bots from signing-up. Create a free account here: https://www.hcaptcha.com/signup-interstitial
 
 #### Client configuration
+
+`client/src/assets/config.json`:
 
 ```jsonc
 {

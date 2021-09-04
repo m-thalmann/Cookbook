@@ -199,7 +199,7 @@ class ConfigSettings {
         $setting = self::SETTINGS[$path];
 
         if (!array_key_exists("validators", $setting)) {
-            return;
+            return true;
         }
 
         $validators = $setting["validators"];

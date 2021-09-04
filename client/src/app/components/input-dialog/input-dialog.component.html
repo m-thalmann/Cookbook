@@ -2,6 +2,7 @@
 
 <mat-dialog-content>
     <mat-form-field appearance="outline" style="width: 100%">
+        <mat-label *ngIf="data.label">{{ data.label }}</mat-label>
         <input matInput [type]="data.type || 'text'" [(ngModel)]="value" (keyup.enter)="confirm()" />
     </mat-form-field>
 </mat-dialog-content>

@@ -80,7 +80,10 @@
                     <td>Email verification ttl (Time to live)</td>
                     <td>{{ serverConfig['email_verification.ttl'] }} seconds</td>
                     <td>
-                        <button (click)="openEditDialog('email_verification.ttl', 'number')" [disabled]="loading">
+                        <button
+                            (click)="openEditDialog('email_verification.ttl', 'number', 'Email verification ttl')"
+                            [disabled]="loading"
+                        >
                             <mat-icon>edit</mat-icon>
                         </button>
                     </td>
@@ -103,7 +106,10 @@
                     <td>hCaptcha secret</td>
                     <td [innerHTML]="getHTMLBullets(16)"></td>
                     <td>
-                        <button (click)="openEditDialog('hcaptcha.secret')" [disabled]="loading">
+                        <button
+                            (click)="openEditDialog('hcaptcha.secret', 'text', 'hCaptcha secret')"
+                            [disabled]="loading"
+                        >
                             <mat-icon>edit</mat-icon>
                         </button>
                     </td>
@@ -163,7 +169,7 @@
                     <td>Token secret</td>
                     <td [innerHTML]="getHTMLBullets(16)"></td>
                     <td>
-                        <button (click)="openEditDialog('token.secret')" [disabled]="loading">
+                        <button (click)="openEditDialog('token.secret', 'text', 'Token secret')" [disabled]="loading">
                             <mat-icon>edit</mat-icon>
                         </button>
                     </td>
@@ -172,7 +178,7 @@
                     <td>Token TTL (Time to live)</td>
                     <td>{{ serverConfig['token.ttl'] }} seconds</td>
                     <td>
-                        <button (click)="openEditDialog('token.ttl', 'number')" [disabled]="loading">
+                        <button (click)="openEditDialog('token.ttl', 'number', 'Token TTL')" [disabled]="loading">
                             <mat-icon>edit</mat-icon>
                         </button>
                     </td>
@@ -181,7 +187,10 @@
                     <td>Password secret</td>
                     <td [innerHTML]="getHTMLBullets(16)"></td>
                     <td>
-                        <button (click)="openEditDialog('password.secret')" [disabled]="loading">
+                        <button
+                            (click)="openEditDialog('password.secret', 'text', 'Password secret')"
+                            [disabled]="loading"
+                        >
                             <mat-icon>edit</mat-icon>
                         </button>
                     </td>
@@ -190,7 +199,10 @@
                     <td>Password-reset TTL (Time to live)</td>
                     <td>{{ serverConfig['password.reset_ttl'] }} seconds</td>
                     <td>
-                        <button (click)="openEditDialog('password.reset_ttl', 'number')" [disabled]="loading">
+                        <button
+                            (click)="openEditDialog('password.reset_ttl', 'number', 'Password-reset TTL')"
+                            [disabled]="loading"
+                        >
                             <mat-icon>edit</mat-icon>
                         </button>
                     </td>
@@ -212,7 +224,7 @@
                     <td>SMTP Host</td>
                     <td>{{ serverConfig['mail.smtp.host'] }}</td>
                     <td>
-                        <button (click)="openEditDialog('mail.smtp.host')" [disabled]="loading">
+                        <button (click)="openEditDialog('mail.smtp.host', 'text', 'SMTP Host')" [disabled]="loading">
                             <mat-icon>edit</mat-icon>
                         </button>
                     </td>
@@ -223,7 +235,7 @@
                         {{ serverConfig['mail.smtp.port'] }}
                     </td>
                     <td>
-                        <button (click)="openEditDialog('mail.smtp.port', 'number')" [disabled]="loading">
+                        <button (click)="openEditDialog('mail.smtp.port', 'number', 'SMTP Port')" [disabled]="loading">
                             <mat-icon>edit</mat-icon>
                         </button>
                     </td>
@@ -246,7 +258,10 @@
                     <td>SMTP Username</td>
                     <td>{{ serverConfig['mail.smtp.username'] }}</td>
                     <td>
-                        <button (click)="openEditDialog('mail.smtp.username')" [disabled]="loading">
+                        <button
+                            (click)="openEditDialog('mail.smtp.username', 'text', 'SMTP Username')"
+                            [disabled]="loading"
+                        >
                             <mat-icon>edit</mat-icon>
                         </button>
                     </td>
@@ -255,7 +270,10 @@
                     <td>SMTP Password</td>
                     <td [innerHTML]="getHTMLBullets(10)"></td>
                     <td>
-                        <button (click)="openEditDialog('mail.smtp.password', 'password')" [disabled]="loading">
+                        <button
+                            (click)="openEditDialog('mail.smtp.password', 'password', 'SMTP Password')"
+                            [disabled]="loading"
+                        >
                             <mat-icon>edit</mat-icon>
                         </button>
                     </td>
@@ -264,7 +282,7 @@
                     <td>Sender mail</td>
                     <td>{{ serverConfig['mail.from.mail'] }}</td>
                     <td>
-                        <button (click)="openEditDialog('mail.from.mail')" [disabled]="loading">
+                        <button (click)="openEditDialog('mail.from.mail', 'text', 'Sender mail')" [disabled]="loading">
                             <mat-icon>edit</mat-icon>
                         </button>
                     </td>
@@ -273,7 +291,7 @@
                     <td>Sender name</td>
                     <td>{{ serverConfig['mail.from.name'] }}</td>
                     <td>
-                        <button (click)="openEditDialog('mail.from.name')" [disabled]="loading">
+                        <button (click)="openEditDialog('mail.from.name', 'text', 'Sender name')" [disabled]="loading">
                             <mat-icon>edit</mat-icon>
                         </button>
                     </td>

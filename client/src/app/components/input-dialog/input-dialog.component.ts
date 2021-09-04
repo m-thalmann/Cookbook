@@ -14,6 +14,7 @@ export class InputDialogComponent {
     public data: {
       title: string;
       type?: string;
+      label?: string;
       default?: string;
       btnConfirm?: string;
       btnDecline?: string;

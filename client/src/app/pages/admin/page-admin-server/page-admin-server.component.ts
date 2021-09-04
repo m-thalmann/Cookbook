@@ -66,7 +66,7 @@ export class PageAdminServerComponent implements OnInit {
     return this.updateValue(path, (event.target as HTMLInputElement).value);
   }
 
-  async openEditDialog(path: string, type = 'text') {
+  async openEditDialog(path: string, type: 'text' | 'password' | 'number', label: string | null) {
     if (this.loading) return;
 
     let currentValue = (this.serverConfig as any)[path];
@@ -77,6 +77,7 @@ export class PageAdminServerComponent implements OnInit {
           title: 'Edit config',
           type: type,
           default: currentValue,
+          label: label,
         },
       })
       .afterClosed()
