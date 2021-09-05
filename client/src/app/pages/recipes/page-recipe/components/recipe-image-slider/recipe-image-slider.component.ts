@@ -33,7 +33,5 @@ export class RecipeImageSliderComponent {
 
   currentRecipeImageNumber = 0;
 
-  constructor(private api: ApiService) {
-  }
-
+  constructor(private api: ApiService) {}
 }

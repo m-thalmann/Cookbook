@@ -1,5 +1,6 @@
-<span class="results" *ngIf="results !== null"> {{ results }} result{{ results !== 1 ? 's' : '' }} </span>
-<cb-skeleton *ngIf="results === null" style="width: 6em" class="inline-block"></cb-skeleton>
+<span class="results" *ngIf="results !== null && !error"> {{ results }} result{{ results !== 1 ? 's' : '' }} </span>
+<span class="results" *ngIf="error"> no results </span>
+<cb-skeleton *ngIf="results === null && !error" style="width: 6em" class="inline-block"></cb-skeleton>
 
 <div class="sort">
     <mat-form-field appearance="outline">

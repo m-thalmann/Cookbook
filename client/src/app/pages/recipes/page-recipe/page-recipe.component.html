@@ -114,7 +114,7 @@
     </div>
 </ng-container>
 
-<cb-skeleton-page-recipe *ngIf="!recipe"></cb-skeleton-page-recipe>
+<cb-skeleton-page-recipe *ngIf="!recipe && !error"></cb-skeleton-page-recipe>
 
 <mat-menu #shareMenu="matMenu">
     <button mat-menu-item (click)="copyLink()"><mat-icon class="fg-accent">link</mat-icon> Copy link</button>
