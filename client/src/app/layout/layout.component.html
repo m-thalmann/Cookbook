@@ -20,6 +20,14 @@
             <a routerLink="/search" mat-icon-button>
                 <mat-icon>search</mat-icon>
             </a>
+            <button
+                mat-icon-button
+                *ngIf="!isLoggedin"
+                [disabled]="translation.loading"
+                [matMenuTriggerFor]="languageMenu"
+            >
+                <mat-icon>translate</mat-icon>
+            </button>
             <button mat-icon-button class="hide-desktop" (click)="toggleMenu()">
                 <mat-icon *ngIf="!showMenu">menu</mat-icon>
                 <mat-icon *ngIf="showMenu">close</mat-icon>
@@ -108,8 +116,23 @@
 <mat-menu #userMenu="matMenu" xPosition="before" class="hide-mobile">
     <div mat-menu-item [disabled]="true"><mat-icon>email</mat-icon> {{ user.user?.email }}</div>
     <button mat-menu-item (click)="showSettingsDialog()"><mat-icon>settings</mat-icon> Settings</button>
+    <button mat-menu-item [disabled]="translation.loading" [matMenuTriggerFor]="languageMenu">
+        <mat-icon>translate</mat-icon> {{ 'language' | translate }}
+    </button>
     <a routerLink="/admin" mat-menu-item *ngIf="user.user?.isAdmin">
         <mat-icon>admin_panel_settings</mat-icon> Admin area
     </a>
     <a routerLink="/logout" mat-menu-item class="fg-warn"> <mat-icon class="fg-warn">logout</mat-icon> Logout </a>
+</mat-menu>
+
+<mat-menu #languageMenu="matMenu" xPosition="before">
+    <button
+        mat-menu-item
+        (click)="translation.use(language.key)"
+        *ngFor="let language of translation.languages"
+        [disabled]="translation.loading || translation.language === language.key"
+    >
+        <mat-icon *ngIf="translation.language === language.key">check</mat-icon>
+        {{ language.name }}
+    </button>
 </mat-menu>

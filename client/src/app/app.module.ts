@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { ComponentsModule } from './components/components.module';
 import { ConfigService } from './core/config/config.service';
 import { CoreModule } from './core/core.module';
+import { TranslationService } from './core/i18n/translation.service';
 import { ResetPasswordDialogComponent } from './layout/components/login-register-dialog/components/reset-password-dialog/reset-password-dialog.component';
 import { VerifyEmailDialogComponent } from './layout/components/login-register-dialog/components/verify-email-dialog/verify-email-dialog.component';
 import { LoginRegisterDialogComponent } from './layout/components/login-register-dialog/login-register-dialog.component';
@@ -19,8 +20,11 @@ import { PageMyRecipesComponent } from './pages/page-my-recipes/page-my-recipes.
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { PageSearchComponent } from './pages/page-search/page-search.component';
 
-export function setupConfig(service: ConfigService) {
-  return () => service.load();
+export function setupServices(config: ConfigService, translation: TranslationService) {
+  return async () => {
+    await config.load();
+    await translation.init();
+  };
 }
 
 @NgModule({
@@ -42,8 +46,8 @@ export function setupConfig(service: ConfigService) {
   providers: [
     {
       provide: APP_INITIALIZER,
-      useFactory: setupConfig,
-      deps: [ConfigService],
+      useFactory: setupServices,
+      deps: [ConfigService, TranslationService],
       multi: true,
     },
   ],

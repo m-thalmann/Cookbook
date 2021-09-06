@@ -4,6 +4,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { fromEvent, Subscription } from 'rxjs';
 import { map, share, throttleTime } from 'rxjs/operators';
 import { UserService } from '../core/auth/user.service';
+import { TranslationService } from '../core/i18n/translation.service';
 import { SeoService } from '../core/services/seo.service';
 import { LoginRegisterDialogComponent } from './components/login-register-dialog/login-register-dialog.component';
 import { SettingsDialogComponent } from './components/settings-dialog/settings-dialog.component';
@@ -24,7 +25,8 @@ export class LayoutComponent implements AfterViewInit, OnDestroy {
     private dialog: MatDialog,
     private router: Router,
     private seo: SeoService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    public translation: TranslationService
   ) {
     this.subscriptions.push(
       this.router.events.subscribe((event) => {

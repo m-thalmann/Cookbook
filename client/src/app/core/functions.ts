@@ -66,3 +66,41 @@ export function calculateTotalTime(recipe: Recipe | null) {
     return null;
   }
 }
+
+type LoggerColor = 'red' | 'blue' | 'lightblue' | 'orange' | 'green';
+
+function getLoggerColor(color: LoggerColor) {
+  switch (color) {
+    case 'red':
+      return '#d10000';
+    case 'blue':
+      return '#21f';
+    case 'lightblue':
+      return '#0068ad';
+    case 'orange':
+      return '#c97600';
+    case 'green':
+      return '#009100';
+  }
+}
+
+/**
+ * Provides styled logging functions
+ */
+export const Logger = {
+  log: (name: string, color: LoggerColor, ...message: any[]) => {
+    Logger.out('log', name, color, ...message);
+  },
+  info: (name: string, color: LoggerColor, ...message: any[]) => {
+    Logger.out('info', name, color, ...message);
+  },
+  warn: (name: string, color: LoggerColor, ...message: any[]) => {
+    Logger.out('warn', name, color, ...message);
+  },
+  error: (name: string, color: LoggerColor, ...message: any[]) => {
+    Logger.out('error', name, color, ...message);
+  },
+  out: (type: 'log' | 'info' | 'warn' | 'error', name: string, color: LoggerColor, ...message: any[]) => {
+    console[type](`%c ${name} `, `color: #fff; background: ${getLoggerColor(color)}; border-radius: 2px`, ...message);
+  },
+};

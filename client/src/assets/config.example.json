@@ -1,5 +1,6 @@
 {
   "api_url": "http://localhost:80",
+  "language": "en",
   "hcaptcha": {
     "enabled": true,
     "site_key": "10000000-ffff-ffff-ffff-000000000001"

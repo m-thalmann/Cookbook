@@ -87,6 +87,7 @@ The rest of the configuration is stored in the database-table `config`:
 ```jsonc
 {
   "api_url": "http://localhost:80/api", // the URL at which the API is reachable
+  "language": "en", // the default language (if not overwritten by user)
   "hcaptcha": {
     // hcaptcha data (see above)
     "enabled": true,

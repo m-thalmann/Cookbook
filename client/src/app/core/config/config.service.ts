@@ -42,7 +42,7 @@ export class ConfigService {
   async load() {
     try {
       this.data = await this.http.get<{}>(URL).toPromise();
-    } catch (e) {
+    } catch (e: any) {
       console.error('Could not load config! Fallback to default values.', e.message);
       this.snackBar.open('Could not load config-file. Did you create it?', 'OK', {
         panelClass: 'action-warn',
