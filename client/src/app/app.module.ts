@@ -23,7 +23,7 @@ import { PageSearchComponent } from './pages/page-search/page-search.component';
 export function setupServices(config: ConfigService, translation: TranslationService) {
   return async () => {
     await config.load();
-    await translation.init();
+    await translation.init(config.get('language', null));
   };
 }
 

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
-import { ConfigService } from '../config/config.service';
+import { environment } from 'src/environments/environment';
 import { Logger } from '../functions';
 import StorageNames from '../StorageNames';
 
@@ -11,6 +11,8 @@ const DEFAULT_LANGUAGE = 'en';
   providedIn: 'root',
 })
 export class TranslationService {
+  private defaultLanguage: string | null = null;
+
   private translations: { [key: string]: any } = {};
   private currentLanguage: string | null = null;
 
@@ -20,7 +22,7 @@ export class TranslationService {
 
   private _loading = false;
 
-  constructor(private http: HttpClient, private config: ConfigService) {
+  constructor(private http: HttpClient) {
     this.loadAvailableLanguages();
   }
 
@@ -30,11 +32,11 @@ export class TranslationService {
    * @param language The language to switch to or null if the default one should be used
    */
   async use(language: string | null) {
-    if (this.loading) return;
+    if (this.loading) return false;
 
     this._loading = true;
 
-    let languagesList = [language, this.navigatorLanguage, this.config.get('language', null), DEFAULT_LANGUAGE];
+    let languagesList = [language, this.navigatorLanguage, this.defaultLanguage, DEFAULT_LANGUAGE];
     languagesList = languagesList.filter((lang, index) => {
       return lang && languagesList.indexOf(lang) === index;
     });
@@ -71,8 +73,12 @@ export class TranslationService {
   /**
    * Initializes the translation with the stored language
    * or the default one if none set
+   *
+   * @param defaultLanguage The default language from the config
    */
-  init() {
+  init(defaultLanguage: string | null) {
+    this.defaultLanguage = defaultLanguage;
+
     return this.use(localStorage.getItem(StorageNames.Language) || null);
   }
 
@@ -105,7 +111,11 @@ export class TranslationService {
       }
     } while (keys.length > 0);
 
-    if (!element) {
+    if (typeof element === 'object') {
+      element = null;
+    }
+
+    if (!element && (!environment.production || (window as any).debug)) {
       Logger.warn('TranslationService', 'orange', `Translation not found for key: '${key}'`);
     }
 
