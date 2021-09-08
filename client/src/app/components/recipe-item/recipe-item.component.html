@@ -15,15 +15,15 @@
             <span>{{ recipe.name }}</span>
             <mat-icon
                 class="visibility"
-                [matTooltip]="recipe.public ? 'Public' : 'Private'"
+                [matTooltip]="(recipe.public ? 'recipe.public' : 'recipe.private') | translate"
                 [matTooltipShowDelay]="500"
                 [inline]="true"
                 >{{ recipe.public ? 'public' : 'lock' }}</mat-icon
             >
         </h3>
         <span class="author">
-            by
-            <strong *ngIf="isOwner">You</strong>
+            {{ 'recipe.by' | translate }}
+            <strong *ngIf="isOwner">{{ 'recipe.you' | translate }}</strong>
             <ng-container *ngIf="!isOwner">{{ recipe.user.name }}</ng-container>
         </span>
         <span class="description" *ngIf="recipe.description">{{ recipe.description }}</span>
@@ -32,21 +32,31 @@
                 mat-chip
                 [routerLink]="categoryURL"
                 *ngIf="recipe.category"
-                matTooltip="Category"
+                matTooltip="{{ 'recipe.category' | translate }}"
                 [matTooltipShowDelay]="500"
             >
                 <mat-icon>menu_book</mat-icon> <span>{{ recipe.category }}</span>
             </a>
-            <mat-chip [disabled]="true" *ngIf="totalTime" matTooltip="Total time" [matTooltipShowDelay]="500">
-                <mat-icon>timer</mat-icon> <span>{{ totalTime }}</span>
+            <mat-chip
+                [disabled]="true"
+                *ngIf="totalTime as time"
+                matTooltip="{{ 'recipe.total_time' | translate }}"
+                [matTooltipShowDelay]="500"
+            >
+                <mat-icon>timer</mat-icon> <span>{{ time.key | translate: time.replacements }}</span>
             </mat-chip>
-            <mat-chip [disabled]="true" *ngIf="recipe.portions" matTooltip="Portions" [matTooltipShowDelay]="500">
+            <mat-chip
+                [disabled]="true"
+                *ngIf="recipe.portions"
+                matTooltip="{{ 'recipe.portions' | translate }}"
+                [matTooltipShowDelay]="500"
+            >
                 <mat-icon>restaurant</mat-icon> <span>{{ recipe.portions }}</span>
             </mat-chip>
             <mat-chip
                 [disabled]="true"
                 *ngIf="recipe.difficulty !== null"
-                matTooltip="Difficulty"
+                matTooltip="{{ 'recipe.difficulty' | translate }}"
                 [matTooltipShowDelay]="500"
                 class="difficulty"
             >
@@ -54,7 +64,11 @@
                     whatshot
                 </mat-icon>
             </mat-chip>
-            <mat-chip [disabled]="true" matTooltip="Publish date" [matTooltipShowDelay]="500">
+            <mat-chip
+                [disabled]="true"
+                matTooltip="{{ 'recipe.publish_date' | translate }}"
+                [matTooltipShowDelay]="500"
+            >
                 <mat-icon>today</mat-icon> <span>{{ recipe.publishDate * 1000 | date }}</span>
             </mat-chip>
         </mat-chip-list>

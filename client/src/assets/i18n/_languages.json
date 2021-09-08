@@ -1,10 +1,12 @@
 [
   {
     "key": "en",
-    "name": "English"
+    "name": "English",
+    "flagCode": "gb"
   },
   {
     "key": "de",
-    "name": "Deutsch"
+    "name": "Deutsch",
+    "flagCode": "de"
   }
 ]

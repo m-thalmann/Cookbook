@@ -1,21 +1,15 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ApiService } from 'src/app/core/api/api.service';
-import {
-  EditIngredient,
-  EditRecipe,
-  Ingredient,
-  ListIngredient,
-  NewRecipe,
-  RecipeFull,
-} from 'src/app/core/api/ApiInterfaces';
+import { EditIngredient, EditRecipe, ListIngredient, NewRecipe, RecipeFull } from 'src/app/core/api/ApiInterfaces';
 import { ApiResponse } from 'src/app/core/api/ApiResponse';
 import { getFormError } from 'src/app/core/forms/Validation';
 import { trimAndNull } from 'src/app/core/functions';
+import { TranslationService } from 'src/app/core/i18n/translation.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
   selector: 'cb-edit-recipe-information',
@@ -85,7 +79,12 @@ export class EditRecipeInformationComponent {
 
   private _editRecipe: RecipeFull | null = null;
 
-  constructor(private fb: FormBuilder, private api: ApiService, private snackBar: MatSnackBar) {
+  constructor(
+    private fb: FormBuilder,
+    private api: ApiService,
+    private snackbar: SnackbarService,
+    private translation: TranslationService
+  ) {
     this.ingredients = this.fb.array([]);
 
     this.recipeForm = this.fb.group({
@@ -362,17 +361,15 @@ export class EditRecipeInformationComponent {
         ingredientsError: this.ingredientsError,
       });
 
-      let saveMessage = 'Successfully saved!';
+      let saveMessage = 'messages.successfully_saved';
 
       if (this.ingredientsError) {
-        saveMessage = 'Successfully saved! Some ingredients could not be saved.';
+        saveMessage = 'messages.recipes.successfully_saved_ingredients_error';
       }
 
-      this.snackBar.open(saveMessage, 'OK', {
-        duration: 5000,
-      });
+      this.snackbar.info(saveMessage);
     } else {
-      this.error = 'Error saving recipe';
+      this.error = this.translation.translate('messages.recipes.error_saving_recipe');
 
       if (res.error?.info) {
         this.error += `: ${res.error.info}`;

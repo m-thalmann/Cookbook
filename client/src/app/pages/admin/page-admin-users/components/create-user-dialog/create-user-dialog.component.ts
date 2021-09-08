@@ -1,10 +1,10 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { getFormError } from 'src/app/core/forms/Validation';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
   selector: 'cb-create-user-dialog',
@@ -23,7 +23,7 @@ export class CreateUserDialogComponent implements OnDestroy {
     private fb: FormBuilder,
     private api: ApiService,
     private dialogRef: MatDialogRef<CreateUserDialogComponent>,
-    private snackBar: MatSnackBar
+    private snackbar: SnackbarService
   ) {
     this.createForm = this.fb.group({
       email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
@@ -107,16 +107,14 @@ export class CreateUserDialogComponent implements OnDestroy {
       if (res.isOK()) {
         this.dialogRef.close(true);
 
-        this.snackBar.open('Successfully created user!', 'OK', {
-          duration: 5000,
-        });
+        this.snackbar.info('message.admin.user_created_successfully');
       } else if (res.isConflict()) {
-        throw new Error('This email is already taken!');
+        throw new Error('messages.users.email_already_taken');
       } else {
         throw new Error(res.error?.info || undefined);
       }
     } catch (e: any) {
-      this.error = e.message || 'An error occurred!';
+      this.error = e.message || 'messages.error_occurred';
       console.error('Error creating user:', res.error);
     }
   }

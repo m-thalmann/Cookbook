@@ -1,30 +1,36 @@
 <form [formGroup]="recipeForm">
-    <h3>General information</h3>
+    <h3>{{ 'pages.edit_recipe.general_information' | translate }}</h3>
     <mat-form-field appearance="outline" color="primary" class="full-width">
-        <mat-label>Name</mat-label>
+        <mat-label>{{ 'recipe.name' | translate }}</mat-label>
         <mat-icon matPrefix>drive_file_rename_outline</mat-icon>
         <input matInput formControlName="name" required />
-        <mat-error *ngIf="getFormError('name') != null">{{ getFormError('name') }}</mat-error>
+        <mat-error *ngIf="getFormError('name') as formError">{{
+            formError.key | translate: formError.replacements
+        }}</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline" color="primary">
-        <mat-label>Visibility</mat-label>
+        <mat-label>{{ 'recipe.visibility' | translate }}</mat-label>
         <mat-icon matPrefix>{{ public?.value ? 'public' : 'lock' }}</mat-icon>
         <mat-select formControlName="public" required>
             <mat-select-trigger>
-                {{ public?.value ? 'Public' : 'Private' }}
+                {{ (public?.value ? 'recipe.public' : 'recipe.private') | translate }}
             </mat-select-trigger>
 
-            <mat-option [value]="true"><mat-icon>public</mat-icon> Public</mat-option>
-            <mat-option [value]="false"><mat-icon>lock</mat-icon> Private</mat-option>
+            <mat-option [value]="true"><mat-icon>public</mat-icon> {{ 'recipe.public' | translate }}</mat-option>
+            <mat-option [value]="false"><mat-icon>lock</mat-icon> {{ 'recipe.private' | translate }}</mat-option>
         </mat-select>
-        <mat-error *ngIf="getFormError('public') != null">{{ getFormError('public') }}</mat-error>
+        <mat-error *ngIf="getFormError('public') as formError">{{
+            formError.key | translate: formError.replacements
+        }}</mat-error>
     </mat-form-field>
     <mat-form-field appearance="outline" color="primary">
-        <mat-label>Category</mat-label>
+        <mat-label>{{ 'recipe.category' | translate }}</mat-label>
         <mat-icon matPrefix>menu_book</mat-icon>
         <input matInput formControlName="category" [matAutocomplete]="autocompleteCategory" />
-        <mat-error *ngIf="getFormError('category') != null">{{ getFormError('category') }}</mat-error>
+        <mat-error *ngIf="getFormError('category') as formError">{{
+            formError.key | translate: formError.replacements
+        }}</mat-error>
         <mat-autocomplete #autocompleteCategory="matAutocomplete">
             <mat-option
                 *ngFor="let option of filteredCategoryList | async"
@@ -37,20 +43,24 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" color="primary" class="full-width">
-        <mat-label>Description</mat-label>
+        <mat-label>{{ 'recipe.description' | translate }}</mat-label>
         <textarea matInput formControlName="description"></textarea>
-        <mat-error *ngIf="getFormError('description') != null">{{ getFormError('description') }}</mat-error>
+        <mat-error *ngIf="getFormError('description') as formError">{{
+            formError.key | translate: formError.replacements
+        }}</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline" color="primary" class="portions">
-        <mat-label>Portions</mat-label>
+        <mat-label>{{ 'recipe.portions' | translate }}</mat-label>
         <mat-icon matPrefix>restaurant</mat-icon>
         <input matInput formControlName="portions" type="number" />
-        <mat-error *ngIf="getFormError('portions') != null">{{ getFormError('portions') }}</mat-error>
+        <mat-error *ngIf="getFormError('portions') as formError">{{
+            formError.key | translate: formError.replacements
+        }}</mat-error>
     </mat-form-field>
 
     <div class="difficulty">
-        <span class="title">Difficulty</span>
+        <span class="title">{{ 'recipe.difficulty' | translate }}</span>
         <mat-slider
             min="0"
             max="5"
@@ -67,32 +77,38 @@
     </div>
 
     <div class="times">
-        <h3>Times (minutes)</h3>
+        <h3>{{ 'pages.edit_recipe.times' | translate }} ({{ 'minutes' | translate }})</h3>
         <mat-form-field appearance="outline" color="primary">
-            <mat-label>Preparation time</mat-label>
+            <mat-label>{{ 'recipe.preparation_time' | translate }}</mat-label>
             <mat-icon matPrefix>timer</mat-icon>
             <input matInput formControlName="preparationTime" type="number" />
-            <span matSuffix>min.</span>
-            <mat-error *ngIf="getFormError('preparationTime') != null">{{ getFormError('preparationTime') }}</mat-error>
+            <span matSuffix>{{ 'min.' | translate }}</span>
+            <mat-error *ngIf="getFormError('preparationTime') as formError">{{
+                formError.key | translate: formError.replacements
+            }}</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline" color="primary">
-            <mat-label>Rest time</mat-label>
+            <mat-label>{{ 'recipe.rest_time' | translate }}</mat-label>
             <mat-icon matPrefix>timer</mat-icon>
             <input matInput formControlName="restTime" type="number" />
-            <span matSuffix>min.</span>
-            <mat-error *ngIf="getFormError('restTime') != null">{{ getFormError('restTime') }}</mat-error>
+            <span matSuffix>{{ 'min.' | translate }}</span>
+            <mat-error *ngIf="getFormError('restTime') as formError">{{
+                formError.key | translate: formError.replacements
+            }}</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline" color="primary">
-            <mat-label>Cooking-/Baking time</mat-label>
+            <mat-label>{{ 'recipe.cook_time' | translate }}</mat-label>
             <mat-icon matPrefix>timer</mat-icon>
             <input matInput formControlName="cookTime" type="number" />
-            <span matSuffix>min.</span>
-            <mat-error *ngIf="getFormError('cookTime') != null">{{ getFormError('cookTime') }}</mat-error>
+            <span matSuffix>{{ 'min.' | translate }}</span>
+            <mat-error *ngIf="getFormError('cookTime') as formError">{{
+                formError.key | translate: formError.replacements
+            }}</mat-error>
         </mat-form-field>
     </div>
 
     <div class="ingredients">
-        <h3>Ingredients ({{ ingredients.length }})</h3>
+        <h3>{{ 'recipe.ingredients' | translate }} ({{ ingredients.length }})</h3>
         <div
             class="ingredient-row"
             formArrayName="ingredients"
@@ -100,7 +116,7 @@
         >
             <div [formGroupName]="i">
                 <mat-form-field appearance="outline" color="primary" class="ingredient-amount">
-                    <mat-label>Amount</mat-label>
+                    <mat-label>{{ 'amount' | translate }}</mat-label>
                     <input
                         matInput
                         formControlName="amount"
@@ -111,12 +127,12 @@
                     <mat-error *ngIf="getFormError('amount', i) != null">{{ getFormError('amount', i) }}</mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="outline" color="primary" class="ingredient-unit">
-                    <mat-label>Unit</mat-label>
+                    <mat-label>{{ 'unit' | translate }}</mat-label>
                     <input matInput formControlName="unit" (keydown.enter)="$event.preventDefault(); addIngredient()" />
                     <mat-error *ngIf="getFormError('unit', i) != null">{{ getFormError('unit', i) }}</mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="outline" color="primary" class="ingredient-name">
-                    <mat-label>Name</mat-label>
+                    <mat-label>{{ 'recipe.name' | translate }}</mat-label>
                     <input
                         matInput
                         formControlName="name"
@@ -162,18 +178,21 @@
             [disabled]="saving || disabled"
             type="button"
         >
-            <mat-icon>add</mat-icon> Add ingredient
+            <mat-icon>add</mat-icon> {{ 'pages.edit_recipe.add_ingredient' | translate }}
         </button>
 
         <p class="fg-warn icon-text" style="display: inline-block; margin-left: 0.5em" *ngIf="ingredientsError">
             <mat-icon>error</mat-icon>
-            <span> Some ingredients could not be saved </span>
+            <span> {{ 'messages.recipes.ingredients_error' | translate }} </span>
         </p>
     </div>
 
-    <h3>Preparation</h3>
+    <h3>{{ 'recipe.preparation' | translate }}</h3>
 
-    <cb-editor formControlName="preparation" placeholder="Insert text..."></cb-editor>
+    <cb-editor
+        formControlName="preparation"
+        [placeholder]="'pages.edit_recipe.insert_text_placeholder' | translate"
+    ></cb-editor>
 
     <div class="save">
         <button
@@ -183,8 +202,12 @@
             class="save-button"
             [disabled]="saving || recipeForm.invalid || disabled"
         >
-            <ng-container *ngIf="isEdit"> <mat-icon>save</mat-icon> Save &amp; continue </ng-container>
-            <ng-container *ngIf="!isEdit"> <mat-icon>cloud_upload</mat-icon> Publish &amp; continue </ng-container>
+            <ng-container *ngIf="isEdit">
+                <mat-icon>save</mat-icon> {{ 'pages.edit_recipe.save_and_continue' | translate }}
+            </ng-container>
+            <ng-container *ngIf="!isEdit">
+                <mat-icon>cloud_upload</mat-icon> {{ 'pages.edit_recipe.publish_and_continue' | translate }}
+            </ng-container>
         </button>
 
         <mat-spinner diameter="20" *ngIf="saving"></mat-spinner>

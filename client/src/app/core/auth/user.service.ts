@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthUser } from '../api/ApiInterfaces';
+import { SnackbarService } from '../services/snackbar.service';
 import StorageNames from '../StorageNames';
 
 @Injectable({
@@ -12,7 +12,7 @@ export class UserService {
   private _user: AuthUser | null = null;
   private _token: string | null = null;
 
-  constructor(private router: Router, private dialog: MatDialog, private snackBar: MatSnackBar) {
+  constructor(private router: Router, private dialog: MatDialog, private snackbar: SnackbarService) {
     this.loadToken();
   }
 
@@ -126,22 +126,22 @@ export class UserService {
 
     switch (reason) {
       case 'logout':
-        reason = 'Successfully logged out!';
+        reason = 'messages.auth.logout.logout';
         break;
       case 'badToken':
       case 'unauthorized':
-        reason = 'You have to log back in!';
+        reason = 'messages.auth.logout.log_back_in';
         break;
       case 'accountDeleted':
-        reason = 'Account deleted successfully!';
+        reason = 'messages.auth.logout.account_deleted';
         break;
       default:
-        reason = 'You have been logged out';
+        reason = 'messages.auth.logout.logged_out';
     }
 
-    this.snackBar.open(reason, 'OK', {
-      duration: 5000,
-    });
+    if (reason) {
+      this.snackbar.info(reason);
+    }
   }
 
   /**

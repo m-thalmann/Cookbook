@@ -2,7 +2,6 @@ import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { Subscription } from 'rxjs';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
@@ -10,6 +9,7 @@ import { InputDialogComponent } from 'src/app/components/input-dialog/input-dial
 import { ApiService } from 'src/app/core/api/api.service';
 import { ApiOptions, Pagination, UserFull } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { CreateUserDialogComponent } from './components/create-user-dialog/create-user-dialog.component';
 
 @Component({
@@ -44,7 +44,7 @@ export class PageAdminUsersComponent implements AfterViewInit, OnDestroy {
     private api: ApiService,
     private user: UserService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackbar: SnackbarService
   ) {}
 
   setEditUser(user: UserFull | null) {
@@ -140,7 +140,9 @@ export class PageAdminUsersComponent implements AfterViewInit, OnDestroy {
     let newPassword = await this.dialog
       .open(InputDialogComponent, {
         data: {
-          title: 'Enter new password',
+          translate: true,
+          title: 'pages.admin.users.enter_new_password',
+          label: 'user.new_password',
           type: 'password',
         },
       })
@@ -155,15 +157,11 @@ export class PageAdminUsersComponent implements AfterViewInit, OnDestroy {
     let res = await this.api.admin.updateUser(id, { password: newPassword });
 
     if (res.isOK()) {
-      this.snackBar.open('New password set successfully', 'OK', {
-        duration: 5000,
-      });
+      this.snackbar.info('messages.admin.new_password_successfully_saved');
 
       await this.loadUsers();
     } else {
-      this.snackBar.open('Error setting new password!', 'OK', {
-        panelClass: 'action-warn',
-      });
+      this.snackbar.error('messages.admin.error_saving_new_password');
       console.error('Error setting new password:', res.error);
     }
 
@@ -178,18 +176,18 @@ export class PageAdminUsersComponent implements AfterViewInit, OnDestroy {
     if (res.isOK()) {
       this.dialog.open(ConfirmDialogComponent, {
         data: {
-          title: 'Password was reset',
-          content: `The new password is: ${res.value?.password}`,
-          btnConfirm: 'OK',
+          translate: true,
+          translationKey: 'dialogs.password_was_reset',
+          contentReplace: {
+            password: res.value?.password || '',
+          },
           onlyOk: true,
         },
       });
 
       await this.loadUsers();
     } else {
-      this.snackBar.open('Error resetting password!', 'OK', {
-        panelClass: 'action-warn',
-      });
+      this.snackbar.error('messages.admin.error_resetting_password');
       console.error('Error resetting password:', res.error);
     }
 
@@ -214,8 +212,9 @@ export class PageAdminUsersComponent implements AfterViewInit, OnDestroy {
     let doDelete = await this.dialog
       .open(ConfirmDialogComponent, {
         data: {
-          title: 'Delete user?',
-          content: `Are you sure you want to delete this user: "${user.email}"? This action is not reversible`,
+          translate: true,
+          translationKey: 'dialogs.delete_user',
+          contentReplace: { email: user.email },
           warn: true,
         },
       })
@@ -229,14 +228,10 @@ export class PageAdminUsersComponent implements AfterViewInit, OnDestroy {
     let res = await this.api.admin.deleteUser(id);
 
     if (res.isOK()) {
-      this.snackBar.open('User deleted successfully!', 'OK', {
-        duration: 5000,
-      });
+      this.snackbar.info('messages.admin.user_deleted_successfully');
       await this.loadUsers();
     } else {
-      this.snackBar.open('Error deleting user!', 'OK', {
-        panelClass: 'action-warn',
-      });
+      this.snackbar.error('messages.admin.error_deleting_user');
       console.error('Error deleting user:', res.error);
     }
 
@@ -251,10 +246,9 @@ export class PageAdminUsersComponent implements AfterViewInit, OnDestroy {
     let doEditAdmin = await this.dialog
       .open(ConfirmDialogComponent, {
         data: {
-          title: user.isAdmin ? 'Revoke admin role?' : 'Grant admin role?',
-          content: `Are you sure you want to ${
-            user.isAdmin ? 'revoke the admin role from' : 'grant the admin role to'
-          } this user: "${user.email}"?`,
+          translate: true,
+          translationKey: user.isAdmin ? 'dialogs.revoke_admin' : 'dialogs.grant_admin',
+          contentReplace: { email: user.email },
         },
       })
       .afterClosed()
@@ -267,14 +261,10 @@ export class PageAdminUsersComponent implements AfterViewInit, OnDestroy {
     let res = await this.api.admin.updateUser(user.id, { isAdmin: !user.isAdmin });
 
     if (res.isOK()) {
-      this.snackBar.open('User updated successfully!', 'OK', {
-        duration: 5000,
-      });
+      this.snackbar.info('messages.admin.user_updated_successfully');
       await this.loadUsers();
     } else {
-      this.snackBar.open('Error updating user!', 'OK', {
-        panelClass: 'action-warn',
-      });
+      this.snackbar.error('messages.admin.error_updating_user');
       console.error('Error updating user:', res.error);
     }
 
@@ -291,14 +281,10 @@ export class PageAdminUsersComponent implements AfterViewInit, OnDestroy {
     let res = await this.api.admin.updateUser(user.id, { emailVerified: !user.emailVerified });
 
     if (res.isOK()) {
-      this.snackBar.open('User updated successfully!', 'OK', {
-        duration: 5000,
-      });
+      this.snackbar.info('messages.admin.user_updated_successfully');
       await this.loadUsers();
     } else {
-      this.snackBar.open('Error updating user!', 'OK', {
-        panelClass: 'action-warn',
-      });
+      this.snackbar.error('messages.admin.error_updating_user');
       console.error('Error updating user:', res.error);
     }
 
@@ -327,15 +313,11 @@ export class PageAdminUsersComponent implements AfterViewInit, OnDestroy {
       let res = await this.api.admin.updateUser(user.id, { email: email, name: name });
 
       if (res.isOK()) {
-        this.snackBar.open('User updated successfully!', 'OK', {
-          duration: 5000,
-        });
+        this.snackbar.info('messages.admin.user_updated_successfully');
         this.editUserId = null;
         await this.loadUsers();
       } else {
-        this.snackBar.open('Error updating user!', 'OK', {
-          panelClass: 'action-warn',
-        });
+        this.snackbar.error('messages.admin.error_updating_user');
         console.error('Error updating user:', res.error);
       }
 

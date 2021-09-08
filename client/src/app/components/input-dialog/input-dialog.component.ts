@@ -12,6 +12,8 @@ export class InputDialogComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public data: {
+      translate?: boolean;
+
       title: string;
       type?: string;
       label?: string;
@@ -26,12 +28,16 @@ export class InputDialogComponent {
     }
   }
 
+  get isTranslated() {
+    return this.data.translate;
+  }
+
   get btnConfirm() {
-    return this.data.btnConfirm ? this.data.btnConfirm : 'SAVE';
+    return this.data.btnConfirm ? this.data.btnConfirm : 'Save';
   }
 
   get btnDecline() {
-    return this.data.btnDecline ? this.data.btnDecline : 'CANCEL';
+    return this.data.btnDecline ? this.data.btnDecline : 'Cancel';
   }
 
   confirm() {

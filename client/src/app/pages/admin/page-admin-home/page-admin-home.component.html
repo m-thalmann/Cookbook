@@ -1,7 +1,9 @@
-<h2 class="icon-text"><mat-icon>admin_panel_settings</mat-icon><span>Admin area</span></h2>
+<h2 class="icon-text">
+    <mat-icon>admin_panel_settings</mat-icon><span>{{ 'pages.admin.area.title' | translate }}</span>
+</h2>
 
 <div class="dashboard">
-    <h3>Server information</h3>
+    <h3>{{ 'pages.admin.area.server_information' | translate }}</h3>
 
     <mat-spinner *ngIf="loading" [diameter]="32"></mat-spinner>
 
@@ -10,15 +12,20 @@
             <h4 class="icon-text">
                 <mat-icon>person</mat-icon><span>{{ serverInformation.users.total }}</span>
             </h4>
-            <h5>Total users</h5>
+            <h5>{{ 'pages.admin.area.total_users' | translate }}</h5>
 
             <div class="additional">
                 <span class="icon-text">
                     <mat-icon>remove_moderator</mat-icon>
-                    <span>Unverified: {{ serverInformation.users.unverified }}</span>
+                    <span
+                        >{{ 'pages.admin.area.unverified' | translate }}: {{ serverInformation.users.unverified }}</span
+                    >
                 </span>
                 <span class="icon-text">
-                    <mat-icon>security</mat-icon> <span>Admins: {{ serverInformation.users.admins }}</span>
+                    <mat-icon>security</mat-icon>
+                    <span
+                        >{{ 'pages.admin.area.administrators' | translate }}: {{ serverInformation.users.admins }}</span
+                    >
                 </span>
             </div>
         </div>
@@ -26,15 +33,19 @@
             <h4 class="icon-text">
                 <mat-icon>restaurant_menu</mat-icon><span>{{ serverInformation.recipes.total }}</span>
             </h4>
-            <h5>Total recipes</h5>
+            <h5>{{ 'pages.admin.area.total_recipes' | translate }}</h5>
 
             <div class="additional">
                 <span class="icon-text">
-                    <mat-icon>public</mat-icon> <span>Public: {{ serverInformation.recipes.private }}</span>
+                    <mat-icon>public</mat-icon>
+                    <span>{{ 'recipe.public' | translate }}: {{ serverInformation.recipes.private }}</span>
                 </span>
                 <span class="icon-text">
                     <mat-icon>lock</mat-icon>
-                    <span>Private: {{ serverInformation.recipes.total - serverInformation.recipes.private }}</span>
+                    <span
+                        >{{ 'recipe.private' | translate }}:
+                        {{ serverInformation.recipes.total - serverInformation.recipes.private }}</span
+                    >
                 </span>
             </div>
         </div>
@@ -42,30 +53,26 @@
             <h4 class="icon-text">
                 <mat-icon>image</mat-icon><span>{{ serverInformation.imagesSize }} MB</span>
             </h4>
-            <h5>Total image size</h5>
+            <h5>{{ 'pages.admin.area.total_image_size' | translate }}</h5>
         </div>
     </ng-container>
 
-    <p class="fg-warn" *ngIf="error"></p>
+    <p class="fg-warn" *ngIf="error">{{ 'messages.admin.error_loading_server_information' | translate }}</p>
 </div>
 
 <div class="navigation">
-    <h3>Settings</h3>
+    <h3>{{ 'settings' | translate }}</h3>
 
     <a routerLink="/admin/users">
         <mat-icon color="accent">manage_accounts</mat-icon>
-        <span>Manage users</span>
+        <span>{{ 'pages.admin.users.title' | translate }}</span>
     </a>
     <a routerLink="/admin/recipes">
         <mat-icon color="accent">menu_book</mat-icon>
-        <span>Manage recipes</span>
-    </a>
-    <a routerLink="/admin/export-import">
-        <mat-icon color="accent">import_export</mat-icon>
-        <span>Export / Import</span>
+        <span>{{ 'pages.admin.recipes.title' | translate }}</span>
     </a>
     <a routerLink="/admin/server">
         <mat-icon color="accent">miscellaneous_services</mat-icon>
-        <span>Server settings</span>
+        <span>{{ 'pages.admin.server.title' | translate }}</span>
     </a>
 </div>

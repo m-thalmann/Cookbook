@@ -6,10 +6,10 @@ import { PageAdminServerComponent } from './page-admin-server/page-admin-server.
 import { PageAdminUsersComponent } from './page-admin-users/page-admin-users.component';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', component: PageAdminHomeComponent, data: { title: 'Admin Area' } },
-  { path: 'users', component: PageAdminUsersComponent, data: { title: 'Admin Users' } },
-  { path: 'recipes', component: PageAdminRecipesComponent, data: { title: 'Admin Recipes' } },
-  { path: 'server', component: PageAdminServerComponent, data: { title: 'Admin Server' } },
+  { path: '', pathMatch: 'full', component: PageAdminHomeComponent, data: { title: 'pages.admin.area.title' } },
+  { path: 'users', component: PageAdminUsersComponent, data: { title: 'pages.admin.users.title' } },
+  { path: 'recipes', component: PageAdminRecipesComponent, data: { title: 'pages.admin.recipes.title' } },
+  { path: 'server', component: PageAdminServerComponent, data: { title: 'pages.admin.server.title' } },
 ];
 
 @NgModule({

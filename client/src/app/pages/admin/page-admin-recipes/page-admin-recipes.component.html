@@ -1,12 +1,14 @@
 <a routerLink="/admin" class="icon-text back-link">
-    <mat-icon>arrow_back</mat-icon><span>Go back to admin area</span>
+    <mat-icon>arrow_back</mat-icon><span>{{ 'pages.admin.go_back' | translate }}</span>
 </a>
 
-<h2 class="icon-text"><mat-icon>menu_book</mat-icon><span>Admin recipes</span></h2>
+<h2 class="icon-text">
+    <mat-icon>menu_book</mat-icon><span>{{ 'pages.admin.recipes.title' | translate }}</span>
+</h2>
 
 <div class="filter">
     <mat-form-field appearance="outline" color="primary" class="search-field">
-        <mat-label>Search</mat-label>
+        <mat-label>{{ 'search' | translate }}</mat-label>
         <mat-icon matPrefix>search</mat-icon>
         <input matInput [(ngModel)]="searchInput" (keyup.enter)="doSearch()" [disabled]="loading" />
         <button matSuffix mat-icon-button (click)="doSearch()" [disabled]="loading" color="accent">
@@ -16,7 +18,7 @@
     <br />
     <mat-chip-list *ngIf="filterUserId">
         <mat-chip [removable]="true">
-            <span>User: {{ filterUser?.name }} ({{ filterUserId }})</span>
+            <span>{{ 'user.user' | translate }}: {{ filterUser?.name }} ({{ filterUserId }})</span>
             <mat-icon matChipRemove routerLink="/admin/recipes">cancel</mat-icon>
         </mat-chip>
     </mat-chip-list>

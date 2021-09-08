@@ -1,10 +1,10 @@
 <a routerLink="/categories" *ngIf="category" class="icon-text back-link">
-    <mat-icon>arrow_back</mat-icon><span>Go back to categories</span>
+    <mat-icon>arrow_back</mat-icon><span>{{ 'pages.categories.go_back' | translate }}</span>
 </a>
 <h2 class="icon-text">
     <mat-icon>menu_book</mat-icon>
 
-    <span *ngIf="isOverview">Browse categories</span>
+    <span *ngIf="isOverview">{{ 'pages.categories.browse_categories' | translate }}</span>
     <span *ngIf="!isOverview">{{ category }}</span>
 </h2>
 
@@ -25,9 +25,11 @@
         </ng-container>
     </div>
 
-    <p class="icon-text fg-warn" *ngIf="error"><mat-icon>error</mat-icon><span>Error loading categories</span></p>
+    <p class="icon-text fg-warn" *ngIf="error">
+        <mat-icon>error</mat-icon><span>{{ 'messages.categories.error_loading_categories' | translate }}</span>
+    </p>
     <p class="icon-text" *ngIf="categories && categories.length === 0">
-        <mat-icon>info</mat-icon><span>No categories found</span>
+        <mat-icon>info</mat-icon><span>{{ 'messages.categories.no_categories_found' | translate }}</span>
     </p>
 </ng-container>
 

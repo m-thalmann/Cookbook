@@ -5,7 +5,7 @@
         (click)="fileInput.click()"
         [disabled]="saving || disabled"
     >
-        <mat-icon>file_upload</mat-icon> Upload new image
+        <mat-icon>file_upload</mat-icon> {{ 'pages.edit_recipe.upload_new_image' | translate }}
     </button>
 
     <div class="progress" *ngIf="saving && uploadProgress !== null">
@@ -13,7 +13,7 @@
         <span>{{ uploadProgress }}%</span>
     </div>
 
-    <span class="fg-warn" *ngIf="error">{{ error }}</span>
+    <span class="fg-warn" *ngIf="error">{{ error | translate }}</span>
     <input type="file" hidden (change)="uploadImage(fileInput.files)" #fileInput accept=".jpg,.jpeg,.jfif,.png,.gif" />
 </div>
 
@@ -31,6 +31,6 @@
         </button>
     </div>
     <p class="icon-text" *ngIf="recipeImagesURLs && recipeImagesURLs.length === 0">
-        <mat-icon>info</mat-icon><span>No images</span>
+        <mat-icon>info</mat-icon><span>{{ 'messages.recipe_images.no_images' | translate }}</span>
     </p>
 </div>

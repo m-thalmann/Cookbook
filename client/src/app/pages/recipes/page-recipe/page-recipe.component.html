@@ -3,14 +3,14 @@
         <span>{{ recipe.name }}</span>
         <mat-icon
             class="visibility"
-            [matTooltip]="recipe.public ? 'Public' : 'Private'"
+            [matTooltip]="(recipe.public ? 'recipe.public' : 'recipe.private') | translate"
             [matTooltipShowDelay]="500"
             [inline]="true"
         >
             {{ recipe.public ? 'public' : 'lock' }}
         </mat-icon>
     </h2>
-    <span class="author">by {{ recipe.user.name }}</span>
+    <span class="author">{{ 'recipe.by' | translate }} {{ recipe.user.name }}</span>
 
     <div class="information">
         <mat-chip-list>
@@ -18,18 +18,23 @@
                 mat-chip
                 [routerLink]="categoryURL"
                 *ngIf="recipe.category"
-                matTooltip="Category"
+                [matTooltip]="'recipe.category' | translate"
                 [matTooltipShowDelay]="500"
             >
                 <mat-icon>menu_book</mat-icon> <span>{{ recipe.category }}</span>
             </a>
-            <mat-chip [disabled]="true" *ngIf="totalTime" matTooltip="Total time" [matTooltipShowDelay]="500">
-                <mat-icon>timer</mat-icon> <span>{{ totalTime }}</span>
+            <mat-chip
+                [disabled]="true"
+                *ngIf="totalTime as time"
+                matTooltip="{{ 'recipe.total_time' | translate }}"
+                [matTooltipShowDelay]="500"
+            >
+                <mat-icon>timer</mat-icon> <span>{{ time.key | translate: time.replacements }}</span>
             </mat-chip>
             <mat-chip
                 [disabled]="true"
                 *ngIf="recipe.difficulty !== null"
-                matTooltip="Difficulty"
+                [matTooltip]="'recipe.difficulty' | translate"
                 [matTooltipShowDelay]="500"
                 class="difficulty"
             >
@@ -37,7 +42,7 @@
                     whatshot
                 </mat-icon>
             </mat-chip>
-            <mat-chip [disabled]="true" matTooltip="Publish date" [matTooltipShowDelay]="500">
+            <mat-chip [disabled]="true" [matTooltip]="'recipe.publish_date' | translate" [matTooltipShowDelay]="500">
                 <mat-icon>today</mat-icon> <span>{{ recipe.publishDate * 1000 | date: 'MMM d, y HH:mm' }}</span>
             </mat-chip>
         </mat-chip-list>
@@ -59,7 +64,7 @@
             class="edit-button"
             *ngIf="canEdit"
         >
-            <mat-icon>edit</mat-icon> Edit recipe
+            <mat-icon>edit</mat-icon> {{ 'pages.edit_recipe.title' | translate }}
         </a>
     </div>
 
@@ -71,9 +76,9 @@
 
     <div class="ingredients" *ngIf="recipe.ingredients.length > 0">
         <h3>
-            <span>Ingredients for</span>
+            <span>{{ 'pages.recipe.ingredients_for' | translate }}</span>
             <input type="number" min="1" [value]="selectedPortions" (input)="setSelectedPortions($event)" />
-            <span>portions</span>
+            <span>{{ 'recipe.portions' | translate }}</span>
         </h3>
 
         <table>
@@ -92,21 +97,27 @@
     </div>
 
     <div class="description" *ngIf="recipe.description">
-        <h3>Description</h3>
+        <h3>{{ 'recipe.description' | translate }}</h3>
         <p>{{ recipe.description }}</p>
     </div>
 
     <div class="preparation" *ngIf="recipe.preparation">
-        <h3>Preparation</h3>
+        <h3>{{ 'recipe.preparation' | translate }}</h3>
         <mat-chip-list *ngIf="recipe.preparationTime || recipe.cookTime">
             <mat-chip [disabled]="true" *ngIf="recipe.preparationTime">
-                <mat-icon>timer</mat-icon> <span>Preparation time ~{{ recipe.preparationTime }} min</span>
+                <mat-icon>timer</mat-icon>
+                <span>
+                    {{ 'recipe.preparation_time' | translate }} ~{{ recipe.preparationTime }}
+                    {{ 'min.' | translate }}
+                </span>
             </mat-chip>
             <mat-chip [disabled]="true" *ngIf="recipe.restTime">
-                <mat-icon>timer</mat-icon> <span>Rest time ~{{ recipe.restTime }} min</span>
+                <mat-icon>timer</mat-icon>
+                <span>{{ 'recipe.rest_time' | translate }} ~{{ recipe.restTime }} {{ 'min.' | translate }}</span>
             </mat-chip>
             <mat-chip [disabled]="true" *ngIf="recipe.cookTime">
-                <mat-icon>timer</mat-icon> <span>Cooking-/Baking time ~{{ recipe.cookTime }} min</span>
+                <mat-icon>timer</mat-icon>
+                <span>{{ 'recipe.cook_time' | translate }} ~{{ recipe.cookTime }} {{ 'min.' | translate }}</span>
             </mat-chip>
         </mat-chip-list>
 
@@ -117,9 +128,11 @@
 <cb-skeleton-page-recipe *ngIf="!recipe && !error"></cb-skeleton-page-recipe>
 
 <mat-menu #shareMenu="matMenu">
-    <button mat-menu-item (click)="copyLink()"><mat-icon class="fg-accent">link</mat-icon> Copy link</button>
+    <button mat-menu-item (click)="copyLink()">
+        <mat-icon class="fg-accent">link</mat-icon> {{ 'pages.recipe.share.copy_link' | translate }}
+    </button>
     <a mat-menu-item [href]="shareEmailLink" target="_blank" rel="noopener">
-        <mat-icon class="fg-accent">email</mat-icon> Email
+        <mat-icon class="fg-accent">email</mat-icon> {{ 'email' | translate }}
     </a>
     <a mat-menu-item [href]="shareWhatsAppLink" target="_blank" rel="noopener">
         <mat-icon svgIcon="whatsapp" class="fg-whatsapp"></mat-icon> WhatsApp
@@ -129,4 +142,6 @@
     </a>
 </mat-menu>
 
-<span class="icon-text fg-warn" *ngIf="error"><mat-icon>error</mat-icon><span>Error loading recipe</span></span>
+<span class="icon-text fg-warn" *ngIf="error"
+    ><mat-icon>error</mat-icon><span>{{ 'messages.recipes.error_loading_recipe' | translate }}</span></span
+>

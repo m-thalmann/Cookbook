@@ -7,6 +7,8 @@ import StorageNames from '../StorageNames';
 const TRANSLATIONS_PATH = 'assets/i18n';
 const DEFAULT_LANGUAGE = 'en';
 
+export type TranslationObject = { key: string; replacements?: { [key: string]: string } };
+
 @Injectable({
   providedIn: 'root',
 })
@@ -16,7 +18,7 @@ export class TranslationService {
   private translations: { [key: string]: any } = {};
   private currentLanguage: string | null = null;
 
-  private availableLanguages: { key: string; name: string }[] | null = null;
+  private availableLanguages: { key: string; name: string; flagCode: string }[] | null = null;
 
   private _languageChanged = new EventEmitter<void>();
 
@@ -115,8 +117,15 @@ export class TranslationService {
       element = null;
     }
 
-    if (!element && (!environment.production || (window as any).debug)) {
-      Logger.warn('TranslationService', 'orange', `Translation not found for key: '${key}'`);
+    if (
+      !element &&
+      (!environment.production || (window as any).debug || localStorage.getItem(StorageNames.Debug) === 'true')
+    ) {
+      Logger.warn(
+        'TranslationService',
+        'orange',
+        `Translation not found for key: '${key}' (Language: '${this.currentLanguage}')`
+      );
     }
 
     let value: string = element || key;

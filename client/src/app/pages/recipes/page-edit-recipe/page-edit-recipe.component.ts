@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { RecipeFull } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
   selector: 'cb-page-edit-recipe',
@@ -22,7 +22,7 @@ export class PageEditRecipeComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private api: ApiService,
-    private snackBar: MatSnackBar,
+    private snackbar: SnackbarService,
     private router: Router,
     private user: UserService
   ) {}
@@ -47,17 +47,12 @@ export class PageEditRecipeComponent implements OnInit, OnDestroy {
       if (res.value && (this.user.user?.isAdmin || res.value.user.id === this.user.user?.id)) {
         this.editRecipe = res.value;
       } else {
-        this.snackBar.open('You do not own this recipe', 'OK', {
-          panelClass: 'action-warn',
-        });
+        this.snackbar.error('messages.recipes.user_not_owner');
 
         await this.router.navigateByUrl('/home');
       }
     } else if (res.isNotFound()) {
-      this.snackBar.open('Recipe was not found', 'OK', {
-        panelClass: 'action-warn',
-        duration: 5000,
-      });
+      this.snackbar.warn('messages.recipes.recipe_not_found');
 
       await this.router.navigateByUrl('/home');
     } else {

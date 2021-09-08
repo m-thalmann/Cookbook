@@ -1,6 +1,10 @@
 <header [class.small]="smallHeader">
     <div class="container">
-        <h1><img src="assets/images/cookbook.svg" alt="Cookbook Logo" /><span>Cookbook</span></h1>
+        <h1>
+            <img src="assets/images/cookbook.svg" alt="{{ 'cookbook' | translate }} Logo" /><span>{{
+                'cookbook' | translate
+            }}</span>
+        </h1>
 
         <nav class="desktop-nav hide-mobile" [class.loggedin]="isLoggedin">
             <ng-container *ngTemplateOutlet="navItems"></ng-container>
@@ -52,7 +56,7 @@
         <a routerLink="/recipes/create" routerLinkActive="active" class="fg-accent" *ngIf="isLoggedin">
             <div>
                 <mat-icon>add</mat-icon>
-                <span>Create recipe</span>
+                <span>{{ 'pages.create_recipe.title' | translate }}</span>
             </div>
         </a>
         <div class="spacer"></div>
@@ -62,16 +66,19 @@
                 <span>{{ user.user?.email }}</span>
             </div>
             <button mat-button (click)="showMenu = false; showSettingsDialog()">
-                <mat-icon>settings</mat-icon> Settings
+                <mat-icon>settings</mat-icon> {{ 'settings' | translate }}
+            </button>
+            <button mat-button [disabled]="translation.loading" [matMenuTriggerFor]="languageMenu">
+                <mat-icon>translate</mat-icon> {{ 'language' | translate }}
             </button>
             <a routerLink="/admin" mat-button (click)="showMenu = false" *ngIf="user.user?.isAdmin">
-                <mat-icon>admin_panel_settings</mat-icon> Admin area
+                <mat-icon>admin_panel_settings</mat-icon> {{ 'pages.admin.area.title' | translate }}
             </a>
-            <a routerLink="/logout" mat-button color="warn"><mat-icon>logout</mat-icon> Logout</a>
+            <a routerLink="/logout" mat-button color="warn"><mat-icon>logout</mat-icon> {{ 'logout' | translate }}</a>
         </div>
         <div class="account" *ngIf="!isLoggedin">
             <button mat-button color="accent" (click)="showMenu = false; showLoginRegisterDialog()">
-                <mat-icon>login</mat-icon> Login / Register
+                <mat-icon>login</mat-icon> {{ 'login' | translate }} / {{ 'register' | translate }}
             </button>
         </div>
     </nav>
@@ -96,33 +103,37 @@
     <a routerLink="/home" routerLinkActive="active">
         <div>
             <mat-icon>home</mat-icon>
-            <span>Home</span>
+            <span>{{ 'pages.home.title' | translate }}</span>
         </div>
     </a>
     <a routerLink="/my" routerLinkActive="active" *ngIf="isLoggedin">
         <div>
             <mat-icon>restaurant_menu</mat-icon>
-            <span>My Recipes</span>
+            <span>{{ 'pages.my_recipes.title' | translate }}</span>
         </div>
     </a>
     <a routerLink="/categories" routerLinkActive="active">
         <div>
             <mat-icon>menu_book</mat-icon>
-            <span>Categories</span>
+            <span>{{ 'pages.categories.title' | translate }}</span>
         </div>
     </a>
 </ng-template>
 
 <mat-menu #userMenu="matMenu" xPosition="before" class="hide-mobile">
     <div mat-menu-item [disabled]="true"><mat-icon>email</mat-icon> {{ user.user?.email }}</div>
-    <button mat-menu-item (click)="showSettingsDialog()"><mat-icon>settings</mat-icon> Settings</button>
+    <button mat-menu-item (click)="showSettingsDialog()">
+        <mat-icon>settings</mat-icon> {{ 'settings' | translate }}
+    </button>
     <button mat-menu-item [disabled]="translation.loading" [matMenuTriggerFor]="languageMenu">
         <mat-icon>translate</mat-icon> {{ 'language' | translate }}
     </button>
     <a routerLink="/admin" mat-menu-item *ngIf="user.user?.isAdmin">
-        <mat-icon>admin_panel_settings</mat-icon> Admin area
+        <mat-icon>admin_panel_settings</mat-icon> {{ 'pages.admin.area.title' | translate }}
     </a>
-    <a routerLink="/logout" mat-menu-item class="fg-warn"> <mat-icon class="fg-warn">logout</mat-icon> Logout </a>
+    <a routerLink="/logout" mat-menu-item class="fg-warn">
+        <mat-icon class="fg-warn">logout</mat-icon> {{ 'logout' | translate }}
+    </a>
 </mat-menu>
 
 <mat-menu #languageMenu="matMenu" xPosition="before">
@@ -132,7 +143,13 @@
         *ngFor="let language of translation.languages"
         [disabled]="translation.loading || translation.language === language.key"
     >
-        <mat-icon *ngIf="translation.language === language.key">check</mat-icon>
-        {{ language.name }}
+        <div class="language-menu-item">
+            <img
+                src="https://www.countryflags.io/{{ language.flagCode }}/flat/32.png"
+                *ngIf="translation.language !== language.key"
+            />
+            <mat-icon *ngIf="translation.language === language.key">check</mat-icon>
+            <span>{{ language.name }}</span>
+        </div>
     </button>
 </mat-menu>

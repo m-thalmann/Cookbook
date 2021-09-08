@@ -10,14 +10,14 @@ const routes: Routes = [
     path: 'edit/:id',
     component: PageEditRecipeComponent,
     canActivate: [AuthGuard],
-    data: { title: 'Edit recipe' },
+    data: { title: 'pages.edit_recipe.title' },
   },
   { path: ':id/:slug', component: PageRecipeComponent },
   {
     path: 'create',
     component: PageCreateRecipeComponent,
     canActivate: [AuthGuard],
-    data: { title: 'Create recipe' },
+    data: { title: 'pages.create_recipe.title' },
   },
 ];
 

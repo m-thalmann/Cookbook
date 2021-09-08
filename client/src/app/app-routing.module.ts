@@ -17,20 +17,25 @@ const routes: Routes = [
     path: '',
     component: LayoutComponent,
     children: [
-      { path: 'home', component: PageHomeComponent, data: { title: 'Home' } },
-      { path: 'my', component: PageMyRecipesComponent, canActivate: [AuthGuard], data: { title: 'My recipes' } },
+      { path: 'home', component: PageHomeComponent, data: { title: 'pages.home.title' } },
+      {
+        path: 'my',
+        component: PageMyRecipesComponent,
+        canActivate: [AuthGuard],
+        data: { title: 'pages.my_recipes.title' },
+      },
       {
         path: 'search',
         children: [
           { path: '', component: PageSearchComponent },
           { path: ':search', component: PageSearchComponent },
         ],
-        data: { title: 'Search' },
+        data: { title: 'pages.search.title' },
       },
       {
         path: 'categories',
         children: [
-          { path: '', component: PageCategoriesComponent, data: { title: 'Categories' } },
+          { path: '', component: PageCategoriesComponent, data: { title: 'pages.categories.title' } },
           { path: ':category', component: PageCategoriesComponent, data: { titleFromParam: 'category' } },
         ],
       },
@@ -45,7 +50,7 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         data: { admin: true },
       },
-      { path: 'not-found', component: PageNotFoundComponent, data: { title: 'Page not found' } },
+      { path: 'not-found', component: PageNotFoundComponent, data: { title: 'pages.not_found.title' } },
     ],
   },
   { path: '**', redirectTo: '/not-found' },

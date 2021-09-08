@@ -1,16 +1,18 @@
-<span class="results" *ngIf="results !== null && !error"> {{ results }} result{{ results !== 1 ? 's' : '' }} </span>
-<span class="results" *ngIf="error"> no results </span>
+<span class="results" *ngIf="results !== null && !error">
+    {{ results }} {{ (results !== 1 ? 'results' : 'result') | translate }}
+</span>
+<span class="results" *ngIf="error"> {{ 'messages.no_results' | translate }} </span>
 <cb-skeleton *ngIf="results === null && !error" style="width: 6em" class="inline-block"></cb-skeleton>
 
 <div class="sort">
     <mat-form-field appearance="outline">
-        <mat-label>Sort by</mat-label>
+        <mat-label>{{ 'sort_by' | translate }}</mat-label>
         <mat-select [value]="sort" (valueChange)="sortChange($event)" [disabled]="loading">
-            <mat-option value="publishDate">Publish date</mat-option>
-            <mat-option value="name">Name</mat-option>
-            <mat-option value="category">Category</mat-option>
-            <mat-option value="public">Visibility</mat-option>
-            <mat-option value="difficulty">Difficulty</mat-option>
+            <mat-option value="publishDate">{{ 'recipe.publish_date' | translate }}</mat-option>
+            <mat-option value="name">{{ 'recipe.name' | translate }}</mat-option>
+            <mat-option value="category">{{ 'recipe.category' | translate }}</mat-option>
+            <mat-option value="public">{{ 'recipe.visibility' | translate }}</mat-option>
+            <mat-option value="difficulty">{{ 'recipe.difficulty' | translate }}</mat-option>
         </mat-select>
         <mat-icon matPrefix>sort</mat-icon>
     </mat-form-field>
@@ -47,4 +49,6 @@
     <cb-skeleton-recipe-item [compact]="compact" [class.compact]="compact"></cb-skeleton-recipe-item>
 </ng-container>
 
-<p class="icon-text fg-warn" *ngIf="error"><mat-icon>error</mat-icon><span>Error loading recipes</span></p>
+<p class="icon-text fg-warn" *ngIf="error">
+    <mat-icon>error</mat-icon><span>{{ 'messages.recipes.error_loading_recipes' | translate }}</span>
+</p>

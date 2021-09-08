@@ -10,8 +10,13 @@ export class ConfirmDialogComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public data: {
-      title: string;
-      content: string;
+      translate?: boolean;
+
+      title?: string;
+      content?: string;
+      translationKey?: string;
+      titleReplace?: { [key: string]: string };
+      contentReplace?: { [key: string]: string };
       btnConfirm?: string;
       btnDecline?: string;
       warn?: boolean;
@@ -19,6 +24,22 @@ export class ConfirmDialogComponent {
       error?: boolean;
     }
   ) {}
+
+  get isTranslated() {
+    return this.data.translate;
+  }
+
+  get translateTitle() {
+    const key = this.data.translationKey ? this.data.translationKey + '.title' : this.data.title || '';
+
+    return { key: key, replace: this.data.titleReplace };
+  }
+
+  get translateContent() {
+    const key = this.data.translationKey ? this.data.translationKey + '.content' : this.data.content || '';
+
+    return { key: key, replace: this.data.contentReplace };
+  }
 
   get btnConfirm() {
     return this.data.btnConfirm ? this.data.btnConfirm : 'OK';

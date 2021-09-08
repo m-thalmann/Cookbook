@@ -1,9 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStepper } from '@angular/material/stepper';
 import { ApiService } from 'src/app/core/api/api.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
   selector: 'cb-reset-password-dialog',
@@ -24,7 +24,7 @@ export class ResetPasswordDialogComponent {
   constructor(
     private dialogRef: MatDialogRef<ResetPasswordDialogComponent>,
     private api: ApiService,
-    private snackBar: MatSnackBar,
+    private snackbar: SnackbarService,
     private fb: FormBuilder
   ) {
     this.emailForm = this.fb.group({
@@ -68,7 +68,7 @@ export class ResetPasswordDialogComponent {
         this.stepper.next();
       }, 0);
     } else {
-      this.error = 'Error sending email';
+      this.error = 'messages.email.error_sending_email';
       this.emailForm.enable();
     }
 
@@ -89,15 +89,13 @@ export class ResetPasswordDialogComponent {
     let res = await this.api.resetPassword(this.email, this.token, this.password);
 
     if (res.isOK()) {
-      this.snackBar.open('Password successfully reset!', 'OK', {
-        duration: 5000,
-      });
+      this.snackbar.info('messages.users.password_reset_successful');
 
       this.dialogRef.close();
     } else if (res.isNotFound()) {
-      this.error = 'The submitted code is wrong';
+      this.error = 'messages.login_register.wrong_code_submitted';
     } else {
-      this.error = 'Error setting new password';
+      this.error = 'messages.admin.error_saving_new_password';
     }
 
     this.loading = false;

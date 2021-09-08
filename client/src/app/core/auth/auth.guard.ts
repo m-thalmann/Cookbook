@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { SnackbarService } from '../services/snackbar.service';
 import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private user: UserService, private router: Router, private snackBar: MatSnackBar) {}
+  constructor(private user: UserService, private router: Router, private snackbar: SnackbarService) {}
 
   /**
    * Returns whether the currently authenticated user is allowed to request this route
@@ -24,13 +24,11 @@ export class AuthGuard implements CanActivate {
       if (!route.data.admin || this.user.user?.isAdmin) {
         return true;
       } else {
-        error = 'You are not authorized to view this page!';
+        error = 'messages.auth.route.unauthorized';
       }
     }
 
-    this.snackBar.open(error || 'You need to log in to view this page!', 'OK', {
-      panelClass: 'action-warn',
-    });
+    this.snackbar.error(error || 'messages.auth.route.login_required');
 
     this.router.navigateByUrl('/home');
 

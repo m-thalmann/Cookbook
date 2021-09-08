@@ -141,9 +141,9 @@ export class LoginRegisterDialogComponent {
           return;
         }
       } else if (res.isNotFound()) {
-        throw new Error('Username or password wrong!');
+        throw new Error('messages.users.credentials_wrong');
       } else if (res.isConflict()) {
-        throw new Error('This email is already taken!');
+        throw new Error('messages.users.email_already_taken');
       } else if (res.isForbidden() && this.isLogin) {
         let verified = await this.dialog
           .open(VerifyEmailDialogComponent, {
@@ -160,8 +160,8 @@ export class LoginRegisterDialogComponent {
         let err = res.error || undefined;
         throw new Error(typeof err === 'object' ? err.info : err);
       }
-    } catch (e) {
-      this.error = e.message || 'An error occurred!';
+    } catch (e: any) {
+      this.error = e.message || 'messages.error_occurred';
       console.error('Error on login/register:', res.error);
     }
 

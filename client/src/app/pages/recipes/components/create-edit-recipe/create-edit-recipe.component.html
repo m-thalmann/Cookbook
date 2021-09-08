@@ -1,18 +1,19 @@
 <div class="actions" *ngIf="editRecipe">
     <p *ngIf="editRecipe && user.user?.id !== editRecipe.user.id" class="owner">
-        <strong>Owner:</strong> {{ editRecipe.user.name }} (ID: {{ editRecipe.user.id }})
+        <strong>{{ 'recipe.owner' | translate }}:</strong> {{ editRecipe.user.name }} ({{ 'id' | translate }}:
+        {{ editRecipe.user.id }})
     </p>
-    <a mat-stroked-button [routerLink]="disabled ? null : recipeURL" [disabled]="disabled"
-        ><mat-icon>visibility</mat-icon> View recipe</a
-    >
+    <a mat-stroked-button [routerLink]="disabled ? null : recipeURL" [disabled]="disabled">
+        <mat-icon>visibility</mat-icon> {{ 'pages.edit_recipe.view_recipe' | translate }}
+    </a>
     <button mat-stroked-button (click)="deleteRecipe()" color="warn" [disabled]="disabled">
-        <mat-icon>delete</mat-icon> Delete recipe
+        <mat-icon>delete</mat-icon> {{ 'pages.edit_recipe.delete_recipe' | translate }}
     </button>
 </div>
 
 <mat-vertical-stepper #stepper linear="true">
     <mat-step [completed]="isEdit">
-        <ng-template matStepLabel>Edit information</ng-template>
+        <ng-template matStepLabel>{{ 'pages.edit_recipe.edit_information' | translate }}</ng-template>
         <cb-edit-recipe-information
             [editRecipe]="editRecipe"
             (saved)="informationSaved($event)"
@@ -21,7 +22,7 @@
     </mat-step>
 
     <mat-step>
-        <ng-template matStepLabel>Edit images</ng-template>
+        <ng-template matStepLabel>{{ 'pages.edit_recipe.edit_images' | translate }}</ng-template>
 
         <cb-edit-recipe-images
             [recipeId]="editRecipe.id"

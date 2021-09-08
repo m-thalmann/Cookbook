@@ -1,87 +1,87 @@
 <a routerLink="/admin" class="icon-text back-link">
-    <mat-icon>arrow_back</mat-icon><span>Go back to admin area</span>
+    <mat-icon>arrow_back</mat-icon><span>{{ 'pages.admin.go_back' | translate }}</span>
 </a>
 
 <h2 class="icon-text">
     <mat-icon>miscellaneous_services</mat-icon>
-    <span>Admin server</span>
+    <span>{{ 'pages.admin.server.title' | translate }}</span>
     <mat-spinner *ngIf="loading" [diameter]="24"></mat-spinner>
 </h2>
 
 <mat-spinner *ngIf="!serverConfig && !error" [diameter]="32"></mat-spinner>
-<p class="fg-warn" *ngIf="error">Error loading server config</p>
+<p class="fg-warn" *ngIf="error">{{ 'messages.admin.error_loading_server_config' | translate }}</p>
 
 <ng-container *ngIf="serverConfig && !error">
     <details>
-        <summary class="icon-text"><mat-icon>code</mat-icon><span>JSON Config</span></summary>
+        <summary class="icon-text">
+            <mat-icon>code</mat-icon><span>{{ 'pages.admin.server.json_config' | translate }}</span>
+        </summary>
         <pre>{{ serverConfig | json }}</pre>
     </details>
 
     <div class="config" [class.loading]="loading">
-        <h3 class="icon-text"><mat-icon>tune</mat-icon><span>Basic</span></h3>
+        <h3 class="icon-text">
+            <mat-icon>tune</mat-icon><span>{{ 'pages.admin.server.basic.title' | translate }}</span>
+        </h3>
         <table>
             <thead>
                 <tr>
-                    <th>Setting</th>
-                    <th>Value</th>
+                    <th>{{ 'setting' | translate }}</th>
+                    <th>{{ 'value' | translate }}</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>Root URL</td>
+                    <td>{{ 'pages.admin.server.basic.root_url' | translate }}</td>
                     <td>{{ serverConfig.root_url }}</td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td>Production</td>
+                    <td>{{ 'pages.admin.server.basic.production' | translate }}</td>
                     <td>
                         <select [value]="serverConfig.production" disabled>
-                            <option value="true">yes</option>
-                            <option value="false">no</option>
+                            <option value="true">{{ 'yes' | translate }}</option>
+                            <option value="false">{{ 'no' | translate }}</option>
                         </select>
                     </td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td>Image store path</td>
-                    <td>{{ serverConfig.image_store ? serverConfig.image_store : 'Default' }}</td>
+                    <td>{{ 'pages.admin.server.basic.image_store_path' | translate }}</td>
+                    <td>{{ serverConfig.image_store ? serverConfig.image_store : ('default' | translate) }}</td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td>Registration enabled</td>
+                    <td>{{ 'pages.admin.server.basic.registration_enabled' | translate }}</td>
                     <td>
-                        <select
-                            [value]="serverConfig.registration_enabled"
-                            (change)="updateValueFromEvent('registration_enabled', $event)"
-                            [disabled]="loading"
-                        >
-                            <option value="true">yes</option>
-                            <option value="false">no</option>
-                        </select>
+                        <ng-container
+                            *ngTemplateOutlet="yesNoSelect; context: { key: 'registration_enabled' }"
+                        ></ng-container>
                     </td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td>Email verification enabled</td>
+                    <td>{{ 'pages.admin.server.basic.email_verification_enabled' | translate }}</td>
                     <td>
-                        <select
-                            [value]="serverConfig['email_verification.enabled']"
-                            (change)="updateValueFromEvent('email_verification.enabled', $event)"
-                            [disabled]="loading"
-                        >
-                            <option value="true">yes</option>
-                            <option value="false">no</option>
-                        </select>
+                        <ng-container
+                            *ngTemplateOutlet="yesNoSelect; context: { key: 'email_verification.enabled' }"
+                        ></ng-container>
                     </td>
                     <td></td>
                 </tr>
                 <tr *ngIf="serverConfig['email_verification.enabled']">
-                    <td>Email verification ttl (Time to live)</td>
-                    <td>{{ serverConfig['email_verification.ttl'] }} seconds</td>
+                    <td>{{ 'pages.admin.server.basic.email_verification_ttl' | translate }}</td>
+                    <td>{{ serverConfig['email_verification.ttl'] }} {{ 'seconds' | translate }}</td>
                     <td>
                         <button
-                            (click)="openEditDialog('email_verification.ttl', 'number', 'Email verification ttl')"
+                            (click)="
+                                openEditDialog(
+                                    'email_verification.ttl',
+                                    'number',
+                                    'pages.admin.server.basic.email_verification_ttl'
+                                )
+                            "
                             [disabled]="loading"
                         >
                             <mat-icon>edit</mat-icon>
@@ -89,25 +89,22 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>hCaptcha enabled</td>
+                    <td>{{ 'pages.admin.server.basic.hcaptcha_enabled' | translate }}</td>
                     <td>
-                        <select
-                            [value]="serverConfig['hcaptcha.enabled']"
-                            (change)="updateValueFromEvent('hcaptcha.enabled', $event)"
-                            [disabled]="loading"
-                        >
-                            <option value="true">yes</option>
-                            <option value="false">no</option>
-                        </select>
+                        <ng-container
+                            *ngTemplateOutlet="yesNoSelect; context: { key: 'hcaptcha.enabled' }"
+                        ></ng-container>
                     </td>
                     <td></td>
                 </tr>
                 <tr *ngIf="serverConfig['hcaptcha.enabled']">
-                    <td>hCaptcha secret</td>
+                    <td>{{ 'pages.admin.server.basic.hcaptcha_secret' | translate }}</td>
                     <td [innerHTML]="getHTMLBullets(16)"></td>
                     <td>
                         <button
-                            (click)="openEditDialog('hcaptcha.secret', 'text', 'hCaptcha secret')"
+                            (click)="
+                                openEditDialog('hcaptcha.secret', 'text', 'pages.admin.server.basic.hcaptcha_secret')
+                            "
                             [disabled]="loading"
                         >
                             <mat-icon>edit</mat-icon>
@@ -117,78 +114,66 @@
             </tbody>
         </table>
 
-        <h3 class="icon-text"><mat-icon>storage</mat-icon><span>Database</span></h3>
+        <h3 class="icon-text">
+            <mat-icon>storage</mat-icon><span>{{ 'pages.admin.server.database.title' | translate }}</span>
+        </h3>
         <table>
             <thead>
                 <tr>
-                    <th>Setting</th>
-                    <th>Value</th>
+                    <th>{{ 'setting' | translate }}</th>
+                    <th>{{ 'value' | translate }}</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>Host</td>
+                    <td>{{ 'pages.admin.server.database.host' | translate }}</td>
                     <td>{{ serverConfig['database.host'] }}</td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td>User</td>
+                    <td>{{ 'pages.admin.server.database.user' | translate }}</td>
                     <td>{{ serverConfig['database.user'] }}</td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td>Password</td>
+                    <td>{{ 'pages.admin.server.database.password' | translate }}</td>
                     <td [innerHTML]="getHTMLBullets(10)"></td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td>Database</td>
+                    <td>{{ 'pages.admin.server.database.database' | translate }}</td>
                     <td>{{ serverConfig['database.database'] }}</td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td>Charset</td>
+                    <td>{{ 'pages.admin.server.database.charset' | translate }}</td>
                     <td>{{ serverConfig['database.charset'] }}</td>
                     <td></td>
                 </tr>
             </tbody>
         </table>
 
-        <h3 class="icon-text"><mat-icon>shield</mat-icon><span>Authentication</span></h3>
+        <h3 class="icon-text">
+            <mat-icon>shield</mat-icon><span>{{ 'pages.admin.server.authentication.title' | translate }}</span>
+        </h3>
         <table>
             <thead>
                 <tr>
-                    <th>Setting</th>
-                    <th>Value</th>
+                    <th>{{ 'setting' | translate }}</th>
+                    <th>{{ 'value' | translate }}</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>Token secret</td>
-                    <td [innerHTML]="getHTMLBullets(16)"></td>
-                    <td>
-                        <button (click)="openEditDialog('token.secret', 'text', 'Token secret')" [disabled]="loading">
-                            <mat-icon>edit</mat-icon>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Token TTL (Time to live)</td>
-                    <td>{{ serverConfig['token.ttl'] }} seconds</td>
-                    <td>
-                        <button (click)="openEditDialog('token.ttl', 'number', 'Token TTL')" [disabled]="loading">
-                            <mat-icon>edit</mat-icon>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Password secret</td>
+                    <td>{{ 'pages.admin.server.authentication.token_secret' | translate }}</td>
                     <td [innerHTML]="getHTMLBullets(16)"></td>
                     <td>
                         <button
-                            (click)="openEditDialog('password.secret', 'text', 'Password secret')"
+                            (click)="
+                                openEditDialog('token.secret', 'text', 'pages.admin.server.authentication.token_secret')
+                            "
                             [disabled]="loading"
                         >
                             <mat-icon>edit</mat-icon>
@@ -196,11 +181,49 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Password-reset TTL (Time to live)</td>
-                    <td>{{ serverConfig['password.reset_ttl'] }} seconds</td>
+                    <td>{{ 'pages.admin.server.authentication.token_ttl' | translate }}</td>
+                    <td>{{ serverConfig['token.ttl'] }} {{ 'seconds' | translate }}</td>
                     <td>
                         <button
-                            (click)="openEditDialog('password.reset_ttl', 'number', 'Password-reset TTL')"
+                            (click)="
+                                openEditDialog('token.ttl', 'number', 'pages.admin.server.authentication.token_ttl')
+                            "
+                            [disabled]="loading"
+                        >
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ 'pages.admin.server.authentication.password_secret' | translate }}</td>
+                    <td [innerHTML]="getHTMLBullets(16)"></td>
+                    <td>
+                        <button
+                            (click)="
+                                openEditDialog(
+                                    'password.secret',
+                                    'text',
+                                    'pages.admin.server.authentication.password_secret'
+                                )
+                            "
+                            [disabled]="loading"
+                        >
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ 'pages.admin.server.authentication.password_reset_ttl' | translate }}</td>
+                    <td>{{ serverConfig['password.reset_ttl'] }} {{ 'seconds' | translate }}</td>
+                    <td>
+                        <button
+                            (click)="
+                                openEditDialog(
+                                    'password.reset_ttl',
+                                    'number',
+                                    'pages.admin.server.authentication.password_reset_ttl'
+                                )
+                            "
                             [disabled]="loading"
                         >
                             <mat-icon>edit</mat-icon>
@@ -210,56 +233,61 @@
             </tbody>
         </table>
 
-        <h3 class="icon-text"><mat-icon>email</mat-icon><span>Mail</span></h3>
+        <h3 class="icon-text">
+            <mat-icon>email</mat-icon><span>{{ 'pages.admin.server.mail.title' | translate }}</span>
+        </h3>
         <table>
             <thead>
                 <tr>
-                    <th>Setting</th>
-                    <th>Value</th>
+                    <th>{{ 'setting' | translate }}</th>
+                    <th>{{ 'value' | translate }}</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>SMTP Host</td>
+                    <td>{{ 'pages.admin.server.mail.smtp_host' | translate }}</td>
                     <td>{{ serverConfig['mail.smtp.host'] }}</td>
                     <td>
-                        <button (click)="openEditDialog('mail.smtp.host', 'text', 'SMTP Host')" [disabled]="loading">
+                        <button
+                            (click)="openEditDialog('mail.smtp.host', 'text', 'pages.admin.server.mail.smtp_host')"
+                            [disabled]="loading"
+                        >
                             <mat-icon>edit</mat-icon>
                         </button>
                     </td>
                 </tr>
                 <tr>
-                    <td>SMTP Port</td>
+                    <td>{{ 'pages.admin.server.mail.smtp_port' | translate }}</td>
                     <td>
                         {{ serverConfig['mail.smtp.port'] }}
                     </td>
                     <td>
-                        <button (click)="openEditDialog('mail.smtp.port', 'number', 'SMTP Port')" [disabled]="loading">
+                        <button
+                            (click)="openEditDialog('mail.smtp.port', 'number', 'pages.admin.server.mail.smtp_port')"
+                            [disabled]="loading"
+                        >
                             <mat-icon>edit</mat-icon>
                         </button>
                     </td>
                 </tr>
                 <tr>
-                    <td>SMTP Encrypted</td>
+                    <td>{{ 'pages.admin.server.mail.smtp_encrypted' | translate }}</td>
                     <td>
-                        <select
-                            [value]="serverConfig['mail.smtp.encrypted']"
-                            (change)="updateValueFromEvent('mail.smtp.encrypted', $event)"
-                            [disabled]="loading"
-                        >
-                            <option value="true">yes</option>
-                            <option value="false">no</option>
-                        </select>
+                        <ng-container
+                            *ngTemplateOutlet="yesNoSelect; context: { key: 'mail.smtp.encrypted' }"
+                        ></ng-container>
                     </td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td>SMTP Username</td>
+                    <td>{{ 'pages.admin.server.mail.smtp_username' | translate }}</td>
                     <td>{{ serverConfig['mail.smtp.username'] }}</td>
                     <td>
                         <button
-                            (click)="openEditDialog('mail.smtp.username', 'text', 'SMTP Username')"
+                            (click)="
+                                openEditDialog('mail.smtp.username', 'text', 'pages.admin.server.mail.smtp_username')
+                            "
                             [disabled]="loading"
                         >
                             <mat-icon>edit</mat-icon>
@@ -267,11 +295,17 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>SMTP Password</td>
+                    <td>{{ 'pages.admin.server.mail.smtp_password' | translate }}</td>
                     <td [innerHTML]="getHTMLBullets(10)"></td>
                     <td>
                         <button
-                            (click)="openEditDialog('mail.smtp.password', 'password', 'SMTP Password')"
+                            (click)="
+                                openEditDialog(
+                                    'mail.smtp.password',
+                                    'password',
+                                    'pages.admin.server.mail.smtp_password'
+                                )
+                            "
                             [disabled]="loading"
                         >
                             <mat-icon>edit</mat-icon>
@@ -279,19 +313,25 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Sender mail</td>
+                    <td>{{ 'pages.admin.server.mail.sender_mail' | translate }}</td>
                     <td>{{ serverConfig['mail.from.mail'] }}</td>
                     <td>
-                        <button (click)="openEditDialog('mail.from.mail', 'text', 'Sender mail')" [disabled]="loading">
+                        <button
+                            (click)="openEditDialog('mail.from.mail', 'text', 'pages.admin.server.mail.sender_mail')"
+                            [disabled]="loading"
+                        >
                             <mat-icon>edit</mat-icon>
                         </button>
                     </td>
                 </tr>
                 <tr>
-                    <td>Sender name</td>
+                    <td>{{ 'pages.admin.server.mail.sender_name' | translate }}</td>
                     <td>{{ serverConfig['mail.from.name'] }}</td>
                     <td>
-                        <button (click)="openEditDialog('mail.from.name', 'text', 'Sender name')" [disabled]="loading">
+                        <button
+                            (click)="openEditDialog('mail.from.name', 'text', 'pages.admin.server.mail.sender_name')"
+                            [disabled]="loading"
+                        >
                             <mat-icon>edit</mat-icon>
                         </button>
                     </td>
@@ -300,3 +340,10 @@
         </table>
     </div>
 </ng-container>
+
+<ng-template #yesNoSelect let-key="key">
+    <select [value]="getServerConfig(key)" (change)="updateValueFromEvent(key, $event)" [disabled]="loading">
+        <option value="true">{{ 'yes' | translate }}</option>
+        <option value="false">{{ 'no' | translate }}</option>
+    </select>
+</ng-template>

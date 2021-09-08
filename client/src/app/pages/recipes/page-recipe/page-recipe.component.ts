@@ -1,13 +1,14 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { RecipeFull } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
 import { calculateTotalTime } from 'src/app/core/functions';
+import { TranslationService } from 'src/app/core/i18n/translation.service';
 import { SeoService } from 'src/app/core/services/seo.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
   selector: 'cb-page-recipe',
@@ -28,10 +29,11 @@ export class PageRecipeComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private api: ApiService,
     private user: UserService,
-    private snackBar: MatSnackBar,
+    private snackbar: SnackbarService,
     private router: Router,
     private clipboard: Clipboard,
-    private seo: SeoService
+    private seo: SeoService,
+    private translation: TranslationService
   ) {}
 
   ngOnInit() {
@@ -102,10 +104,7 @@ export class PageRecipeComponent implements OnInit, OnDestroy {
         }
       }
     } else if (res.isNotFound()) {
-      this.snackBar.open('Recipe was not found', 'OK', {
-        panelClass: 'action-warn',
-        duration: 5000,
-      });
+      this.snackbar.warn('messages.recipes.recipe_not_found');
 
       await this.router.navigateByUrl('/home');
     } else {
@@ -122,24 +121,24 @@ export class PageRecipeComponent implements OnInit, OnDestroy {
 
   copyLink() {
     if (this.clipboard.copy(location.href)) {
-      this.snackBar.open('Successfully copied!', 'OK', {
-        duration: 5000,
-      });
+      this.snackbar.info('messages.copy_successful');
     }
   }
 
   get shareEmailLink() {
-    const text = encodeURIComponent(`Recipe: ${this.recipe?.name}`);
+    const text = encodeURIComponent(`${this.translation.translate('recipe.recipe')}: ${this.recipe?.name}`);
     return `mailto:?subject=${text}&body=${encodeURIComponent(location.href)}`;
   }
 
   get shareWhatsAppLink() {
-    const text = encodeURIComponent(`Recipe: ${this.recipe?.name}\n${location.href}`);
+    const text = encodeURIComponent(
+      `${this.translation.translate('recipe.recipe')}: ${this.recipe?.name}\n${location.href}`
+    );
     return `https://wa.me/?text=${text}`;
   }
 
   get shareTelegramLink() {
-    const text = encodeURIComponent(`Recipe: ${this.recipe?.name}`);
+    const text = encodeURIComponent(`${this.translation.translate('recipe.recipe')}: ${this.recipe?.name}`);
     return `https://t.me/share/url?url=${encodeURIComponent(location.href)}&text=${text}`;
   }
 
@@ -147,7 +146,7 @@ export class PageRecipeComponent implements OnInit, OnDestroy {
     if (!this.recipe) return;
 
     navigator.share({
-      title: `Recipe: ${this.recipe.name}`,
+      title: `${this.translation.translate('recipe.recipe')}: ${this.recipe.name}`,
       url: location.href,
     });
   }

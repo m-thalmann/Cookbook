@@ -1,24 +1,28 @@
 import { AbstractControl } from '@angular/forms';
+import { TranslationObject } from '../i18n/translation.service';
 
-export const getFormError = (field: AbstractControl | null) => {
+export const getFormError = (field: AbstractControl | null): TranslationObject | null => {
   if (field?.invalid) {
     if (field.hasError('required')) {
-      return 'This field is required';
+      return { key: 'messages.form_validation.required' };
     }
     if (field.hasError('email')) {
-      return 'Not a valid email address';
+      return { key: 'messages.form_validation.email' };
     }
     if (field.hasError('passwordsMismatch')) {
-      return "The passwords don't match";
+      return { key: 'messages.form_validation.passwords_mismatch' };
     }
     if (field.hasError('maxlength')) {
-      return `The value is too long (max. ${field.getError('maxlength').requiredLength})`;
+      return {
+        key: 'messages.form_validation.max_length',
+        replacements: { maxLength: field.getError('maxlength').requiredLength },
+      };
     }
     if (field.hasError('min')) {
-      return `The value is too small (min. ${field.getError('min').min})`;
+      return { key: 'messages.form_validation.min', replacements: { min: field.getError('min').min } };
     }
     if (field.hasError('max')) {
-      return `The value is too big (max. ${field.getError('max').max})`;
+      return { key: 'messages.form_validation.max', replacements: { max: field.getError('max').max } };
     }
   }
 

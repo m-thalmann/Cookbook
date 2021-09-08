@@ -1,4 +1,5 @@
 import { Recipe } from './api/ApiInterfaces';
+import { TranslationObject } from './i18n/translation.service';
 
 /**
  * Generates a slug out of a string by:
@@ -47,7 +48,7 @@ export function trimAndNull(string: string | null | undefined) {
  * @param recipe the recipe
  * @returns The total time string
  */
-export function calculateTotalTime(recipe: Recipe | null) {
+export function calculateTotalTime(recipe: Recipe | null): TranslationObject | null {
   let time = 0;
 
   if (recipe?.preparationTime) {
@@ -61,7 +62,7 @@ export function calculateTotalTime(recipe: Recipe | null) {
   }
 
   if (time > 0) {
-    return time + ' min';
+    return { key: 'recipe.total_time_value', replacements: { totalTime: time.toString() } };
   } else {
     return null;
   }

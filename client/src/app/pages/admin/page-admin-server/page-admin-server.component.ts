@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { InputDialogComponent } from 'src/app/components/input-dialog/input-dialog.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { ServerConfig } from 'src/app/core/api/ApiInterfaces';
+import { TranslationService } from 'src/app/core/i18n/translation.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
   selector: 'cb-page-admin-server',
@@ -16,7 +17,12 @@ export class PageAdminServerComponent implements OnInit {
   error = false;
   loading = false;
 
-  constructor(private api: ApiService, private dialog: MatDialog, private snackBar: MatSnackBar) {}
+  constructor(
+    private api: ApiService,
+    private dialog: MatDialog,
+    private snackbar: SnackbarService,
+    private translation: TranslationService
+  ) {}
 
   ngOnInit() {
     this.loadServerConfig();
@@ -35,6 +41,10 @@ export class PageAdminServerComponent implements OnInit {
     }
   }
 
+  getServerConfig(key: string) {
+    return (this.serverConfig as any)[key];
+  }
+
   async updateValue(path: string, value: any) {
     this.loading = true;
 
@@ -43,9 +53,7 @@ export class PageAdminServerComponent implements OnInit {
     if (res.isOK()) {
       await this.loadServerConfig();
 
-      this.snackBar.open('Config edited successfully!', 'OK', {
-        duration: 5000,
-      });
+      this.snackbar.info('messages.admin.config_edited_successfully');
     } else {
       let error = '';
 
@@ -53,9 +61,7 @@ export class PageAdminServerComponent implements OnInit {
         error = ': ' + res.error.info;
       }
 
-      this.snackBar.open('Error saving config' + error, 'OK', {
-        panelClass: 'action-warn',
-      });
+      this.snackbar.error(this.translation.translate('messages.admin.error_saving_config') + error);
       console.error('Error saving config:', res.error);
     }
 
@@ -74,10 +80,11 @@ export class PageAdminServerComponent implements OnInit {
     let value = await this.dialog
       .open(InputDialogComponent, {
         data: {
-          title: 'Edit config',
+          translate: true,
+          title: 'pages.admin.server.edit_config',
+          label: label,
           type: type,
           default: currentValue,
-          label: label,
         },
       })
       .afterClosed()

@@ -1,12 +1,13 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { UserService } from 'src/app/core/auth/user.service';
 import { getFormError } from 'src/app/core/forms/Validation';
+import { TranslationService } from 'src/app/core/i18n/translation.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
   selector: 'cb-settings-dialog',
@@ -30,8 +31,9 @@ export class SettingsDialogComponent implements OnDestroy {
     private api: ApiService,
     private user: UserService,
     private dialogRef: MatDialogRef<SettingsDialogComponent>,
-    private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private snackbar: SnackbarService,
+    private dialog: MatDialog,
+    private translation: TranslationService
   ) {
     this.settingsForm = this.fb.group(
       {
@@ -211,21 +213,19 @@ export class SettingsDialogComponent implements OnDestroy {
         this.dialogRef.close();
 
         if ((await this.api.checkAuthentication()).isOK()) {
-          this.snackBar.open('Successfully updated settings!', 'OK', {
-            duration: 5000,
-          });
+          this.snackbar.info('messages.users.settings_updated_successfully');
         } else {
           location.reload();
         }
       } else if (res.isConflict()) {
-        throw new Error('This email is already taken!');
+        throw new Error('messages.users.email_already_taken');
       } else if (res.isForbidden()) {
-        throw new Error('The entered password is wrong!');
+        throw new Error('messages.users.entered_password_wrong');
       } else {
         throw new Error(res.error?.info || undefined);
       }
     } catch (e: any) {
-      this.error = e.message || 'An error occurred!';
+      this.error = e.message || 'messages.error_occurred';
       console.error('Error saving settings:', res.error);
     }
   }
@@ -234,8 +234,8 @@ export class SettingsDialogComponent implements OnDestroy {
     let doDelete = await this.dialog
       .open(ConfirmDialogComponent, {
         data: {
-          title: 'Delete account?',
-          content: `Are you sure you want to delete your account and all your recipes? This action is not reversible`,
+          translate: true,
+          translationKey: 'dialogs.delete_account',
           warn: true,
         },
       })
@@ -258,9 +258,11 @@ export class SettingsDialogComponent implements OnDestroy {
         error = ': ' + res.error.info;
       }
 
-      this.snackBar.open('Error deleting account' + error, 'OK', {
-        panelClass: 'action-warn',
-      });
+      this.snackbar.error(
+        this.translation.translate('messages.users.error_deleting_account') + error,
+        undefined,
+        false
+      );
       console.error('Error deleting account:', res.error);
     }
 

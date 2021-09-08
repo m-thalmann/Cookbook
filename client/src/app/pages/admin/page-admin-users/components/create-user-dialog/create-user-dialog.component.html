@@ -1,37 +1,51 @@
-<h1 mat-dialog-title><mat-icon>person_add</mat-icon><span>Create user</span></h1>
+<h1 mat-dialog-title>
+    <mat-icon>person_add</mat-icon><span>{{ 'pages.admin.users.create_user' | translate }}</span>
+</h1>
 
 <mat-dialog-content>
     <form [formGroup]="createForm">
         <mat-form-field appearance="outline" color="primary">
-            <mat-label>Email</mat-label>
+            <mat-label>{{ 'user.email' | translate }}</mat-label>
             <input matInput type="text" formControlName="email" />
-            <mat-error *ngIf="getFormError('email') != null">{{ getFormError('email') }}</mat-error>
+            <mat-error *ngIf="getFormError('email') as formError">{{
+                formError.key | translate: formError.replacements
+            }}</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline" color="primary">
-            <mat-label>Name</mat-label>
+            <mat-label>{{ 'user.name' | translate }}</mat-label>
             <input matInput type="text" formControlName="name" />
-            <mat-error *ngIf="getFormError('name') != null">{{ getFormError('name') }}</mat-error>
+            <mat-error *ngIf="getFormError('name') as formError">{{
+                formError.key | translate: formError.replacements
+            }}</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline" color="primary">
-            <mat-label>Password</mat-label>
+            <mat-label>{{ 'user.password' | translate }}</mat-label>
             <input matInput type="password" formControlName="password" />
-            <mat-error *ngIf="getFormError('password') != null">{{ getFormError('password') }}</mat-error>
+            <mat-error *ngIf="getFormError('password') as formError">{{
+                formError.key | translate: formError.replacements
+            }}</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline" color="primary">
-            <mat-label>Repeat password</mat-label>
+            <mat-label>{{ 'user.repeat_password' | translate }}</mat-label>
             <input matInput type="password" formControlName="passwordConfirm" />
-            <mat-error *ngIf="getFormError('passwordConfirm') != null">{{ getFormError('passwordConfirm') }}</mat-error>
+            <mat-error *ngIf="getFormError('passwordConfirm') as formError">{{
+                formError.key | translate: formError.replacements
+            }}</mat-error>
         </mat-form-field>
-        <mat-slide-toggle color="warn" formControlName="isAdmin">Admin account</mat-slide-toggle>
-        <mat-slide-toggle color="accent" formControlName="verifyEmail">Send verification email</mat-slide-toggle>
+        <mat-slide-toggle color="warn" formControlName="isAdmin">{{
+            'pages.admin.users.admin_account' | translate
+        }}</mat-slide-toggle>
+        <mat-slide-toggle color="accent" formControlName="verifyEmail">{{
+            'pages.admin.users.send_verification_email' | translate
+        }}</mat-slide-toggle>
     </form>
-    <p *ngIf="error" class="fg-warn">{{ error }}</p>
+    <p *ngIf="error" class="fg-warn">{{ error | translate }}</p>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
     <mat-spinner *ngIf="saving" color="primary" diameter="20" style="margin-right: 1rem"></mat-spinner>
-    <button mat-flat-button mat-dialog-close [disabled]="saving">Cancel</button>
+    <button mat-flat-button mat-dialog-close [disabled]="saving">{{ 'cancel' | translate }}</button>
     <button mat-flat-button (click)="save()" color="accent" [disabled]="saving || createForm.invalid">
-        Save changes
+        {{ 'save' | translate }}
     </button>
 </mat-dialog-actions>

@@ -1,7 +1,9 @@
-<h2 class="icon-text"><mat-icon>search</mat-icon><span>Search recipe</span></h2>
+<h2 class="icon-text">
+    <mat-icon>search</mat-icon><span>{{ 'pages.search.search_recipes' | translate }}</span>
+</h2>
 
 <mat-form-field appearance="outline" color="primary" class="search-field">
-    <mat-label>Search</mat-label>
+    <mat-label>{{ 'search' | translate }}</mat-label>
     <mat-icon matPrefix>search</mat-icon>
     <input matInput [(ngModel)]="searchInput" (keyup.enter)="doSearch()" [disabled]="loading" />
     <button matSuffix mat-icon-button (click)="doSearch()" [disabled]="loading" color="accent">

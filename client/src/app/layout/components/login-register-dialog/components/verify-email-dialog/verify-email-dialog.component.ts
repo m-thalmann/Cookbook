@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApiService } from 'src/app/core/api/api.service';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
   selector: 'cb-verify-email-dialog',
@@ -19,7 +19,7 @@ export class VerifyEmailDialogComponent {
     @Inject(MAT_DIALOG_DATA)
     public email: string,
     private api: ApiService,
-    private snackBar: MatSnackBar
+    private snackbar: SnackbarService
   ) {}
 
   set code(code: string) {
@@ -49,9 +49,9 @@ export class VerifyEmailDialogComponent {
       this.code = '';
 
       if (res.isForbidden()) {
-        this.error = 'Verification code is wrong or has expired';
+        this.error = 'messages.login_register.wrong_verification_code';
       } else {
-        this.error = 'Error verifying email';
+        this.error = 'messages.login_register.error_verifying_email';
       }
     }
 
@@ -69,14 +69,9 @@ export class VerifyEmailDialogComponent {
     let res = await this.api.resendVerificationEmail(this.email);
 
     if (res.isOK()) {
-      this.snackBar.open('Verification-email sent!', 'OK', {
-        duration: 5000,
-      });
+      this.snackbar.info('messages.email.verification_email_sent');
     } else {
-      this.snackBar.open('Error sending email', 'OK', {
-        duration: 10000,
-        panelClass: 'action-warn',
-      });
+      this.snackbar.warn('messages.email.error_sending_email');
     }
 
     this.loading = false;

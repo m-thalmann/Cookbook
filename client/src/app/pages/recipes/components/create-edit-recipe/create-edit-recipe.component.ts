@@ -1,6 +1,5 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStepper } from '@angular/material/stepper';
 import { Router } from '@angular/router';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
@@ -8,6 +7,7 @@ import { ApiService } from 'src/app/core/api/api.service';
 import { RecipeFull } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
 import { slugify } from 'src/app/core/functions';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
   selector: 'cb-create-edit-recipe',
@@ -24,7 +24,7 @@ export class CreateEditRecipeComponent {
   constructor(
     private api: ApiService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar,
+    private snackbar: SnackbarService,
     private router: Router,
     public user: UserService
   ) {}
@@ -45,8 +45,8 @@ export class CreateEditRecipeComponent {
     let doDelete = await this.dialog
       .open(ConfirmDialogComponent, {
         data: {
-          title: 'Delete recipe?',
-          content: 'Are you sure you want to delete this recipe? This action is not reversible',
+          translate: true,
+          translationKey: 'dialogs.delete_recipe',
           warn: true,
         },
       })
@@ -60,14 +60,10 @@ export class CreateEditRecipeComponent {
     let res = await this.api.deleteRecipe(this.editRecipe.id);
 
     if (res.isOK()) {
-      this.snackBar.open('Recipe deleted successfully!', 'OK', {
-        duration: 5000,
-      });
+      this.snackbar.info('messages.recipes.recipe_deleted_successfully');
       await this.router.navigateByUrl('/home');
     } else {
-      this.snackBar.open('Error deleting recipe!', 'OK', {
-        panelClass: 'action-warn',
-      });
+      this.snackbar.error('messages.recipes.error_deleting_recipe');
       console.error('Error deleting recipe:', res.error);
     }
 

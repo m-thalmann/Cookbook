@@ -1,9 +1,9 @@
 import { Component, Input, OnDestroy } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { RecipeImage } from 'src/app/core/api/ApiInterfaces';
 import { ApiResponse } from 'src/app/core/api/ApiResponse';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
   selector: 'cb-edit-recipe-images',
@@ -38,7 +38,7 @@ export class EditRecipeImagesComponent implements OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-  constructor(private api: ApiService, private snackBar: MatSnackBar) {}
+  constructor(private api: ApiService, private snackbar: SnackbarService) {}
 
   async reload() {
     if (this.recipeId === null) return;
@@ -58,7 +58,7 @@ export class EditRecipeImagesComponent implements OnDestroy {
       }
     } else {
       console.error('Error loading recipe-images:', res.error);
-      this.error = 'Error loading recipe-images';
+      this.error = 'messages.recipe_images.error_loading_recipe_images';
     }
 
     this.loading = false;
@@ -78,11 +78,9 @@ export class EditRecipeImagesComponent implements OnDestroy {
         if (event instanceof ApiResponse) {
           if (event.isOK()) {
             await this.reload();
-            this.snackBar.open('Image was added successfully!', 'OK', {
-              duration: 5000,
-            });
+            this.snackbar.info('messages.recipe_images.image_added_successfully');
           } else {
-            this.error = event.error.info || 'Error uploading image';
+            this.error = event.error.info || 'messages.recipe_images.error_uploading_image';
             console.error('Error adding recipe-image:', event.error);
           }
 
@@ -103,13 +101,9 @@ export class EditRecipeImagesComponent implements OnDestroy {
 
       if (res.isOK()) {
         await this.reload();
-        this.snackBar.open('Image was deleted successfully!', 'OK', {
-          duration: 5000,
-        });
+        this.snackbar.info('messages.recipe_images.image_deleted_successfully');
       } else {
-        this.snackBar.open('Image could not be deleted!', 'OK', {
-          panelClass: 'action-warn',
-        });
+        this.snackbar.error('messages.recipe_images.error_deleting_image');
         console.error('Error deleting recipe-image:', res.error);
       }
 

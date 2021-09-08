@@ -261,6 +261,18 @@ main {
   }
 }
 
+.language-menu-item {
+  img {
+    vertical-align: middle;
+    height: 1.5rem;
+    margin-right: 1rem;
+  }
+
+  span {
+    vertical-align: middle;
+  }
+}
+
 @media screen and (max-width: 980px) {
   header {
     padding: 0 10px;

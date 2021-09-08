@@ -1,27 +1,27 @@
 import { HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { UserService } from '../auth/user.service';
 import { ConfigService } from '../config/config.service';
+import { SnackbarService } from '../services/snackbar.service';
 import {
+  ApiOptions,
+  CategoryInformation,
   EditIngredient,
   EditRecipe,
   Ingredient,
   ListIngredient,
   NewIngredient,
   NewRecipe,
-  ApiOptions,
   Pagination,
   Recipe,
   RecipeFull,
   RecipeImage,
+  ServerConfig,
+  ServerInformation,
   User,
   UserFull,
-  ServerInformation,
-  ServerConfig,
-  CategoryInformation,
 } from './ApiInterfaces';
 import { ApiResponse } from './ApiResponse';
 
@@ -33,7 +33,7 @@ export class ApiService {
     private http: HttpClient,
     private config: ConfigService,
     private user: UserService,
-    private snackBar: MatSnackBar
+    private snackbar: SnackbarService
   ) {}
 
   /**
@@ -124,10 +124,7 @@ export class ApiService {
         this.user.logout('unauthorized');
       } else if (status == 403) {
         if (this.user.isLoggedin) {
-          this.snackBar.open('You are not authorized to perform this action!', 'OK', {
-            duration: 10000,
-            panelClass: 'action-warn',
-          });
+          this.snackbar.warn('messages.auth.action_unauthorized');
         }
       }
 
