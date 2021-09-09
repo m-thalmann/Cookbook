@@ -1,6 +1,6 @@
 <header [class.small]="smallHeader">
     <div class="container">
-        <h1>
+        <h1 routerLink="/home">
             <img src="assets/images/cookbook.svg" alt="{{ 'cookbook' | translate }} Logo" /><span>{{
                 'cookbook' | translate
             }}</span>
@@ -8,16 +8,6 @@
 
         <nav class="desktop-nav hide-mobile" [class.loggedin]="isLoggedin">
             <ng-container *ngTemplateOutlet="navItems"></ng-container>
-            <a
-                routerLink="/recipes/create"
-                routerLinkActive="active"
-                class="fg-accent create-recipe-link"
-                *ngIf="isLoggedin"
-            >
-                <div>
-                    <mat-icon>add</mat-icon>
-                </div>
-            </a>
         </nav>
 
         <div class="actions">
@@ -53,12 +43,6 @@
 
     <nav class="mobile-nav hide-desktop" [class.show]="showMenu">
         <ng-container *ngTemplateOutlet="navItems"></ng-container>
-        <a routerLink="/recipes/create" routerLinkActive="active" class="fg-accent" *ngIf="isLoggedin">
-            <div>
-                <mat-icon>add</mat-icon>
-                <span>{{ 'pages.create_recipe.title' | translate }}</span>
-            </div>
-        </a>
         <div class="spacer"></div>
         <div class="account" *ngIf="isLoggedin">
             <div class="account-mail">
@@ -116,6 +100,12 @@
         <div>
             <mat-icon>menu_book</mat-icon>
             <span>{{ 'pages.categories.title' | translate }}</span>
+        </div>
+    </a>
+    <a routerLink="/recipes/create" routerLinkActive="active" class="fg-accent create-recipe-link" *ngIf="isLoggedin">
+        <div>
+            <mat-icon>add</mat-icon>
+            <span class="hide-desktop">{{ 'pages.create_recipe.title' | translate }}</span>
         </div>
     </a>
 </ng-template>

@@ -57,7 +57,9 @@
         </div>
     </ng-container>
 
-    <p class="fg-warn" *ngIf="error">{{ 'messages.admin.error_loading_server_information' | translate }}</p>
+    <p class="icon-text fg-warn" *ngIf="error">
+        <mat-icon>error</mat-icon><span>{{ 'messages.admin.error_loading_server_information' | translate }}</span>
+    </p>
 </div>
 
 <div class="navigation">

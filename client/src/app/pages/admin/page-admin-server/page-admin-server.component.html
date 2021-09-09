@@ -9,7 +9,9 @@
 </h2>
 
 <mat-spinner *ngIf="!serverConfig && !error" [diameter]="32"></mat-spinner>
-<p class="fg-warn" *ngIf="error">{{ 'messages.admin.error_loading_server_config' | translate }}</p>
+<p class="icon-text fg-warn" *ngIf="error">
+    <mat-icon>error</mat-icon><span>{{ 'messages.admin.error_loading_server_config' | translate }}</span>
+</p>
 
 <ng-container *ngIf="serverConfig && !error">
     <details>
@@ -23,7 +25,7 @@
         <h3 class="icon-text">
             <mat-icon>tune</mat-icon><span>{{ 'pages.admin.server.basic.title' | translate }}</span>
         </h3>
-        <table>
+        <table class="mat-elevation-z4">
             <thead>
                 <tr>
                     <th>{{ 'setting' | translate }}</th>
@@ -89,7 +91,15 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>{{ 'pages.admin.server.basic.hcaptcha_enabled' | translate }}</td>
+                    <td>
+                        <span class="vertical-align-middle">{{
+                            'pages.admin.server.basic.hcaptcha_enabled' | translate
+                        }}</span>
+                        &nbsp;
+                        <a href="https://www.hcaptcha.com/" target="_blank" rel="noopener noreferrer">
+                            <mat-icon class="vertical-align-middle">info</mat-icon>
+                        </a>
+                    </td>
                     <td>
                         <ng-container
                             *ngTemplateOutlet="yesNoSelect; context: { key: 'hcaptcha.enabled' }"
@@ -117,7 +127,7 @@
         <h3 class="icon-text">
             <mat-icon>storage</mat-icon><span>{{ 'pages.admin.server.database.title' | translate }}</span>
         </h3>
-        <table>
+        <table class="mat-elevation-z4">
             <thead>
                 <tr>
                     <th>{{ 'setting' | translate }}</th>
@@ -157,7 +167,7 @@
         <h3 class="icon-text">
             <mat-icon>shield</mat-icon><span>{{ 'pages.admin.server.authentication.title' | translate }}</span>
         </h3>
-        <table>
+        <table class="mat-elevation-z4">
             <thead>
                 <tr>
                     <th>{{ 'setting' | translate }}</th>
@@ -236,7 +246,7 @@
         <h3 class="icon-text">
             <mat-icon>email</mat-icon><span>{{ 'pages.admin.server.mail.title' | translate }}</span>
         </h3>
-        <table>
+        <table class="mat-elevation-z4">
             <thead>
                 <tr>
                     <th>{{ 'setting' | translate }}</th>
