@@ -104,7 +104,7 @@ class ConfigSettings {
         ],
         "mail.smtp.encrypted" => [
             "defaultValue" => true,
-            "datatype" => self::TYPE_STRING,
+            "datatype" => self::TYPE_BOOLEAN,
         ],
         "mail.smtp.username" => [
             "defaultValue" => null,
@@ -282,7 +282,7 @@ class ConfigSettings {
         $db = Database::get();
 
         $stmt = $db->prepare(
-            "INSERT INTO `config` (`key`, `value`, `datatype`) VALUES (:key, :value, :datatype) ON DUPLICATE KEY UPDATE value = :value"
+            "INSERT INTO `config` (`key`, `value`, `datatype`) VALUES (:key, :value, :datatype) ON DUPLICATE KEY UPDATE `value` = :value, `datatype` = :datatype"
         );
 
         $value = self::parseConfigValue($setting["datatype"], $value);
