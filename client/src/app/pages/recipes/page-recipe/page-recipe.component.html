@@ -43,7 +43,7 @@
                 </mat-icon>
             </mat-chip>
             <mat-chip [disabled]="true" [matTooltip]="'recipe.publish_date' | translate" [matTooltipShowDelay]="500">
-                <mat-icon>today</mat-icon> <span>{{ recipe.publishDate * 1000 | date: 'MMM d, y HH:mm' }}</span>
+                <mat-icon>today</mat-icon> <span>{{ recipe.publishDate * 1000 | localizedDate: true }}</span>
             </mat-chip>
         </mat-chip-list>
     </div>

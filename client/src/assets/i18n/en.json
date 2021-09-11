@@ -3,6 +3,8 @@
   "amount": "Amount",
   "cancel": "Cancel",
   "cookbook": "Cookbook",
+  "date_format": "mediumDate",
+  "date_time_format": "medium",
   "default": "Default",
   "dialogs": {
     "delete_account": {

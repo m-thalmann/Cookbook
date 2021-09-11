@@ -69,7 +69,7 @@
                 matTooltip="{{ 'recipe.publish_date' | translate }}"
                 [matTooltipShowDelay]="500"
             >
-                <mat-icon>today</mat-icon> <span>{{ recipe.publishDate * 1000 | date }}</span>
+                <mat-icon>today</mat-icon> <span>{{ recipe.publishDate * 1000 | localizedDate }}</span>
             </mat-chip>
         </mat-chip-list>
     </div>

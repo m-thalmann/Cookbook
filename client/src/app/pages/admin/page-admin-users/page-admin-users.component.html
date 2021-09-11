@@ -122,8 +122,8 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header>
                 {{ 'pages.admin.users.last_modified' | translate }}
             </th>
-            <td mat-cell *matCellDef="let user" [matTooltip]="(user.lastUpdated * 1000 | date: 'MMM d, y HH:mm') || ''">
-                {{ user.lastUpdated * 1000 | date }}
+            <td mat-cell *matCellDef="let user" [matTooltip]="(user.lastUpdated * 1000 | localizedDate: true) || ''">
+                {{ user.lastUpdated * 1000 | localizedDate }}
             </td>
         </ng-container>
         <ng-container matColumnDef="admin">
