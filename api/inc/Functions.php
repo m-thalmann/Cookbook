@@ -27,11 +27,12 @@ class Functions {
      * Applies pagination to the query
      *
      * @param Query $query
+     * @param string[] $forbiddenProperties A list of properties that are forbidden to sort by
      *
      * @return Query
      */
-    public static function sort($query) {
-        if (!empty($_GET["sort"])) {
+    public static function sort($query, $forbiddenProperties = []) {
+        if (!empty($_GET["sort"]) && !in_array($_GET["sort"], $forbiddenProperties)) {
             return $query->orderBy(
                 $_GET["sort"],
                 !empty($_GET["sortDir"]) ? $_GET["sortDir"] : "asc"

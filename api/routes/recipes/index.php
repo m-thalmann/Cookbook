@@ -16,7 +16,7 @@ $group
     ->get('/', Authorization::middleware(false), function () {
         $query = Recipe::getQueryForUser("1", [], Authorization::user(), false);
 
-        return Functions::pagination(Functions::sort($query));
+        return Functions::pagination(Functions::sort($query, Recipe::FORBIDDEN_SORT_PROPERTIES));
     })
     ->get('/id/{{i:id}}', Authorization::middleware(false), function ($req) {
         $recipe = Recipe::getQueryForUser(
@@ -48,7 +48,7 @@ $group
             false
         );
 
-        return Functions::pagination(Functions::sort($query));
+        return Functions::pagination(Functions::sort($query, Recipe::FORBIDDEN_SORT_PROPERTIES));
     })
     ->get('/category/{{:name}}', Authorization::middleware(false), function (
         $req
@@ -62,7 +62,7 @@ $group
             false
         );
 
-        return Functions::pagination(Functions::sort($query));
+        return Functions::pagination(Functions::sort($query, Recipe::FORBIDDEN_SORT_PROPERTIES));
     })
     ->post('/', Authorization::middleware(), function ($req) {
         Database::get()->beginTransaction();

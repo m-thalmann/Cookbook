@@ -12,6 +12,8 @@ use PAF\Model\Model;
  * @tablename users
  */
 class User extends Model {
+    const FORBIDDEN_SORT_PROPERTIES = ["password", "passwordSalt", "verifyEmailCode", "verifyEmailCodeExpires"];
+
     /**
      * @prop
      * @primary

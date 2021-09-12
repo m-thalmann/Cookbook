@@ -10,6 +10,8 @@ use PAF\Model\Model;
  * @tablename recipes
  */
 class Recipe extends Model {
+    const FORBIDDEN_SORT_PROPERTIES = ["userId"];
+
     private $user = null;
 
     /**
