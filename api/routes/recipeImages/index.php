@@ -37,6 +37,7 @@ $group
                     : Authorization::user()->id
             )
         ) {
+            RecipeImage::deleteOrphanImages();
             return Response::ok();
         } else {
             return Response::notFound();

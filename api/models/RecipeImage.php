@@ -4,6 +4,7 @@ namespace API\models;
 
 use API\config\Config;
 use API\inc\Validation;
+use PAF\Model\Database;
 use PAF\Model\DuplicateException;
 use PAF\Model\Model;
 
@@ -92,6 +93,21 @@ class RecipeImage extends Model {
         } catch (\Exception $e) {
             unlink($finalPath);
             throw $e;
+        }
+    }
+
+    /**
+     * Deletes all images that have no entry in the database
+     */
+    public static function deleteOrphanImages(){
+        $images = scandir(self::getImageStorePath());
+
+        $databaseImages = Database::get()->query("SELECT `path` FROM `recipe_images`")->fetchAll(\PDO::FETCH_COLUMN);
+
+        foreach($images as $image){
+            if($image[0] !== "." && !in_array(self::getImageStorePath() . $image, $databaseImages)){
+                unlink(self::getImageStorePath() . $image);
+            }
         }
     }
 

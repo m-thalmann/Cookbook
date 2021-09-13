@@ -6,6 +6,7 @@ use API\auth\Authorization;
 use API\config\Config;
 use API\inc\Functions;
 use API\inc\Mailer;
+use API\models\RecipeImage;
 use API\models\ResetPassword;
 use API\models\User;
 use PAF\Model\Database;
@@ -144,6 +145,7 @@ $group
         }
 
         if (User::query("id = ?", [Authorization::user()->id])->delete()) {
+            RecipeImage::deleteOrphanImages();
             return Response::ok();
         } else {
             return Response::error();

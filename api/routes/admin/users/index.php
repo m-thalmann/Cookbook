@@ -6,6 +6,7 @@ use API\auth\Authorization;
 use API\config\Config;
 use API\inc\Functions;
 use API\inc\Mailer;
+use API\models\RecipeImage;
 use API\models\User;
 use PAF\Model\Database;
 use PAF\Model\DuplicateException;
@@ -147,6 +148,8 @@ $group
         }
 
         if (User::query("id = ?", [$req["params"]["id"]])->delete()) {
+            RecipeImage::deleteOrphanImages();
+            
             return Response::ok();
         } else {
             return Response::error();

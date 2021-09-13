@@ -145,6 +145,7 @@ $group
         );
 
         if ($query->delete()) {
+            RecipeImage::deleteOrphanImages();
             return Response::ok();
         } else {
             return Response::error();
