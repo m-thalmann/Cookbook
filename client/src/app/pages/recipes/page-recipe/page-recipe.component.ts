@@ -1,11 +1,10 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { RecipeFull } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
-import { calculateTotalTime } from 'src/app/core/functions';
+import { calculateTotalTime, SubSink } from 'src/app/core/functions';
 import { TranslationService } from 'src/app/core/i18n/translation.service';
 import { SeoService } from 'src/app/core/services/seo.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
@@ -23,7 +22,7 @@ export class PageRecipeComponent implements OnInit, OnDestroy {
 
   selectedPortions: number = 1;
 
-  private subscriptions: Subscription[] = [];
+  private subSink = new SubSink();
 
   constructor(
     private route: ActivatedRoute,
@@ -37,7 +36,7 @@ export class PageRecipeComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.subscriptions.push(
+    this.subSink.push(
       this.route.params.subscribe((params) => {
         if (!this.loading) {
           this.load(params.id);
@@ -156,6 +155,6 @@ export class PageRecipeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.subSink.clear();
   }
 }

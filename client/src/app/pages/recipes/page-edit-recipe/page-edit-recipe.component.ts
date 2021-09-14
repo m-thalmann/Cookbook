@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { RecipeFull } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
+import { SubSink } from 'src/app/core/functions';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
@@ -17,7 +17,7 @@ export class PageEditRecipeComponent implements OnInit, OnDestroy {
   loading = false;
   error = false;
 
-  private subscriptions: Subscription[] = [];
+  private subSink = new SubSink();
 
   constructor(
     private route: ActivatedRoute,
@@ -28,7 +28,7 @@ export class PageEditRecipeComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.subscriptions.push(
+    this.subSink.push(
       this.route.params.subscribe((params) => {
         if (!this.loading && (!this.editRecipe || this.editRecipe.id !== params.id)) {
           this.load(params.id);
@@ -65,6 +65,6 @@ export class PageEditRecipeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.subSink.clear();
   }
 }

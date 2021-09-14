@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Subscription } from 'rxjs';
+import { SubSink } from './core/functions';
 import { TranslationService } from './core/i18n/translation.service';
 import { SeoService } from './core/services/seo.service';
 
@@ -11,7 +11,7 @@ import { SeoService } from './core/services/seo.service';
   styles: [],
 })
 export class AppComponent implements OnDestroy {
-  private subscriptions: Subscription[] = [];
+  private subSink = new SubSink();
 
   constructor(
     private matIconRegistry: MatIconRegistry,
@@ -28,7 +28,7 @@ export class AppComponent implements OnDestroy {
       this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icons/telegram.svg')
     );
 
-    this.subscriptions.push(
+    this.subSink.push(
       this.translation.languageChanged.subscribe(() => {
         this.seo.generateTags();
       })
@@ -36,6 +36,6 @@ export class AppComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.subSink.clear();
   }
 }

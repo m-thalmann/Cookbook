@@ -1,9 +1,10 @@
 import { AfterViewInit, Component, NgZone, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NavigationEnd, Router } from '@angular/router';
-import { fromEvent, Subscription } from 'rxjs';
+import { fromEvent } from 'rxjs';
 import { map, share, throttleTime } from 'rxjs/operators';
 import { UserService } from '../core/auth/user.service';
+import { SubSink } from '../core/functions';
 import { TranslationService } from '../core/i18n/translation.service';
 import { SeoService } from '../core/services/seo.service';
 import { LoginRegisterDialogComponent } from './components/login-register-dialog/login-register-dialog.component';
@@ -18,7 +19,7 @@ export class LayoutComponent implements AfterViewInit, OnDestroy {
   showMenu = false;
   smallHeader = false;
 
-  private subscriptions: Subscription[] = [];
+  private subSink = new SubSink();
 
   constructor(
     public user: UserService,
@@ -28,7 +29,7 @@ export class LayoutComponent implements AfterViewInit, OnDestroy {
     private ngZone: NgZone,
     public translation: TranslationService
   ) {
-    this.subscriptions.push(
+    this.subSink.push(
       this.router.events.subscribe((event) => {
         if (event instanceof NavigationEnd) {
           this.showMenu = false;
@@ -41,7 +42,7 @@ export class LayoutComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     this.ngZone.runOutsideAngular(() => {
-      this.subscriptions.push(
+      this.subSink.push(
         fromEvent(window, 'scroll')
           .pipe(
             throttleTime(10),
@@ -95,6 +96,6 @@ export class LayoutComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.subSink.clear();
   }
 }

@@ -1,8 +1,8 @@
 import { Component, Input, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { RecipeImage } from 'src/app/core/api/ApiInterfaces';
 import { ApiResponse } from 'src/app/core/api/ApiResponse';
+import { SubSink } from 'src/app/core/functions';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
@@ -36,7 +36,7 @@ export class EditRecipeImagesComponent implements OnDestroy {
   recipeImages: RecipeImage[] | null = null;
   recipeImagesURLs: string[] | null = null;
 
-  private subscriptions: Subscription[] = [];
+  private subSink = new SubSink();
 
   constructor(private api: ApiService, private snackbar: SnackbarService) {}
 
@@ -73,7 +73,7 @@ export class EditRecipeImagesComponent implements OnDestroy {
     this.error = null;
     this.uploadProgress = 0;
 
-    this.subscriptions.push(
+    this.subSink.push(
       this.api.addRecipeImage(this.recipeId, files[0]).subscribe(async (event) => {
         if (event instanceof ApiResponse) {
           if (event.isOK()) {
@@ -112,6 +112,6 @@ export class EditRecipeImagesComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.subSink.clear();
   }
 }

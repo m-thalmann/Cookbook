@@ -3,12 +3,12 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { Subscription } from 'rxjs';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 import { InputDialogComponent } from 'src/app/components/input-dialog/input-dialog.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { ApiOptions, Pagination, UserFull } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
+import { SubSink } from 'src/app/core/functions';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { CreateUserDialogComponent } from './components/create-user-dialog/create-user-dialog.component';
 
@@ -38,7 +38,7 @@ export class PageAdminUsersComponent implements AfterViewInit, OnDestroy {
 
   private _search: string | null = null;
 
-  private subscriptions: Subscription[] = [];
+  private subSink = new SubSink();
 
   constructor(
     private api: ApiService,
@@ -64,14 +64,14 @@ export class PageAdminUsersComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     this.loadUsers();
 
-    this.subscriptions.push(
+    this.subSink.push(
       this.sort.sortChange.subscribe(() => {
         this.paginator.pageIndex = 0;
         this.loadUsers();
       })
     );
 
-    this.subscriptions.push(
+    this.subSink.push(
       this.paginator.page.subscribe(() => {
         this.loadUsers();
       })
@@ -328,6 +328,6 @@ export class PageAdminUsersComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.subSink.clear();
   }
 }

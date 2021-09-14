@@ -1,9 +1,9 @@
 import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { RecipeListComponent } from 'src/app/components/recipe-list/recipe-list.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { ApiOptions, User } from 'src/app/core/api/ApiInterfaces';
+import { SubSink } from 'src/app/core/functions';
 
 @Component({
   selector: 'cb-page-admin-recipes',
@@ -21,10 +21,10 @@ export class PageAdminRecipesComponent implements OnDestroy {
   filterUserId: number | null = null;
   filterUser: User | null = null;
 
-  private subscriptions: Subscription[] = [];
+  private subSink = new SubSink();
 
   constructor(private api: ApiService, private route: ActivatedRoute) {
-    this.subscriptions.push(
+    this.subSink.push(
       this.route.queryParams.subscribe((params) => {
         if (params.userId) {
           this.filterUserId = params.userId;
@@ -74,6 +74,6 @@ export class PageAdminRecipesComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.subSink.clear();
   }
 }

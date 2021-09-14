@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { Logger } from '../functions';
+import { Logger, LoggerColor } from '../functions';
 import StorageNames from '../StorageNames';
 
 const TRANSLATIONS_PATH = 'assets/i18n';
@@ -67,7 +67,7 @@ export class TranslationService {
 
     this._loading = false;
 
-    Logger.error('TranslationService', 'orange', 'No translation file could be loaded!');
+    Logger.error('TranslationService', LoggerColor.orange, 'No translation file could be loaded!');
 
     return false;
   }
@@ -123,7 +123,7 @@ export class TranslationService {
     ) {
       Logger.warn(
         'TranslationService',
-        'orange',
+        LoggerColor.orange,
         `Translation not found for key: '${key}' (Language: '${this.currentLanguage}')`
       );
     }
@@ -168,7 +168,12 @@ export class TranslationService {
     try {
       this.translations[language] = await this.http.get<{}>(`${TRANSLATIONS_PATH}/${language}.json`).toPromise();
     } catch (e: any) {
-      Logger.error('TranslationService', 'orange', `Error loading translation file (${language}):`, e.message);
+      Logger.error(
+        'TranslationService',
+        LoggerColor.orange,
+        `Error loading translation file (${language}):`,
+        e.message
+      );
       return false;
     }
 
@@ -182,7 +187,7 @@ export class TranslationService {
     try {
       this.availableLanguages = await this.http.get<any>(`${TRANSLATIONS_PATH}/_languages.json`).toPromise();
     } catch (e: any) {
-      Logger.error('TranslationService', 'orange', `Error loading available-translations-file:`, e.message);
+      Logger.error('TranslationService', LoggerColor.orange, `Error loading available-translations-file:`, e.message);
     }
   }
 

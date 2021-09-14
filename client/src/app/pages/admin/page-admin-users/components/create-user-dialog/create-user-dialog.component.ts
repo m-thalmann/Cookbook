@@ -1,9 +1,9 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { getFormError } from 'src/app/core/forms/Validation';
+import { SubSink } from 'src/app/core/functions';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
@@ -17,7 +17,7 @@ export class CreateUserDialogComponent implements OnDestroy {
   saving = false;
   error: string | null = null;
 
-  private subscriptions: Subscription[] = [];
+  private subSink = new SubSink();
 
   constructor(
     private fb: FormBuilder,
@@ -46,7 +46,7 @@ export class CreateUserDialogComponent implements OnDestroy {
     });
 
     if (this.password) {
-      this.subscriptions.push(
+      this.subSink.push(
         this.password.valueChanges.subscribe(() => {
           if (this.passwordConfirm) {
             this.passwordConfirm.updateValueAndValidity();
@@ -120,6 +120,6 @@ export class CreateUserDialogComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.subSink.clear();
   }
 }

@@ -1,11 +1,11 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Subscription } from 'rxjs';
 import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { UserService } from 'src/app/core/auth/user.service';
 import { getFormError } from 'src/app/core/forms/Validation';
+import { SubSink } from 'src/app/core/functions';
 import { TranslationService } from 'src/app/core/i18n/translation.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
@@ -24,7 +24,7 @@ export class SettingsDialogComponent implements OnDestroy {
   saving = false;
   error: string | null = null;
 
-  private subscriptions: Subscription[] = [];
+  private subSink = new SubSink();
 
   constructor(
     private fb: FormBuilder,
@@ -95,7 +95,7 @@ export class SettingsDialogComponent implements OnDestroy {
     );
 
     if (this.password) {
-      this.subscriptions.push(
+      this.subSink.push(
         this.password.valueChanges.subscribe(() => {
           if (this.passwordConfirm) {
             this.passwordConfirm.updateValueAndValidity();
@@ -271,6 +271,6 @@ export class SettingsDialogComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.subSink.clear();
   }
 }

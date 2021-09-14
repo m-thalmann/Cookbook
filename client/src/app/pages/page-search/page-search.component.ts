@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { RecipeListComponent } from 'src/app/components/recipe-list/recipe-list.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { ApiOptions } from 'src/app/core/api/ApiInterfaces';
+import { SubSink } from 'src/app/core/functions';
 
 @Component({
   selector: 'cb-page-search',
@@ -19,12 +19,12 @@ export class PageSearchComponent implements OnInit, OnDestroy {
 
   loading = false;
 
-  private subscriptions: Subscription[] = [];
+  private subSink = new SubSink();
 
   constructor(private api: ApiService, private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit() {
-    this.subscriptions.push(
+    this.subSink.push(
       this.route.params.subscribe((params) => {
         this.search = params.search ? params.search : null;
 
@@ -60,6 +60,6 @@ export class PageSearchComponent implements OnInit, OnDestroy {
   };
 
   ngOnDestroy() {
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.subSink.clear();
   }
 }

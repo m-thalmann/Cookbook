@@ -1,8 +1,8 @@
 import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { ApiOptions, CategoryInformation } from 'src/app/core/api/ApiInterfaces';
+import { SubSink } from 'src/app/core/functions';
 
 @Component({
   selector: 'cb-page-categories',
@@ -17,10 +17,10 @@ export class PageCategoriesComponent implements OnDestroy {
   loadingCategories = false;
   error = false;
 
-  private subscriptions: Subscription[] = [];
+  private subSink = new SubSink();
 
   constructor(private route: ActivatedRoute, private api: ApiService) {
-    this.subscriptions.push(
+    this.subSink.push(
       this.route.params.subscribe((params) => {
         if (params.category) {
           this.category = decodeURIComponent(params.category);
@@ -74,6 +74,6 @@ export class PageCategoriesComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.subSink.clear();
   }
 }
