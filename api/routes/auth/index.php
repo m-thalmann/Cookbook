@@ -109,12 +109,22 @@ $group
 
         $data = $req["post"] ?? [];
 
+        $oldPasswordRequired = false;
+
+        foreach (User::EDIT_PASSWORD_REQUIRED_PROPERTIES as $property) {
+            if (array_key_exists($property, $data)) {
+                $oldPasswordRequired = true;
+                break;
+            }
+        }
+
         if (
-            !array_key_exists("oldPassword", $data) ||
-            Authorization::encryptPassword(
-                $data["oldPassword"],
-                $user->passwordSalt
-            ) !== $user->password
+            $oldPasswordRequired &&
+            (!array_key_exists("oldPassword", $data) ||
+                Authorization::encryptPassword(
+                    $data["oldPassword"],
+                    $user->passwordSalt
+                ) !== $user->password)
         ) {
             return Response::forbidden(["info" => "Old password is wrong"]);
         }

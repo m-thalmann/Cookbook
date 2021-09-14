@@ -2,6 +2,7 @@ export interface User {
   id: number;
   email: string;
   name: string;
+  languageCode: string;
 }
 
 export interface AuthUser extends User {

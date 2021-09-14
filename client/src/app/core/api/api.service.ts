@@ -196,7 +196,13 @@ export class ApiService {
     });
   }
 
-  updateUser(values: { oldPassword?: string; email?: string; name?: string; password?: string }) {
+  updateUser(values: {
+    oldPassword?: string;
+    email?: string;
+    name?: string;
+    password?: string;
+    languageCode?: string;
+  }) {
     return this.put<User>(`${this.URL}/auth`, values);
   }
 

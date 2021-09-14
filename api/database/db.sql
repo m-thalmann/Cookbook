@@ -10,6 +10,7 @@ CREATE TABLE `users` (
   `name` varchar(20) NOT NULL,
   `password` varchar(64) NOT NULL,
   `passwordSalt` varchar(32) NOT NULL,
+  `languageCode` VARCHAR(5) NOT NULL,
   `verifyEmailCode` varchar(5),
   `verifyEmailCodeExpires` datetime,
   `isAdmin` boolean NOT NULL DEFAULT 0,

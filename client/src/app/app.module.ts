@@ -8,6 +8,7 @@ import { ComponentsModule } from './components/components.module';
 import { ConfigService } from './core/config/config.service';
 import { CoreModule } from './core/core.module';
 import { TranslationService } from './core/i18n/translation.service';
+import { UserTranslationService } from './core/i18n/user-translation.service';
 import { ResetPasswordDialogComponent } from './layout/components/login-register-dialog/components/reset-password-dialog/reset-password-dialog.component';
 import { VerifyEmailDialogComponent } from './layout/components/login-register-dialog/components/verify-email-dialog/verify-email-dialog.component';
 import { LoginRegisterDialogComponent } from './layout/components/login-register-dialog/login-register-dialog.component';
@@ -24,6 +25,12 @@ export function setupServices(config: ConfigService, translation: TranslationSer
   return async () => {
     await config.load();
     await translation.init(config.get('language', null));
+  };
+}
+
+export function setupUserTranslationService(userTranslation: UserTranslationService) {
+  return () => {
+    userTranslation.init();
   };
 }
 
@@ -48,6 +55,12 @@ export function setupServices(config: ConfigService, translation: TranslationSer
       provide: APP_INITIALIZER,
       useFactory: setupServices,
       deps: [ConfigService, TranslationService],
+      multi: true,
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: setupUserTranslationService,
+      deps: [UserTranslationService],
       multi: true,
     },
   ],

@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AuthUser } from '../api/ApiInterfaces';
 import { Logger, LoggerColor } from '../functions';
+import { TranslationService } from '../i18n/translation.service';
 import { SnackbarService } from '../services/snackbar.service';
 import StorageNames from '../StorageNames';
 
@@ -19,6 +20,7 @@ export class UserService {
     private router: Router,
     private dialog: MatDialog,
     private snackbar: SnackbarService,
+    private translation: TranslationService
   ) {
     try {
       this.loadToken();
@@ -45,6 +47,12 @@ export class UserService {
     this.loadToken();
 
     this.userChanged.emit();
+
+    const languageCode = this.user?.languageCode;
+
+    if (languageCode) {
+      this.translation.use(languageCode);
+    }
   }
 
   /**
@@ -180,6 +188,7 @@ export class UserService {
         typeof tokenPayload.user_id === 'number' &&
         typeof tokenPayload.user_email === 'string' &&
         typeof tokenPayload.user_name === 'string' &&
+        typeof tokenPayload.user_languageCode === 'string' &&
         typeof tokenPayload.user_isAdmin === 'boolean'
       )
     ) {
@@ -190,6 +199,7 @@ export class UserService {
       id: tokenPayload.user_id,
       email: tokenPayload.user_email,
       name: tokenPayload.user_name,
+      languageCode: tokenPayload.user_languageCode,
       isAdmin: tokenPayload.user_isAdmin,
     };
   }

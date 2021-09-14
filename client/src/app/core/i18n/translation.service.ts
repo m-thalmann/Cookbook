@@ -20,7 +20,8 @@ export class TranslationService {
 
   private availableLanguages: { key: string; name: string; flagCode: string }[] | null = null;
 
-  private _languageChanged = new EventEmitter<void>();
+  readonly languageChanged = new EventEmitter<string>();
+  readonly languageSaved = new EventEmitter<string | null>();
 
   private _loading = false;
 
@@ -52,13 +53,19 @@ export class TranslationService {
       }
 
       if (await this.load(_language)) {
-        if (language && language === _language) {
-          await this.saveLanguage(_language);
-        }
+        const isInit = this.currentLanguage === null;
 
         this.currentLanguage = _language;
 
-        this._languageChanged.emit();
+        if (language && language === _language) {
+          if (!isInit) {
+            this.saveLanguage(_language);
+          }
+        }
+
+        if (!isInit) {
+          this.languageChanged.emit(_language);
+        }
 
         this._loading = false;
         return true;
@@ -196,16 +203,14 @@ export class TranslationService {
    *
    * @param language The language to save for the user
    */
-  private async saveLanguage(language: string | null) {
+  private saveLanguage(language: string | null) {
     if (language) {
       localStorage.setItem(StorageNames.Language, language);
     } else {
       localStorage.removeItem(StorageNames.Language);
     }
 
-    this.currentLanguage = language;
-
-    // TODO: save in user-database
+    this.languageSaved.emit(language);
   }
 
   /**
@@ -228,12 +233,5 @@ export class TranslationService {
    */
   get languages() {
     return this.availableLanguages;
-  }
-
-  /**
-   * Observable that emits an event, whenever the language is changed
-   */
-  get languageChanged() {
-    return this._languageChanged;
   }
 }

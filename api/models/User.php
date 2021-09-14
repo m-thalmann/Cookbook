@@ -12,7 +12,17 @@ use PAF\Model\Model;
  * @tablename users
  */
 class User extends Model {
-    const FORBIDDEN_SORT_PROPERTIES = ["password", "passwordSalt", "verifyEmailCode", "verifyEmailCodeExpires"];
+    const FORBIDDEN_SORT_PROPERTIES = [
+        "password",
+        "passwordSalt",
+        "verifyEmailCode",
+        "verifyEmailCodeExpires",
+    ];
+
+    /**
+     * @var string[] Properties that need a password confirmation to be updated (old password)
+     */
+    const EDIT_PASSWORD_REQUIRED_PROPERTIES = ["email", "name", "password"];
 
     /**
      * @prop
@@ -51,6 +61,12 @@ class User extends Model {
      * @output false
      */
     public $passwordSalt = null;
+
+    /**
+     * @prop
+     * @var string
+     */
+    public $languageCode;
 
     /**
      * @prop
@@ -175,6 +191,7 @@ class User extends Model {
             "email" => ["Email", true],
             "name" => ["Name", true],
             "password" => ["Password", true],
+            "languageCode" => ["Language", true],
         ]);
     }
 

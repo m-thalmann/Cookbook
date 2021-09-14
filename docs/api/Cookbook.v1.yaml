@@ -67,10 +67,11 @@ paths:
                   type: string
                 password:
                   type: string
+                languageCode:
+                  type: string
+                  example: en
                 oldPassword:
                   type: string
-              required:
-                - oldPassword
       responses:
         '200':
           description: OK
@@ -234,6 +235,9 @@ paths:
                   maxLength: 20
                 password:
                   type: string
+                languageCode:
+                  type: string
+                  example: en
                 hcaptchaToken:
                   type: string
                   description: The token received from a successfully solved hCaptcha (if enabled)
@@ -241,6 +245,7 @@ paths:
                 - email
                 - name
                 - password
+                - languageCode
       responses:
         '201':
           description: Created
@@ -1786,10 +1791,14 @@ components:
         name:
           type: string
           maxLength: 20
+        languageCode:
+          type: string
+          example: en
       required:
         - id
         - email
         - name
+        - languageCode
     UserFull:
       title: User with additional information
       allOf:

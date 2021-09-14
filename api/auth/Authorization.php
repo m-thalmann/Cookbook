@@ -41,6 +41,7 @@ class Authorization {
                 "user_id" => $user->id,
                 "user_email" => $user->email,
                 "user_name" => $user->name,
+                "user_languageCode" => $user->languageCode,
                 "user_isAdmin" => $user->isAdmin,
                 "user_lastUpdated" => $user->lastUpdated,
                 "exp" => time() + Config::get('token.ttl'),

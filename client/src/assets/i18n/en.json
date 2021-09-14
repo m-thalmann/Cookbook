@@ -213,7 +213,7 @@
         "enter_new_password": "Enter new password",
         "last_modified": "Last modified",
         "reset_password": "Reset password",
-        "search_placeholder": "e.g. max@muster.com, ...",
+        "search_placeholder": "e.g. john@doe.com, ...",
         "send_verification_email": "Send verification email",
         "title": "Manage users",
         "view_user_recipes": "View user recipes"
