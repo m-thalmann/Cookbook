@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AuthUser } from '../api/ApiInterfaces';
+import { Logger, LoggerColor } from '../functions';
 import { SnackbarService } from '../services/snackbar.service';
 import StorageNames from '../StorageNames';
 
@@ -12,12 +13,22 @@ export class UserService {
   private _user: AuthUser | null = null;
   private _token: string | null = null;
 
-  constructor(private router: Router, private dialog: MatDialog, private snackbar: SnackbarService) {
-    this.loadToken();
+  readonly userChanged = new EventEmitter<void>();
+
+  constructor(
+    private router: Router,
+    private dialog: MatDialog,
+    private snackbar: SnackbarService,
+  ) {
+    try {
+      this.loadToken();
+    } catch (e) {}
   }
 
   /**
    * Stores the token
+   *
+   * @throws If the token is not formatted correctly
    *
    * @param token the token of the user
    * @param save whether to store the token
@@ -32,10 +43,14 @@ export class UserService {
     }
 
     this.loadToken();
+
+    this.userChanged.emit();
   }
 
   /**
    * Loads the token and user from storage or cookies (if stored before)
+   *
+   * @throws If the token is not formatted correctly
    *
    * @returns the loaded token or null, if no token was found
    */
@@ -61,13 +76,15 @@ export class UserService {
 
         this._token = token;
       } catch (e) {
-        console.error(e);
+        Logger.error('UserService', LoggerColor.lightblue, 'Error parsing token:', e);
 
         if (this.isLoggedin) {
           this.logout('badToken');
         } else {
           this.remove();
         }
+
+        throw e;
       }
     }
   }
@@ -76,7 +93,7 @@ export class UserService {
    * Removes the stored user and token from storage and cookies
    */
   private remove() {
-    Object.values(StorageNames).forEach((storageName) => localStorage.removeItem(storageName));
+    localStorage.removeItem(StorageNames.Token);
 
     document.cookie = `${StorageNames.Token}=; samesite=strict; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
 
@@ -117,7 +134,7 @@ export class UserService {
    * @param reason the reason for the logout
    * @param redirectPath the path to redirect the user to, after the logout (or no redirect if null)
    */
-  logout(reason: string | null, redirectPath: string | null = '/home') {
+  logout(reason: string | null = null, redirectPath: string | null = '/home') {
     this.remove();
 
     this.dialog.closeAll();
@@ -142,6 +159,8 @@ export class UserService {
     if (reason) {
       this.snackbar.info(reason);
     }
+
+    this.userChanged.emit();
   }
 
   /**

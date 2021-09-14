@@ -123,18 +123,13 @@ export class LoginRegisterDialogComponent {
 
     try {
       if (res.isOK() && res.value !== null) {
-        if (this.isLogin && res.value.token) {
-          try {
-            UserService.parseUserFromToken(res.value.token);
-          } catch (e) {
-            console.error(e);
-            throw new Error();
+        if (this.isLogin) {
+          if (res.value.token) {
+            this.user.login(res.value.token, this.remember?.value);
           }
-
-          this.user.login(res.value.token, this.remember?.value);
-
-          location.href = location.pathname;
         } else {
+          // Auto-login after register
+
           this.isLogin = true;
 
           await this.action();
@@ -165,7 +160,8 @@ export class LoginRegisterDialogComponent {
       console.error('Error on login/register:', res.error);
     }
 
-    this.dialogRef.disableClose = false;
+    this.dialogRef.close();
+    // TODO: maybe show info
   }
 
   /**

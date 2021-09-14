@@ -2,6 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from 'src/app/core/api/api.service';
 import { ApiOptions, CategoryInformation } from 'src/app/core/api/ApiInterfaces';
+import { UserService } from 'src/app/core/auth/user.service';
 import { SubSink } from 'src/app/core/functions';
 
 @Component({
@@ -19,7 +20,7 @@ export class PageCategoriesComponent implements OnDestroy {
 
   private subSink = new SubSink();
 
-  constructor(private route: ActivatedRoute, private api: ApiService) {
+  constructor(private route: ActivatedRoute, private api: ApiService, private user: UserService) {
     this.subSink.push(
       this.route.params.subscribe((params) => {
         if (params.category) {
@@ -28,6 +29,14 @@ export class PageCategoriesComponent implements OnDestroy {
         } else {
           this.loadCategories();
           this.category = null;
+        }
+      })
+    );
+
+    this.subSink.push(
+      this.user.userChanged.subscribe(() => {
+        if (this.isOverview) {
+          this.loadCategories();
         }
       })
     );

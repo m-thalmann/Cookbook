@@ -1,13 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ApiOptions, Pagination, Recipe, RecipeSortDirection } from 'src/app/core/api/ApiInterfaces';
 import { ApiResponse } from 'src/app/core/api/ApiResponse';
+import { UserService } from 'src/app/core/auth/user.service';
+import { SubSink } from 'src/app/core/functions';
 
 @Component({
   selector: 'cb-recipe-list',
   templateUrl: './recipe-list.component.html',
   styleUrls: ['./recipe-list.component.scss'],
 })
-export class RecipeListComponent implements OnInit {
+export class RecipeListComponent implements OnInit, OnDestroy {
+  private subSink = new SubSink();
+
   @Input()
   set sort(sort: string) {
     this._sort = sort;
@@ -32,10 +36,12 @@ export class RecipeListComponent implements OnInit {
 
   recipes: Pagination<Recipe> | null = null;
 
-  constructor() {}
+  constructor(private user: UserService) {}
 
   ngOnInit() {
     this.reload();
+
+    this.subSink.push(this.user.userChanged.subscribe(this.reload.bind(this)));
   }
 
   get sort() {
@@ -92,5 +98,9 @@ export class RecipeListComponent implements OnInit {
 
     this.loading = false;
     this.loadingChange.emit(this.loading);
+  }
+
+  ngOnDestroy() {
+    this.subSink.clear();
   }
 }

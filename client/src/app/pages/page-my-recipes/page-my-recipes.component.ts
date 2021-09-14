@@ -12,6 +12,8 @@ export class PageMyRecipesComponent {
   constructor(private api: ApiService, private user: UserService) {}
 
   reload = (options: ApiOptions) => {
-    return this.api.getRecipesForUser(this.user.user!.id, options);
+    if (!this.user.user) return null;
+
+    return this.api.getRecipesForUser(this.user.user.id, options);
   };
 }

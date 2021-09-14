@@ -43,6 +43,14 @@ export class PageRecipeComponent implements OnInit, OnDestroy {
         }
       })
     );
+
+    this.subSink.push(
+      this.user.userChanged.subscribe(() => {
+        if (this.recipe) {
+          this.load(this.recipe.id);
+        }
+      })
+    );
   }
 
   setSelectedPortions(selectedPortions: Event) {

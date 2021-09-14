@@ -121,7 +121,7 @@ export class ApiService {
 
     if (status != 404) {
       if (status == 401 && this.user.isLoggedin) {
-        this.user.logout('unauthorized');
+        this.user.logout('unauthorized', null);
       } else if (status == 403) {
         if (this.user.isLoggedin) {
           this.snackbar.warn('messages.auth.action_unauthorized');
