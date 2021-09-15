@@ -32,7 +32,10 @@ class Functions {
      * @return Query
      */
     public static function sort($query, $forbiddenProperties = []) {
-        if (!empty($_GET["sort"]) && !in_array($_GET["sort"], $forbiddenProperties)) {
+        if (
+            !empty($_GET["sort"]) &&
+            !in_array($_GET["sort"], $forbiddenProperties)
+        ) {
             return $query->orderBy(
                 $_GET["sort"],
                 !empty($_GET["sortDir"]) ? $_GET["sortDir"] : "asc"

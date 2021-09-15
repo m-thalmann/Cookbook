@@ -71,7 +71,7 @@ export class PageCategoriesComponent implements OnDestroy {
   }
 
   getCategoryURL(category: string) {
-    return '/categories/' + encodeURIComponent(category);
+    return '/categories/' + category;
   }
 
   getThumbnailUrl(recipeId: number | null) {

@@ -50,7 +50,7 @@ class Recipe extends Model {
 
     /**
      * @prop
-     * @maxLength 10
+     * @maxLength 20
      * @var string|null
      */
     public $category;

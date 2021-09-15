@@ -253,7 +253,7 @@ export class ApiService {
 
   getRecipesForCategory(category: string, options: ApiOptions) {
     return this.get<Pagination<Recipe>>(
-      `${this.URL}/recipes/category/${category}${ApiService.buildOptionsQueryString(options)}`
+      `${this.URL}/recipes/category/${encodeURIComponent(category)}${ApiService.buildOptionsQueryString(options)}`
     );
   }
 

@@ -149,7 +149,7 @@ $group
 
         if (User::query("id = ?", [$req["params"]["id"]])->delete()) {
             RecipeImage::deleteOrphanImages();
-            
+
             return Response::ok();
         } else {
             return Response::error();

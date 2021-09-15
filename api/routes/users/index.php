@@ -18,5 +18,7 @@ $group->get('/id/{{i:id}}/recipes', Authorization::middleware(false), function (
         false
     );
 
-    return Functions::pagination(Functions::sort($query, Recipe::FORBIDDEN_SORT_PROPERTIES));
+    return Functions::pagination(
+        Functions::sort($query, Recipe::FORBIDDEN_SORT_PROPERTIES)
+    );
 });

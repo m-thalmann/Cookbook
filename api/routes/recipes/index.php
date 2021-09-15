@@ -16,7 +16,9 @@ $group
     ->get('/', Authorization::middleware(false), function () {
         $query = Recipe::getQueryForUser("1", [], Authorization::user(), false);
 
-        return Functions::pagination(Functions::sort($query, Recipe::FORBIDDEN_SORT_PROPERTIES));
+        return Functions::pagination(
+            Functions::sort($query, Recipe::FORBIDDEN_SORT_PROPERTIES)
+        );
     })
     ->get('/id/{{i:id}}', Authorization::middleware(false), function ($req) {
         $recipe = Recipe::getQueryForUser(
@@ -39,7 +41,7 @@ $group
     ->get('/search/{{:search}}', Authorization::middleware(false), function (
         $req
     ) {
-        $search = "%{$req["params"]["search"]}%";
+        $search = "%" . urldecode($req["params"]["search"]) . "%";
 
         $query = Recipe::getQueryForUser(
             "name LIKE :search OR description LIKE :search",
@@ -48,7 +50,9 @@ $group
             false
         );
 
-        return Functions::pagination(Functions::sort($query, Recipe::FORBIDDEN_SORT_PROPERTIES));
+        return Functions::pagination(
+            Functions::sort($query, Recipe::FORBIDDEN_SORT_PROPERTIES)
+        );
     })
     ->get('/category/{{:name}}', Authorization::middleware(false), function (
         $req
@@ -56,13 +60,15 @@ $group
         $query = Recipe::getQueryForUser(
             "category = :category",
             [
-                "category" => $req["params"]["name"],
+                "category" => urldecode($req["params"]["name"]),
             ],
             Authorization::user(),
             false
         );
 
-        return Functions::pagination(Functions::sort($query, Recipe::FORBIDDEN_SORT_PROPERTIES));
+        return Functions::pagination(
+            Functions::sort($query, Recipe::FORBIDDEN_SORT_PROPERTIES)
+        );
     })
     ->post('/', Authorization::middleware(), function ($req) {
         Database::get()->beginTransaction();
