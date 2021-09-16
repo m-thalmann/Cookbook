@@ -7,6 +7,7 @@ import { Component, Input } from '@angular/core';
 })
 export class SkeletonRecipeItemComponent {
   @Input() compact = false;
+  @Input() grid = false;
 
   constructor() {}
 }

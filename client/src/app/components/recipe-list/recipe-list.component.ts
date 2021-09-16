@@ -18,6 +18,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
     this.sortDirection = RecipeSortDirection[sort];
   }
   @Input() sortDirection: 'asc' | 'desc' = 'desc';
+  @Input() display: 'list' | 'grid' = 'list';
 
   @Input() reloadFunction!: (options: ApiOptions) => Promise<ApiResponse<Pagination<Recipe>>> | null;
 
@@ -66,6 +67,10 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   toggleSortDirection() {
     this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     this.page = 0;
+  }
+
+  toggleDisplay() {
+    this.display = this.display === 'list' ? 'grid' : 'list';
   }
 
   async reload() {

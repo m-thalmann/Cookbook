@@ -27,6 +27,18 @@
       height: 5em;
       width: 5em;
     }
+
+    &.grid {
+      display: block;
+      width: 100%;
+
+      margin-right: 0;
+      margin-bottom: 1em;
+
+      > cb-skeleton {
+        margin: 0 auto;
+      }
+    }
   }
 
   .content {
@@ -53,6 +65,11 @@
 
     &.compact .description {
       display: none;
+    }
+
+    &.grid {
+      display: block;
+      width: 100%;
     }
   }
 

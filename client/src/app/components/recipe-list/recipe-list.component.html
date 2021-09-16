@@ -4,32 +4,41 @@
 <span class="results" *ngIf="error"> {{ 'messages.no_results' | translate }} </span>
 <cb-skeleton *ngIf="results === null && !error" style="width: 6em" class="inline-block"></cb-skeleton>
 
-<div class="sort">
-    <mat-form-field appearance="outline">
-        <mat-label>{{ 'sort_by' | translate }}</mat-label>
-        <mat-select [value]="sort" (valueChange)="sortChange($event)" [disabled]="loading">
-            <mat-option value="publishDate">{{ 'recipe.publish_date' | translate }}</mat-option>
-            <mat-option value="name">{{ 'recipe.name' | translate }}</mat-option>
-            <mat-option value="category">{{ 'recipe.category' | translate }}</mat-option>
-            <mat-option value="public">{{ 'recipe.visibility' | translate }}</mat-option>
-            <mat-option value="difficulty">{{ 'recipe.difficulty' | translate }}</mat-option>
-        </mat-select>
-        <mat-icon matPrefix>sort</mat-icon>
-    </mat-form-field>
+<div class="actions">
+    <div class="sort">
+        <mat-form-field appearance="outline">
+            <mat-label>{{ 'sort_by' | translate }}</mat-label>
+            <mat-select [value]="sort" (valueChange)="sortChange($event)" [disabled]="loading">
+                <mat-option value="publishDate">{{ 'recipe.publish_date' | translate }}</mat-option>
+                <mat-option value="name">{{ 'recipe.name' | translate }}</mat-option>
+                <mat-option value="category">{{ 'recipe.category' | translate }}</mat-option>
+                <mat-option value="public">{{ 'recipe.visibility' | translate }}</mat-option>
+                <mat-option value="difficulty">{{ 'recipe.difficulty' | translate }}</mat-option>
+            </mat-select>
+            <mat-icon matPrefix>sort</mat-icon>
+        </mat-form-field>
 
-    <button mat-icon-button (click)="toggleSortDirection()" [disabled]="loading">
-        <mat-icon>{{ sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward' }}</mat-icon>
+        <button mat-icon-button (click)="toggleSortDirection()" [disabled]="loading">
+            <mat-icon>{{ sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward' }}</mat-icon>
+        </button>
+    </div>
+
+    <button mat-icon-button (click)="toggleDisplay()" class="display hide-mobile">
+        <mat-icon>{{ display === 'list' ? 'view_list' : 'grid_view' }}</mat-icon>
     </button>
 </div>
 
 <ng-container *ngIf="recipes">
-    <cb-recipe-item
-        *ngFor="let recipe of recipes.items"
-        [recipe]="recipe"
-        [disabled]="loading"
-        [compact]="compact"
-        [class.compact]="compact"
-    ></cb-recipe-item>
+    <div class="recipes" [class.display-grid]="display === 'grid'">
+        <cb-recipe-item
+            *ngFor="let recipe of recipes.items"
+            [recipe]="recipe"
+            [disabled]="loading"
+            [compact]="compact"
+            [grid]="display === 'grid'"
+            [class.compact]="compact"
+        ></cb-recipe-item>
+    </div>
 
     <p class="icon-text" *ngIf="recipes.total_items === 0"><mat-icon>info</mat-icon><span>No recipes found</span></p>
 
@@ -42,11 +51,33 @@
 </ng-container>
 
 <ng-container *ngIf="!recipes && !error">
-    <cb-skeleton-recipe-item [compact]="compact" [class.compact]="compact"></cb-skeleton-recipe-item>
-    <cb-skeleton-recipe-item [compact]="compact" [class.compact]="compact"></cb-skeleton-recipe-item>
-    <cb-skeleton-recipe-item [compact]="compact" [class.compact]="compact"></cb-skeleton-recipe-item>
-    <cb-skeleton-recipe-item [compact]="compact" [class.compact]="compact"></cb-skeleton-recipe-item>
-    <cb-skeleton-recipe-item [compact]="compact" [class.compact]="compact"></cb-skeleton-recipe-item>
+    <div class="recipes" [class.display-grid]="display === 'grid'">
+        <cb-skeleton-recipe-item
+            [compact]="compact"
+            [class.compact]="compact"
+            [grid]="display === 'grid'"
+        ></cb-skeleton-recipe-item>
+        <cb-skeleton-recipe-item
+            [compact]="compact"
+            [class.compact]="compact"
+            [grid]="display === 'grid'"
+        ></cb-skeleton-recipe-item>
+        <cb-skeleton-recipe-item
+            [compact]="compact"
+            [class.compact]="compact"
+            [grid]="display === 'grid'"
+        ></cb-skeleton-recipe-item>
+        <cb-skeleton-recipe-item
+            [compact]="compact"
+            [class.compact]="compact"
+            [grid]="display === 'grid'"
+        ></cb-skeleton-recipe-item>
+        <cb-skeleton-recipe-item
+            [compact]="compact"
+            [class.compact]="compact"
+            [grid]="display === 'grid'"
+        ></cb-skeleton-recipe-item>
+    </div>
 </ng-container>
 
 <p class="icon-text fg-warn" *ngIf="error">

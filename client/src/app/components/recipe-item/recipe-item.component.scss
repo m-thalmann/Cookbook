@@ -1,5 +1,35 @@
 @import 'variables.scss';
 
+@mixin small-view {
+  > * {
+    display: block;
+  }
+
+  .img-container {
+    width: 100% !important;
+    margin-right: 0 !important;
+    margin-bottom: 1em !important;
+  }
+
+  .content {
+    width: 100% !important;
+
+    mat-chip-list {
+      width: fit-content;
+      margin: 0 auto;
+    }
+  }
+
+  .edit-recipe {
+    position: relative;
+    top: unset;
+    right: unset;
+    transform: unset;
+
+    margin: 1em auto 0 auto;
+  }
+}
+
 .container {
   display: block;
   color: inherit;
@@ -43,6 +73,10 @@
     .content .description {
       display: none;
     }
+  }
+
+  &.grid {
+    @include small-view;
   }
 
   &:hover:not(.disabled) {
@@ -167,33 +201,5 @@
 }
 
 @media screen and (max-width: $mobile-width) {
-  .container {
-    > * {
-      display: block;
-    }
-
-    .img-container {
-      width: 100%;
-      margin-right: 0;
-      margin-bottom: 1em;
-    }
-
-    .content {
-      width: 100% !important;
-
-      mat-chip-list {
-        width: fit-content;
-        margin: 0 auto;
-      }
-    }
-
-    .edit-recipe {
-      position: relative;
-      top: unset;
-      right: unset;
-      transform: unset;
-
-      margin: 1em auto 0 auto;
-    }
-  }
+  @include small-view;
 }

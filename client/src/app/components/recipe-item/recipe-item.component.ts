@@ -15,6 +15,7 @@ export class RecipeItemComponent {
   @Input() recipe: Recipe | null = null;
 
   @Input() compact = false;
+  @Input() grid = false;
   @Input() disabled: boolean = false;
 
   constructor(private api: ApiService, private user: UserService) {}
