@@ -127,6 +127,9 @@ export class LoginRegisterDialogComponent {
           if (res.value.token) {
             this.user.login(res.value.token, this.remember?.value);
           }
+
+          this.dialogRef.close();
+          // TODO: maybe show info
         } else {
           // Auto-login after register
 
@@ -159,9 +162,6 @@ export class LoginRegisterDialogComponent {
       this.error = e.message || 'messages.error_occurred';
       console.error('Error on login/register:', res.error);
     }
-
-    this.dialogRef.close();
-    // TODO: maybe show info
   }
 
   /**

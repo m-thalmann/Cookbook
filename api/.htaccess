@@ -1,8 +1,11 @@
+# see https://stackoverflow.com/a/69198892/11028838
+Options -Indexes
+DirectorySlash Off
+
 RewriteEngine On
 
 RewriteCond %{HTTP:Authorization} ^(.*)
 RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
 
-RewriteCond %{REQUEST_FILENAME}  -f [OR]
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.*)$ index.php [L,QSA]
+RewriteCond %{REQUEST_FILENAME} "(?<!setup.php)$"
+RewriteRule !^index\.php$ index.php [L]
