@@ -5,7 +5,7 @@ import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confir
 import { ApiService } from 'src/app/core/api/api.service';
 import { UserService } from 'src/app/core/auth/user.service';
 import { getFormError } from 'src/app/core/forms/Validation';
-import { SubSink } from 'src/app/core/functions';
+import { Logger, LoggerColor, SubSink } from 'src/app/core/functions';
 import { TranslationService } from 'src/app/core/i18n/translation.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
@@ -226,7 +226,7 @@ export class SettingsDialogComponent implements OnDestroy {
       }
     } catch (e: any) {
       this.error = e.message || 'messages.error_occurred';
-      console.error('Error saving settings:', res.error);
+      Logger.error('Settings', LoggerColor.red, 'Error saving settings:', res.error);
     }
   }
 
@@ -263,7 +263,7 @@ export class SettingsDialogComponent implements OnDestroy {
         undefined,
         false
       );
-      console.error('Error deleting account:', res.error);
+      Logger.error('Settings', LoggerColor.red, 'Error deleting account:', res.error);
     }
 
     this.saving = false;

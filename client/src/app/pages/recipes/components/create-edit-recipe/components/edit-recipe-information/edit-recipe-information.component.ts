@@ -7,7 +7,7 @@ import { ApiService } from 'src/app/core/api/api.service';
 import { EditIngredient, EditRecipe, ListIngredient, NewRecipe, RecipeFull } from 'src/app/core/api/ApiInterfaces';
 import { ApiResponse } from 'src/app/core/api/ApiResponse';
 import { getFormError } from 'src/app/core/forms/Validation';
-import { trimAndNull } from 'src/app/core/functions';
+import { Logger, LoggerColor, trimAndNull } from 'src/app/core/functions';
 import { TranslationService } from 'src/app/core/i18n/translation.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
@@ -333,7 +333,7 @@ export class EditRecipeInformationComponent {
       if (this.ingredientsError) {
         ingredientsResults.forEach((result) => {
           if (!result.isOK()) {
-            console.error('Error saving ingredient:', result.error);
+            Logger.error('EditRecipeInformation', LoggerColor.green, 'Error saving ingredient:', result.error);
           }
         });
       }
@@ -375,7 +375,7 @@ export class EditRecipeInformationComponent {
         this.error += `: ${res.error.info}`;
       }
 
-      console.error('Error saving recipe:', res.error);
+      Logger.error('EditRecipeInformation', LoggerColor.green, 'Error saving recipe:', res.error);
     }
 
     this.saving = false;

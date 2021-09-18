@@ -7,6 +7,7 @@ import { ApiResponse } from 'src/app/core/api/ApiResponse';
 import { UserService } from 'src/app/core/auth/user.service';
 import { ConfigService } from 'src/app/core/config/config.service';
 import { getFormError } from 'src/app/core/forms/Validation';
+import { Logger, LoggerColor } from 'src/app/core/functions';
 import { TranslationService } from 'src/app/core/i18n/translation.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { ResetPasswordDialogComponent } from './components/reset-password-dialog/reset-password-dialog.component';
@@ -170,7 +171,7 @@ export class LoginRegisterDialogComponent {
       }
     } catch (e: any) {
       this.error = e.message || 'messages.error_occurred';
-      console.error('Error on login/register:', res.error);
+      Logger.error('Login/Register', LoggerColor.red, 'Error on login/register:', res.error);
     }
   }
 

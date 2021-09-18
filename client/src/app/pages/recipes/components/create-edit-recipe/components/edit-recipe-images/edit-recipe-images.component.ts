@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy } from '@angular/core';
 import { ApiService } from 'src/app/core/api/api.service';
 import { RecipeImage } from 'src/app/core/api/ApiInterfaces';
 import { ApiResponse } from 'src/app/core/api/ApiResponse';
-import { SubSink } from 'src/app/core/functions';
+import { Logger, LoggerColor, SubSink } from 'src/app/core/functions';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
@@ -57,7 +57,7 @@ export class EditRecipeImagesComponent implements OnDestroy {
         this.recipeImagesURLs = [];
       }
     } else {
-      console.error('Error loading recipe-images:', res.error);
+      Logger.error('EditRecipeImages', LoggerColor.green, 'Error loading recipe-images:', res.error);
       this.error = 'messages.recipe_images.error_loading_recipe_images';
     }
 
@@ -81,7 +81,7 @@ export class EditRecipeImagesComponent implements OnDestroy {
             this.snackbar.info('messages.recipe_images.image_added_successfully');
           } else {
             this.error = event.error.info || 'messages.recipe_images.error_uploading_image';
-            console.error('Error adding recipe-image:', event.error);
+            Logger.error('EditRecipeImages', LoggerColor.green, 'Error adding recipe-image:', event.error);
           }
 
           this.saving = false;
@@ -104,7 +104,7 @@ export class EditRecipeImagesComponent implements OnDestroy {
         this.snackbar.info('messages.recipe_images.image_deleted_successfully');
       } else {
         this.snackbar.error('messages.recipe_images.error_deleting_image');
-        console.error('Error deleting recipe-image:', res.error);
+        Logger.error('EditRecipeImages', LoggerColor.green, 'Error deleting recipe-image:', res.error);
       }
 
       this.saving = false;

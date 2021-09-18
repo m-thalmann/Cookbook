@@ -24,7 +24,7 @@
     </div>
 
     <button mat-icon-button (click)="toggleDisplay()" class="display hide-mobile">
-        <mat-icon>{{ display === 'list' ? 'view_list' : 'grid_view' }}</mat-icon>
+        <mat-icon>{{ display === 'list' ? 'view_stream' : 'grid_view' }}</mat-icon>
     </button>
 </div>
 
@@ -56,26 +56,7 @@
             [compact]="compact"
             [class.compact]="compact"
             [grid]="display === 'grid'"
-        ></cb-skeleton-recipe-item>
-        <cb-skeleton-recipe-item
-            [compact]="compact"
-            [class.compact]="compact"
-            [grid]="display === 'grid'"
-        ></cb-skeleton-recipe-item>
-        <cb-skeleton-recipe-item
-            [compact]="compact"
-            [class.compact]="compact"
-            [grid]="display === 'grid'"
-        ></cb-skeleton-recipe-item>
-        <cb-skeleton-recipe-item
-            [compact]="compact"
-            [class.compact]="compact"
-            [grid]="display === 'grid'"
-        ></cb-skeleton-recipe-item>
-        <cb-skeleton-recipe-item
-            [compact]="compact"
-            [class.compact]="compact"
-            [grid]="display === 'grid'"
+            *ngFor="let _ of getArray(9)"
         ></cb-skeleton-recipe-item>
     </div>
 </ng-container>

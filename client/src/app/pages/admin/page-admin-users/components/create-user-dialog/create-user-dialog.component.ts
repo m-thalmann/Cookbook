@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ApiService } from 'src/app/core/api/api.service';
 import { getFormError } from 'src/app/core/forms/Validation';
-import { SubSink } from 'src/app/core/functions';
+import { Logger, LoggerColor, SubSink } from 'src/app/core/functions';
 import { TranslationService } from 'src/app/core/i18n/translation.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
@@ -122,7 +122,7 @@ export class CreateUserDialogComponent implements OnDestroy {
       }
     } catch (e: any) {
       this.error = e.message || 'messages.error_occurred';
-      console.error('Error creating user:', res.error);
+      Logger.error('CreateUser', LoggerColor.blue, 'Error creating user:', res.error);
     }
   }
 

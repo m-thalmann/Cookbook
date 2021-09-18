@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ApiService } from 'src/app/core/api/api.service';
 import { ApiOptions, CategoryInformation } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
-import { SubSink } from 'src/app/core/functions';
+import { Logger, LoggerColor, SubSink } from 'src/app/core/functions';
 
 @Component({
   selector: 'cb-page-categories',
@@ -64,7 +64,7 @@ export class PageCategoriesComponent implements OnDestroy {
       this.categories = res.value;
     } else {
       this.error = true;
-      console.error('Error loading categories:', res.error);
+      Logger.error('PageCategories', LoggerColor.green, 'Error loading categories:', res.error);
     }
 
     this.loadingCategories = false;

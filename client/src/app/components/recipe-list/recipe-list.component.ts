@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { ApiOptions, Pagination, Recipe, RecipeSortDirection } from 'src/app/core/api/ApiInterfaces';
 import { ApiResponse } from 'src/app/core/api/ApiResponse';
 import { UserService } from 'src/app/core/auth/user.service';
-import { SubSink } from 'src/app/core/functions';
+import { Logger, LoggerColor, SubSink } from 'src/app/core/functions';
 
 @Component({
   selector: 'cb-recipe-list',
@@ -97,12 +97,22 @@ export class RecipeListComponent implements OnInit, OnDestroy {
         this.error = true;
         this.errorChange.emit(true);
 
-        console.error('Error loading recipes:', recipes.error);
+        Logger.error('RecipeList', LoggerColor.green, 'Error loading recipes:', recipes.error);
       }
     }
 
     this.loading = false;
     this.loadingChange.emit(this.loading);
+  }
+
+  /**
+   * Returns an empty array with n elements
+   *
+   * @param n length of array
+   * @returns An empty array with n elements
+   */
+  getArray(n: number) {
+    return Array(n);
   }
 
   ngOnDestroy() {

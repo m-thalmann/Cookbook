@@ -18,7 +18,7 @@ class Functions {
      */
     public static function pagination($query) {
         return $query->pagination(
-            intval($_GET["itemsPerPage"] ?? 10),
+            intval($_GET["itemsPerPage"] ?? 9),
             intval($_GET["page"] ?? 0)
         );
     }

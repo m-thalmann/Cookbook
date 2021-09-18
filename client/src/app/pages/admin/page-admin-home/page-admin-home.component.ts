@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/core/api/api.service';
 import { ServerInformation } from 'src/app/core/api/ApiInterfaces';
+import { Logger, LoggerColor } from 'src/app/core/functions';
 
 @Component({
   selector: 'cb-page-admin-home',
@@ -28,7 +29,7 @@ export class PageAdminHomeComponent implements OnInit {
     if (res.isOK()) {
       this.serverInformation = res.value;
     } else {
-      console.error('Error loading server information:', res.error);
+      Logger.error('PageAdminHome', LoggerColor.blue, 'Error loading server information:', res.error);
       this.error = true;
     }
 

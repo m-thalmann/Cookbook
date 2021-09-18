@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/core/api/api.service';
 import { RecipeFull } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
-import { calculateTotalTime, SubSink } from 'src/app/core/functions';
+import { calculateTotalTime, Logger, LoggerColor, SubSink } from 'src/app/core/functions';
 import { TranslationService } from 'src/app/core/i18n/translation.service';
 import { SeoService } from 'src/app/core/services/seo.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
@@ -115,7 +115,7 @@ export class PageRecipeComponent implements OnInit, OnDestroy {
 
       await this.router.navigateByUrl('/home');
     } else {
-      console.error('Error loading recipe:', res.error);
+      Logger.error('PageRecipe', LoggerColor.green, 'Error loading recipe:', res.error);
       this.error = true;
     }
 

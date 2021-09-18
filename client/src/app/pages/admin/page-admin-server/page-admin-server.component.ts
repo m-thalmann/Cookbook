@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { InputDialogComponent } from 'src/app/components/input-dialog/input-dialog.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { ServerConfig } from 'src/app/core/api/ApiInterfaces';
+import { Logger, LoggerColor } from 'src/app/core/functions';
 import { TranslationService } from 'src/app/core/i18n/translation.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
@@ -36,7 +37,7 @@ export class PageAdminServerComponent implements OnInit {
     if (res.isOK()) {
       this.serverConfig = res.value;
     } else {
-      console.error('Error loading server-config:', res.error);
+      Logger.error('PageAdminServer', LoggerColor.blue, 'Error loading server-config:', res.error);
       this.error = true;
     }
   }
@@ -62,7 +63,7 @@ export class PageAdminServerComponent implements OnInit {
       }
 
       this.snackbar.error(this.translation.translate('messages.admin.error_saving_config') + error);
-      console.error('Error saving config:', res.error);
+      Logger.error('PageAdminServer', LoggerColor.blue, 'Error saving config:', res.error);
     }
 
     this.loading = false;

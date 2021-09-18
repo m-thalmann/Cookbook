@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Logger, LoggerColor } from '../functions';
 import { SnackbarService } from '../services/snackbar.service';
 
 const URL = 'assets/config.json';
@@ -43,7 +44,12 @@ export class ConfigService {
     try {
       this.data = await this.http.get<{}>(URL).toPromise();
     } catch (e: any) {
-      console.error('Could not load config! Fallback to default values.', e.message);
+      Logger.error(
+        'ConfigService',
+        LoggerColor.orange,
+        'Could not load config! Fallback to default values.',
+        e.message
+      );
       setTimeout(() => this.snackbar.error('messages.config_loading_error'), 500);
     }
   }

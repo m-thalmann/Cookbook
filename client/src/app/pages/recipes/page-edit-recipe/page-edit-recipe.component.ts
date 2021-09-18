@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/core/api/api.service';
 import { RecipeFull } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
-import { SubSink } from 'src/app/core/functions';
+import { Logger, LoggerColor, SubSink } from 'src/app/core/functions';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
@@ -58,7 +58,7 @@ export class PageEditRecipeComponent implements OnInit, OnDestroy {
     } else {
       this.error = true;
 
-      console.error('Error loading recipe:', res.error);
+      Logger.error('PageEditRecipe', LoggerColor.green, 'Error loading recipe:', res.error);
     }
 
     this.loading = false;

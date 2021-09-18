@@ -30,7 +30,7 @@ export class UserService {
     try {
       this.loadUserFromStorage();
     } catch (e: any) {
-      Logger.error('UserService', LoggerColor.lightblue, e.message);
+      Logger.error('UserService', LoggerColor.orange, e.message);
     }
   }
 
@@ -157,7 +157,7 @@ export class UserService {
         }
       }
     } else if (!res.isUnauthorized()) {
-      Logger.warn('UserService', LoggerColor.lightblue, 'Auth-user could not be loaded:', res.error);
+      Logger.warn('UserService', LoggerColor.orange, 'Auth-user could not be loaded:', res.error);
     }
   }
 

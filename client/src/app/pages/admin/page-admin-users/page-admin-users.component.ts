@@ -8,7 +8,7 @@ import { InputDialogComponent } from 'src/app/components/input-dialog/input-dial
 import { ApiService } from 'src/app/core/api/api.service';
 import { ApiOptions, Pagination, UserFull } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
-import { SubSink } from 'src/app/core/functions';
+import { Logger, LoggerColor, SubSink } from 'src/app/core/functions';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { CreateUserDialogComponent } from './components/create-user-dialog/create-user-dialog.component';
 
@@ -116,7 +116,7 @@ export class PageAdminUsersComponent implements AfterViewInit, OnDestroy {
       this.users = res.value;
     } else {
       this.error = true;
-      console.error('Error loading users:', res.error);
+      Logger.error('PageAdminUsers', LoggerColor.blue, 'Error loading users:', res.error);
     }
 
     this.loading = false;
@@ -162,7 +162,7 @@ export class PageAdminUsersComponent implements AfterViewInit, OnDestroy {
       await this.loadUsers();
     } else {
       this.snackbar.error('messages.admin.error_saving_new_password');
-      console.error('Error setting new password:', res.error);
+      Logger.error('PageAdminUsers', LoggerColor.blue, 'Error setting new password:', res.error);
     }
 
     this.loading = false;
@@ -188,7 +188,7 @@ export class PageAdminUsersComponent implements AfterViewInit, OnDestroy {
       await this.loadUsers();
     } else {
       this.snackbar.error('messages.admin.error_resetting_password');
-      console.error('Error resetting password:', res.error);
+      Logger.error('PageAdminUsers', LoggerColor.blue, 'Error resetting password:', res.error);
     }
 
     this.loading = false;
@@ -232,7 +232,7 @@ export class PageAdminUsersComponent implements AfterViewInit, OnDestroy {
       await this.loadUsers();
     } else {
       this.snackbar.error('messages.admin.error_deleting_user');
-      console.error('Error deleting user:', res.error);
+      Logger.error('PageAdminUsers', LoggerColor.blue, 'Error deleting user:', res.error);
     }
 
     this.loading = false;
@@ -265,7 +265,7 @@ export class PageAdminUsersComponent implements AfterViewInit, OnDestroy {
       await this.loadUsers();
     } else {
       this.snackbar.error('messages.admin.error_updating_user');
-      console.error('Error updating user:', res.error);
+      Logger.error('PageAdminUsers', LoggerColor.blue, 'Error updating user:', res.error);
     }
 
     this.loading = false;
@@ -285,7 +285,7 @@ export class PageAdminUsersComponent implements AfterViewInit, OnDestroy {
       await this.loadUsers();
     } else {
       this.snackbar.error('messages.admin.error_updating_user');
-      console.error('Error updating user:', res.error);
+      Logger.error('PageAdminUsers', LoggerColor.blue, 'Error updating user:', res.error);
     }
 
     this.loading = false;
@@ -318,7 +318,7 @@ export class PageAdminUsersComponent implements AfterViewInit, OnDestroy {
         await this.loadUsers();
       } else {
         this.snackbar.error('messages.admin.error_updating_user');
-        console.error('Error updating user:', res.error);
+        Logger.error('PageAdminUsers', LoggerColor.blue, 'Error updating user:', res.error);
       }
 
       this.loading = false;

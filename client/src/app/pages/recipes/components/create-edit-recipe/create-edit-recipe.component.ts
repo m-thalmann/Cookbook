@@ -6,7 +6,7 @@ import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confir
 import { ApiService } from 'src/app/core/api/api.service';
 import { RecipeFull } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
-import { slugify } from 'src/app/core/functions';
+import { Logger, LoggerColor, slugify } from 'src/app/core/functions';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
@@ -64,7 +64,7 @@ export class CreateEditRecipeComponent {
       await this.router.navigateByUrl('/home');
     } else {
       this.snackbar.error('messages.recipes.error_deleting_recipe');
-      console.error('Error deleting recipe:', res.error);
+      Logger.error('CreateEditRecipe', LoggerColor.green, 'Error deleting recipe:', res.error);
     }
 
     this.disabled = false;
