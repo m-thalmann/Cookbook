@@ -1344,6 +1344,9 @@ paths:
                   maxLength: 20
                 password:
                   type: string
+                languageCode:
+                  type: string
+                  example: en
                 isAdmin:
                   type: boolean
                 verifyEmail:
@@ -1352,6 +1355,7 @@ paths:
                 - email
                 - name
                 - password
+                - languageCode
       responses:
         '201':
           description: Created

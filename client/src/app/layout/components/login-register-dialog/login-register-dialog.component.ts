@@ -7,6 +7,7 @@ import { ApiResponse } from 'src/app/core/api/ApiResponse';
 import { UserService } from 'src/app/core/auth/user.service';
 import { ConfigService } from 'src/app/core/config/config.service';
 import { getFormError } from 'src/app/core/forms/Validation';
+import { TranslationService } from 'src/app/core/i18n/translation.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { ResetPasswordDialogComponent } from './components/reset-password-dialog/reset-password-dialog.component';
 import { VerifyEmailDialogComponent } from './components/verify-email-dialog/verify-email-dialog.component';
@@ -35,7 +36,8 @@ export class LoginRegisterDialogComponent {
     private config: ConfigService,
     private changeDetectionRef: ChangeDetectorRef,
     private dialog: MatDialog,
-    private snackbar: SnackbarService
+    private snackbar: SnackbarService,
+    private translation: TranslationService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
@@ -117,7 +119,13 @@ export class LoginRegisterDialogComponent {
     if (this.isLogin) {
       res = await this.api.loginUser(this.email?.value, this.password?.value);
     } else {
-      res = await this.api.registerUser(this.email?.value, this.password?.value, this.name?.value, this.hcaptchaToken);
+      res = await this.api.registerUser(
+        this.email?.value,
+        this.password?.value,
+        this.name?.value,
+        this.translation.language || 'en',
+        this.hcaptchaToken
+      );
     }
 
     this.loading = false;

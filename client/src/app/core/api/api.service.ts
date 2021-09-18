@@ -178,11 +178,12 @@ export class ApiService {
     });
   }
 
-  registerUser(email: string, password: string, name: string, hcaptchaToken: string | null) {
+  registerUser(email: string, password: string, name: string, languageCode: string, hcaptchaToken: string | null) {
     return this.post<{ user: AuthUser; info: string }>(`${this.URL}/auth/register`, {
       email: email,
       password: password,
       name: name,
+      languageCode: languageCode,
       hcaptchaToken: hcaptchaToken ? hcaptchaToken : undefined,
     });
   }
@@ -395,13 +396,21 @@ export class ApiService {
       getUser: (id: number) => {
         return this.get<UserFull>(`${this.URL}/admin/users/id/${id}`);
       },
-      createUser: (email: string, password: string, name: string, isAdmin = false, verifyEmail = true) => {
+      createUser: (
+        email: string,
+        password: string,
+        name: string,
+        isAdmin = false,
+        verifyEmail = true,
+        languageCode?: string
+      ) => {
         return this.post<UserFull>(`${this.URL}/admin/users`, {
           email: email,
           password: password,
           name: name,
           isAdmin: isAdmin,
           verifyEmail: verifyEmail,
+          languageCode: languageCode || this.config.get('language', 'en'),
         });
       },
       updateUser: (

@@ -9,6 +9,20 @@ mat-slide-toggle {
   margin-bottom: 1em;
 }
 
+.language-item-container {
+  img,
+  span {
+    vertical-align: middle;
+    display: inline-block;
+  }
+
+  img {
+    vertical-align: middle;
+    height: 1.5em;
+    margin-right: 0.5em;
+  }
+}
+
 .error {
   margin: 1em 0;
 }

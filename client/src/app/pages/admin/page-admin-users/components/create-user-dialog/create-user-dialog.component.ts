@@ -4,6 +4,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { ApiService } from 'src/app/core/api/api.service';
 import { getFormError } from 'src/app/core/forms/Validation';
 import { SubSink } from 'src/app/core/functions';
+import { TranslationService } from 'src/app/core/i18n/translation.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
@@ -23,7 +24,8 @@ export class CreateUserDialogComponent implements OnDestroy {
     private fb: FormBuilder,
     private api: ApiService,
     private dialogRef: MatDialogRef<CreateUserDialogComponent>,
-    private snackbar: SnackbarService
+    private snackbar: SnackbarService,
+    public translation: TranslationService
   ) {
     this.createForm = this.fb.group({
       email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
@@ -41,6 +43,7 @@ export class CreateUserDialogComponent implements OnDestroy {
           },
         ],
       ],
+      language: [this.translation.languages ? this.translation.languages[0] : null, [Validators.required]],
       isAdmin: [false],
       verifyEmail: [true],
     });
@@ -67,6 +70,9 @@ export class CreateUserDialogComponent implements OnDestroy {
   }
   get passwordConfirm() {
     return this.createForm?.get('passwordConfirm');
+  }
+  get language() {
+    return this.createForm?.get('language');
   }
   get isAdmin() {
     return this.createForm?.get('isAdmin');
@@ -96,7 +102,8 @@ export class CreateUserDialogComponent implements OnDestroy {
       this.password?.value,
       this.name?.value,
       this.isAdmin?.value,
-      this.verifyEmail?.value
+      this.verifyEmail?.value,
+      this.language?.value.key
     );
 
     this.saving = false;

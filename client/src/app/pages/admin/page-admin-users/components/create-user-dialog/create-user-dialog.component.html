@@ -32,6 +32,28 @@
                 formError.key | translate: formError.replacements
             }}</mat-error>
         </mat-form-field>
+        <mat-form-field appearance="outline" color="primary">
+            <mat-label>{{ 'language' | translate }}</mat-label>
+            <mat-select formControlName="language">
+                <mat-select-trigger>
+                    <div class="language-item-container" *ngIf="language?.value as _language">
+                        <img src="https://www.countryflags.io/{{ _language.flagCode }}/flat/32.png" />
+                        <span>
+                            {{ _language.name }}
+                        </span>
+                    </div>
+                </mat-select-trigger>
+
+                <mat-option *ngFor="let language of translation.languages" [value]="language">
+                    <div class="language-item-container">
+                        <img src="https://www.countryflags.io/{{ language.flagCode }}/flat/32.png" />
+                        <span>
+                            {{ language.name }}
+                        </span>
+                    </div>
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
         <mat-slide-toggle color="warn" formControlName="isAdmin">{{
             'pages.admin.users.admin_account' | translate
         }}</mat-slide-toggle>
