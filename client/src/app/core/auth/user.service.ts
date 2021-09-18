@@ -2,7 +2,8 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AuthUser } from '../api/ApiInterfaces';
-import { Logger, LoggerColor } from '../functions';
+import { ApiResponse } from '../api/ApiResponse';
+import { Logger, LoggerColor, removeCookie, setSessionCookie } from '../functions';
 import { TranslationService } from '../i18n/translation.service';
 import { SnackbarService } from '../services/snackbar.service';
 import StorageNames from '../StorageNames';
@@ -25,6 +26,12 @@ export class UserService {
     try {
       this.loadToken();
     } catch (e) {}
+
+    try {
+      this.loadUserFromStorage();
+    } catch (e: any) {
+      Logger.error('UserService', LoggerColor.lightblue, e.message);
+    }
   }
 
   /**
@@ -33,18 +40,22 @@ export class UserService {
    * @throws If the token is not formatted correctly
    *
    * @param token the token of the user
+   * @param user the authenticated user
    * @param save whether to store the token
    */
-  login(token: string, save: boolean = false) {
+  login(token: string, user: AuthUser, save: boolean = false) {
     this.remove();
 
     if (save) {
       localStorage.setItem(StorageNames.Token, token);
+      localStorage.setItem(StorageNames.User, JSON.stringify(user));
     } else {
-      document.cookie = `${StorageNames.Token}=${token}; samesite=strict; path=/`;
+      setSessionCookie(StorageNames.Token, token);
+      setSessionCookie(StorageNames.User, JSON.stringify(user));
     }
 
-    this.loadToken();
+    this._user = user;
+    this._token = token;
 
     this.userChanged.emit();
 
@@ -56,11 +67,7 @@ export class UserService {
   }
 
   /**
-   * Loads the token and user from storage or cookies (if stored before)
-   *
-   * @throws If the token is not formatted correctly
-   *
-   * @returns the loaded token or null, if no token was found
+   * Loads the token from storage or cookies (if stored before)
    */
   private loadToken(): void {
     let token = null;
@@ -79,21 +86,78 @@ export class UserService {
     }
 
     if (token) {
-      try {
-        this._user = UserService.parseUserFromToken(token);
+      this._token = token;
+    }
+  }
 
-        this._token = token;
-      } catch (e) {
-        Logger.error('UserService', LoggerColor.lightblue, 'Error parsing token:', e);
+  /**
+   * Loads the user from storage or cookies (if stored before)
+   */
+  private loadUserFromStorage() {
+    let _user: string | null = null;
 
-        if (this.isLoggedin) {
-          this.logout('badToken');
-        } else {
-          this.remove();
-        }
+    if (this.isRemembered) {
+      _user = localStorage.getItem(StorageNames.User);
+    } else {
+      let userCookie = document.cookie
+        .split('; ')
+        .map((el) => el.split('='))
+        .find((el) => el[0] == StorageNames.User);
 
-        throw e;
+      if (userCookie != null) {
+        _user = userCookie[1];
       }
+    }
+
+    if (_user) {
+      let user = JSON.parse(_user);
+
+      if (
+        typeof user.id !== 'number' ||
+        typeof user.email !== 'string' ||
+        typeof user.name !== 'string' ||
+        typeof user.languageCode !== 'string' ||
+        typeof user.isAdmin !== 'boolean'
+      ) {
+        throw new Error('User from storage does not contain correct data');
+      }
+
+      this._user = user;
+    }
+  }
+
+  /**
+   * Loads the user by an API-Response-promise
+   *
+   * @see {@link ApiService.getAuthenticatedUser}
+   * @see {@link AppModule.setupServices}
+   *
+   * @param userPromise
+   */
+  async loadUser(
+    userPromise: Promise<
+      ApiResponse<{
+        user: AuthUser;
+        info: string;
+      }>
+    >
+  ) {
+    let res = await userPromise;
+
+    if (res.isOK() && res.value) {
+      let userJson = JSON.stringify(res.value.user);
+
+      if (JSON.stringify(this._user) !== userJson) {
+        this._user = res.value.user;
+
+        if (this.isRemembered) {
+          localStorage.setItem(StorageNames.User, userJson);
+        } else {
+          setSessionCookie(StorageNames.User, userJson);
+        }
+      }
+    } else if (!res.isUnauthorized()) {
+      Logger.warn('UserService', LoggerColor.lightblue, 'Auth-user could not be loaded:', res.error);
     }
   }
 
@@ -102,8 +166,10 @@ export class UserService {
    */
   private remove() {
     localStorage.removeItem(StorageNames.Token);
+    localStorage.removeItem(StorageNames.User);
 
-    document.cookie = `${StorageNames.Token}=; samesite=strict; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
+    removeCookie(StorageNames.Token);
+    removeCookie(StorageNames.User);
 
     this._user = this._token = null;
   }
@@ -153,7 +219,7 @@ export class UserService {
       case 'logout':
         reason = 'messages.auth.logout.logout';
         break;
-      case 'badToken':
+      case 'settings_changed':
       case 'unauthorized':
         reason = 'messages.auth.logout.log_back_in';
         break;
@@ -169,38 +235,5 @@ export class UserService {
     }
 
     this.userChanged.emit();
-  }
-
-  /**
-   * Parses the user from a jwt token
-   *
-   * @param token The jwt token
-   *
-   * @throws If the token is not formatted correctly
-   *
-   * @returns The parsed user
-   */
-  static parseUserFromToken(token: string): AuthUser {
-    let tokenPayload = JSON.parse(atob(token.split('.')[1]));
-
-    if (
-      !(
-        typeof tokenPayload.user_id === 'number' &&
-        typeof tokenPayload.user_email === 'string' &&
-        typeof tokenPayload.user_name === 'string' &&
-        typeof tokenPayload.user_languageCode === 'string' &&
-        typeof tokenPayload.user_isAdmin === 'boolean'
-      )
-    ) {
-      throw new Error('Token does not contain correct user data');
-    }
-
-    return {
-      id: tokenPayload.user_id,
-      email: tokenPayload.user_email,
-      name: tokenPayload.user_name,
-      languageCode: tokenPayload.user_languageCode,
-      isAdmin: tokenPayload.user_isAdmin,
-    };
   }
 }

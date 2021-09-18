@@ -25,6 +25,11 @@ class User extends Model {
     const EDIT_PASSWORD_REQUIRED_PROPERTIES = ["email", "name", "password"];
 
     /**
+     * @var string[] Properties that invalidate all existing tokens for this user, when updated
+     */
+    const EDIT_TOKEN_INVALID_PROPERTIES = ["email", "password", "isAdmin"];
+
+    /**
      * @prop
      * @primary
      * @autoincrement
@@ -115,7 +120,12 @@ class User extends Model {
                 $this->generateVerifyEmailCode();
                 break;
         }
+
         parent::__set($property, $value);
+
+        if (in_array($property, self::EDIT_TOKEN_INVALID_PROPERTIES)) {
+            $this->editValue("lastUpdated", time(), false, true);
+        }
     }
 
     public function jsonSerialize($full = false) {
@@ -132,6 +142,14 @@ class User extends Model {
         }
 
         return $ret;
+    }
+
+    public function getAuthUserJSON() {
+        $ret = parent::jsonSerialize();
+
+        return array_merge($ret, [
+            "isAdmin" => $this->isAdmin,
+        ]);
     }
 
     /**

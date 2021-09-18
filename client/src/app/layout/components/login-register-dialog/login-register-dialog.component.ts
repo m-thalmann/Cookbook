@@ -2,11 +2,12 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ApiService } from 'src/app/core/api/api.service';
-import { User } from 'src/app/core/api/ApiInterfaces';
+import { AuthUser } from 'src/app/core/api/ApiInterfaces';
 import { ApiResponse } from 'src/app/core/api/ApiResponse';
 import { UserService } from 'src/app/core/auth/user.service';
 import { ConfigService } from 'src/app/core/config/config.service';
 import { getFormError } from 'src/app/core/forms/Validation';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { ResetPasswordDialogComponent } from './components/reset-password-dialog/reset-password-dialog.component';
 import { VerifyEmailDialogComponent } from './components/verify-email-dialog/verify-email-dialog.component';
 
@@ -33,7 +34,8 @@ export class LoginRegisterDialogComponent {
     private user: UserService,
     private config: ConfigService,
     private changeDetectionRef: ChangeDetectorRef,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackbar: SnackbarService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
@@ -110,7 +112,7 @@ export class LoginRegisterDialogComponent {
     this.loginForm.disable();
     this.dialogRef.disableClose = true;
 
-    let res: ApiResponse<{ user: User; token?: string; info: string }>;
+    let res: ApiResponse<{ user: AuthUser; token?: string; info: string }>;
 
     if (this.isLogin) {
       res = await this.api.loginUser(this.email?.value, this.password?.value);
@@ -125,11 +127,11 @@ export class LoginRegisterDialogComponent {
       if (res.isOK() && res.value !== null) {
         if (this.isLogin) {
           if (res.value.token) {
-            this.user.login(res.value.token, this.remember?.value);
+            this.user.login(res.value.token, res.value.user, this.remember?.value);
           }
 
           this.dialogRef.close();
-          // TODO: maybe show info
+          this.snackbar.info('messages.users.login_successful');
         } else {
           // Auto-login after register
 

@@ -14,7 +14,7 @@ CREATE TABLE `users` (
   `verifyEmailCode` varchar(5),
   `verifyEmailCodeExpires` datetime,
   `isAdmin` boolean NOT NULL DEFAULT 0,
-  `lastUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `lastUpdated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
   UNIQUE(`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -36,7 +36,7 @@ paths:
                 type: object
                 properties:
                   user:
-                    $ref: '#/components/schemas/User'
+                    $ref: '#/components/schemas/AuthUser'
                   info:
                     type: string
                     example: Authorized
@@ -168,7 +168,7 @@ paths:
                 type: object
                 properties:
                   user:
-                    $ref: '#/components/schemas/User'
+                    $ref: '#/components/schemas/AuthUser'
                   info:
                     type: string
                     example: Authorized
@@ -255,7 +255,7 @@ paths:
                 type: object
                 properties:
                   user:
-                    $ref: '#/components/schemas/User'
+                    $ref: '#/components/schemas/AuthUser'
                   info:
                     type: string
                     example: Authorized
@@ -1817,6 +1817,16 @@ components:
             - emailVerified
             - isAdmin
             - lastUpdated
+    AuthUser:
+      title: User used for authentication
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          properties:
+            isAdmin:
+              type: boolean
+          required:
+            - isAdmin
     Ingredient:
       title: Ingredient
       type: object

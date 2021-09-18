@@ -5,6 +5,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ComponentsModule } from './components/components.module';
+import { ApiService } from './core/api/api.service';
+import { UserService } from './core/auth/user.service';
 import { ConfigService } from './core/config/config.service';
 import { CoreModule } from './core/core.module';
 import { TranslationService } from './core/i18n/translation.service';
@@ -21,9 +23,19 @@ import { PageMyRecipesComponent } from './pages/page-my-recipes/page-my-recipes.
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { PageSearchComponent } from './pages/page-search/page-search.component';
 
-export function setupServices(config: ConfigService, translation: TranslationService) {
+export function setupServices(
+  config: ConfigService,
+  translation: TranslationService,
+  api: ApiService,
+  user: UserService
+) {
   return async () => {
     await config.load();
+
+    if (user.isLoggedin) {
+      api.getAuthenticatedUser();
+    }
+
     await translation.init(config.get('language', null));
   };
 }
@@ -54,7 +66,7 @@ export function setupUserTranslationService(userTranslation: UserTranslationServ
     {
       provide: APP_INITIALIZER,
       useFactory: setupServices,
-      deps: [ConfigService, TranslationService],
+      deps: [ConfigService, TranslationService, ApiService, UserService],
       multi: true,
     },
     {

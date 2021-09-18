@@ -4,9 +4,9 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { UserService } from '../auth/user.service';
 import { ConfigService } from '../config/config.service';
-import { SnackbarService } from '../services/snackbar.service';
 import {
   ApiOptions,
+  AuthUser,
   CategoryInformation,
   EditIngredient,
   EditRecipe,
@@ -29,12 +29,7 @@ import { ApiResponse } from './ApiResponse';
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(
-    private http: HttpClient,
-    private config: ConfigService,
-    private user: UserService,
-    private snackbar: SnackbarService
-  ) {}
+  constructor(private http: HttpClient, private config: ConfigService, private user: UserService) {}
 
   /**
    * The http-options containing the token, if a user is logged-in
@@ -122,10 +117,6 @@ export class ApiService {
     if (status != 404) {
       if (status == 401 && this.user.isLoggedin) {
         this.user.logout('unauthorized', null);
-      } else if (status == 403) {
-        if (this.user.isLoggedin) {
-          this.snackbar.warn('messages.auth.action_unauthorized');
-        }
       }
 
       return new ApiResponse<T>(e.status, null, error);
@@ -181,14 +172,14 @@ export class ApiService {
   // User
 
   loginUser(email: string, password: string) {
-    return this.post<{ user: User; token: string; info: string }>(`${this.URL}/auth/login`, {
+    return this.post<{ user: AuthUser; token: string; info: string }>(`${this.URL}/auth/login`, {
       email: email,
       password: password,
     });
   }
 
   registerUser(email: string, password: string, name: string, hcaptchaToken: string | null) {
-    return this.post<{ user: User; info: string }>(`${this.URL}/auth/register`, {
+    return this.post<{ user: AuthUser; info: string }>(`${this.URL}/auth/register`, {
       email: email,
       password: password,
       name: name,
@@ -210,8 +201,15 @@ export class ApiService {
     return this.delete<any>(`${this.URL}/auth`);
   }
 
-  checkAuthentication() {
-    return this.get<{ user: User; info: string }>(`${this.URL}/auth`);
+  /**
+   * Loads the authenticated user and sets it in the user-service
+   */
+  getAuthenticatedUser() {
+    let promise = this.get<{ user: AuthUser; info: string }>(`${this.URL}/auth`);
+
+    this.user.loadUser(promise);
+
+    return promise;
   }
 
   verifyEmail(email: string, code: string) {

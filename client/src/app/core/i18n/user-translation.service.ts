@@ -21,9 +21,7 @@ export class UserTranslationService implements OnDestroy {
       let res = await this.api.updateUser({ languageCode: language });
 
       if (res.isOK()) {
-        // TODO: refresh user -> remove following loc
-
-        await this.api.checkAuthentication();
+        await this.api.getAuthenticatedUser();
       } else {
         Logger.error('UserTranslationService', LoggerColor.orange, 'Error saving language to user:', res.error);
       }

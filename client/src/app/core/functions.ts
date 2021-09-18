@@ -69,6 +69,23 @@ export function calculateTotalTime(recipe: Recipe | null): TranslationObject | n
   }
 }
 
+/**
+ * Sets a session cookie
+ * @param name The name of the cookie
+ * @param value The value of the cookie
+ */
+export function setSessionCookie(name: string, value: string) {
+  document.cookie = `${name}=${value}; samesite=strict; path=/`;
+}
+
+/**
+ * Removes a cookie
+ * @param name The name of the cookie
+ */
+export function removeCookie(name: string) {
+  document.cookie = `${name}=; samesite=strict; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
+}
+
 export const LoggerColor = {
   red: '#d10000',
   blue: '#21f',

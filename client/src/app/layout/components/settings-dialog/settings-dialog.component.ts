@@ -212,10 +212,10 @@ export class SettingsDialogComponent implements OnDestroy {
       if (res.isOK()) {
         this.dialogRef.close();
 
-        if ((await this.api.checkAuthentication()).isOK()) {
+        if ((await this.api.getAuthenticatedUser()).isOK()) {
           this.snackbar.info('messages.users.settings_updated_successfully');
         } else {
-          location.reload();
+          this.user.logout('settings_changed');
         }
       } else if (res.isConflict()) {
         throw new Error('messages.users.email_already_taken');

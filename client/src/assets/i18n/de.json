@@ -75,7 +75,6 @@
       "user_updated_successfully": "Benutzer erfolgreich bearbeitet!"
     },
     "auth": {
-      "action_unauthorized": "Du bist nicht berechtigt diese Aktion durchzuführen!",
       "logout": {
         "account_deleted": "Account erfolgreich gelöscht!",
         "log_back_in": "Du musst dich erneut anmelden!",
@@ -138,6 +137,7 @@
       "entered_password_wrong": "Das eingegebene Passwort ist falsch!",
       "error_deleting_account": "Fehler beim Löschen des Accounts!",
       "error_loading_users": "Fehler beim Laden der Benutzer!",
+      "login_successful": "Erfolgreich angemeldet!",
       "no_users_found": "Keine Benutzer gefunden",
       "password_reset_successful": "Passwort wurde erfolgreich zurückgesetzt!",
       "settings_updated_successfully": "Einstellungen wurden erfolgreich bearbeitet!"
