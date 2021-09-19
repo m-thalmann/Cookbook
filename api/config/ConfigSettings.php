@@ -256,7 +256,7 @@ class ConfigSettings {
             $configSecret = @file_get_contents(__DIR__ . "/config_secret");
 
             if ($configSecret !== false) {
-                self::$configSecret = $configSecret;
+                self::$configSecret = trim($configSecret);
             }
         }
 
