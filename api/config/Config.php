@@ -46,6 +46,17 @@ class Config {
         }
 
         if (array_key_exists($path, self::$config)) {
+            if (!self::$config[$path]["parsed"]) {
+                self::$config[$path][
+                    "value"
+                ] = ConfigSettings::parseConfigValue(
+                    self::$config[$path]["datatype"],
+                    self::$config[$path]["value"],
+                    self::$config[$path]["encrypted"]
+                );
+                self::$config[$path]["parsed"] = true;
+            }
+
             return self::$config[$path]["value"];
         }
 

@@ -20,6 +20,7 @@ Cookbook is a web application that stores all your favorite recipes. Self-hostin
 1. Host the `api`-directory publicly on an Apache-Webserver
    - Make sure you enabled `AllowOverride All` in order for the `.htaccess` file to work
    - Create a configuration file by copying the file `api/config/config.example.json` to `api/config/config.json` and setting the values accordingly (see section [Configuration](#configuration))
+   - Create a configuration-secret file: `api/config/config_secret` with a random-string secret (see section [Configuration](#configuration))
 1. Navigate into the `client`-directory and install the npm-dependencies:
    - `npm install`
 1. Build the client:
@@ -79,6 +80,10 @@ The rest of the configuration is stored in the database-table `config`:
 - If the `password.secret` is changed, the passwords in the database are no longer valid and all users need to reset their password
 
 `hcaptcha`: hCaptcha is used to prevent bots from signing-up. Create a free account here: https://www.hcaptcha.com/signup-interstitial
+
+##### API configuration secret
+
+The file `api/config/config_secret` contains a secret to encrypt sensitive configuration-values that are saved in the database. The file needs to be created.
 
 #### Client configuration
 

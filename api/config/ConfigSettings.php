@@ -52,6 +52,7 @@ class ConfigSettings {
         "token.secret" => [
             "defaultValue" => "86nYFNtuqMxGCG3v7TQuoFhgMSwil3hP",
             "datatype" => self::TYPE_STRING,
+            "encrypted" => true,
         ],
         "token.ttl" => [
             "defaultValue" => 604800,
@@ -63,6 +64,7 @@ class ConfigSettings {
         "password.secret" => [
             "defaultValue" => "86nYFNtuqMxGCG3v7TQuoFhgMSwil3hP",
             "datatype" => self::TYPE_STRING,
+            "encrypted" => true,
         ],
         "password.reset_ttl" => [
             "defaultValue" => 600,
@@ -93,6 +95,7 @@ class ConfigSettings {
         "hcaptcha.secret" => [
             "defaultValue" => "0x0000000000000000000000000000000000000000",
             "datatype" => self::TYPE_STRING,
+            "encrypted" => true,
         ],
         "mail.smtp.host" => [
             "defaultValue" => null,
@@ -113,6 +116,7 @@ class ConfigSettings {
         "mail.smtp.password" => [
             "defaultValue" => null,
             "datatype" => self::TYPE_STRING,
+            "encrypted" => true,
         ],
         "mail.from.mail" => [
             "defaultValue" => "cookbook@example.com",
@@ -143,6 +147,10 @@ class ConfigSettings {
     const TYPE_INTEGER = "integer";
     const TYPE_NUMBER = "number";
 
+    private const ENCRYPTION_ALGORITHM = 'BF-CBC';
+
+    private static $configSecret = null;
+
     /**
      * Returns all visible config-paths
      *
@@ -157,6 +165,7 @@ class ConfigSettings {
      *
      * @param string $datatype The datatype of the value
      * @param mixed $value The value to parse
+     * @param bool $encrypted Whether the value is encrypted or not
      *
      * @see ConfigSettings::TYPE_STRING
      * @see ConfigSettings::TYPE_BOOLEAN
@@ -165,7 +174,11 @@ class ConfigSettings {
      *
      * @return mixed The parsed value
      */
-    public static function parseConfigValue($datatype, $value) {
+    public static function parseConfigValue(
+        $datatype,
+        $value,
+        $encrypted = false
+    ) {
         if ($value !== null) {
             switch ($datatype) {
                 case self::TYPE_BOOLEAN:
@@ -182,6 +195,10 @@ class ConfigSettings {
                 default:
                     $value = $value;
             }
+        }
+
+        if ($encrypted) {
+            $value = self::decryptValue($value);
         }
 
         return $value;
@@ -228,6 +245,86 @@ class ConfigSettings {
     }
 
     /**
+     * Returns the configuration secret
+     *
+     * @see config_secret (file)
+     *
+     * @return string The config-secret
+     */
+    private static function getConfigSecret() {
+        if (self::$configSecret === null) {
+            $configSecret = @file_get_contents(__DIR__ . "/config_secret");
+
+            if ($configSecret !== false) {
+                self::$configSecret = $configSecret;
+            }
+        }
+
+        return self::$configSecret;
+    }
+
+    /**
+     * Encrypts a config-value using the config-secret
+     *
+     * @param string $value The value to encrypt
+     *
+     * @see ConfigSettings::getConfigSecret
+     * @see ConfigSettings::ENCRYPTION_ALGORITHM
+     *
+     * @return string the base64encoded iv & encrypted value
+     */
+    private static function encryptValue($value) {
+        $ivLength = @openssl_cipher_iv_length(self::ENCRYPTION_ALGORITHM);
+
+        if ($ivLength === false) {
+            return $value;
+        }
+
+        $iv = random_bytes($ivLength);
+
+        return base64_encode(
+            $iv .
+                openssl_encrypt(
+                    $value,
+                    self::ENCRYPTION_ALGORITHM,
+                    self::getConfigSecret(),
+                    OPENSSL_RAW_DATA,
+                    $iv
+                )
+        );
+    }
+
+    /**
+     * Decrypts a config-value using the config-secret
+     *
+     * @param string $value The base64encoded iv & encrypted value to decrypt
+     *
+     * @see ConfigSettings::getConfigSecret
+     * @see ConfigSettings::ENCRYPTION_ALGORITHM
+     *
+     * @return string the decrypted value
+     */
+    private static function decryptValue($value) {
+        $ivLength = @openssl_cipher_iv_length(self::ENCRYPTION_ALGORITHM);
+
+        if ($ivLength === false) {
+            return $value;
+        }
+
+        $value = base64_decode($value);
+
+        $iv = substr($value, 0, $ivLength);
+
+        return openssl_decrypt(
+            substr($value, $ivLength),
+            self::ENCRYPTION_ALGORITHM,
+            self::getConfigSecret(),
+            OPENSSL_RAW_DATA,
+            $iv
+        );
+    }
+
+    /**
      * Loads the config from the database
      */
     public static function loadConfig() {
@@ -242,13 +339,22 @@ class ConfigSettings {
         $config = [];
 
         foreach ($stmt->fetchAll() as $row) {
+            $datatype = $row["datatype"];
+            $encrypted = false;
+
+            if (array_key_exists($row["key"], self::SETTINGS)) {
+                $setting = self::SETTINGS[$row["key"]];
+
+                $datatype = $setting["datatype"];
+                $encrypted = $setting["encrypted"] ?? false;
+            }
+
             $config[$row["key"]] = [
                 "key" => $row["key"],
-                "value" => self::parseConfigValue(
-                    $row["datatype"],
-                    $row["value"]
-                ),
-                "datatype" => $row["datatype"],
+                "value" => $row["value"],
+                "datatype" => $datatype,
+                "encrypted" => $encrypted,
+                "parsed" => false,
             ];
         }
 
@@ -296,6 +402,10 @@ class ConfigSettings {
         } elseif ($setting["datatype"] === self::TYPE_BOOLEAN) {
             $value = $value ? "true" : "false";
         } else {
+            if ($setting["encrypted"] ?? false) {
+                $value = self::encryptValue($value);
+            }
+
             $value = strval($value);
         }
 
