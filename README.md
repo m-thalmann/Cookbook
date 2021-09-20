@@ -13,6 +13,8 @@
 
 Cookbook is a web application that stores all your favorite recipes. Self-hosting gives you full control over the precious, secret family recipes and lets you share them with your friends.
 
+![Cookbook](docs/images/cookbook.png)
+
 ## Selfhosting
 
 1. Clone the repository / download and extract it
