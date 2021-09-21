@@ -2,6 +2,7 @@
 
 namespace API\config;
 
+use API\inc\ApiException;
 use PAF\Model\Database;
 
 class ConfigSettings {
@@ -333,7 +334,10 @@ class ConfigSettings {
         $stmt = $db->query("SELECT * FROM config");
 
         if ($stmt === false) {
-            throw new \Exception('Config could not be loaded');
+            throw ApiException::error(
+                "config.loading",
+                'Config could not be loaded'
+            );
         }
 
         $config = [];
@@ -367,13 +371,16 @@ class ConfigSettings {
      * @param string $path The config-path
      * @param mixed $value The value to set
      *
-     * @throws \InvalidArgumentException If the path is not editable or the value is not valid
+     * @throws ApiException If the path is not editable/does not exist or the value is not valid
      *
      * @return boolean Whether the value was saved or not
      */
     public static function saveConfigValue($path, $value) {
         if (!array_key_exists($path, self::SETTINGS)) {
-            throw new \Exception('Setting not found');
+            throw ApiException::error(
+                "config.setting_not_found",
+                "Setting not found"
+            );
         }
 
         $setting = self::SETTINGS[$path];
@@ -382,7 +389,10 @@ class ConfigSettings {
             array_key_exists("baseConfig", $setting) &&
             $setting["baseConfig"]
         ) {
-            throw new \InvalidArgumentException('Setting not editable');
+            throw ApiException::forbidden(
+                "config.setting_not_editable",
+                'Setting not editable'
+            );
         }
 
         $db = Database::get();
@@ -394,7 +404,10 @@ class ConfigSettings {
         $value = self::parseConfigValue($setting["datatype"], $value);
 
         if (!self::isSettingValid($path, $value)) {
-            throw new \InvalidArgumentException('Value is not valid');
+            throw ApiException::badRequest(
+                "config.saving_value_invalid",
+                'Value is not valid'
+            );
         }
 
         if ($value === null) {

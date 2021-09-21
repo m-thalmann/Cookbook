@@ -3,6 +3,7 @@
 namespace API\auth;
 
 use API\config\Config;
+use API\inc\ApiException;
 use API\models\User;
 use PAF\Router\Response;
 
@@ -205,7 +206,10 @@ class Authorization {
                 }
             } catch (UnauthorizedException $e) {
                 if ($mustBeAuthorized || $next === null) {
-                    return Response::unauthorized(["info" => $e->getMessage()]);
+                    throw ApiException::unauthorized(
+                        "default",
+                        $e->getMessage()
+                    );
                 }
                 if (!empty($token)) {
                     header('X-Logout: true');

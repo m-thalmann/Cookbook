@@ -4,6 +4,7 @@ namespace API\routes;
 
 use API\auth\Authorization;
 use API\config\Config;
+use API\inc\ApiException;
 use API\inc\Functions;
 use API\inc\Mailer;
 use API\models\RecipeImage;
@@ -33,26 +34,27 @@ $group
                         "token" => "Bearer $token",
                     ]);
                 } else {
-                    return Response::forbidden([
-                        "info" => "Email not verified",
-                    ]);
+                    throw ApiException::forbidden(
+                        "email_not_verified",
+                        "Email not verified"
+                    );
                 }
             } else {
-                return Response::notFound([
-                    "info" => "Email or password wrong",
-                ]);
+                return Response::notFound("Email or password wrong");
             }
         } else {
-            return Response::badRequest([
-                "info" => "Email and password expected",
-            ]);
+            throw ApiException::badRequest(
+                "default",
+                "Email and password expected"
+            );
         }
     })
     ->post('/register', function ($req) {
         if (!Config::get("registration_enabled", true)) {
-            return Response::methodNotAllowed([
-                "info" => "Registration is disabled",
-            ]);
+            throw ApiException::methodNotAllowed(
+                "registration_disabled",
+                "Registration is disabled"
+            );
         }
 
         $data = $req["post"] ?? [];
@@ -60,16 +62,18 @@ $group
         if (Config::get("hcaptcha.enabled")) {
             if (array_key_exists("hcaptchaToken", $data)) {
                 if (!Functions::validateHCaptcha($data["hcaptchaToken"])) {
-                    return Response::forbidden([
-                        "info" => "hCaptcha-Token invalid",
-                    ]);
+                    throw ApiException::forbidden(
+                        "hcaptcha_invalid",
+                        "hCaptcha-Token invalid"
+                    );
                 }
 
                 unset($data["hcaptchaToken"]);
             } else {
-                return Response::badRequest([
-                    "hcaptchaToken" => "hCaptcha-Token required",
-                ]);
+                throw ApiException::badRequest(
+                    "default",
+                    "hCaptcha-Token required"
+                );
             }
         }
 
@@ -80,20 +84,23 @@ $group
         try {
             $user->save();
         } catch (InvalidException $e) {
-            return Response::badRequest(User::getErrors($user));
+            throw ApiException::badRequest(
+                "validation",
+                User::getErrors($user)
+            );
         } catch (DuplicateException $e) {
-            return Response::conflict([
-                "info" => "A user with this email already exists",
-            ]);
+            throw ApiException::conflict(
+                "default",
+                "A user with this email already exists"
+            );
         }
 
         if (Config::get("email_verification.enabled")) {
-            if (!Mailer::sendEmailVerification($user)) {
+            try {
+                Mailer::sendEmailVerification($user);
+            } catch (\Exception $e) {
                 Database::get()->rollBack();
-
-                return Response::error([
-                    "info" => "Error sending verification-email",
-                ]);
+                throw $e;
             }
         }
 
@@ -126,7 +133,10 @@ $group
                     $user->passwordSalt
                 ) !== $user->password)
         ) {
-            return Response::forbidden(["info" => "Old password is wrong"]);
+            throw ApiException::forbidden(
+                "old_password_wrong",
+                "Old password is wrong"
+            );
         }
 
         unset($data["oldPassword"]);
@@ -136,11 +146,15 @@ $group
         try {
             $user->save();
         } catch (InvalidException $e) {
-            return Response::badRequest(User::getErrors($user));
+            throw ApiException::badRequest(
+                "validation",
+                User::getErrors($user)
+            );
         } catch (DuplicateException $e) {
-            return Response::conflict([
-                "info" => "A user with this email already exists",
-            ]);
+            throw ApiException::conflict(
+                "default",
+                "A user with this email already exists"
+            );
         }
 
         return $user;
@@ -148,9 +162,10 @@ $group
     ->delete('/', Authorization::middleware(), function () {
         if (Authorization::user()->isAdmin) {
             if (User::query("isAdmin = 1")->count() === 1) {
-                return Response::forbidden([
-                    "info" => "You are the last admin",
-                ]);
+                throw ApiException::forbidden(
+                    "last_admin",
+                    "You are the last admin"
+                );
             }
         }
 
@@ -158,14 +173,17 @@ $group
             RecipeImage::deleteOrphanImages();
             return Response::ok();
         } else {
-            return Response::error();
+            throw ApiException::error("default", "Error deleting user");
         }
     })
     ->post('/verifyEmail', function ($req) {
         $data = $req["post"] ?? [];
 
         if (empty($data["email"]) || empty($data["code"])) {
-            return Response::badRequest(["info" => "Email and code expected"]);
+            throw ApiException::badRequest(
+                "default",
+                "Email and code expected"
+            );
         }
 
         $user = User::get("email = ?", [$data["email"]])->getFirst();
@@ -180,19 +198,20 @@ $group
                     return Response::ok();
                 }
             } else {
-                return Response::forbidden([
-                    "info" => "Verification code is wrong or has expired",
-                ]);
+                throw ApiException::forbidden(
+                    "default",
+                    "Verification code is wrong or has expired"
+                );
             }
         }
 
-        return Response::error();
+        throw ApiException::error("default", "Error verifying email");
     })
     ->post('/verifyEmail/resend', function ($req) {
         $data = $req["post"] ?? [];
 
         if (empty($data["email"])) {
-            return Response::badRequest(["info" => "Email expected"]);
+            throw ApiException::badRequest("default", "Email expected");
         }
 
         $user = User::get("email = ?", [$data["email"]])->getFirst();
@@ -206,11 +225,9 @@ $group
             $user->save();
         }
 
-        if (Mailer::sendEmailVerification($user)) {
-            return Response::ok();
-        }
+        Mailer::sendEmailVerification($user);
 
-        return Response::error();
+        return Response::ok();
     })
     ->get('/registrationEnabled', function () {
         return Config::get("registration_enabled", true);
@@ -223,9 +240,10 @@ $group
             empty($data["token"]) ||
             empty($data["password"])
         ) {
-            return Response::badRequest([
-                "info" => "Email, token and password expected",
-            ]);
+            throw ApiException::badRequest(
+                "default",
+                "Email, token and password expected"
+            );
         }
 
         $resetPassword = ResetPassword::search($data["email"], $data["token"]);
@@ -239,7 +257,7 @@ $group
         $user->password = $data["password"];
 
         if (!$user->save()) {
-            return Response::error();
+            throw ApiException::error("default", "Error saving user");
         }
 
         return Response::ok();
@@ -248,7 +266,7 @@ $group
         $data = $req["post"] ?? [];
 
         if (empty($data["email"])) {
-            return Response::badRequest(["info" => "Email expected"]);
+            throw ApiException::badRequest("default", "Email expected");
         }
 
         $user = User::get("email = ?", [$data["email"]])->getFirst();
@@ -259,9 +277,7 @@ $group
 
         $resetPassword = ResetPassword::generate($user);
 
-        if (Mailer::sendResetPassword($user, $resetPassword->token)) {
-            return Response::ok();
-        }
+        Mailer::sendResetPassword($user, $resetPassword->token);
 
-        return Response::error();
+        return Response::ok();
     });

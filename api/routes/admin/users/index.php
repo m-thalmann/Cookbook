@@ -4,6 +4,7 @@ namespace API\routes\admin;
 
 use API\auth\Authorization;
 use API\config\Config;
+use API\inc\ApiException;
 use API\inc\Functions;
 use API\inc\Mailer;
 use API\models\RecipeImage;
@@ -73,20 +74,23 @@ $group
         try {
             $user->save();
         } catch (InvalidException $e) {
-            return Response::badRequest(User::getErrors($user));
+            throw ApiException::badRequest(
+                "validation",
+                User::getErrors($user)
+            );
         } catch (DuplicateException $e) {
-            return Response::conflict([
-                "info" => "A user with this email already exists",
-            ]);
+            throw ApiException::conflict(
+                "default",
+                "A user with this email already exists"
+            );
         }
 
         if ($verifyEmail && Config::get("email_verification.enabled")) {
-            if (!Mailer::sendEmailVerification($user)) {
+            try {
+                Mailer::sendEmailVerification($user);
+            } catch (\Exception $e) {
                 Database::get()->rollBack();
-
-                return Response::error([
-                    "info" => "Error sending verification-email",
-                ]);
+                throw $e;
             }
         }
 
@@ -98,7 +102,10 @@ $group
         $req
     ) {
         if ($req["params"]["id"] === Authorization::user()->id) {
-            return Response::forbidden(["info" => "You can't update yourself"]);
+            throw ApiException::forbidden(
+                "default",
+                "You can't update yourself"
+            );
         }
 
         $user = User::getById($req["params"]["id"]);
@@ -131,11 +138,15 @@ $group
         try {
             $user->save();
         } catch (InvalidException $e) {
-            return Response::badRequest(User::getErrors($user));
+            throw ApiException::badRequest(
+                "validation",
+                User::getErrors($user)
+            );
         } catch (DuplicateException $e) {
-            return Response::conflict([
-                "info" => "A user with this email already exists",
-            ]);
+            throw ApiException::conflict(
+                "default",
+                "A user with this email already exists"
+            );
         }
 
         return $user->jsonSerialize(true);
@@ -144,7 +155,10 @@ $group
         $req
     ) {
         if ($req["params"]["id"] === Authorization::user()->id) {
-            return Response::forbidden(["info" => "You can't delete yourself"]);
+            throw ApiException::forbidden(
+                "default",
+                "You can't delete yourself"
+            );
         }
 
         if (User::query("id = ?", [$req["params"]["id"]])->delete()) {
@@ -152,7 +166,7 @@ $group
 
             return Response::ok();
         } else {
-            return Response::error();
+            throw ApiException::error("default", "Query could not be executed");
         }
     })
     ->post(
@@ -170,7 +184,7 @@ $group
             $user->password = $password;
 
             if (!$user->save()) {
-                return Response::error();
+                throw ApiException::error("default", "User could not be saved");
             }
 
             return [

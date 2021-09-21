@@ -16,7 +16,7 @@ class Mailer {
      * @param string $subject The subject
      * @param string $content The (HTML-)content
      *
-     * @return bool whether it was successful or not
+     * @throws ApiException If the email could not be sent
      */
     public static function send($to, $subject, $content) {
         $mail = new PHPMailer(true);
@@ -44,10 +44,8 @@ class Mailer {
             $mail->AltBody = $content;
 
             $mail->send();
-
-            return true;
         } catch (Exception $e) {
-            return false;
+            throw ApiException::error("sending_email", $e->getMessage());
         }
     }
 
@@ -72,12 +70,12 @@ class Mailer {
      *
      * @param User $user The user
      *
-     * @return bool whether it was successful or not
+     * @throws ApiException If the email could not be sent
      */
     public static function sendEmailVerification($user) {
         $expires = date('d.m.Y H:i', $user->verifyEmailCodeExpires);
 
-        return self::send(
+        self::send(
             $user->email,
             "Cookbook email verification",
             "Hi $user->name,<br />please use the following code to verify this email address:<br /><b>$user->verifyEmailCode</b><br />It will expire at <i>$expires</i>"
@@ -90,10 +88,10 @@ class Mailer {
      * @param User $user The user
      * @param string $token The token used to identify the user
      *
-     * @return bool whether it was successful or not
+     * @throws ApiException If the email could not be sent
      */
     public static function sendResetPassword($user, $token) {
-        return self::send(
+        self::send(
             $user->email,
             "Cookbook password reset",
             "Hi $user->name,<br />please use the following code to reset your password:<br /><b>$token</b>"

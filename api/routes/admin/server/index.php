@@ -5,6 +5,7 @@ namespace API\routes\admin;
 use API\auth\Authorization;
 use API\config\Config;
 use API\config\ConfigSettings;
+use API\inc\ApiException;
 use PAF\Router\Response;
 
 $group
@@ -15,17 +16,14 @@ $group
         $data = $req["post"] ?? [];
 
         if (empty($data["path"]) || !array_key_exists("value", $data)) {
-            return Response::badRequest([
-                "info" => "Path and/or value missing",
-            ]);
+            throw ApiException::badRequest(
+                "default",
+                "Path and/or value missing"
+            );
         }
 
-        try {
-            if (!Config::edit($data["path"], $data["value"])) {
-                return Response::error();
-            }
-        } catch (\InvalidArgumentException $e) {
-            return Response::forbidden(["info" => $e->getMessage()]);
+        if (!Config::edit($data["path"], $data["value"])) {
+            throw ApiException::error("config.saving", "Error saving config");
         }
 
         return Response::ok();

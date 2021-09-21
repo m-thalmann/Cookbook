@@ -4,8 +4,8 @@ namespace API;
 
 use API\config\Config;
 
+use API\inc\ApiException;
 use PAF\Model\Database;
-use PAF\Router\Response;
 use PAF\Router\Router;
 
 try {
@@ -46,27 +46,43 @@ try {
     // Routes
 
     try {
-        Router::group('/admin', __DIR__ . '/routes/admin/index.php');
-        Router::group('/auth', __DIR__ . '/routes/auth/index.php');
-        Router::group('/categories', __DIR__ . '/routes/categories/index.php');
-        Router::group(
-            '/ingredients',
-            __DIR__ . '/routes/ingredients/index.php'
-        );
-        Router::group(
-            '/recipeImages',
-            __DIR__ . '/routes/recipeImages/index.php'
-        );
-        Router::group('/recipes', __DIR__ . '/routes/recipes/index.php');
-        Router::group('/users', __DIR__ . '/routes/users/index.php');
+        try {
+            Router::group('/admin', __DIR__ . '/routes/admin/index.php');
+            Router::group('/auth', __DIR__ . '/routes/auth/index.php');
+            Router::group(
+                '/categories',
+                __DIR__ . '/routes/categories/index.php'
+            );
+            Router::group(
+                '/ingredients',
+                __DIR__ . '/routes/ingredients/index.php'
+            );
+            Router::group(
+                '/recipeImages',
+                __DIR__ . '/routes/recipeImages/index.php'
+            );
+            Router::group('/recipes', __DIR__ . '/routes/recipes/index.php');
+            Router::group('/users', __DIR__ . '/routes/users/index.php');
 
-        if (!Router::execute()) {
-            Router::output(Response::notImplemented('Method not found'));
+            if (!Router::execute()) {
+                throw ApiException::notImplemented(
+                    "route_not_found",
+                    "Route not found"
+                );
+            }
+        } catch (\InvalidArgumentException $e) {
+            throw ApiException::badRequest("default", $e->getMessage());
+        } catch (\PDOException $e) {
+            throw ApiException::error("database.default", $e->getMessage());
+        } catch (\Exception $e) {
+            if ($e instanceof ApiException) {
+                throw $e;
+            } else {
+                throw ApiException::error("default", $e->getMessage());
+            }
         }
-    } catch (\InvalidArgumentException $e) {
-        Router::output(Response::badRequest($e->getMessage()));
-    } catch (\Exception $e) {
-        Router::output(Response::error($e->getMessage()));
+    } catch (ApiException $e) {
+        Router::output($e->getResponse());
     }
 } catch (\Exception $e) {
     @header("Content-Type: application/json");

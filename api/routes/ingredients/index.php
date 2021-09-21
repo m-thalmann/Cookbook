@@ -3,6 +3,7 @@
 namespace API\routes;
 
 use API\auth\Authorization;
+use API\inc\ApiException;
 use API\models\Ingredient;
 use PAF\Model\Database;
 use PAF\Model\InvalidException;
@@ -15,7 +16,7 @@ $group
         );
 
         if (!$stmt->execute([Authorization::user()->id])) {
-            return Response::error();
+            throw ApiException::error("default", "Could not fetch ingredients");
         }
 
         return $stmt->fetchAll();
@@ -35,7 +36,10 @@ $group
         try {
             $ingredient->save();
         } catch (InvalidException $e) {
-            return Response::badRequest(Ingredient::getErrors($ingredient));
+            throw ApiException::badRequest(
+                "validation",
+                Ingredient::getErrors($ingredient)
+            );
         }
 
         return $ingredient;
@@ -50,6 +54,6 @@ $group
         ) {
             return Response::ok();
         } else {
-            return Response::error();
+            throw ApiException::error("default", "Error deleting ingredient");
         }
     });

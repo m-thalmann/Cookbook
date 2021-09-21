@@ -3,6 +3,7 @@
 namespace API\models;
 
 use API\config\Config;
+use API\inc\ApiException;
 use API\inc\Validation;
 use PAF\Model\Database;
 use PAF\Model\DuplicateException;
@@ -59,7 +60,10 @@ class RecipeImage extends Model {
      */
     public static function add($recipeId, $tmpLocation, $fileExtension) {
         if (!array_key_exists($fileExtension, self::MIME_TYPES)) {
-            throw new \InvalidArgumentException("Not allowed file-type");
+            throw ApiException::badRequest(
+                "image.not_allowed_type",
+                "Not allowed file-type"
+            );
         }
 
         $mimeType = self::MIME_TYPES[$fileExtension];
@@ -77,7 +81,10 @@ class RecipeImage extends Model {
         }
 
         if (!move_uploaded_file($tmpLocation, $finalPath)) {
-            throw new \Exception("Error uploading file");
+            throw ApiException::error(
+                "image.error_uploading",
+                "Error uploading file"
+            );
         }
 
         try {

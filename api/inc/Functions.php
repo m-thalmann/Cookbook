@@ -90,7 +90,7 @@ class Functions {
                     $img = imagecreatefromgif($image->path);
                     break;
                 default:
-                    return Response::error("Bad image-type");
+                    throw ApiException::error("image.type", "Bad image-type");
             }
 
             list($width, $height) = getimagesize($image->path);

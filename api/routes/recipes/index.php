@@ -3,6 +3,7 @@
 namespace API\routes;
 
 use API\auth\Authorization;
+use API\inc\ApiException;
 use API\inc\Functions;
 use API\models\Ingredient;
 use API\models\Recipe;
@@ -87,7 +88,10 @@ $group
             $recipe->save();
         } catch (InvalidException $e) {
             Database::get()->rollBack();
-            return Response::badRequest(Recipe::getErrors($recipe));
+            throw ApiException::badRequest(
+                "validation",
+                Recipe::getErrors($recipe)
+            );
         }
 
         foreach ($ingredients as $ing) {
@@ -99,14 +103,16 @@ $group
                 $ingredient->save();
             } catch (InvalidException $e) {
                 Database::get()->rollBack();
-                return Response::badRequest([
-                    "ingredients" => Ingredient::getErrors($ingredient),
-                ]);
+
+                throw ApiException::badRequest(
+                    "validation_ingredients",
+                    Ingredient::getErrors($ingredient)
+                );
             } catch (DuplicateException $e) {
-                return Response::conflict([
-                    "info" =>
-                        "An ingredient with this name already exists for this recipe",
-                ]);
+                throw ApiException::conflict(
+                    "default",
+                    "An ingredient with this name already exists for this recipe"
+                );
             }
         }
 
@@ -125,9 +131,10 @@ $group
         }
 
         if ($req["post"] !== null && array_key_exists("userId", $req["post"])) {
-            return Response::forbidden([
-                "info" => "You can't change ownership",
-            ]);
+            throw ApiException::forbidden(
+                "default",
+                "You can't change ownership"
+            );
         }
 
         $recipe->editValues($req["post"] ?? [], true);
@@ -135,7 +142,10 @@ $group
         try {
             $recipe->save();
         } catch (InvalidException $e) {
-            return Response::badRequest(Recipe::getErrors($recipe));
+            throw ApiException::badRequest(
+                "validation",
+                Recipe::getErrors($recipe)
+            );
         }
 
         return $recipe->jsonSerialize(true);
@@ -154,7 +164,7 @@ $group
             RecipeImage::deleteOrphanImages();
             return Response::ok();
         } else {
-            return Response::error();
+            throw ApiException::error("default", "Error deleting image");
         }
     })
     ->post('/id/{{i:id}}/ingredients', Authorization::middleware(), function (
@@ -176,12 +186,15 @@ $group
         try {
             $ingredient->save();
         } catch (InvalidException $e) {
-            return Response::badRequest(Ingredient::getErrors($ingredient));
+            throw ApiException::badRequest(
+                "validation",
+                Ingredient::getErrors($ingredient)
+            );
         } catch (DuplicateException $e) {
-            return Response::conflict([
-                "info" =>
-                    "An ingredient with this name already exists for this recipe",
-            ]);
+            throw ApiException::conflict(
+                "default",
+                "An ingredient with this name already exists for this recipe"
+            );
         }
 
         return Response::created($ingredient);
@@ -251,21 +264,22 @@ $group
             !isset($_FILES['image']['error']) ||
             is_array($_FILES['image']['error'])
         ) {
-            return Response::badRequest(["info" => "No file"]);
+            throw ApiException::badRequest("image.no_file", "No file");
         }
 
         switch ($_FILES['image']['error']) {
             case UPLOAD_ERR_OK:
                 break;
             case UPLOAD_ERR_NO_FILE:
-                return Response::badRequest(["info" => "No file"]);
+                throw ApiException::badRequest("image.no_file", "No file");
             case UPLOAD_ERR_INI_SIZE:
             case UPLOAD_ERR_FORM_SIZE:
-                return Response::badRequest([
-                    "info" => 'Exceeded filesize limit',
-                ]);
+                throw ApiException::badRequest(
+                    "image.too_large",
+                    "Exceeded filesize limit"
+                );
             default:
-                return Response::error(["info" => 'Upload error']);
+                throw ApiException::error("default", "Upload error");
         }
 
         $name = $_FILES['image']['name'];
@@ -279,10 +293,8 @@ $group
                 $tmpLocation,
                 $fileExtension
             );
-        } catch (\InvalidArgumentException $e) {
-            return Response::badRequest(["info" => $e->getMessage()]);
         } catch (DuplicateException $e) {
-            return Response::conflict(["info" => $e->getMessage()]);
+            throw ApiException::conflict("default", $e->getMessage());
         }
 
         return Response::created($image);

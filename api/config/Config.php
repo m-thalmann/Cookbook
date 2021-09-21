@@ -2,6 +2,8 @@
 
 namespace API\config;
 
+use API\inc\ApiException;
+
 class Config {
     private static $baseConfig = null;
     private static $config = null;
@@ -19,7 +21,10 @@ class Config {
         self::$baseConfig = @json_decode(file_get_contents($file), true);
 
         if (self::$baseConfig === null || self::$baseConfig === false) {
-            throw new \Exception('Base-Config could not be loaded');
+            throw ApiException::error(
+                "config.loading",
+                "Base-Config could not be loaded"
+            );
         }
     }
 
@@ -117,7 +122,7 @@ class Config {
      *
      * @see ConfigSettings::saveConfigValue()
      *
-     * @throws \InvalidArgumentException If the path is not editable
+     * @throws ApiException If the path is not editable/does not exist or the value is not valid
      *
      * @return boolean Whether the value was saved or not
      */
