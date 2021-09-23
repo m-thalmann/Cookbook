@@ -24,7 +24,7 @@ tags:
 paths:
   /auth:
     get:
-      summary: Returns whether the user is authenticated or not
+      summary: Returns the authenticated user (if authenticated)
       tags:
         - User
       responses:
@@ -33,16 +33,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  user:
-                    $ref: '#/components/schemas/AuthUser'
-                  info:
-                    type: string
-                    example: Authorized
-                required:
-                  - user
-                  - info
+                $ref: '#/components/schemas/AuthUser'
         '401':
           $ref: '#/components/responses/Unauthorized'
       operationId: get-auth
@@ -80,7 +71,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
         '400':
-          $ref: '#/components/responses/ValidationError'
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -88,25 +83,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: Old password is wrong
-                required:
-                  - info
+                $ref: '#/components/schemas/ApiError'
         '409':
           description: A user with this email already exists
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: A user with this email already exists
-                required:
-                  - info
+                $ref: '#/components/schemas/ApiError'
       operationId: put-auth
       description: Update the authenticated user
       security:
@@ -126,15 +109,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: You are the last admin
-                required:
-                  - info
-        '500':
-          description: Something went wrong
+                $ref: '#/components/schemas/ApiError'
       operationId: delete-auth
       description: Deletes the authenticated user and all of its data
       security:
@@ -169,51 +144,25 @@ paths:
                 properties:
                   user:
                     $ref: '#/components/schemas/AuthUser'
-                  info:
-                    type: string
-                    example: Authorized
                   token:
                     $ref: '#/components/schemas/JwtToken'
                 required:
                   - user
-                  - info
                   - token
         '400':
           description: Bad request
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: Email and password expected
-                required:
-                  - info
+                $ref: '#/components/schemas/ApiError'
         '403':
           description: Email not verified
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: Email not verified
-                required:
-                  - info
+                $ref: '#/components/schemas/ApiError'
         '404':
           description: Email or password wrong
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: Email or password wrong
-                required:
-                  - info
       operationId: post-auth-login
       description: Authenticates the user and returns a token
   /auth/register:
@@ -252,52 +201,38 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  user:
-                    $ref: '#/components/schemas/AuthUser'
-                  info:
-                    type: string
-                    example: Authorized
-                required:
-                  - user
-                  - info
+                $ref: '#/components/schemas/AuthUser'
         '400':
-          $ref: '#/components/responses/ValidationError'
+          description: |
+            hCaptcha Token invalid or validation error:
+
+            Error keys:
+              - bad_request.hcaptcha_invalid
+              - bad_request.validation
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ApiError'
+                  - $ref: '#/components/schemas/ValidationError'
         '403':
           description: The hcaptchaToken was invalid
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: hCaptcha-Token invalid
+                $ref: '#/components/schemas/ApiError'
         '405':
           description: Registration is disabled
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: Registration is disabled
-                required:
-                  - info
+                $ref: '#/components/schemas/ApiError'
         '409':
           description: A user with this email already exists
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: A user with this email already exists
-                required:
-                  - info
+                $ref: '#/components/schemas/ApiError'
       operationId: post-auth-register
       description: Registers a new user
   /auth/verifyEmail:
@@ -330,25 +265,13 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: Email and code expected
-                required:
-                  - info
+                $ref: '#/components/schemas/ApiError'
         '403':
           description: Verification code is wrong or has expired
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: Verification code is wrong or has expired
-                required:
-                  - info
+                $ref: '#/components/schemas/ApiError'
       operationId: post-auth-verifyEmail
       description: Verify an email
   /auth/verifyEmail/resend:
@@ -375,13 +298,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: Email and code expected
-                required:
-                  - info
+                $ref: '#/components/schemas/ApiError'
       operationId: post-auth-verifyEmail
       description: Verify an email
   /auth/registrationEnabled:
@@ -431,13 +348,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: Email, token and password expected
-                required:
-                  - info
+                $ref: '#/components/schemas/ApiError'
         '404':
           description: Combination of email and token not found
       operationId: post-auth-resetPassword
@@ -466,13 +377,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: Email expected
-                required:
-                  - info
+                $ref: '#/components/schemas/ApiError'
       operationId: post-auth-resetPassword-send
       description: Sends a reset-password email to the given email if it exists in the database
   /recipes:
@@ -607,7 +512,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/RecipeFull'
         '400':
-          $ref: '#/components/responses/ValidationError'
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '409':
@@ -615,13 +524,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: An ingredient with this name already exists for this recipe
-                required:
-                  - info
+                $ref: '#/components/schemas/ApiError'
       operationId: post-recipes
       description: Create a new recipe
       security:
@@ -719,7 +622,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/RecipeFull'
         '400':
-          $ref: '#/components/responses/ValidationError'
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -727,13 +634,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: You can't change ownership
-                required:
-                  - info
+                $ref: '#/components/schemas/ApiError'
         '404':
           description: Recipe not found
       operationId: put-recipes-id
@@ -750,8 +651,6 @@ paths:
           description: OK (also if not deleted due to not found or not owned by user)
         '401':
           $ref: '#/components/responses/Unauthorized'
-        '500':
-          description: Something went wrong
       operationId: delete-recipes-id
       description: Delete an existing recipe
       security:
@@ -923,7 +822,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Ingredient'
         '400':
-          $ref: '#/components/responses/ValidationError'
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -933,13 +836,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: An ingredient with this name already exists for this recipe
-                required:
-                  - info
+                $ref: '#/components/schemas/ApiError'
       operationId: post-recipes-id-ingredients
       description: Add a new ingredient to a recipe
       security:
@@ -1018,7 +915,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Ingredient'
         '400':
-          $ref: '#/components/responses/ValidationError'
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -1037,8 +938,6 @@ paths:
           description: OK (also if not deleted due to not found or not owned by user)
         '401':
           $ref: '#/components/responses/Unauthorized'
-        '500':
-          description: Something went wrong
       operationId: delete-ingredients-id
       description: Delete a specific ingredient
       security:
@@ -1169,13 +1068,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: No file
-                required:
-                  - info
+                $ref: '#/components/schemas/ApiError'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -1185,13 +1078,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: The same image already exists for this recipe
-                required:
-                  - info
+                $ref: '#/components/schemas/ApiError'
       operationId: post-recipes-id-images
       description: Add a new recipe-image to a recipe
       security:
@@ -1364,19 +1251,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserFull'
         '400':
-          $ref: '#/components/responses/ValidationError'
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
         '409':
           description: A user with this email already exists
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: A user with this email already exists
-                required:
-                  - info
+                $ref: '#/components/schemas/ApiError'
       operationId: post-admin-users
       description: Create a new user
       security:
@@ -1439,7 +1324,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserFull'
         '400':
-          $ref: '#/components/responses/ValidationError'
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -1447,13 +1336,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: You can't update yourself
-                required:
-                  - info
+                $ref: '#/components/schemas/ApiError'
         '404':
           description: User not found
         '409':
@@ -1461,13 +1344,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: A user with this email already exists
-                required:
-                  - info
+                $ref: '#/components/schemas/ApiError'
       operationId: put-admin-users-id
       description: Update a user
       security:
@@ -1487,13 +1364,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: You can't delete yourself
-                required:
-                  - info
+                $ref: '#/components/schemas/ApiError'
       operationId: delete-admin-users-id
       description: Delete a user
       security:
@@ -1754,13 +1625,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: Path and/or value missing
-                required:
-                  - info
+                $ref: '#/components/schemas/ApiError'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -1768,13 +1633,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  info:
-                    type: string
-                    example: Setting not editable
-                required:
-                  - info
+                $ref: '#/components/schemas/ApiError'
       operationId: put-admin-server-config
       description: Update server config
       security:
@@ -2001,20 +1860,56 @@ components:
         - items_per_page
         - total_items
         - total_pages
-  responses:
-    Unauthorized:
-      description: There was no authentication provided or it was invalid
-    Forbidden:
-      description: The user has not the rights to perform this action
+    ApiError:
+      title: Api Error
+      type: object
+      properties:
+        errorKey:
+          type: string
+          example: bad_request.default
+          description: Key used for translation
+        details:
+          description: Specific/Additional information for the error
+          example: Sent data is invalid
+      required:
+        - errorKey
+        - details
     ValidationError:
-      description: Bad request
+      title: Validation Error (Api Error)
+      type: object
+      properties:
+        errorKey:
+          type: string
+          example: bad_request.validation
+          description: Key used for translation
+        details:
+          description: Specific/Additional information for the error
+          type: object
+          additionalProperties:
+            type: string
+            description: The error message for the property (key)
+      required:
+        - errorKey
+        - details
+  responses:
+    ApiError:
+      description: An error occurred
       content:
         application/json:
           schema:
-            type: object
-            additionalProperties:
-              type: string
-              description: The error message for the property (key)
+            $ref: '#/components/schemas/ApiError'
+    Unauthorized:
+      description: There was no authentication provided or it was invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+    Forbidden:
+      description: The user has not the rights to perform this action
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
   parameters:
     ItemsPerPage:
       schema:

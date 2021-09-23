@@ -2,7 +2,6 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ApiService } from 'src/app/core/api/api.service';
-import { AuthUser } from 'src/app/core/api/ApiInterfaces';
 import { ApiResponse } from 'src/app/core/api/ApiResponse';
 import { UserService } from 'src/app/core/auth/user.service';
 import { ConfigService } from 'src/app/core/config/config.service';
@@ -115,7 +114,7 @@ export class LoginRegisterDialogComponent {
     this.loginForm.disable();
     this.dialogRef.disableClose = true;
 
-    let res: ApiResponse<{ user: AuthUser; token?: string; info: string }>;
+    let res: ApiResponse<any>;
 
     if (this.isLogin) {
       res = await this.api.loginUser(this.email?.value, this.password?.value);

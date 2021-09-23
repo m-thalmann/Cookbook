@@ -134,21 +134,14 @@ export class UserService {
    *
    * @param userPromise
    */
-  async loadUser(
-    userPromise: Promise<
-      ApiResponse<{
-        user: AuthUser;
-        info: string;
-      }>
-    >
-  ) {
+  async loadUser(userPromise: Promise<ApiResponse<AuthUser>>) {
     let res = await userPromise;
 
     if (res.isOK() && res.value) {
-      let userJson = JSON.stringify(res.value.user);
+      let userJson = JSON.stringify(res.value);
 
       if (JSON.stringify(this._user) !== userJson) {
-        this._user = res.value.user;
+        this._user = res.value;
 
         if (this.isRemembered) {
           localStorage.setItem(StorageNames.User, userJson);

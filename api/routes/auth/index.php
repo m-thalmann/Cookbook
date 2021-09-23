@@ -29,7 +29,6 @@ $group
 
                 if ($token) {
                     return Response::ok([
-                        "info" => "Authorized",
                         "user" => Authorization::user()->getAuthUserJSON(),
                         "token" => "Bearer $token",
                     ]);
@@ -106,10 +105,7 @@ $group
 
         Database::get()->commit();
 
-        return Response::created([
-            "info" => "Authorized",
-            "user" => $user->getAuthUserJSON(),
-        ]);
+        return Response::created($user->getAuthUserJSON());
     })
     ->put('/', Authorization::middleware(), function ($req) {
         $user = Authorization::user();

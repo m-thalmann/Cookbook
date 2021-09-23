@@ -172,14 +172,14 @@ export class ApiService {
   // User
 
   loginUser(email: string, password: string) {
-    return this.post<{ user: AuthUser; token: string; info: string }>(`${this.URL}/auth/login`, {
+    return this.post<{ user: AuthUser; token: string }>(`${this.URL}/auth/login`, {
       email: email,
       password: password,
     });
   }
 
   registerUser(email: string, password: string, name: string, languageCode: string, hcaptchaToken: string | null) {
-    return this.post<{ user: AuthUser; info: string }>(`${this.URL}/auth/register`, {
+    return this.post<AuthUser>(`${this.URL}/auth/register`, {
       email: email,
       password: password,
       name: name,
@@ -206,7 +206,7 @@ export class ApiService {
    * Loads the authenticated user and sets it in the user-service
    */
   getAuthenticatedUser() {
-    let promise = this.get<{ user: AuthUser; info: string }>(`${this.URL}/auth`);
+    let promise = this.get<AuthUser>(`${this.URL}/auth`);
 
     this.user.loadUser(promise);
 

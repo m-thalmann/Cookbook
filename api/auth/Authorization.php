@@ -219,10 +219,7 @@ class Authorization {
             if ($next !== null) {
                 return $next($request);
             } else {
-                return Response::ok([
-                    "user" => self::$user->getAuthUserJSON(),
-                    "info" => "Authorized",
-                ]);
+                return Response::ok(self::$user->getAuthUserJSON());
             }
         };
     }
