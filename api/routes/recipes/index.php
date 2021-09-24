@@ -110,7 +110,7 @@ $group
                 );
             } catch (DuplicateException $e) {
                 throw ApiException::conflict(
-                    "default",
+                    "ingredient_name",
                     "An ingredient with this name already exists for this recipe"
                 );
             }
@@ -132,7 +132,7 @@ $group
 
         if ($req["post"] !== null && array_key_exists("userId", $req["post"])) {
             throw ApiException::forbidden(
-                "default",
+                "recipe.change_ownership",
                 "You can't change ownership"
             );
         }
@@ -192,7 +192,7 @@ $group
             );
         } catch (DuplicateException $e) {
             throw ApiException::conflict(
-                "default",
+                "ingredient_name",
                 "An ingredient with this name already exists for this recipe"
             );
         }
@@ -294,7 +294,7 @@ $group
                 $fileExtension
             );
         } catch (DuplicateException $e) {
-            throw ApiException::conflict("default", $e->getMessage());
+            throw ApiException::conflict("recipe_image", $e->getMessage());
         }
 
         return Response::created($image);

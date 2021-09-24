@@ -71,7 +71,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
         '400':
-          description: Bad request
+          description: |
+            Bad request
+
+            Error keys:
+            - bad_request.validation
           content:
             application/json:
               schema:
@@ -79,13 +83,21 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
-          description: Old password is wrong
+          description: |
+            Old password is wrong
+
+            Error keys:
+            - forbidden.old_password_wrong
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
         '409':
-          description: A user with this email already exists
+          description: |
+            A user with this email already exists
+
+            Error keys:
+            - conflict.user_email
           content:
             application/json:
               schema:
@@ -105,7 +117,11 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
-          description: You are the last admin (can't be deleted)
+          description: |
+            You are the last admin (can't be deleted)
+
+            Error keys:
+            - forbidden.last_admin
           content:
             application/json:
               schema:
@@ -150,13 +166,21 @@ paths:
                   - user
                   - token
         '400':
-          description: Bad request
+          description: |
+            Bad request
+
+            Error keys:
+            - bad_request.default
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
         '403':
-          description: Email not verified
+          description: |
+            Email not verified
+
+            Error keys:
+            - forbidden.email_not_verified
           content:
             application/json:
               schema:
@@ -216,19 +240,31 @@ paths:
                   - $ref: '#/components/schemas/ApiError'
                   - $ref: '#/components/schemas/ValidationError'
         '403':
-          description: The hcaptchaToken was invalid
+          description: |
+            The hcaptchaToken was invalid
+
+            Error keys:
+            - forbidden.hcaptcha_invalid
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
         '405':
-          description: Registration is disabled
+          description: |
+            Registration is disabled
+
+            Error keys:
+            - method_not_allowed.registration_disabled
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
         '409':
-          description: A user with this email already exists
+          description: |
+            A user with this email already exists
+
+            Error keys:
+            - conflict.user_email
           content:
             application/json:
               schema:
@@ -261,13 +297,21 @@ paths:
         '200':
           description: OK (also if email does not exist or already verified)
         '400':
-          description: Email and code expected
+          description: |
+            Email and code expected
+
+            Error keys:
+            - bad_request.default
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
         '403':
-          description: Verification code is wrong or has expired
+          description: |
+            Verification code is wrong or has expired
+
+            Error keys:
+            - forbidden.verification_code_wrong_or_expired
           content:
             application/json:
               schema:
@@ -294,7 +338,11 @@ paths:
         '200':
           description: OK (also if email does not exist or already verified)
         '400':
-          description: Email expected
+          description: |
+            Email expected
+
+            Error keys:
+            - bad_request.default
           content:
             application/json:
               schema:
@@ -344,7 +392,11 @@ paths:
         '200':
           description: OK
         '400':
-          description: Email, token and password expected
+          description: |
+            Email, token and password expected
+
+            Error keys:
+            - bad_request.default
           content:
             application/json:
               schema:
@@ -373,7 +425,11 @@ paths:
         '200':
           description: OK (also if the email does not exist)
         '400':
-          description: Email expected
+          description: |
+            Email expected
+
+            Error keys:
+            - bad_request.default
           content:
             application/json:
               schema:
@@ -512,7 +568,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/RecipeFull'
         '400':
-          description: Bad request
+          description: |
+            Bad request
+
+            Error keys:
+            - bad_request.validation
+            - bad_request.validation_ingredients
           content:
             application/json:
               schema:
@@ -520,7 +581,11 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
         '409':
-          description: Duplicate ingredient name
+          description: |
+            Duplicate ingredient name
+
+            Error keys:
+            - conflict.ingredient_name
           content:
             application/json:
               schema:
@@ -622,7 +687,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/RecipeFull'
         '400':
-          description: Bad request
+          description: |
+            Bad request
+
+            Error keys:
+            - bad_request.validation
           content:
             application/json:
               schema:
@@ -630,7 +699,11 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
-          description: Can't change ownership of recipe
+          description: |
+            Can't change ownership of recipe
+
+            Error keys:
+            - forbidden.recipe.change_ownership
           content:
             application/json:
               schema:
@@ -822,7 +895,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Ingredient'
         '400':
-          description: Bad request
+          description: |
+            Bad request
+
+            Error keys:
+            - bad_request.validation
           content:
             application/json:
               schema:
@@ -832,7 +909,11 @@ paths:
         '404':
           description: Recipe not found or not owned by user
         '409':
-          description: Duplicate ingredient name in recipe
+          description: |
+            Duplicate ingredient name in recipe
+
+            Error keys:
+            - conflict.ingredient_name
           content:
             application/json:
               schema:
@@ -915,7 +996,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Ingredient'
         '400':
-          description: Bad request
+          description: |
+            Bad request
+
+            Error keys:
+            - bad_request.validation
           content:
             application/json:
               schema:
@@ -1064,7 +1149,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/RecipeImage'
         '400':
-          description: Bad request
+          description: |
+            Bad request
+
+            Error keys:
+            - bad_request.image.no_file
+            - bad_request.image.too_large
+            - bad_request.image.not_allowed_type
           content:
             application/json:
               schema:
@@ -1074,7 +1165,11 @@ paths:
         '404':
           description: Recipe not found
         '409':
-          description: An identical image already exists for this recipe
+          description: |
+            An identical image already exists for this recipe
+
+            Error keys:
+            - conflict.recipe_image
           content:
             application/json:
               schema:
@@ -1251,13 +1346,21 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserFull'
         '400':
-          description: Bad request
+          description: |
+            Bad request
+
+            Error keys:
+            - bad_request.validation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ValidationError'
         '409':
-          description: A user with this email already exists
+          description: |
+            A user with this email already exists
+
+            Error keys:
+            - conflict.user_email
           content:
             application/json:
               schema:
@@ -1324,7 +1427,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserFull'
         '400':
-          description: Bad request
+          description: |
+            Bad request
+
+            Error keys:
+            - bad_request.validation
           content:
             application/json:
               schema:
@@ -1332,7 +1439,11 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
-          description: You can't update yourself
+          description: |
+            You can't update yourself
+
+            Error keys:
+            - forbidden.update_self
           content:
             application/json:
               schema:
@@ -1340,7 +1451,11 @@ paths:
         '404':
           description: User not found
         '409':
-          description: A user with this email already exists
+          description: |
+            A user with this email already exists
+
+            Error keys:
+            - conflict.user_email
           content:
             application/json:
               schema:
@@ -1360,7 +1475,11 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
-          description: You can't delete yourself
+          description: |
+            You can't delete yourself
+
+            Error keys:
+            - forbidden.delete_self
           content:
             application/json:
               schema:
@@ -1621,7 +1740,11 @@ paths:
         '200':
           description: OK
         '400':
-          description: Path and/or value missing
+          description: |
+            Path and/or value missing
+
+            Error keys:
+            - bad_request.default
           content:
             application/json:
               schema:
@@ -1629,7 +1752,11 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
-          description: Setting not editable (is base-config-value)
+          description: |
+            Setting not editable (is base-config-value)
+
+            Error keys:
+            - forbidden.setting_not_editable
           content:
             application/json:
               schema:
@@ -1892,20 +2019,12 @@ components:
         - errorKey
         - details
   responses:
-    ApiError:
-      description: An error occurred
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
     Unauthorized:
-      description: There was no authentication provided or it was invalid
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ApiError'
-    Forbidden:
-      description: The user has not the rights to perform this action
+      description: |
+        There was no authentication provided or it was invalid
+
+        Error keys:
+        - unauthorized.default
       content:
         application/json:
           schema:

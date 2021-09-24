@@ -390,7 +390,7 @@ class ConfigSettings {
             $setting["baseConfig"]
         ) {
             throw ApiException::forbidden(
-                "config.setting_not_editable",
+                "setting_not_editable",
                 'Setting not editable'
             );
         }

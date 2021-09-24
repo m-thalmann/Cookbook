@@ -5,22 +5,16 @@ namespace API\inc;
 use PAF\Router\Response;
 
 class ApiException extends \Exception implements \JsonSerializable {
-    const ERRORS = [];
-
     private $type;
     private $errorValue;
-    private $details = null;
 
     public function __construct($type, $errorKey, $details = null) {
         $this->type = $type;
 
-        $this->errorValue = self::ERRORS[$type][$errorKey] ?? [
-            "details" => $details,
+        $this->errorValue = [
+            "errorKey" => "$type.$errorKey",
+            "details" => $details ?? "An error occurred",
         ];
-
-        $this->errorValue["errorKey"] = "$type.$errorKey";
-
-        $this->details = $details;
 
         $this->message = $details;
     }
@@ -58,12 +52,7 @@ class ApiException extends \Exception implements \JsonSerializable {
     }
 
     public function jsonSerialize() {
-        return [
-            "errorKey" => $this->errorValue["errorKey"],
-            "details" =>
-                $this->details ??
-                ($this->errorValue["details"] ?? "An error occurred"),
-        ];
+        return $this->errorValue;
     }
 
     public function getResponse() {

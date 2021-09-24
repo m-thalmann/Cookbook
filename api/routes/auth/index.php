@@ -89,7 +89,7 @@ $group
             );
         } catch (DuplicateException $e) {
             throw ApiException::conflict(
-                "default",
+                "user_email",
                 "A user with this email already exists"
             );
         }
@@ -148,7 +148,7 @@ $group
             );
         } catch (DuplicateException $e) {
             throw ApiException::conflict(
-                "default",
+                "user_email",
                 "A user with this email already exists"
             );
         }
@@ -195,7 +195,7 @@ $group
                 }
             } else {
                 throw ApiException::forbidden(
-                    "default",
+                    "verification_code_wrong_or_expired",
                     "Verification code is wrong or has expired"
                 );
             }

@@ -80,7 +80,7 @@ $group
             );
         } catch (DuplicateException $e) {
             throw ApiException::conflict(
-                "default",
+                "user_email",
                 "A user with this email already exists"
             );
         }
@@ -103,7 +103,7 @@ $group
     ) {
         if ($req["params"]["id"] === Authorization::user()->id) {
             throw ApiException::forbidden(
-                "default",
+                "update_self",
                 "You can't update yourself"
             );
         }
@@ -144,7 +144,7 @@ $group
             );
         } catch (DuplicateException $e) {
             throw ApiException::conflict(
-                "default",
+                "user_email",
                 "A user with this email already exists"
             );
         }
@@ -156,7 +156,7 @@ $group
     ) {
         if ($req["params"]["id"] === Authorization::user()->id) {
             throw ApiException::forbidden(
-                "default",
+                "delete_self",
                 "You can't delete yourself"
             );
         }
