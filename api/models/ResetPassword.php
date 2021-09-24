@@ -44,6 +44,9 @@ class ResetPassword extends Model {
      *
      * @param User $user The user
      *
+     * @throws \PAF\Model\DuplicateException
+     * @throws \PAF\Model\InvalidException
+     *
      * @return ResetPassword|false The generated instance or false if an error occurred
      */
     public static function generate($user) {

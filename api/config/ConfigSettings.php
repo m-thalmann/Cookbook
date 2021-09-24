@@ -148,7 +148,7 @@ class ConfigSettings {
     const TYPE_INTEGER = "integer";
     const TYPE_NUMBER = "number";
 
-    private const ENCRYPTION_ALGORITHM = 'BF-CBC';
+    const ENCRYPTION_ALGORITHM = 'BF-CBC';
 
     private static $configSecret = null;
 
@@ -193,8 +193,6 @@ class ConfigSettings {
                 case self::TYPE_NUMBER:
                     $value = floatval($value);
                     break;
-                default:
-                    $value = $value;
             }
         }
 

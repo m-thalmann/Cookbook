@@ -52,6 +52,8 @@ class Functions {
      * @param bool $cacheable whether the image can be cached
      * @param integer|null $maxSize the width/height to scale the image to
      *
+     * @throws ApiException
+     *
      * @return Response the generated response with the image
      */
     public static function outputRecipeImage(

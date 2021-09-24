@@ -4,7 +4,6 @@ namespace API\models;
 
 use API\config\Config;
 use API\inc\ApiException;
-use API\inc\Validation;
 use PAF\Model\Database;
 use PAF\Model\DuplicateException;
 use PAF\Model\Model;
@@ -13,6 +12,13 @@ use PAF\Model\Model;
  * @tablename recipe_images
  */
 class RecipeImage extends Model {
+    /**
+     * @var array Properties (key) checked in validation. The value is a boolean, whether the property is a string or not
+     */
+    const VALIDATION_PROPERTIES = [
+        "recipeId" => false,
+    ];
+
     const MIME_TYPES = [
         "jpg" => "image/jpeg",
         "jpeg" => "image/jpeg",
@@ -55,6 +61,10 @@ class RecipeImage extends Model {
      * @param int $recipeId The id of the recipe
      * @param string $tmpLocation The path of the image
      * @param string $fileExtension The file-type-extension
+     *
+     * @throws ApiException
+     * @throws DuplicateException
+     * @throws \PAF\Model\InvalidException
      *
      * @return RecipeImage The created recipe-image
      */
@@ -138,12 +148,6 @@ class RecipeImage extends Model {
         }
 
         return $path;
-    }
-
-    public static function getErrors($user) {
-        return Validation::getValidationErrorMessages($user, [
-            "recipeId" => ["Recipe"],
-        ]);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace API\routes;
 use API\auth\Authorization;
 use API\inc\ApiException;
 use API\inc\Functions;
+use API\inc\Validation;
 use API\models\Ingredient;
 use API\models\Recipe;
 use API\models\RecipeImage;
@@ -90,7 +91,7 @@ $group
             Database::get()->rollBack();
             throw ApiException::badRequest(
                 "validation",
-                Recipe::getErrors($recipe)
+                Validation::getErrorMessages($recipe)
             );
         }
 
@@ -106,7 +107,7 @@ $group
 
                 throw ApiException::badRequest(
                     "validation_ingredients",
-                    Ingredient::getErrors($ingredient)
+                    Validation::getErrorMessages($ingredient)
                 );
             } catch (DuplicateException $e) {
                 throw ApiException::conflict(
@@ -144,7 +145,7 @@ $group
         } catch (InvalidException $e) {
             throw ApiException::badRequest(
                 "validation",
-                Recipe::getErrors($recipe)
+                Validation::getErrorMessages($recipe)
             );
         }
 
@@ -188,7 +189,7 @@ $group
         } catch (InvalidException $e) {
             throw ApiException::badRequest(
                 "validation",
-                Ingredient::getErrors($ingredient)
+                Validation::getErrorMessages($ingredient)
             );
         } catch (DuplicateException $e) {
             throw ApiException::conflict(
@@ -211,7 +212,7 @@ $group
         '/id/{{i:id}}/images/count',
         Authorization::middleware(false),
         function ($req) {
-            return RecipeImage::query(
+            return RecipeImage::getQueryForUser(
                 "recipeId = :id",
                 ["id" => $req["params"]["id"]],
                 Authorization::user(),
@@ -223,7 +224,7 @@ $group
         '/id/{{i:id}}/images/number/{{i:number}}',
         Authorization::middleware(false),
         function ($req) {
-            $image = RecipeImage::query(
+            $image = RecipeImage::getQueryForUser(
                 "recipeId = :id",
                 ["id" => $req["params"]["id"]],
                 Authorization::user(),

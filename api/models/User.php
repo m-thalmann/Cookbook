@@ -5,13 +5,22 @@ namespace API\models;
 use API\auth\Authorization;
 use API\config\Config;
 use API\inc\Functions;
-use API\inc\Validation;
 use PAF\Model\Model;
 
 /**
  * @tablename users
  */
 class User extends Model {
+    /**
+     * @var array Properties (key) checked in validation. The value is a boolean, whether the property is a string or not
+     */
+    const VALIDATION_PROPERTIES = [
+        "email" => true,
+        "name" => true,
+        "password" => true,
+        "languageCode" => true,
+    ];
+
     const FORBIDDEN_SORT_PROPERTIES = [
         "password",
         "passwordSalt",
@@ -202,15 +211,6 @@ class User extends Model {
     public function clearEmailVerification() {
         $this->editValue("verifyEmailCode", null, false, true);
         $this->editValue("verifyEmailCodeExpires", null, false, true);
-    }
-
-    public static function getErrors($user) {
-        return Validation::getValidationErrorMessages($user, [
-            "email" => ["Email", true],
-            "name" => ["Name", true],
-            "password" => ["Password", true],
-            "languageCode" => ["Language", true],
-        ]);
     }
 
     public static function isEmailVerified($user) {

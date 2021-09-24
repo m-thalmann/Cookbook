@@ -2,20 +2,34 @@
 
 namespace API\inc;
 
+use PAF\Model\Model;
 use PAF\Model\ValidationError;
 
 class Validation {
-    public static function getValidationErrorMessages($model, $mapping) {
-        $errors = $model->getValidationErrors();
-
+    /**
+     * Gets all error messages (validation errors for properties)
+     * for the given model. The model must have a "VALIDATION_PROPERTIES" constant
+     *
+     * @param Model $model The model to validate
+     *
+     * @return array The error messages (value) for the properties (key)
+     */
+    public static function getErrorMessages($model) {
         $res = [];
 
+        if (!defined(get_class($model) . "::VALIDATION_PROPERTIES")) {
+            return $res;
+        }
+
+        $validationProperties = $model::VALIDATION_PROPERTIES;
+
+        $errors = $model->getValidationErrors();
+
         foreach ($errors as $prop => $error) {
-            if (array_key_exists($prop, $mapping)) {
-                $res[$prop] = Validation::getValidationErrorMessage(
+            if (array_key_exists($prop, $validationProperties)) {
+                $res[$prop] = self::getErrorMessage(
                     $error->getError(),
-                    $mapping[$prop][0],
-                    $mapping[$prop][1] ?? false
+                    $validationProperties[$prop]
                 );
             }
         }
@@ -23,36 +37,42 @@ class Validation {
         return $res;
     }
 
-    public static function getValidationErrorMessage(
-        $error,
-        $property,
-        $isString = false
-    ) {
+    /**
+     * Returns the error message for a given error code
+     *
+     * @param int $error The validation error
+     * @param bool $isString Whether the property is a string
+     *
+     * @see ValidationError
+     *
+     * @return string|null The validation error
+     */
+    public static function getErrorMessage($error, $isString = false) {
         switch ($error) {
             case ValidationError::INVALID_NULL:
-                return "'$property' must have a value";
+                return "validation_error.null";
             case ValidationError::INVALID_TYPE:
-                return "'$property' has a wrong type";
+                return "validation_error.type";
             case ValidationError::INVALID_EMAIL:
-                return "'$property' is not a valid email";
+                return "validation_error.email";
             case ValidationError::INVALID_URL:
-                return "'$property' is not a valid URL";
+                return "validation_error.url";
             case ValidationError::INVALID_IP:
-                return "'$property' is not a valid IP";
+                return "validation_error.ip";
             case ValidationError::INVALID_ENUM:
             case ValidationError::INVALID_PATTERN:
-                return "'$property' has a not allowed value";
+                return "validation_error.value";
             case ValidationError::INVALID_MIN:
                 if ($isString) {
-                    return "'$property' is too short";
+                    return "validation_error.too_short";
                 } else {
-                    return "'$property' is too small";
+                    return "validation_error.too_small";
                 }
             case ValidationError::INVALID_MAX:
                 if ($isString) {
-                    return "'$property' is too long";
+                    return "validation_error.too_long";
                 } else {
-                    return "'$property' is too big";
+                    return "validation_error.too_big";
                 }
         }
 

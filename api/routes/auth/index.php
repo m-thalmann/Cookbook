@@ -7,6 +7,7 @@ use API\config\Config;
 use API\inc\ApiException;
 use API\inc\Functions;
 use API\inc\Mailer;
+use API\inc\Validation;
 use API\models\RecipeImage;
 use API\models\ResetPassword;
 use API\models\User;
@@ -85,7 +86,7 @@ $group
         } catch (InvalidException $e) {
             throw ApiException::badRequest(
                 "validation",
-                User::getErrors($user)
+                Validation::getErrorMessages($user)
             );
         } catch (DuplicateException $e) {
             throw ApiException::conflict(
@@ -144,7 +145,7 @@ $group
         } catch (InvalidException $e) {
             throw ApiException::badRequest(
                 "validation",
-                User::getErrors($user)
+                Validation::getErrorMessages($user)
             );
         } catch (DuplicateException $e) {
             throw ApiException::conflict(

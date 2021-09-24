@@ -2,7 +2,6 @@
 
 namespace API\models;
 
-use API\inc\Validation;
 use PAF\Model\Collection;
 use PAF\Model\Model;
 
@@ -10,6 +9,16 @@ use PAF\Model\Model;
  * @tablename ingredients
  */
 class Ingredient extends Model {
+    /**
+     * @var array Properties (key) checked in validation. The value is a boolean, whether the property is a string or not
+     */
+    const VALIDATION_PROPERTIES = [
+        "recipeId" => false,
+        "amount" => false,
+        "unit" => true,
+        "name" => true,
+    ];
+
     /**
      * @prop
      * @primary
@@ -73,15 +82,6 @@ class Ingredient extends Model {
         return true;
     }
 
-    public static function getErrors($ingredient) {
-        return Validation::getValidationErrorMessages($ingredient, [
-            "recipeId" => ["Recipe"],
-            "amount" => ["Amount"],
-            "unit" => ["Unit", true],
-            "name" => ["Name", true],
-        ]);
-    }
-
     /**
      * Returns a specific ingredient
      *
@@ -125,7 +125,7 @@ class Ingredient extends Model {
     }
 
     /**
-     * Returns a ingredient-query-object for the given query, that the user has access to
+     * Returns an ingredient-query-object for the given query, that the user has access to
      *
      * @param string $whereClause The sql-where-clause for the query
      * @param array $values The values inserted safely into the query (named parameters)

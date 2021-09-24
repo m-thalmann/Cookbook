@@ -4,6 +4,7 @@ namespace API\routes;
 
 use API\auth\Authorization;
 use API\inc\ApiException;
+use API\inc\Validation;
 use API\models\Ingredient;
 use PAF\Model\Database;
 use PAF\Model\InvalidException;
@@ -38,7 +39,7 @@ $group
         } catch (InvalidException $e) {
             throw ApiException::badRequest(
                 "validation",
-                Ingredient::getErrors($ingredient)
+                Validation::getErrorMessages($ingredient)
             );
         }
 

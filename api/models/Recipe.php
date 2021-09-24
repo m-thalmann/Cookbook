@@ -2,7 +2,6 @@
 
 namespace API\models;
 
-use API\inc\Validation;
 use PAF\Model\Collection;
 use PAF\Model\Model;
 
@@ -10,6 +9,22 @@ use PAF\Model\Model;
  * @tablename recipes
  */
 class Recipe extends Model {
+    /**
+     * @var array Properties (key) checked in validation. The value is a boolean, whether the property is a string or not
+     */
+    const VALIDATION_PROPERTIES = [
+        "userId" => false,
+        "public" => false,
+        "name" => true,
+        "description" => true,
+        "portions" => false,
+        "difficulty" => false,
+        "preparation" => true,
+        "preparationTime" => false,
+        "restTime" => false,
+        "cookTime" => false,
+    ];
+
     const FORBIDDEN_SORT_PROPERTIES = ["userId"];
 
     private $user = null;
@@ -132,21 +147,6 @@ class Recipe extends Model {
         }
 
         return $ret;
-    }
-
-    public static function getErrors($recipe) {
-        return Validation::getValidationErrorMessages($recipe, [
-            "userId" => ["Recipe"],
-            "public" => ["Visibility"],
-            "name" => ["Name", true],
-            "description" => ["Description", true],
-            "portions" => ["Portions"],
-            "difficulty" => ["Difficulty"],
-            "preparation" => ["Preparation", true],
-            "preparationTime" => ["Preparation time"],
-            "restTime" => ["Rest time"],
-            "cookTime" => ["Cooking time"],
-        ]);
     }
 
     /**

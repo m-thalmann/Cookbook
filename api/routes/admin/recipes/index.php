@@ -27,11 +27,8 @@ $group->get('/', Authorization::middleware(true, true), function () {
 
     return Functions::pagination(
         Functions::sort(
-            Recipe::query(
-                $query,
-                $queryParameters,
-                Recipe::FORBIDDEN_SORT_PROPERTIES
-            )
+            Recipe::query($query, $queryParameters),
+            Recipe::FORBIDDEN_SORT_PROPERTIES
         )
     );
 });

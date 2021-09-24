@@ -12,6 +12,8 @@ class Config {
      * Loads the base-config from the json-file
      *
      * @param string $file The path to the json-config-file
+     *
+     * @throws ApiException
      */
     public static function loadBaseConfig($file) {
         if (self::$baseConfig !== null) {

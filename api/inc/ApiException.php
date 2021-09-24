@@ -5,18 +5,24 @@ namespace API\inc;
 use PAF\Router\Response;
 
 class ApiException extends \Exception implements \JsonSerializable {
+    const DEFAULT_MESSAGE = "An error occurred";
+
     private $type;
     private $errorValue;
 
     public function __construct($type, $errorKey, $details = null) {
+        $details = $details ?? self::DEFAULT_MESSAGE;
+
+        parent::__construct(
+            is_string($details) ? $details : self::DEFAULT_MESSAGE
+        );
+
         $this->type = $type;
 
         $this->errorValue = [
             "errorKey" => "$type.$errorKey",
-            "details" => $details ?? "An error occurred",
+            "details" => $details,
         ];
-
-        $this->message = $details;
     }
 
     public static function badRequest($errorKey, $details = null) {
