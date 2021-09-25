@@ -47,13 +47,19 @@
   }
 }
 
+.recipes:not(.display-grid) {
+  cb-recipe-item,
+  cb-skeleton-recipe-item {
+    margin-bottom: 1em;
+  }
+}
+
 mat-spinner {
   margin: 1em auto;
 }
 
 cb-recipe-item,
 cb-skeleton-recipe-item {
-  margin-bottom: 1em;
   display: block;
 
   &.compact {

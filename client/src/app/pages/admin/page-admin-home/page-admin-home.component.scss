@@ -1,14 +1,18 @@
 @import 'variables.scss';
 
 .dashboard {
-  margin-bottom: 1em;
+  margin-bottom: 2em;
+
+  h3 {
+    text-align: center;
+  }
 
   > div {
     display: inline-block;
     text-align: center;
     vertical-align: top;
 
-    width: calc(100% / 3 - 10px);
+    width: calc(100% / 3);
 
     h4 {
       font-size: 1.5rem;
@@ -31,6 +35,8 @@
 }
 
 .navigation {
+  text-align: center;
+
   a {
     display: inline-block;
     padding: 1em;
@@ -43,6 +49,10 @@
     text-decoration: none;
 
     transition: box-shadow 0.2s;
+
+    &:last-of-type {
+      margin-right: 0;
+    }
 
     &:hover {
       box-shadow: 0 0 15px -5px rgba(0, 0, 0, 0.6);

@@ -3,9 +3,12 @@
 </h2>
 
 <div class="dashboard">
-    <h3>{{ 'pages.admin.area.server_information' | translate }}</h3>
+    <h3>
+        <mat-icon>information</mat-icon>
+        <span>{{ 'pages.admin.area.server_information' | translate }}</span>
+    </h3>
 
-    <mat-spinner *ngIf="loading" [diameter]="32"></mat-spinner>
+    <mat-spinner *ngIf="loading" [diameter]="32" style="margin: 1em auto"></mat-spinner>
 
     <ng-container *ngIf="!loading && serverInformation">
         <div>
@@ -63,7 +66,10 @@
 </div>
 
 <div class="navigation">
-    <h3>{{ 'settings' | translate }}</h3>
+    <h3>
+        <mat-icon>settings</mat-icon>
+        <span>{{ 'settings' | translate }}</span>
+    </h3>
 
     <a routerLink="/admin/users">
         <mat-icon color="accent">manage_accounts</mat-icon>
