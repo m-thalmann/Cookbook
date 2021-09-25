@@ -8,6 +8,7 @@ import { EditIngredient, EditRecipe, ListIngredient, NewRecipe, RecipeFull } fro
 import { ApiResponse } from 'src/app/core/api/ApiResponse';
 import { getFormError } from 'src/app/core/forms/Validation';
 import { Logger, LoggerColor, trimAndNull } from 'src/app/core/functions';
+import { TranslationService } from 'src/app/core/i18n/translation.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
@@ -19,7 +20,11 @@ export class EditRecipeInformationComponent {
   @Input()
   set editRecipe(editRecipe: RecipeFull | null) {
     if (editRecipe) {
-      this.recipeForm.reset(editRecipe);
+      let _editRecipe = editRecipe as any;
+
+      _editRecipe.language = this.getLanguageInformation(_editRecipe.languageCode);
+
+      this.recipeForm.reset(_editRecipe);
       this.ingredients.clear();
       this.ingredientIds = [];
 
@@ -79,12 +84,21 @@ export class EditRecipeInformationComponent {
 
   private _editRecipe: RecipeFull | null = null;
 
-  constructor(private fb: FormBuilder, private api: ApiService, private snackbar: SnackbarService) {
+  constructor(
+    private fb: FormBuilder,
+    private api: ApiService,
+    private snackbar: SnackbarService,
+    public translation: TranslationService
+  ) {
     this.ingredients = this.fb.array([]);
 
     this.recipeForm = this.fb.group({
       name: [this.editRecipe?.name || '', [Validators.required, Validators.maxLength(50)]],
       public: [this.editRecipe ? this.editRecipe.public : false, [Validators.required]],
+      language: [
+        this.getLanguageInformation(this.editRecipe?.languageCode || this.translation.language),
+        [Validators.required],
+      ],
       category: [this.editRecipe?.category || '', [Validators.maxLength(10)]],
       description: [this.editRecipe?.description || ''],
       portions: [this.editRecipe?.portions || null, [Validators.min(1)]],
@@ -105,10 +119,13 @@ export class EditRecipeInformationComponent {
   }
 
   get public() {
-    return this.recipeForm?.get('public');
+    return this.recipeForm.get('public');
+  }
+  get language() {
+    return this.recipeForm.get('language');
   }
   get difficulty() {
-    return this.recipeForm?.get('difficulty');
+    return this.recipeForm.get('difficulty');
   }
 
   getFormError(key: string, index: number | null = null) {
@@ -241,6 +258,13 @@ export class EditRecipeInformationComponent {
       delete values.ingredients;
     }
 
+    if (values.difficulty !== null) {
+      values.difficulty++;
+    }
+
+    values.languageCode = values.language.key;
+    delete values.language;
+
     let recipe: NewRecipe | EditRecipe = values;
 
     recipe.description = trimAndNull(recipe.description);
@@ -261,6 +285,9 @@ export class EditRecipeInformationComponent {
       }
       if (this._editRecipe.public === recipe.public) {
         delete recipe.public;
+      }
+      if (this._editRecipe.languageCode === recipe.languageCode) {
+        delete recipe.languageCode;
       }
       if (this._editRecipe.description === recipe.description) {
         delete recipe.description;
@@ -380,5 +407,19 @@ export class EditRecipeInformationComponent {
 
     this.saving = false;
     this.recipeForm.enable();
+  }
+
+  /**
+   * Searches for the languages information in the availableLanguages
+   *
+   * @param language The language code to search
+   * @returns The languages information of null if not found
+   */
+  getLanguageInformation(language: string | null) {
+    if (language) {
+      return this.translation.getLanguageInformation(language);
+    }
+
+    return null;
   }
 }

@@ -42,6 +42,14 @@
                     whatshot
                 </mat-icon>
             </mat-chip>
+            <mat-chip
+                [disabled]="true"
+                [matTooltip]="'language' | translate"
+                [matTooltipShowDelay]="500"
+                *ngIf="translation.getLanguageInformation(recipe.languageCode) as language"
+            >
+                <mat-icon>language</mat-icon> <span>{{ language.name }}</span>
+            </mat-chip>
             <mat-chip [disabled]="true" [matTooltip]="'recipe.publish_date' | translate" [matTooltipShowDelay]="500">
                 <mat-icon>today</mat-icon> <span>{{ recipe.publishDate * 1000 | localizedDate: true }}</span>
             </mat-chip>

@@ -115,6 +115,10 @@ class User extends Model {
     public $lastUpdated;
 
     public function __set($property, $value) {
+        if ($this->__get($property) === $value) {
+            return;
+        }
+
         switch ($property) {
             case 'password':
                 $this->generateSalt();

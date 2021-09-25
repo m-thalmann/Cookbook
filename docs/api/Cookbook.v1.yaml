@@ -1859,6 +1859,9 @@ components:
         public:
           type: boolean
           description: Whether the recipe is publicly visible or not
+        languageCode:
+          type: string
+          example: en
         name:
           type: string
           maxLength: 20

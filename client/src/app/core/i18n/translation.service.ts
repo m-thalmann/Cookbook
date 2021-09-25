@@ -234,4 +234,22 @@ export class TranslationService {
   get languages() {
     return this.availableLanguages;
   }
+
+  /**
+   * Searches for the languages information in the availableLanguages
+   *
+   * @param language The language code to search
+   * @returns The languages information of null if not found
+   */
+  getLanguageInformation(language: string) {
+    if (this.availableLanguages) {
+      for (let _language of this.availableLanguages) {
+        if (_language.key === language) {
+          return _language;
+        }
+      }
+    }
+
+    return null;
+  }
 }

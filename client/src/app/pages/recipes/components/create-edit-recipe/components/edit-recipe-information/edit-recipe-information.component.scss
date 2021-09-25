@@ -10,6 +10,20 @@ mat-form-field {
   margin-right: 0.5em;
 }
 
+.language-item-container {
+  img,
+  span {
+    vertical-align: middle;
+    display: inline-block;
+  }
+
+  img {
+    vertical-align: middle;
+    height: 1.25em;
+    margin-right: 0.5em;
+  }
+}
+
 .portions {
   margin-right: 1.5em;
 }

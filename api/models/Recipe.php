@@ -52,6 +52,12 @@ class Recipe extends Model {
 
     /**
      * @prop
+     * @var string
+     */
+    public $languageCode;
+
+    /**
+     * @prop
      * @maxLength 50
      * @var string
      */

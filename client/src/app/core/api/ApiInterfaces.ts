@@ -25,6 +25,7 @@ export interface Ingredient {
 export interface Recipe {
   id: number;
   public: boolean;
+  languageCode: string;
   name: string;
   description: string | null;
   category: string | null;
@@ -57,6 +58,7 @@ export interface NewIngredient {
 
 export interface NewRecipe {
   public: boolean;
+  languageCode: string;
   name: string;
   description: string | null;
   category: string | null;
@@ -77,6 +79,7 @@ export interface EditIngredient {
 
 export interface EditRecipe {
   public?: boolean;
+  languageCode?: string;
   name?: string;
   description?: string | null;
   category?: string | null;

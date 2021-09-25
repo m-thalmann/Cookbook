@@ -85,6 +85,10 @@ $group
 
         $recipe->userId = Authorization::user()->id;
 
+        if($recipe->languageCode === null){
+            $recipe->languageCode = Authorization::user()->languageCode;
+        }
+
         try {
             $recipe->save();
         } catch (InvalidException $e) {
@@ -265,14 +269,20 @@ $group
             !isset($_FILES['image']['error']) ||
             is_array($_FILES['image']['error'])
         ) {
-            throw ApiException::badRequest("image.no_file", "No file");
+            throw ApiException::badRequest(
+                "image.no_file",
+                "No file. File probably too large"
+            );
         }
 
         switch ($_FILES['image']['error']) {
             case UPLOAD_ERR_OK:
                 break;
             case UPLOAD_ERR_NO_FILE:
-                throw ApiException::badRequest("image.no_file", "No file");
+                throw ApiException::badRequest(
+                    "image.no_file",
+                    "No file. File probably too large"
+                );
             case UPLOAD_ERR_INI_SIZE:
             case UPLOAD_ERR_FORM_SIZE:
                 throw ApiException::badRequest(

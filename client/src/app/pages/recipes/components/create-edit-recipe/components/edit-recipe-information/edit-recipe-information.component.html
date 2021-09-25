@@ -25,6 +25,31 @@
         }}</mat-error>
     </mat-form-field>
     <mat-form-field appearance="outline" color="primary">
+        <mat-label>{{ 'language' | translate }}</mat-label>
+        <mat-select formControlName="language" required>
+            <mat-select-trigger>
+                <div class="language-item-container" *ngIf="language?.value as _language">
+                    <img src="https://www.countryflags.io/{{ _language.flagCode }}/flat/32.png" />
+                    <span>
+                        {{ _language.name }}
+                    </span>
+                </div>
+            </mat-select-trigger>
+
+            <mat-option *ngFor="let language of translation.languages" [value]="language">
+                <div class="language-item-container">
+                    <img src="https://www.countryflags.io/{{ language.flagCode }}/flat/32.png" />
+                    <span>
+                        {{ language.name }}
+                    </span>
+                </div>
+            </mat-option>
+        </mat-select>
+        <mat-error *ngIf="getFormError('language') as formError">{{
+            formError.key | translate: formError.replacements
+        }}</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" color="primary">
         <mat-label>{{ 'recipe.category' | translate }}</mat-label>
         <mat-icon matPrefix>menu_book</mat-icon>
         <input matInput formControlName="category" [matAutocomplete]="autocompleteCategory" />

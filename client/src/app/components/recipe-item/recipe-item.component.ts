@@ -3,6 +3,7 @@ import { ApiService } from 'src/app/core/api/api.service';
 import { Recipe } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
 import { calculateTotalTime, slugify } from 'src/app/core/functions';
+import { TranslationService } from 'src/app/core/i18n/translation.service';
 
 const FALLBACK_IMAGE = 'assets/images/cookbook.svg';
 
@@ -18,7 +19,7 @@ export class RecipeItemComponent {
   @Input() grid = false;
   @Input() disabled: boolean = false;
 
-  constructor(private api: ApiService, private user: UserService) {}
+  constructor(private api: ApiService, private user: UserService, public translation: TranslationService) {}
 
   get recipeURL() {
     if (this.disabled || !this.recipe) return null;

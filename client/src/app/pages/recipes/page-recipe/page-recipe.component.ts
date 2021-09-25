@@ -32,7 +32,7 @@ export class PageRecipeComponent implements OnInit, OnDestroy {
     private router: Router,
     private clipboard: Clipboard,
     private seo: SeoService,
-    private translation: TranslationService
+    public translation: TranslationService
   ) {}
 
   ngOnInit() {
