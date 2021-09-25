@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { ApiService } from 'src/app/core/api/api.service';
+import { Logger, LoggerColor } from 'src/app/core/functions';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
@@ -70,6 +71,8 @@ export class ResetPasswordDialogComponent {
     } else {
       this.error = 'messages.email.error_sending_email';
       this.emailForm.enable();
+
+      Logger.error('ResetPassword', LoggerColor.red, 'Error sending email:', res.error);
     }
 
     this.loading = false;
@@ -96,6 +99,8 @@ export class ResetPasswordDialogComponent {
       this.error = 'messages.login_register.wrong_code_submitted';
     } else {
       this.error = 'messages.admin.error_saving_new_password';
+
+      Logger.error('ResetPassword', LoggerColor.red, 'Error resetting password:', res.error);
     }
 
     this.loading = false;

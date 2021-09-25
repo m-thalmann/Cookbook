@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RecipeListComponent } from 'src/app/components/recipe-list/recipe-list.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { ApiOptions, User } from 'src/app/core/api/ApiInterfaces';
-import { SubSink } from 'src/app/core/functions';
+import { Logger, LoggerColor, SubSink } from 'src/app/core/functions';
 
 @Component({
   selector: 'cb-page-admin-recipes',
@@ -52,6 +52,8 @@ export class PageAdminRecipesComponent implements OnDestroy {
 
     if (res.isOK() && res.value) {
       this.filterUser = res.value;
+    } else {
+      Logger.error('PageAdminRecipes', LoggerColor.blue, 'Error fetching user:', res.error);
     }
   }
 

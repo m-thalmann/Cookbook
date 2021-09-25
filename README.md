@@ -1,5 +1,5 @@
 <p align="center">
-    <img alt="Cookbook" src="https://raw.githubusercontent.com/m-thalmann/Cookbook/master/client/src/assets/images/cookbook.svg" width="150"/>
+    <img alt="Cookbook" src="client/src/assets/images/cookbook.svg" width="150"/>
 </p>
 <h1 align="center">Cookbook - Self-hosted recipes</h1>
 
@@ -102,3 +102,9 @@ The file `api/config/config_secret` contains a secret to encrypt sensitive confi
   }
 }
 ```
+
+## Screenshots
+
+## Project structure
+
+## Developing

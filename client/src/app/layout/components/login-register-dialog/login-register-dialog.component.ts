@@ -132,41 +132,44 @@ export class LoginRegisterDialogComponent {
     this.loginForm.enable();
 
     try {
-      if (res.isOK() && res.value !== null) {
-        if (this.isLogin) {
+      if (this.isLogin) {
+        if (res.isOK() && res.value !== null) {
           if (res.value.token) {
             this.user.login(res.value.token, res.value.user, this.remember?.value);
           }
 
           this.dialogRef.close();
           this.snackbar.info('messages.users.login_successful');
+        } else if (res.isNotFound()) {
+          this.error = 'messages.users.credentials_wrong';
+        } else if (res.isForbidden()) {
+          let verified = await this.dialog
+            .open(VerifyEmailDialogComponent, {
+              data: this.email?.value,
+            })
+            .afterClosed()
+            .toPromise();
+
+          if (verified) {
+            await this.action();
+            return;
+          }
         } else {
+          throw new Error(res.error?.errorKey ? `api_error.${res.error.errorKey}` : undefined);
+        }
+      } else {
+        if (res.isOK() && res.value !== null) {
           // Auto-login after register
 
           this.isLogin = true;
 
           await this.action();
           return;
+        } else if (res.isConflict()) {
+          this.error = 'messages.users.email_already_taken';
+        } else {
+          throw new Error(res.error?.errorKey ? `api_error.${res.error.errorKey}` : undefined);
         }
-      } else if (res.isNotFound()) {
-        throw new Error('messages.users.credentials_wrong');
-      } else if (res.isConflict()) {
-        throw new Error('messages.users.email_already_taken');
-      } else if (res.isForbidden() && this.isLogin) {
-        let verified = await this.dialog
-          .open(VerifyEmailDialogComponent, {
-            data: this.email?.value,
-          })
-          .afterClosed()
-          .toPromise();
-
-        if (verified) {
-          await this.action();
-          return;
-        }
-      } else {
-        let err = res.error || undefined;
-        throw new Error(typeof err === 'object' ? err.info : err);
       }
     } catch (e: any) {
       this.error = e.message || 'messages.error_occurred';

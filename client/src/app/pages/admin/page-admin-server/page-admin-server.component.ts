@@ -58,8 +58,8 @@ export class PageAdminServerComponent implements OnInit {
     } else {
       let error = '';
 
-      if (res.error.info) {
-        error = ': ' + res.error.info;
+      if (res.error?.errorKey) {
+        error = ' ' + this.translation.translate(`api_error.${res.error.errorKey}`);
       }
 
       this.snackbar.error(this.translation.translate('messages.admin.error_saving_config') + error);

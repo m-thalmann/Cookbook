@@ -212,6 +212,9 @@
 
         <mat-spinner diameter="20" *ngIf="saving"></mat-spinner>
 
-        <span *ngIf="error" class="fg-warn">{{ error }}</span>
+        <span *ngIf="error" class="fg-warn">
+            {{ error | translate }}
+            <ng-container *ngIf="errorDetails">{{ errorDetails | translate }}</ng-container>
+        </span>
     </div>
 </form>

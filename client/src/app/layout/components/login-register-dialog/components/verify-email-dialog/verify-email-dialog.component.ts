@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ApiService } from 'src/app/core/api/api.service';
+import { Logger, LoggerColor } from 'src/app/core/functions';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
@@ -52,6 +53,8 @@ export class VerifyEmailDialogComponent {
         this.error = 'messages.login_register.wrong_verification_code';
       } else {
         this.error = 'messages.login_register.error_verifying_email';
+
+        Logger.error('VerifyEmail', LoggerColor.red, 'Error verifying email:', res.error);
       }
     }
 
@@ -72,6 +75,8 @@ export class VerifyEmailDialogComponent {
       this.snackbar.info('messages.email.verification_email_sent');
     } else {
       this.snackbar.warn('messages.email.error_sending_email');
+
+      Logger.error('VerifyEmail', LoggerColor.red, 'Error sending email:', res.error);
     }
 
     this.loading = false;

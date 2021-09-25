@@ -8,7 +8,6 @@ import { EditIngredient, EditRecipe, ListIngredient, NewRecipe, RecipeFull } fro
 import { ApiResponse } from 'src/app/core/api/ApiResponse';
 import { getFormError } from 'src/app/core/forms/Validation';
 import { Logger, LoggerColor, trimAndNull } from 'src/app/core/functions';
-import { TranslationService } from 'src/app/core/i18n/translation.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
@@ -67,6 +66,7 @@ export class EditRecipeInformationComponent {
 
   saving = false;
   error: string | null = null;
+  errorDetails: string | null = null;
   ingredientsError = false; // used on edit
 
   ingredientList: ListIngredient[] | null = null;
@@ -79,16 +79,11 @@ export class EditRecipeInformationComponent {
 
   private _editRecipe: RecipeFull | null = null;
 
-  constructor(
-    private fb: FormBuilder,
-    private api: ApiService,
-    private snackbar: SnackbarService,
-    private translation: TranslationService
-  ) {
+  constructor(private fb: FormBuilder, private api: ApiService, private snackbar: SnackbarService) {
     this.ingredients = this.fb.array([]);
 
     this.recipeForm = this.fb.group({
-      name: [this.editRecipe?.name || '', [Validators.required, Validators.maxLength(20)]],
+      name: [this.editRecipe?.name || '', [Validators.required, Validators.maxLength(50)]],
       public: [this.editRecipe ? this.editRecipe.public : false, [Validators.required]],
       category: [this.editRecipe?.category || '', [Validators.maxLength(10)]],
       description: [this.editRecipe?.description || ''],
@@ -133,6 +128,8 @@ export class EditRecipeInformationComponent {
 
     if (res.isOK()) {
       this.ingredientList = res.value;
+    } else {
+      Logger.error('EditRecipeInformation', LoggerColor.green, 'Error loading ingredients list:', res.error);
     }
   }
 
@@ -150,6 +147,8 @@ export class EditRecipeInformationComponent {
           return this.categoryList?.filter((option) => option.toLowerCase().includes(filterValue)) || [];
         })
       );
+    } else {
+      Logger.error('EditRecipeInformation', LoggerColor.green, 'Error loading categories:', res.error);
     }
   }
 
@@ -231,6 +230,7 @@ export class EditRecipeInformationComponent {
 
     this.saving = true;
     this.error = null;
+    this.errorDetails = null;
     this.ingredientsError = false;
     this.recipeForm.disable();
 
@@ -369,10 +369,10 @@ export class EditRecipeInformationComponent {
 
       this.snackbar.info(saveMessage);
     } else {
-      this.error = this.translation.translate('messages.recipes.error_saving_recipe');
+      this.error = 'messages.recipes.error_saving_recipe';
 
-      if (res.error?.info) {
-        this.error += `: ${res.error.info}`;
+      if (res.error?.errorKey) {
+        this.errorDetails = `api_error.${res.error.errorKey}`;
       }
 
       Logger.error('EditRecipeInformation', LoggerColor.green, 'Error saving recipe:', res.error);

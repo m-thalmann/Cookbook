@@ -218,7 +218,7 @@
             <span>{{ 'pages.admin.users.view_user_recipes' | translate }}</span>
         </a>
         <button mat-menu-item (click)="deleteUser(user.id)" [disabled]="isCurrentUser(user.id)">
-            <mat-icon [color]="isCurrentUser(user.id) ? '' : 'warn'">delete</mat-icon>
+            <mat-icon [color]="isCurrentUser(user.id) ? undefined : 'warn'">delete</mat-icon>
             <span [class]="isCurrentUser(user.id) ? '' : 'fg-warn'">{{
                 'pages.admin.users.delete_user' | translate
             }}</span>

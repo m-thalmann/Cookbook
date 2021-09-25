@@ -80,7 +80,9 @@ export class EditRecipeImagesComponent implements OnDestroy {
             await this.reload();
             this.snackbar.info('messages.recipe_images.image_added_successfully');
           } else {
-            this.error = event.error.info || 'messages.recipe_images.error_uploading_image';
+            this.error = event.error?.errorKey
+              ? `api_error.${event.error.errorKey}`
+              : 'messages.recipe_images.error_uploading_image';
             Logger.error('EditRecipeImages', LoggerColor.green, 'Error adding recipe-image:', event.error);
           }
 

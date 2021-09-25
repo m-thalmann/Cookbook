@@ -1,6 +1,40 @@
 {
   "admin": "Admin",
   "amount": "Menge",
+  "api_error": {
+    "bad_request": {
+      "config": {
+        "saving_value_invalid": "Der Wert ist ungültig!"
+      },
+      "default": "Gesendete Daten sind ungültig!",
+      "image": {
+        "no_file": "Keine Bild empfangen. Wahrscheinlich ist die Datei zu groß.",
+        "not_allowed_type": "Dieser Bild-Typ ist nicht erlaubt!",
+        "too_large": "Das Bild ist zu groß!"
+      },
+      "validation": "Ein Validierungsfehler ist aufgetreten!"
+    },
+    "error": {
+      "config": {
+        "loading": "Fehler beim Laden der Konfigurationsdatei!",
+        "saving": "Fehler beim Speichern der Konfiguration!",
+        "setting_not_found": "Einstellung wurde nicht gefunden!"
+      },
+      "database": {
+        "connection": "Fehler bei der Verbindung zur Datenbank!",
+        "default": "Fehler beim Abfragen der Datenbank!"
+      },
+      "default": "Ein Fehler ist aufgetreten!",
+      "sending_email": "Fehler beim Senden der Email!"
+    },
+    "forbidden": {
+      "default": "Du bist nicht berechtigt diese Aktion durchzuführen!",
+      "hcaptcha_invalid": "hCaptcha ist ungültig!",
+      "last_admin": "Du bist der letzte Admin!",
+      "old_password_wrong": "Altes Passwort ist falsch!",
+      "setting_not_editable": "Diese Einstellung kann nicht bearbeitet werden!"
+    }
+  },
   "cancel": "Abbrechen",
   "cookbook": "Kochbuch",
   "date_format": "dd.MM.YYYY",

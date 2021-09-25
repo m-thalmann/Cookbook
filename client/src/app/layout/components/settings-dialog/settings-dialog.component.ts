@@ -218,11 +218,11 @@ export class SettingsDialogComponent implements OnDestroy {
           this.user.logout('settings_changed');
         }
       } else if (res.isConflict()) {
-        throw new Error('messages.users.email_already_taken');
+        this.error = 'messages.users.email_already_taken';
       } else if (res.isForbidden()) {
-        throw new Error('messages.users.entered_password_wrong');
+        this.error = 'messages.users.entered_password_wrong';
       } else {
-        throw new Error(res.error?.info || undefined);
+        throw new Error(res.error?.errorKey ? `api_error.${res.error.errorKey}` : undefined);
       }
     } catch (e: any) {
       this.error = e.message || 'messages.error_occurred';
@@ -254,8 +254,8 @@ export class SettingsDialogComponent implements OnDestroy {
     } else {
       let error = '';
 
-      if (res.error.info) {
-        error = ': ' + res.error.info;
+      if (res.error?.errorKey) {
+        error = ' ' + this.translation.translate(`api_error.${res.error.errorKey}`);
       }
 
       this.snackbar.error(

@@ -1,3 +1,5 @@
+import { ApiError } from './ApiInterfaces';
+
 export class ApiResponse<T> {
   /**
    * @param status the http status
@@ -7,7 +9,7 @@ export class ApiResponse<T> {
   constructor(
     public readonly status: number,
     public readonly value: T | null = null,
-    public readonly error: any = null
+    public readonly error: ApiError | null = null
   ) {}
 
   /**

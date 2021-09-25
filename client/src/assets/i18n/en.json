@@ -1,6 +1,40 @@
 {
   "admin": "Admin",
   "amount": "Amount",
+  "api_error": {
+    "bad_request": {
+      "config": {
+        "saving_value_invalid": "The value is invalid!"
+      },
+      "default": "Sent data is invalid!",
+      "image": {
+        "no_file": "No image received. Probably the file is too large.",
+        "not_allowed_type": "This image-type is not allowed!",
+        "too_large": "The image is too large!"
+      },
+      "validation": "A validation error has occurred!"
+    },
+    "error": {
+      "config": {
+        "loading": "Error loading configuration-file!",
+        "saving": "Error saving config!",
+        "setting_not_found": "Setting not found!"
+      },
+      "database": {
+        "connection": "Error connecting to the database!",
+        "default": "Error while querying the database!"
+      },
+      "default": "An error has occurred!",
+      "sending_email": "Error sending email!"
+    },
+    "forbidden": {
+      "default": "You are not authorized to perform this action!",
+      "hcaptcha_invalid": "hCaptcha is invalid!",
+      "last_admin": "You are the last admin!",
+      "old_password_wrong": "Old password is wrong!",
+      "setting_not_editable": "This setting is not editable!"
+    }
+  },
   "cancel": "Cancel",
   "cookbook": "Cookbook",
   "date_format": "mediumDate",

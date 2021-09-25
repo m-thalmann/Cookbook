@@ -148,6 +148,11 @@ export interface ApiOptions {
   sortDirection?: 'asc' | 'desc' | null;
 }
 
+export interface ApiError {
+  errorKey: string;
+  details: any;
+}
+
 interface SortDirection {
   [key: string]: 'asc' | 'desc';
 }

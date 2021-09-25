@@ -116,9 +116,9 @@ export class CreateUserDialogComponent implements OnDestroy {
 
         this.snackbar.info('message.admin.user_created_successfully');
       } else if (res.isConflict()) {
-        throw new Error('messages.users.email_already_taken');
+        this.error = 'messages.users.email_already_taken';
       } else {
-        throw new Error(res.error?.info || undefined);
+        throw new Error(res.error?.errorKey ? `api_error.${res.error.errorKey}` : undefined);
       }
     } catch (e: any) {
       this.error = e.message || 'messages.error_occurred';
