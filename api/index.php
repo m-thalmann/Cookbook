@@ -73,13 +73,26 @@ try {
         } catch (\InvalidArgumentException $e) {
             throw ApiException::badRequest("default", $e->getMessage());
         } catch (\PDOException $e) {
-            throw ApiException::error("database.default", $e->getMessage());
-        } catch (\Exception $e) {
-            if ($e instanceof ApiException) {
-                throw $e;
-            } else {
-                throw ApiException::error("default", $e->getMessage());
+            switch ($e->getCode()) {
+                case 1042:
+                case 1043:
+                case 1044:
+                case 1045:
+                case 2002:
+                    throw ApiException::error(
+                        "database.connection",
+                        "Database connection could not be established"
+                    );
+                default:
+                    throw ApiException::error(
+                        "database.default",
+                        $e->getMessage()
+                    );
             }
+        } catch (ApiException $e) {
+            throw $e;
+        } catch (\Exception $e) {
+            throw ApiException::error("default", $e->getMessage());
         }
     } catch (ApiException $e) {
         Router::output($e->getResponse());
