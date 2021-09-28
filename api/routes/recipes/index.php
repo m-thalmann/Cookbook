@@ -16,7 +16,21 @@ use PAF\Router\Response;
 
 $group
     ->get('/', Authorization::middleware(false), function () {
-        $query = Recipe::getQueryForUser("1", [], Authorization::user(), false);
+        if (empty($_GET["language"])) {
+            $query = Recipe::getQueryForUser(
+                "1",
+                [],
+                Authorization::user(),
+                false
+            );
+        } else {
+            $query = Recipe::getQueryForUser(
+                "languageCode = :language",
+                ["language" => $_GET["language"]],
+                Authorization::user(),
+                false
+            );
+        }
 
         return Functions::pagination(
             Functions::sort($query, Recipe::FORBIDDEN_SORT_PROPERTIES)
@@ -45,12 +59,21 @@ $group
     ) {
         $search = "%" . urldecode($req["params"]["search"]) . "%";
 
-        $query = Recipe::getQueryForUser(
-            "name LIKE :search OR description LIKE :search",
-            ["search" => $search],
-            Authorization::user(),
-            false
-        );
+        if (empty($_GET["language"])) {
+            $query = Recipe::getQueryForUser(
+                "name LIKE :search OR description LIKE :search",
+                ["search" => $search],
+                Authorization::user(),
+                false
+            );
+        } else {
+            $query = Recipe::getQueryForUser(
+                "(name LIKE :search OR description LIKE :search) AND languageCode = :language",
+                ["search" => $search, "language" => $_GET["language"]],
+                Authorization::user(),
+                false
+            );
+        }
 
         return Functions::pagination(
             Functions::sort($query, Recipe::FORBIDDEN_SORT_PROPERTIES)
@@ -59,14 +82,26 @@ $group
     ->get('/category/{{:name}}', Authorization::middleware(false), function (
         $req
     ) {
-        $query = Recipe::getQueryForUser(
-            "category = :category",
-            [
-                "category" => urldecode($req["params"]["name"]),
-            ],
-            Authorization::user(),
-            false
-        );
+        if (empty($_GET["language"])) {
+            $query = Recipe::getQueryForUser(
+                "category = :category",
+                [
+                    "category" => urldecode($req["params"]["name"]),
+                ],
+                Authorization::user(),
+                false
+            );
+        } else {
+            $query = Recipe::getQueryForUser(
+                "category = :category AND languageCode = :language",
+                [
+                    "category" => urldecode($req["params"]["name"]),
+                    "language" => $_GET["language"],
+                ],
+                Authorization::user(),
+                false
+            );
+        }
 
         return Functions::pagination(
             Functions::sort($query, Recipe::FORBIDDEN_SORT_PROPERTIES)
@@ -85,7 +120,7 @@ $group
 
         $recipe->userId = Authorization::user()->id;
 
-        if($recipe->languageCode === null){
+        if ($recipe->languageCode === null) {
             $recipe->languageCode = Authorization::user()->languageCode;
         }
 

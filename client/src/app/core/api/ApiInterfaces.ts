@@ -149,6 +149,7 @@ export interface ApiOptions {
   itemsPerPage?: number | null;
   sort?: string | null;
   sortDirection?: 'asc' | 'desc' | null;
+  language?: string;
 }
 
 export interface ApiError {

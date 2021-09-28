@@ -140,6 +140,9 @@ export class ApiService {
     if (typeof options.sortDirection !== 'undefined' && options.sortDirection !== null) {
       query.push(`sortDir=${options.sortDirection}`);
     }
+    if (typeof options.language !== 'undefined') {
+      query.push(`language=${options.language}`);
+    }
 
     return query;
   }

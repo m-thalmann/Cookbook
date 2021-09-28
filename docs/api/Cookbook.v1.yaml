@@ -446,6 +446,7 @@ paths:
         - $ref: '#/components/parameters/Page'
         - $ref: '#/components/parameters/Sort'
         - $ref: '#/components/parameters/SortDir'
+        - $ref: '#/components/parameters/Language'
       responses:
         '200':
           description: OK
@@ -745,6 +746,7 @@ paths:
         - $ref: '#/components/parameters/Page'
         - $ref: '#/components/parameters/Sort'
         - $ref: '#/components/parameters/SortDir'
+        - $ref: '#/components/parameters/Language'
       responses:
         '200':
           description: OK
@@ -786,6 +788,7 @@ paths:
         - $ref: '#/components/parameters/Page'
         - $ref: '#/components/parameters/Sort'
         - $ref: '#/components/parameters/SortDir'
+        - $ref: '#/components/parameters/Language'
       responses:
         '200':
           description: OK
@@ -826,6 +829,7 @@ paths:
         - $ref: '#/components/parameters/Page'
         - $ref: '#/components/parameters/Sort'
         - $ref: '#/components/parameters/SortDir'
+        - $ref: '#/components/parameters/Language'
       responses:
         '200':
           description: OK
@@ -2073,6 +2077,14 @@ components:
       in: query
       required: false
       description: The width to scale the image to (or height if portrait)
+    Language:
+      schema:
+        type: string
+        example: en
+      name: language
+      in: query
+      required: false
+      description: The language to filter by
   headers:
     xLogout:
       description: If set, the user should be logged out, since his token has expired
