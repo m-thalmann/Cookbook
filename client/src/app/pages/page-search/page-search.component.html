@@ -11,4 +11,10 @@
     </button>
 </mat-form-field>
 
-<cb-recipe-list [reloadFunction]="reload" sort="name" #recipeList *ngIf="search"></cb-recipe-list>
+<cb-recipe-list
+    [reloadFunction]="reload"
+    [filterLanguage]="true"
+    sort="name"
+    #recipeList
+    *ngIf="search"
+></cb-recipe-list>

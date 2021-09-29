@@ -1,6 +1,7 @@
 {
   "admin": "Admin",
   "amount": "Menge",
+  "any": "Jede",
   "api_error": {
     "bad_request": {
       "config": {

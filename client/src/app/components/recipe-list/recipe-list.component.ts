@@ -3,6 +3,9 @@ import { ApiOptions, Pagination, Recipe, RecipeSortDirection } from 'src/app/cor
 import { ApiResponse } from 'src/app/core/api/ApiResponse';
 import { UserService } from 'src/app/core/auth/user.service';
 import { Logger, LoggerColor, SubSink } from 'src/app/core/functions';
+import { TranslationService } from 'src/app/core/i18n/translation.service';
+
+const ANY_LANGUAGE = 'any_language';
 
 @Component({
   selector: 'cb-recipe-list',
@@ -18,6 +21,17 @@ export class RecipeListComponent implements OnInit, OnDestroy {
     this.sortDirection = RecipeSortDirection[sort];
   }
   @Input() sortDirection: 'asc' | 'desc' = 'desc';
+
+  @Input() language: string = ANY_LANGUAGE;
+  @Input()
+  set filterLanguage(filterLanguage: boolean) {
+    if (filterLanguage) {
+      this.language = this.translation.language || ANY_LANGUAGE;
+    } else {
+      this.language = ANY_LANGUAGE;
+    }
+  }
+
   @Input() display: 'list' | 'grid' = 'list';
 
   @Input() reloadFunction!: (options: ApiOptions) => Promise<ApiResponse<Pagination<Recipe>>> | null;
@@ -37,7 +51,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
 
   recipes: Pagination<Recipe> | null = null;
 
-  constructor(private user: UserService) {}
+  constructor(private user: UserService, public translation: TranslationService) {}
 
   ngOnInit() {
     this.reload();
@@ -64,6 +78,11 @@ export class RecipeListComponent implements OnInit, OnDestroy {
     this.page = 0;
   }
 
+  languageChange(language: string) {
+    this.language = language;
+    this.page = 0;
+  }
+
   toggleSortDirection() {
     this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     this.page = 0;
@@ -84,6 +103,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
       page: this.page,
       sort: this.sort,
       sortDirection: this.sortDirection,
+      language: this.language === ANY_LANGUAGE ? undefined : this.language,
     });
 
     if (recipes !== null) {

@@ -34,5 +34,5 @@
 </ng-container>
 
 <ng-container *ngIf="!isOverview">
-    <cb-recipe-list [reloadFunction]="reload" sort="name" *ngIf="category"></cb-recipe-list>
+    <cb-recipe-list [reloadFunction]="reload" [filterLanguage]="true" sort="name" *ngIf="category"></cb-recipe-list>
 </ng-container>
