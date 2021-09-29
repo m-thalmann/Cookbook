@@ -74,6 +74,13 @@ class ConfigSettings {
                 "min" => 60,
             ],
         ],
+        "bad_authentication_limit" => [
+            "defaultValue" => 5,
+            "datatype" => self::TYPE_INTEGER,
+            "validators" => [
+                "min" => -1,
+            ],
+        ],
         "registration_enabled" => [
             "defaultValue" => true,
             "datatype" => self::TYPE_BOOLEAN,

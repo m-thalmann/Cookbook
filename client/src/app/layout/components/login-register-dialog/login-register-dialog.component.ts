@@ -25,8 +25,10 @@ export class LoginRegisterDialogComponent {
 
   loginForm: FormGroup;
 
-  private hcaptchaToken: string | null = null;
+  private hcaptchaToken: string | undefined = undefined;
   private readonly hcaptchaEnabled: boolean;
+
+  loginNeedsHcaptcha = false;
 
   constructor(
     private dialogRef: MatDialogRef<LoginRegisterDialogComponent>,
@@ -96,11 +98,11 @@ export class LoginRegisterDialogComponent {
   }
 
   get showHCaptcha() {
-    return !this.isLogin && this.hcaptchaEnabled;
+    return (!this.isLogin || this.loginNeedsHcaptcha) && this.hcaptchaEnabled;
   }
 
   get isHCaptchaValid() {
-    return this.isLogin || !this.hcaptchaEnabled || this.hcaptchaToken !== null;
+    return !this.hcaptchaEnabled || this.hcaptchaToken !== undefined || !this.isLogin || !this.loginNeedsHcaptcha;
   }
 
   /**
@@ -117,7 +119,11 @@ export class LoginRegisterDialogComponent {
     let res: ApiResponse<any>;
 
     if (this.isLogin) {
-      res = await this.api.loginUser(this.email?.value, this.password?.value);
+      res = await this.api.loginUser(
+        this.email?.value,
+        this.password?.value,
+        this.loginNeedsHcaptcha ? this.hcaptchaToken : undefined
+      );
     } else {
       res = await this.api.registerUser(
         this.email?.value,
@@ -143,16 +149,27 @@ export class LoginRegisterDialogComponent {
         } else if (res.isNotFound()) {
           this.error = 'messages.users.credentials_wrong';
         } else if (res.isForbidden()) {
-          let verified = await this.dialog
-            .open(VerifyEmailDialogComponent, {
-              data: this.email?.value,
-            })
-            .afterClosed()
-            .toPromise();
+          if (res.error?.errorKey === 'forbidden.email_not_verified') {
+            // email not verified
 
-          if (verified) {
-            await this.action();
-            return;
+            let verified = await this.dialog
+              .open(VerifyEmailDialogComponent, {
+                data: this.email?.value,
+              })
+              .afterClosed()
+              .toPromise();
+
+            if (verified) {
+              await this.action();
+              return;
+            }
+          } else if (res.error?.errorKey === 'forbidden.too_many_bad_logins') {
+            // too many bad logins
+
+            this.loginNeedsHcaptcha = true;
+            this.error = 'messages.users.credentials_wrong';
+          } else {
+            throw new Error(res.error?.errorKey ? `api_error.${res.error.errorKey}` : undefined);
           }
         } else {
           throw new Error(res.error?.errorKey ? `api_error.${res.error.errorKey}` : undefined);
@@ -197,6 +214,7 @@ export class LoginRegisterDialogComponent {
     this.remember?.updateValueAndValidity();
 
     this.error = null;
+    this.loginNeedsHcaptcha = false;
   }
 
   onCaptchaVerified(token: string) {

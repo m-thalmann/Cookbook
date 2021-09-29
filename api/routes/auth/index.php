@@ -19,29 +19,57 @@ use PAF\Router\Response;
 $group
     ->get('/', Authorization::middleware())
     ->post('/login', function ($req) {
-        if ($req["post"]["email"] && $req["post"]["password"]) {
-            $user = Authorization::getUser(
-                $req["post"]["email"],
-                $req["post"]["password"]
-            );
+        $data = $req["post"] ?? [];
+
+        if ($data["email"] && $data["password"]) {
+            $user = User::getByEmail($req["post"]["email"]);
 
             if ($user) {
-                $token = Authorization::login($user);
+                $canLogin = true;
 
-                if ($token) {
-                    return Response::ok([
-                        "user" => Authorization::user()->getAuthUserJSON(),
-                        "token" => "Bearer $token",
-                    ]);
-                } else {
-                    throw ApiException::forbidden(
-                        "email_not_verified",
-                        "Email not verified"
-                    );
+                if (
+                    $user->hasTooManyBadLogins() &&
+                    Config::get("hcaptcha.enabled")
+                ) {
+                    if (array_key_exists("hcaptchaToken", $data)) {
+                        if (
+                            !Functions::validateHCaptcha($data["hcaptchaToken"])
+                        ) {
+                            throw ApiException::forbidden(
+                                "hcaptcha_invalid",
+                                "hCaptcha-Token invalid"
+                            );
+                        }
+                    } else {
+                        $canLogin = false;
+                    }
                 }
-            } else {
-                return Response::notFound("Email or password wrong");
+
+                if (
+                    $canLogin &&
+                    Authorization::checkUserPassword($user, $data["password"])
+                ) {
+                    $token = Authorization::login($user);
+
+                    if ($token) {
+                        $user->correctLogin();
+
+                        return Response::ok([
+                            "user" => Authorization::user()->getAuthUserJSON(),
+                            "token" => "Bearer $token",
+                        ]);
+                    } else {
+                        throw ApiException::forbidden(
+                            "email_not_verified",
+                            "Email not verified"
+                        );
+                    }
+                }
+
+                $user->badLogin();
             }
+
+            return Response::notFound("Email or password wrong");
         } else {
             throw ApiException::badRequest(
                 "default",

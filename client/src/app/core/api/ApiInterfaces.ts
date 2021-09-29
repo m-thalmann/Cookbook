@@ -124,6 +124,7 @@ export interface ServerConfig {
   image_store: string | null;
   'token.ttl': number;
   'password.reset_ttl': number;
+  bad_authentication_limit: number;
   registration_enabled: boolean;
   'email_verification.enabled': boolean;
   'email_verification.ttl': number;

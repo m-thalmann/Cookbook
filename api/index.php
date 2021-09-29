@@ -30,6 +30,8 @@ try {
         Config::getBaseConfig('database.charset')
     );
 
+    Config::loadConfig();
+
     // Constants
     define('ROOT_URL', Config::getBaseConfig('root_url'));
 

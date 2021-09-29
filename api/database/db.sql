@@ -15,6 +15,7 @@ CREATE TABLE `users` (
   `verifyEmailCodeExpires` datetime,
   `isAdmin` boolean NOT NULL DEFAULT 0,
   `lastUpdated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `badLoginAttempts` int(11) NOT NULL DEFAULT 0,
 
   UNIQUE(`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

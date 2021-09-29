@@ -174,20 +174,21 @@ export class ApiService {
 
   // User
 
-  loginUser(email: string, password: string) {
+  loginUser(email: string, password: string, hcaptchaToken?: string) {
     return this.post<{ user: AuthUser; token: string }>(`${this.URL}/auth/login`, {
       email: email,
       password: password,
+      hcaptchaToken: hcaptchaToken,
     });
   }
 
-  registerUser(email: string, password: string, name: string, languageCode: string, hcaptchaToken: string | null) {
+  registerUser(email: string, password: string, name: string, languageCode: string, hcaptchaToken?: string) {
     return this.post<AuthUser>(`${this.URL}/auth/register`, {
       email: email,
       password: password,
       name: name,
       languageCode: languageCode,
-      hcaptchaToken: hcaptchaToken ? hcaptchaToken : undefined,
+      hcaptchaToken: hcaptchaToken,
     });
   }
 

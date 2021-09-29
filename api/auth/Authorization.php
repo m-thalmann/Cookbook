@@ -81,27 +81,16 @@ class Authorization {
     }
 
     /**
-     * Retrieves the user with the given credentials
+     * Checks the users password
      *
-     * @param string $email
+     * @param User $user
      * @param string $password
      *
-     * @return User|null The user or null, if incorrect credentials
+     * @return boolean Whether the password is correct
      */
-    public static function getUser($email, $password) {
-        $user = User::get("email = :email", [
-            "email" => $email,
-        ])->getFirst();
-
-        if (
-            $user &&
-            $user->password ===
-                self::encryptPassword($password, $user->passwordSalt)
-        ) {
-            return $user;
-        }
-
-        return null;
+    public static function checkUserPassword($user, $password) {
+        return $user->password ===
+            self::encryptPassword($password, $user->passwordSalt);
     }
 
     /**

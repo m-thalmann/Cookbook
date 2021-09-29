@@ -199,6 +199,7 @@
       },
       "server": {
         "authentication": {
+          "bad_authentication_limit": "Limit fehlgeschlagener Anmeldungen",
           "password_reset_ttl": "Passwort-Zurücksetzungs-TTL",
           "password_secret": "Passwort Secret",
           "title": "Authentifizierung",

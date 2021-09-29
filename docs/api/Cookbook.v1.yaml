@@ -147,6 +147,9 @@ paths:
                   format: email
                 password:
                   type: string
+                hcaptchaToken:
+                  type: string
+                  description: The token received from a successfully solved hCaptcha (if enabled and needed)
               required:
                 - email
                 - password
@@ -181,6 +184,8 @@ paths:
 
             Error keys:
             - forbidden.email_not_verified
+            - forbidden.hcaptcha_invalid
+            - forbidden.too_many_bad_logins
           content:
             application/json:
               schema:
@@ -1668,6 +1673,9 @@ paths:
                   password.reset_ttl:
                     type: integer
                     minimum: 0
+                  bad_authentication_limit:
+                    type: integer
+                    minimum: -1
                   registration_enabled:
                     type: boolean
                   email_verification.enabled:

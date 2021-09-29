@@ -56,23 +56,24 @@ Cookbook is a web application that stores all your favorite recipes. Self-hostin
 
 The rest of the configuration is stored in the database-table `config`:
 
-| Key                          | Datatype          | Description                                                     |
-| ---------------------------- | ----------------- | --------------------------------------------------------------- |
-| `token.secret`               | `string`          | Secret used to encode the JWT tokens (**Attention: see below**) |
-| `token.ttl`                  | `integer` (>= 60) | Seconds after which a token expires                             |
-| `password.secret`            | `string`          | Secret used to hash the passwords (**Attention: see below**)    |
-| `password.reset_ttl`         | `integer` (>= 60) | Seconds after which the password-reset-token expires            |
-| `registration_enabled`       | `boolean`         | Whether users are allowed to register                           |
-| `email_verification.enabled` | `boolean`         | Whether the email must be verified                              |
-| `email_verification.ttl`     | `integer` (>= 60) | Seconds after which the email-verification-token expires        |
-| `hcaptcha.enabled`           | `boolean`         | Whether the hCaptcha is enabled (see below)                     |
-| `hcpatcha.secret`            | `string`          | The hCaptcha secret (see below)                                 |
-| `mail.smtp.host`             | `string`          | SMTP Host                                                       |
-| `mail.smtp.port`             | `string`          | SMTP Port                                                       |
-| `mail.smtp.encrypted`        | `boolean`         | Whether the SMTP connection is encrypted                        |
-| `mail.smtp.username`         | `string`          | SMTP Username                                                   |
-| `mail.from.mail`             | `string` (email)  | The sender-email                                                |
-| `mail.from.name`             | `string`          | The senders name                                                |
+| Key                          | Datatype          | Description                                                                                        |
+| ---------------------------- | ----------------- | -------------------------------------------------------------------------------------------------- |
+| `token.secret`               | `string`          | Secret used to encode the JWT tokens (**Attention: see below**)                                    |
+| `token.ttl`                  | `integer` (>= 60) | Seconds after which a token expires                                                                |
+| `password.secret`            | `string`          | Secret used to hash the passwords (**Attention: see below**)                                       |
+| `password.reset_ttl`         | `integer` (>= 60) | Seconds after which the password-reset-token expires                                               |
+| `bad_authentication_limit`   | `integer` (>= -1) | Amount of unsuccessful authentications after which to show an hCaptcha (if enabled). -1 to disable |
+| `registration_enabled`       | `boolean`         | Whether users are allowed to register                                                              |
+| `email_verification.enabled` | `boolean`         | Whether the email must be verified                                                                 |
+| `email_verification.ttl`     | `integer` (>= 60) | Seconds after which the email-verification-token expires                                           |
+| `hcaptcha.enabled`           | `boolean`         | Whether the hCaptcha is enabled (see below)                                                        |
+| `hcpatcha.secret`            | `string`          | The hCaptcha secret (see below)                                                                    |
+| `mail.smtp.host`             | `string`          | SMTP Host                                                                                          |
+| `mail.smtp.port`             | `string`          | SMTP Port                                                                                          |
+| `mail.smtp.encrypted`        | `boolean`         | Whether the SMTP connection is encrypted                                                           |
+| `mail.smtp.username`         | `string`          | SMTP Username                                                                                      |
+| `mail.from.mail`             | `string` (email)  | The sender-email                                                                                   |
+| `mail.from.name`             | `string`          | The senders name                                                                                   |
 
 **Important**: Make sure to change the secrets to a long, random string
 

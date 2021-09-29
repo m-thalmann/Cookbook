@@ -240,6 +240,24 @@
                         </button>
                     </td>
                 </tr>
+                <tr>
+                    <td>{{ 'pages.admin.server.authentication.bad_authentication_limit' | translate }}</td>
+                    <td>{{ serverConfig['bad_authentication_limit'] }}</td>
+                    <td>
+                        <button
+                            (click)="
+                                openEditDialog(
+                                    'bad_authentication_limit',
+                                    'number',
+                                    'pages.admin.server.authentication.bad_authentication_limit'
+                                )
+                            "
+                            [disabled]="loading"
+                        >
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
+                </tr>
             </tbody>
         </table>
 

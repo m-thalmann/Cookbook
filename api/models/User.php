@@ -4,6 +4,7 @@ namespace API\models;
 
 use API\auth\Authorization;
 use API\config\Config;
+use API\inc\ApiException;
 use API\inc\Functions;
 use PAF\Model\Model;
 
@@ -114,6 +115,14 @@ class User extends Model {
      */
     public $lastUpdated;
 
+    /**
+     * @prop
+     * @var integer
+     * @editable false
+     * @output false
+     */
+    public $badLoginAttempts;
+
     public function __set($property, $value) {
         if ($this->__get($property) === $value) {
             return;
@@ -222,6 +231,54 @@ class User extends Model {
     }
 
     /**
+     * Increments the bad-login-attempts-counter by 1
+     *
+     * This function saves the user afterwards!
+     *
+     * @throws ApiException if there where too many bad logins
+     */
+    public function badLogin() {
+        $this->editValue(
+            "badLoginAttempts",
+            $this->badLoginAttempts + 1,
+            false,
+            true
+        );
+
+        $this->save();
+
+        $limit = Config::get("bad_authentication_limit");
+
+        if (
+            $limit !== -1 &&
+            $this->badLoginAttempts >= $limit &&
+            Config::get("hcaptcha.enabled")
+        ) {
+            throw ApiException::forbidden(
+                "too_many_bad_logins",
+                "User has too many bad logins!"
+            );
+        }
+    }
+
+    /**
+     * Sets the bad-login-attempts-counter to 0
+     *
+     * This function saves the user afterwards!
+     */
+    public function correctLogin() {
+        $this->editValue("badLoginAttempts", 0, false, true);
+
+        $this->save();
+    }
+
+    public function hasTooManyBadLogins() {
+        $limit = Config::get("bad_authentication_limit");
+
+        return $limit !== -1 && $this->badLoginAttempts > $limit;
+    }
+
+    /**
      * Returns a specific user
      *
      * @param int $id The id of the user
@@ -230,5 +287,16 @@ class User extends Model {
      */
     public static function getById($id) {
         return self::get("id = ?", [$id])->getFirst();
+    }
+
+    /**
+     * Returns a specific user by email
+     *
+     * @param string $email The string of the user
+     *
+     * @return User|null The found user or null if not found
+     */
+    public static function getByEmail($email) {
+        return self::get("email = ?", [$email])->getFirst();
     }
 }

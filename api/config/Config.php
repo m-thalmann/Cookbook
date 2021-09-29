@@ -35,7 +35,7 @@ class Config {
      *
      * @see ConfigSettings::loadConfig()
      */
-    private static function loadConfig() {
+    public static function loadConfig() {
         self::$config = ConfigSettings::loadConfig();
     }
 
@@ -48,10 +48,6 @@ class Config {
      * @return mixed|null The value or null if not found
      */
     public static function get($path, $default = null) {
-        if (self::$config === null) {
-            self::loadConfig();
-        }
-
         if (array_key_exists($path, self::$config)) {
             if (!self::$config[$path]["parsed"]) {
                 self::$config[$path][
@@ -69,7 +65,8 @@ class Config {
 
         if (
             array_key_exists($path, ConfigSettings::SETTINGS) &&
-            !ConfigSettings::SETTINGS[$path]["baseConfig"]
+            (!array_key_exists("baseConfig", ConfigSettings::SETTINGS[$path]) ||
+                !ConfigSettings::SETTINGS[$path]["baseConfig"])
         ) {
             return ConfigSettings::SETTINGS[$path]["defaultValue"];
         }

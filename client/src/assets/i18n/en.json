@@ -199,6 +199,7 @@
       },
       "server": {
         "authentication": {
+          "bad_authentication_limit": "Bad authentication limit",
           "password_reset_ttl": "Password-reset TTL",
           "password_secret": "Password secret",
           "title": "Authentication",
