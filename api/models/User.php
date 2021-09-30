@@ -121,7 +121,7 @@ class User extends Model {
      * @editable false
      * @output false
      */
-    public $badLoginAttempts;
+    public $badLoginAttempts = 0;
 
     public function __set($property, $value) {
         if ($this->__get($property) === $value) {

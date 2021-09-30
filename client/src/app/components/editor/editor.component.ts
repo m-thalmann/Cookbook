@@ -76,7 +76,7 @@ export class EditorComponent implements ControlValueAccessor {
     let link = window.prompt('Enter link');
 
     if (link) {
-      document.execCommand('createLink', false);
+      document.execCommand('createLink', false, link);
     }
     this.focus();
     this.update();
