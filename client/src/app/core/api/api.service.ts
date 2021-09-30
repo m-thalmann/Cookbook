@@ -47,7 +47,7 @@ export class ApiService {
 
     return {
       observe: 'response',
-      headers: headers,
+      headers,
     };
   }
 
@@ -62,7 +62,7 @@ export class ApiService {
 
     return {
       observe: 'events',
-      headers: headers,
+      headers,
       reportProgress: true,
     };
   }
@@ -176,19 +176,19 @@ export class ApiService {
 
   loginUser(email: string, password: string, hcaptchaToken?: string) {
     return this.post<{ user: AuthUser; token: string }>(`${this.URL}/auth/login`, {
-      email: email,
-      password: password,
-      hcaptchaToken: hcaptchaToken,
+      email,
+      password,
+      hcaptchaToken,
     });
   }
 
   registerUser(email: string, password: string, name: string, languageCode: string, hcaptchaToken?: string) {
     return this.post<AuthUser>(`${this.URL}/auth/register`, {
-      email: email,
-      password: password,
-      name: name,
-      languageCode: languageCode,
-      hcaptchaToken: hcaptchaToken,
+      email,
+      password,
+      name,
+      languageCode,
+      hcaptchaToken,
     });
   }
 
@@ -219,14 +219,14 @@ export class ApiService {
 
   verifyEmail(email: string, code: string) {
     return this.post<any>(`${this.URL}/auth/verifyEmail`, {
-      email: email,
-      code: code,
+      email,
+      code,
     });
   }
 
   resendVerificationEmail(email: string) {
     return this.post<any>(`${this.URL}/auth/verifyEmail/resend`, {
-      email: email,
+      email,
     });
   }
 
@@ -235,11 +235,11 @@ export class ApiService {
   }
 
   resetPassword(email: string, token: string, password: string) {
-    return this.post<any>(`${this.URL}/auth/resetPassword`, { email: email, token: token, password: password });
+    return this.post<any>(`${this.URL}/auth/resetPassword`, { email, token, password });
   }
 
   sendResetPasswordEmail(email: string) {
-    return this.post<any>(`${this.URL}/auth/resetPassword/send`, { email: email });
+    return this.post<any>(`${this.URL}/auth/resetPassword/send`, { email });
   }
 
   // Recipe
@@ -409,11 +409,11 @@ export class ApiService {
         languageCode?: string
       ) => {
         return this.post<UserFull>(`${this.URL}/admin/users`, {
-          email: email,
-          password: password,
-          name: name,
-          isAdmin: isAdmin,
-          verifyEmail: verifyEmail,
+          email,
+          password,
+          name,
+          isAdmin,
+          verifyEmail,
           languageCode: languageCode || this.config.get('language', 'en'),
         });
       },
@@ -448,7 +448,10 @@ export class ApiService {
         return this.get<ServerConfig>(`${this.URL}/admin/server/config`);
       },
       updateServerConfig: (path: string, value: any) => {
-        return this.put<any>(`${this.URL}/admin/server/config`, { path: path, value: value });
+        return this.put<any>(`${this.URL}/admin/server/config`, { path, value });
+      },
+      sendTestEmail: (email: string) => {
+        return this.post<any>(`${this.URL}/admin/server/sendTestEmail`, { email });
       },
     };
   }

@@ -1778,6 +1778,54 @@ paths:
       security:
         - Token: []
         - QueryToken: []
+  /admin/server/sendTestEmail:
+    post:
+      summary: Sends a test-email
+      tags:
+        - Admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: The recipients email
+                  example: john@example.com
+              required:
+                - email
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: |
+            Email expected
+
+            Error keys:
+            - bad_request.default
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          description: |
+            Error sending email
+
+            Error keys:
+            - error.sending_email
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      operationId: put-admin-server-config
+      description: Update server config
+      security:
+        - Token: []
+        - QueryToken: []
 components:
   schemas:
     User:

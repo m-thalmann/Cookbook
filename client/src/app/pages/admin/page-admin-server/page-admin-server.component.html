@@ -366,6 +366,15 @@
                 </tr>
             </tbody>
         </table>
+
+        <button mat-raised-button (click)="sendTestEmail()" [disabled]="loading" color="accent" class="send-test-email">
+            <mat-icon *ngIf="!sendingTestEmail">mail</mat-icon>
+            <mat-spinner [diameter]="24" color="accent" *ngIf="sendingTestEmail"></mat-spinner>
+
+            <span>
+                {{ 'pages.admin.server.mail.send_test_email' | translate }}
+            </span>
+        </button>
     </div>
 </ng-container>
 

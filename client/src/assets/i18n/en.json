@@ -105,6 +105,7 @@
       "error_saving_new_password": "Error saving new password!",
       "error_updating_user": "Error updating user!",
       "new_password_successfully_saved": "New password successfully saved!",
+      "test_email_sent_successfully": "Test-Email was sent successfully!",
       "user_created_successfully": "User created successfully!",
       "user_deleted_successfully": "User deleted successfully!",
       "user_updated_successfully": "User updated successfully!"
@@ -228,6 +229,8 @@
         "edit_config": "Edit config",
         "json_config": "JSON Config",
         "mail": {
+          "send_test_email": "Send test-email",
+          "send": "Send",
           "sender_mail": "Sender mail",
           "sender_name": "Sender name",
           "smtp_encrypted": "SMTP Encrypted",

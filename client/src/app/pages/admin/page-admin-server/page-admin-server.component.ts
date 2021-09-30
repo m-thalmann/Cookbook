@@ -18,6 +18,8 @@ export class PageAdminServerComponent implements OnInit {
   error = false;
   loading = false;
 
+  sendingTestEmail = false;
+
   constructor(
     private api: ApiService,
     private dialog: MatDialog,
@@ -83,8 +85,8 @@ export class PageAdminServerComponent implements OnInit {
         data: {
           translate: true,
           title: 'pages.admin.server.edit_config',
-          label: label,
-          type: type,
+          label,
+          type,
           default: currentValue,
         },
       })
@@ -94,6 +96,44 @@ export class PageAdminServerComponent implements OnInit {
     if (value !== null && value !== undefined) {
       await this.updateValue(path, value);
     }
+  }
+
+  async sendTestEmail() {
+    if (this.loading) return;
+
+    let email = await this.dialog
+      .open(InputDialogComponent, {
+        data: {
+          translate: true,
+          title: 'pages.admin.server.mail.send_test_email',
+          label: 'email',
+          type: 'email',
+          btnConfirm: 'pages.admin.server.mail.send',
+        },
+      })
+      .afterClosed()
+      .toPromise();
+
+    if (!email) return;
+
+    this.loading = true;
+    this.sendingTestEmail = true;
+
+    let res = await this.api.admin.sendTestEmail(email);
+
+    if (res.isOK()) {
+      this.snackbar.info('messages.admin.test_email_sent_successfully');
+    } else {
+      this.snackbar.warn(
+        `${this.translation.translate('messages.email.error_sending_email')} ${res.error?.details}`,
+        10000,
+        false
+      );
+      Logger.error('PageAdminServer', LoggerColor.blue, 'Error sending test-email:', res.error);
+    }
+
+    this.loading = false;
+    this.sendingTestEmail = false;
   }
 
   getHTMLBullets(amount: number) {

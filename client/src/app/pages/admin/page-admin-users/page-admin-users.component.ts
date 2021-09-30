@@ -310,7 +310,7 @@ export class PageAdminUsersComponent implements AfterViewInit, OnDestroy {
     if (email || name) {
       this.loading = true;
 
-      let res = await this.api.admin.updateUser(user.id, { email: email, name: name });
+      let res = await this.api.admin.updateUser(user.id, { email, name });
 
       if (res.isOK()) {
         this.snackbar.info('messages.admin.user_updated_successfully');

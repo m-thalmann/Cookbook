@@ -23,7 +23,7 @@ export class SnackbarService {
 
     this.snackBar.open(message, this.translation.translate('ok'), {
       panelClass: warn ? 'action-warn' : undefined,
-      duration: duration,
+      duration,
     });
   }
 

@@ -71,7 +71,7 @@ export class LoginRegisterDialogComponent {
           return null;
         },
       ],
-      remember: [false],
+      remember: [true],
     });
 
     this.hcaptchaEnabled = this.config.get('hcaptcha.enabled', false);

@@ -6,6 +6,7 @@ use API\auth\Authorization;
 use API\config\Config;
 use API\config\ConfigSettings;
 use API\inc\ApiException;
+use API\inc\Mailer;
 use PAF\Router\Response;
 
 $group
@@ -27,4 +28,21 @@ $group
         }
 
         return Response::ok();
+    })
+    ->post('/sendTestEmail', Authorization::middleware(true, true), function (
+        $req
+    ) {
+        $data = $req["post"] ?? [];
+
+        if (!array_key_exists("email", $data)) {
+            throw ApiException::badRequest("default", "Email expected");
+        }
+
+        Mailer::send(
+            $data["email"],
+            "Cookbook test email",
+            "This is a test email"
+        );
+
+        return true;
     });

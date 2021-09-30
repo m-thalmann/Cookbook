@@ -33,14 +33,12 @@ details {
 }
 
 .config {
+  text-align: center;
+
   &.loading {
     table {
       opacity: 0.5;
     }
-  }
-
-  h3 {
-    text-align: center;
   }
 
   table {
@@ -97,6 +95,22 @@ details {
 
     tbody tr:nth-child(odd) {
       background: #{$foreground}20;
+    }
+  }
+
+  button.send-test-email {
+    margin-bottom: 1em;
+
+    span,
+    mat-spinner,
+    mat-icon {
+      vertical-align: middle;
+      display: inline-block;
+    }
+
+    mat-spinner,
+    mat-icon {
+      margin: 0 0.5rem 0 0;
     }
   }
 }

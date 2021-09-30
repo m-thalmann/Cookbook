@@ -32,13 +32,13 @@ export class ConfirmDialogComponent {
   get translateTitle() {
     const key = this.data.translationKey ? this.data.translationKey + '.title' : this.data.title || '';
 
-    return { key: key, replace: this.data.titleReplace };
+    return { key, replace: this.data.titleReplace };
   }
 
   get translateContent() {
     const key = this.data.translationKey ? this.data.translationKey + '.content' : this.data.content || '';
 
-    return { key: key, replace: this.data.contentReplace };
+    return { key, replace: this.data.contentReplace };
   }
 
   get btnConfirm() {

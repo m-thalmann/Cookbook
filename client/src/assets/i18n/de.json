@@ -105,6 +105,7 @@
       "error_saving_new_password": "Fehler beim Speichern des neuen Passwortes!",
       "error_updating_user": "Fehler beim Bearbeiten des Benutzers!",
       "new_password_successfully_saved": "Neues Passwort erfolgreich gespeichert!",
+      "test_email_sent_successfully": "Test-Email wurde erfolgreich versandt!",
       "user_created_successfully": "Benutzer wurde erfolgreich erstellt!",
       "user_deleted_successfully": "Benutzer erfolgreich gelöscht!",
       "user_updated_successfully": "Benutzer erfolgreich bearbeitet!"
@@ -228,6 +229,8 @@
         "edit_config": "Konfiguration bearbeiten",
         "json_config": "JSON Konfiguration",
         "mail": {
+          "send_test_email": "Test-Email senden",
+          "send": "Senden",
           "sender_mail": "Sender-Email",
           "sender_name": "Sender-Name",
           "smtp_encrypted": "SMTP Verschlüsselt",
