@@ -1,29 +1,29 @@
 CREATE TABLE `config` (
-  `key` varchar(50) NOT NULL PRIMARY KEY,
-  `value` text,
-  `datatype` enum('string', 'boolean', 'integer', 'number')
-)
+  `key` VARCHAR(50) NOT NULL PRIMARY KEY,
+  `value` TEXT,
+  `datatype` ENUM('string', 'boolean', 'integer', 'number')
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `email` varchar(100) NOT NULL,
-  `name` varchar(20) NOT NULL,
-  `password` varchar(64) NOT NULL,
-  `passwordSalt` varchar(32) NOT NULL,
+  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `email` VARCHAR(100) NOT NULL,
+  `name` VARCHAR(20) NOT NULL,
+  `password` VARCHAR(64) NOT NULL,
+  `passwordSalt` VARCHAR(32) NOT NULL,
   `languageCode` VARCHAR(5) NOT NULL,
-  `verifyEmailCode` varchar(5),
-  `verifyEmailCodeExpires` datetime,
-  `isAdmin` boolean NOT NULL DEFAULT 0,
-  `lastUpdated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `badLoginAttempts` int(11) NOT NULL DEFAULT 0,
+  `verifyEmailCode` VARCHAR(5),
+  `verifyEmailCodeExpires` DATETIME,
+  `isAdmin` BOOLEAN NOT NULL DEFAULT 0,
+  `lastUpdated` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `badLoginAttempts` INT(11) NOT NULL DEFAULT 0,
 
   UNIQUE(`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `reset_password` (
-  `userId` int(11) NOT NULL,
-  `token` varchar(32) NOT NULL,
-  `expires` datetime NOT NULL,
+  `userId` INT(11) NOT NULL,
+  `token` VARCHAR(32) NOT NULL,
+  `expires` DATETIME NOT NULL,
 
   UNIQUE(userId, token),
 
@@ -32,31 +32,31 @@ CREATE TABLE `reset_password` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `recipes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `userId` int(11) NOT NULL,
-  `public` boolean NOT NULL DEFAULT 0,
+  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `userId` INT(11) NOT NULL,
+  `public` BOOLEAN NOT NULL DEFAULT 0,
   `languageCode` VARCHAR(5) NOT NULL,
-  `name` varchar(50) NOT NULL,
-  `description` text,
-  `category` varchar(10),
-  `portions` int(11),
-  `difficulty` int(11),
-  `preparation` text,
-  `preparationTime` int(11),
-  `restTime` int(11),
-  `cookTime` int(11),
-  `publishDate` datetime NOT NULL,
+  `name` VARCHAR(50) NOT NULL,
+  `description` TEXT,
+  `category` VARCHAR(10),
+  `portions` INT(11),
+  `difficulty` INT(11),
+  `preparation` TEXT,
+  `preparationTime` INT(11),
+  `restTime` INT(11),
+  `cookTime` INT(11),
+  `publishDate` DATETIME NOT NULL,
 
   FOREIGN KEY (userId) REFERENCES users(id)
     ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `ingredients` (
-  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `recipeId` int(11) NOT NULL,
-  `amount` float,
-  `unit` varchar(10),
-  `name` varchar(20),
+  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `recipeId` INT(11) NOT NULL,
+  `amount` FLOAT,
+  `unit` VARCHAR(10),
+  `name` VARCHAR(20),
 
   UNIQUE(`recipeId`, `name`),
 
@@ -65,10 +65,10 @@ CREATE TABLE `ingredients` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `recipe_images` (
-  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `recipeId` int(11) NOT NULL,
-  `path` text NOT NULL,
-  `mimeType` varchar(20) NOT NULL,
+  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `recipeId` INT(11) NOT NULL,
+  `path` TEXT NOT NULL,
+  `mimeType` VARCHAR(20) NOT NULL,
 
   FOREIGN KEY (recipeId) REFERENCES recipes(id)
     ON UPDATE CASCADE ON DELETE CASCADE

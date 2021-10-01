@@ -51,6 +51,26 @@ class Database {
     }
 
     /**
+     * Unregisters a provider for the model-class, if it is set,
+     * or for all model classes (as default provider), if no model-class is set.
+     * 
+     * @param string|null $modelClass The name of the model-class for which this database instance should be unregistered
+     * 
+     * @return void
+     */
+    public static function unregisterProvider($modelClass = null){
+        if ($modelClass === null) {
+            self::$provider = null;
+        } else {
+            self::validateModelClass($modelClass);
+
+            if (array_key_exists($modelClass, self::$modelProviders)) {
+                unset(self::$modelProviders[$modelClass]);
+            }
+        }
+    }
+
+    /**
      * Sets the provider using a PDO database connection string (DSN)
      *
      * The PDO instance will have the following options set:

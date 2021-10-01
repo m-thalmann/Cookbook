@@ -95,14 +95,16 @@ $group
                         "hCaptcha-Token invalid"
                     );
                 }
-
-                unset($data["hcaptchaToken"]);
             } else {
                 throw ApiException::badRequest(
                     "default",
                     "hCaptcha-Token required"
                 );
             }
+        }
+
+        if (array_key_exists("hcaptchaToken", $data)) {
+            unset($data["hcaptchaToken"]);
         }
 
         Database::get()->beginTransaction();

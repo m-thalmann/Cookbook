@@ -48,7 +48,8 @@ Cookbook is a web application that stores all your favorite recipes. Self-hostin
     "database": "database_name",
     "charset": "utf8"
   },
-  "image_store": null // the directory where the uploaded images are stored (see below)
+  "image_store": null, // the directory where the uploaded images are stored (see below)
+  "setup_complete": true // OPTIONAL: whether the setup was completed or not (<ROOT_URL>/setup.php)
 }
 ```
 
@@ -69,7 +70,7 @@ The rest of the configuration is stored in the database-table `config`:
 | `hcaptcha.enabled`           | `boolean`         | Whether the hCaptcha is enabled (see below)                                                        |
 | `hcpatcha.secret`            | `string`          | The hCaptcha secret (see below)                                                                    |
 | `mail.smtp.host`             | `string`          | SMTP Host                                                                                          |
-| `mail.smtp.port`             | `string`          | SMTP Port                                                                                          |
+| `mail.smtp.port`             | `integer`         | SMTP Port                                                                                          |
 | `mail.smtp.encrypted`        | `boolean`         | Whether the SMTP connection is encrypted                                                           |
 | `mail.smtp.username`         | `string`          | SMTP Username                                                                                      |
 | `mail.from.mail`             | `string` (email)  | The sender-email                                                                                   |

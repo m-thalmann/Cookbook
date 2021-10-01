@@ -9,6 +9,15 @@ class Config {
     private static $config = null;
 
     /**
+     * Returns the path of the base-config
+     *
+     * @return string
+     */
+    public static function getBaseConfigPath() {
+        return __DIR__ . "/config.json";
+    }
+
+    /**
      * Loads the base-config from the json-file
      *
      * @param string $file The path to the json-config-file
@@ -133,6 +142,43 @@ class Config {
 
         return false;
     }
-}
 
-Config::loadBaseConfig(__DIR__ . "/config.json");
+    /**
+     * Edit the base config. The callback receives the current base-config
+     * as parameter and has to return the new config (if returns null, it will not be saved)
+     * 
+     * @param callable $callback The callback function
+     * 
+     * @return boolean whether the config was saved
+     */
+    public static function editBaseConfig(callable $callback) {
+        $config = $callback(self::$baseConfig);
+
+        if (is_array($config)) {
+            if (
+                file_put_contents(
+                    self::getBaseConfigPath(),
+                    json_encode($config, JSON_PRETTY_PRINT)
+                )
+            ) {
+                self::$baseConfig = $config;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Writes the config values to the database by setting the currently set value
+     * (which is the default value if none set)
+     */
+    public static function writeConfig() {
+        foreach (array_keys(ConfigSettings::SETTINGS) as $path) {
+            try {
+                ConfigSettings::saveConfigValue($path, self::get($path));
+            } catch (\Exception $e) {
+            }
+        }
+    }
+}

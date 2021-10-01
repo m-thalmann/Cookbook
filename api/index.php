@@ -16,6 +16,9 @@ try {
     // Autoload
     require_once __DIR__ . '/autoload.php';
 
+    // Config
+    Config::loadBaseConfig(Config::getBaseConfigPath());
+
     if (Config::getBaseConfig("production", true)) {
         error_reporting(E_ALL ^ E_WARNING);
     }

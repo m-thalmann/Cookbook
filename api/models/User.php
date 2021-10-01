@@ -81,7 +81,7 @@ class User extends Model {
      * @prop
      * @var string
      */
-    public $languageCode;
+    public $languageCode = "en";
 
     /**
      * @prop

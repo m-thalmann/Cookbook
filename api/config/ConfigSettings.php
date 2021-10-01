@@ -50,6 +50,11 @@ class ConfigSettings {
             "datatype" => self::TYPE_STRING,
             "baseConfig" => true,
         ],
+        "setup_complete" => [
+            "defaultValue" => true,
+            "datatype" => self::TYPE_BOOLEAN,
+            "baseConfig" => true,
+        ],
         "token.secret" => [
             "defaultValue" => "86nYFNtuqMxGCG3v7TQuoFhgMSwil3hP",
             "datatype" => self::TYPE_STRING,
@@ -111,7 +116,7 @@ class ConfigSettings {
         ],
         "mail.smtp.port" => [
             "defaultValue" => null,
-            "datatype" => self::TYPE_STRING,
+            "datatype" => self::TYPE_INTEGER,
         ],
         "mail.smtp.encrypted" => [
             "defaultValue" => true,
@@ -155,7 +160,7 @@ class ConfigSettings {
     const TYPE_INTEGER = "integer";
     const TYPE_NUMBER = "number";
 
-    const ENCRYPTION_ALGORITHM = 'BF-CBC';
+    const ENCRYPTION_ALGORITHM = 'aes-128-cfb';
 
     private static $configSecret = null;
 
@@ -251,6 +256,15 @@ class ConfigSettings {
     }
 
     /**
+     * Returns the config-secret-path
+     * 
+     * @return string
+     */
+    public static function getConfigSecretPath() {
+        return __DIR__ . "/config_secret";
+    }
+
+    /**
      * Returns the configuration secret
      *
      * @see config_secret (file)
@@ -259,7 +273,7 @@ class ConfigSettings {
      */
     private static function getConfigSecret() {
         if (self::$configSecret === null) {
-            $configSecret = @file_get_contents(__DIR__ . "/config_secret");
+            $configSecret = @file_get_contents(self::getConfigSecretPath());
 
             if ($configSecret !== false) {
                 self::$configSecret = trim($configSecret);
