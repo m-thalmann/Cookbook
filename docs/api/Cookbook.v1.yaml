@@ -15,6 +15,7 @@ servers:
   - url: 'http://localhost:80/api'
     description: Dev /api
 tags:
+  - name: API
   - name: User
   - name: Recipe
   - name: Ingredient
@@ -22,6 +23,26 @@ tags:
   - name: Category
   - name: Admin
 paths:
+  /:
+    get:
+      summary: Used to check if api is reachable
+      tags:
+        - API
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  info:
+                    type: string
+                    example: Cookbook API
+                required:
+                  - info
+      operationId: get
+      description: Used to check if api is reachable
   /auth:
     get:
       summary: Returns the authenticated user (if authenticated)

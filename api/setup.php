@@ -5,18 +5,20 @@ namespace API;
 use API\config\Config;
 use API\config\ConfigSettings;
 use API\inc\Functions;
+use API\models\RecipeImage;
 use API\models\User;
 use PAF\Model\Database;
 
 require_once __DIR__ . '/lib/PAF/src/autoload.php';
 require_once __DIR__ . '/autoload.php';
 
+define('ROOT_DIR', __DIR__);
+
 $baseConfigLoaded = false;
 $configLoaded = false;
 $configSaved = true;
 $databaseError = false;
 $databaseConnected = false;
-$databaseFilled = false;
 $createUserError = null;
 
 const PASSWORD_PLACEHOLDER = "<db_password>";
@@ -56,9 +58,7 @@ function getConfigValue($path) {
 }
 
 function getPostValue($path) {
-    $value = !empty($_POST[$path]) ? $_POST[$path] : null;
-
-    return $value ? $value : null;
+    return isset($_POST[$path]) ? $_POST[$path] : null;
 }
 
 function connectDB() {
@@ -101,6 +101,20 @@ function connectDB() {
     }
 
     return false;
+}
+
+function getAPIUrl(){
+    $isHttps = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
+
+    $url = ($isHttps ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
+
+    if(($isHttps && $_SERVER['SERVER_PORT'] != 443) || (!$isHttps && $_SERVER['SERVER_PORT'] != 80)){
+        $url .= ":$_SERVER[SERVER_PORT]";
+    }
+
+    $url .= Config::getBaseConfig("root_url");
+
+    return $url;
 }
 
 if (array_key_exists("complete", $_GET)) {
@@ -164,13 +178,10 @@ if (array_key_exists("fillDB", $_GET)) {
 
         Config::writeConfig();
 
-        $databaseFilled = true;
+        RecipeImage::deleteOrphanImages();
 
-        try {
-            Config::loadConfig();
-            $configLoaded = true;
-        } catch (\Exception $e) {
-        }
+        header('Location: setup.php');
+        exit;
     }
 }
 
@@ -222,26 +233,27 @@ if (!empty($_POST)) {
             $databasePassword = getPostValue("database-password");
             $databaseDatabase = getPostValue("database-database");
 
-            if ($rootUrl) {
-                $config["root_url"] = $rootUrl;
+            if ($rootUrl !== null) {
+                $config["root_url"] = trim($rootUrl);
             }
-            if ($imageStore) {
-                $config["image_store"] = $imageStore;
+            if ($imageStore !== null) {
+                $imageStore = trim($imageStore);
+                $config["image_store"] = $imageStore ? $imageStore : null;
             }
 
-            if ($databaseHost) {
+            if ($databaseHost !== null) {
                 $config["database"]["host"] = $databaseHost;
             }
-            if ($databaseUser) {
+            if ($databaseUser !== null) {
                 $config["database"]["user"] = $databaseUser;
             }
             if (
-                $databasePassword &&
+                $databasePassword !== null &&
                 $databasePassword !== PASSWORD_PLACEHOLDER
             ) {
                 $config["database"]["password"] = $databasePassword;
             }
-            if ($databaseDatabase) {
+            if ($databaseDatabase !== null) {
                 $config["database"]["database"] = $databaseDatabase;
             }
 
@@ -264,6 +276,8 @@ if (!empty($_POST)) {
         $configSaved = false;
     }
 }
+
+$imageStoreWritable = $configLoaded && @is_writable(RecipeImage::getImageStorePath());
 
 $adminUsers =
     $configLoaded && $databaseConnected ? User::get("isAdmin = 1") : [];
@@ -353,6 +367,19 @@ $adminUsers =
         ul li span{
             vertical-align: middle;
             display: inline-block;
+        }
+
+        .spinning{
+            animation: spinning 1s infinite;
+        }
+
+        @keyframes spinning{
+            0%{
+                transform: rotate(360deg);
+            }
+            100%{
+                transform: rotate(0deg);
+            }
         }
 
         header{
@@ -451,6 +478,28 @@ $adminUsers =
             padding: 0.25em 0.5em;
         }
     </style>
+
+    <script>
+        function setAPIWorks(works){
+            var icon = document.getElementById("api_reachable_icon");
+
+            icon.classList.remove("spinning");
+
+            if(works){
+                icon.style.color = "limegreen";
+                icon.innerHTML = "check";
+            }else{
+                icon.style.color = "orange";
+                icon.innerHTML = "warning";
+            }
+        }
+
+        fetch('<?=getAPIUrl(); ?>').then((val) => {
+            setAPIWorks(val.ok);
+        }).catch((err) => {
+            setAPIWorks(false);
+        })
+    </script>
 </head>
 <body>
     <header>
@@ -553,19 +602,34 @@ $adminUsers =
 
                 <?php if ($databaseConnected) { ?>
                 <div class="fillDB">
-                    <a href="setup.php?fillDB" class="button">Reset database &amp; create tables</a>
-                    <?php if ($databaseFilled) { ?>
-                    <span class="material-icons" style="color: limegreen; vertical-align: middle">check</span>
-                    <?php } ?>
+                    <a
+                        href="setup.php?fillDB"
+                        onclick="return confirm('This will delete all existing data and images. Continue?')"
+                        class="button"
+                    >
+                        Reset database &amp; create tables
+                    </a>
                 </div>
                 <?php } ?>
             </section>
-            
+
             <section style="padding: 1em">
                 <ul>
                     <li>
                         <span>Created config file</span>
                         <?php if ($baseConfigLoaded) { ?>
+                        <span class="material-icons" style="color: limegreen">check</span>
+                        <?php } else { ?>
+                        <span class="material-icons" style="color: red">clear</span>
+                        <?php } ?>
+                    </li>
+                    <li>
+                        <span>API reachable</span>
+                        <span class="material-icons spinning" id="api_reachable_icon">loop</span>
+                    </li>
+                    <li>
+                        <span>Image directory writable</span>
+                        <?php if ($imageStoreWritable) { ?>
                         <span class="material-icons" style="color: limegreen">check</span>
                         <?php } else { ?>
                         <span class="material-icons" style="color: red">clear</span>
@@ -600,6 +664,7 @@ $adminUsers =
                 <input type="submit" value="Save settings" />
                 <?php if (
                     $baseConfigLoaded &&
+                    $imageStoreWritable &&
                     $databaseConnected &&
                     $configLoaded &&
                     count($adminUsers) > 0

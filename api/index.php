@@ -52,6 +52,12 @@ try {
 
     try {
         try {
+            Router::addRoutes()->get('/', function(){
+                return [
+                    "info" => "Cookbook API"
+                ];
+            });
+
             Router::group('/admin', __DIR__ . '/routes/admin/index.php');
             Router::group('/auth', __DIR__ . '/routes/auth/index.php');
             Router::group(
