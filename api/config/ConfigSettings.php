@@ -162,6 +162,7 @@ class ConfigSettings {
 
     const ENCRYPTION_ALGORITHM = 'aes-128-cfb';
 
+    private static $configLoaded = false;
     private static $configSecret = null;
 
     /**
@@ -381,6 +382,8 @@ class ConfigSettings {
             ];
         }
 
+        self::$configLoaded = true;
+
         return $config;
     }
 
@@ -446,5 +449,32 @@ class ConfigSettings {
             "value" => $value,
             "datatype" => $setting["datatype"],
         ]);
+    }
+
+    /**
+     * Updates (saves) the config-values that are encrypted with the new secret
+     * 
+     * @param string $newSecret The new secret to use
+     * 
+     * @return void
+     */
+    public static function updateConfigSecret($newSecret){
+        if(!self::$configLoaded){
+            throw new \Exception("Config was not yet loaded!");
+        }
+
+        $settings = [];
+
+        foreach(self::SETTINGS as $key => $setting){
+            if($setting["encrypted"] ?? false){
+                $settings[$key] = Config::get($key);
+            }
+        }
+
+        self::$configSecret = $newSecret;
+
+        foreach($settings as $key => $setting){
+            self::saveConfigValue($key, Config::get($key));
+        }
     }
 }

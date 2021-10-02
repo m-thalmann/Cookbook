@@ -205,6 +205,15 @@ if (array_key_exists("addUser", $_GET) && $databaseConnected) {
     }
 }
 
+if (array_key_exists("newConfigSecret", $_GET) && $_GET["newConfigSecret"] !== "ok") {
+    $secret = Functions::getRandomString();
+    ConfigSettings::updateConfigSecret($secret);
+
+    file_put_contents(ConfigSettings::getConfigSecretPath(), $secret);
+
+    header('Location: setup.php?newConfigSecret=ok');
+}
+
 if (!empty($_POST)) {
     if (
         Config::editBaseConfig(function ($config) {
@@ -550,6 +559,11 @@ $adminUsers =
                         "image_store"
                     ) ?>">
                 </div>
+
+                <a href="setup.php?newConfigSecret" class="button">Set new config-secret</a>
+                <?php if(array_key_exists("newConfigSecret", $_GET) && $_GET["newConfigSecret"] === "ok") { ?>
+                <span class="material-icons" style="color: limegreen; vertical-align: middle">check</span>
+                <?php } ?>
             </section>
         
             <section>
