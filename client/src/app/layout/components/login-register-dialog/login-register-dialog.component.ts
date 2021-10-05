@@ -192,6 +192,8 @@ export class LoginRegisterDialogComponent {
       this.error = e.message || 'messages.error_occurred';
       Logger.error('Login/Register', LoggerColor.red, 'Error on login/register:', res.error);
     }
+
+    this.dialogRef.disableClose = false;
   }
 
   /**

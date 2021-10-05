@@ -149,12 +149,16 @@
                         [cbFocus]="focusedIngredient === i"
                         (keydown.enter)="$event.preventDefault(); addIngredient()"
                     />
-                    <mat-error *ngIf="getFormError('amount', i) != null">{{ getFormError('amount', i) }}</mat-error>
+                    <mat-error *ngIf="getFormError('amount', i) as formError">{{
+                        formError.key | translate: formError.replacements
+                    }}</mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="outline" color="primary" class="ingredient-unit">
                     <mat-label>{{ 'unit' | translate }}</mat-label>
                     <input matInput formControlName="unit" (keydown.enter)="$event.preventDefault(); addIngredient()" />
-                    <mat-error *ngIf="getFormError('unit', i) != null">{{ getFormError('unit', i) }}</mat-error>
+                    <mat-error *ngIf="getFormError('unit', i) as formError">{{
+                        formError.key | translate: formError.replacements
+                    }}</mat-error>
                 </mat-form-field>
                 <mat-form-field appearance="outline" color="primary" class="ingredient-name">
                     <mat-label>{{ 'recipe.name' | translate }}</mat-label>
@@ -165,7 +169,9 @@
                         (keydown.enter)="$event.preventDefault(); addIngredient()"
                         [matAutocomplete]="autocompleteIngredient"
                     />
-                    <mat-error *ngIf="getFormError('name', i) != null">{{ getFormError('name', i) }}</mat-error>
+                    <mat-error *ngIf="getFormError('name', i) as formError">{{
+                        formError.key | translate: formError.replacements
+                    }}</mat-error>
                     <mat-autocomplete
                         #autocompleteIngredient="matAutocomplete"
                         (optionSelected)="onAutocompleteIngredientSelected(i, $event)"
