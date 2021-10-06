@@ -177,7 +177,24 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>{{ 'pages.admin.server.authentication.token_secret' | translate }}</td>
+                    <td>
+                        <span class="vertical-align-middle">
+                            {{ 'pages.admin.server.authentication.token_secret' | translate }}
+                        </span>
+                        &nbsp;
+                        <a
+                            (click)="
+                                openInfoDialog(
+                                    'pages.admin.server.authentication.token_secret',
+                                    'pages.admin.server.authentication.token_secret_warning'
+                                )
+                            "
+                            class="fg-warn"
+                            style="cursor: pointer"
+                        >
+                            <mat-icon class="vertical-align-middle">info</mat-icon>
+                        </a>
+                    </td>
                     <td [innerHTML]="getHTMLBullets(16)"></td>
                     <td>
                         <button
@@ -205,7 +222,24 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>{{ 'pages.admin.server.authentication.password_secret' | translate }}</td>
+                    <td>
+                        <span class="vertical-align-middle">
+                            {{ 'pages.admin.server.authentication.password_secret' | translate }}
+                        </span>
+                        &nbsp;
+                        <a
+                            (click)="
+                                openInfoDialog(
+                                    'pages.admin.server.authentication.password_secret',
+                                    'pages.admin.server.authentication.password_secret_warning'
+                                )
+                            "
+                            class="fg-warn"
+                            style="cursor: pointer"
+                        >
+                            <mat-icon class="vertical-align-middle">info</mat-icon>
+                        </a>
+                    </td>
                     <td [innerHTML]="getHTMLBullets(16)"></td>
                     <td>
                         <button

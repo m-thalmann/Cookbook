@@ -203,8 +203,10 @@
           "bad_authentication_limit": "Bad authentication limit",
           "password_reset_ttl": "Password-reset TTL",
           "password_secret": "Password secret",
+          "password_secret_warning": "If the password-secret is changed, all users have to reset their password using the password-recovery.",
           "title": "Authentication",
           "token_secret": "Token secret",
+          "token_secret_warning": "If the token-secret is changed, all users are logged out and have to log back in.",
           "token_ttl": "Token TTL"
         },
         "basic": {

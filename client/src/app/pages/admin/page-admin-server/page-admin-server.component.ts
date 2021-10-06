@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from 'src/app/components/confirm-dialog/confirm-dialog.component';
 import { InputDialogComponent } from 'src/app/components/input-dialog/input-dialog.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { ServerConfig } from 'src/app/core/api/ApiInterfaces';
@@ -138,5 +139,17 @@ export class PageAdminServerComponent implements OnInit {
 
   getHTMLBullets(amount: number) {
     return '&bull;'.repeat(amount);
+  }
+
+  openInfoDialog(titleKey: string, textKey: string) {
+    this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        onlyOk: true,
+        title: titleKey,
+        content: textKey,
+        translate: true,
+      },
+      width: '250px',
+    });
   }
 }

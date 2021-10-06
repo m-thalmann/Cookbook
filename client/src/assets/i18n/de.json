@@ -203,8 +203,10 @@
           "bad_authentication_limit": "Limit fehlgeschlagener Anmeldungen",
           "password_reset_ttl": "Passwort-Zurücksetzungs-TTL",
           "password_secret": "Passwort Secret",
+          "password_secret_warning": "Wenn das Passwort-Secret verändert wird, muss jeder Nutzer sein Passwort zurücksetzen (über die Passwort-Wiederherstellung).",
           "title": "Authentifizierung",
           "token_secret": "Token Secret",
+          "token_secret_warning": "Wenn das Token-Secret verändert wird, werden alle Nutzer ausgeloggt und müssen sich erneut anmelden.",
           "token_ttl": "Token TTL"
         },
         "basic": {
