@@ -69,6 +69,10 @@ export class ResetPasswordDialogComponent {
         this.stepper.next();
       }, 0);
     } else {
+      if (res.status === 405 && res.error) {
+        this.snackbar.warn(`api_error.${res.error.errorKey}`);
+      }
+
       this.error = 'messages.email.error_sending_email';
       this.emailForm.enable();
 

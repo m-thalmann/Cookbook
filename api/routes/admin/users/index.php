@@ -61,6 +61,8 @@ $group
             unset($data["verifyEmail"]);
         }
 
+        $verifyEmail = $verifyEmail && Config::get("mail.enabled");
+
         Database::get()->beginTransaction();
 
         $user = User::fromValues($data);

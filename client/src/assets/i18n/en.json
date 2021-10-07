@@ -34,6 +34,9 @@
       "last_admin": "You are the last admin!",
       "old_password_wrong": "Old password is wrong!",
       "setting_not_editable": "This setting is not editable!"
+    },
+    "method_not_allowed": {
+      "email_disabled": "Emails are disabled"
     }
   },
   "cancel": "Cancel",
@@ -231,6 +234,7 @@
         "edit_config": "Edit config",
         "json_config": "JSON Config",
         "mail": {
+          "enabled": "Emails enabled",
           "send_test_email": "Send test-email",
           "send": "Send",
           "sender_mail": "Sender mail",

@@ -110,6 +110,10 @@ class ConfigSettings {
             "datatype" => self::TYPE_STRING,
             "encrypted" => true,
         ],
+        "mail.enabled" => [
+            "defaultValue" => false,
+            "datatype" => self::TYPE_BOOLEAN,
+        ],
         "mail.smtp.host" => [
             "defaultValue" => null,
             "datatype" => self::TYPE_STRING,

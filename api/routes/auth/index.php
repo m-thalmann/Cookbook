@@ -111,6 +111,10 @@ $group
 
         $user = User::fromValues($data);
 
+        if(!Config::get("mail.enabled")){
+            $user->clearEmailVerification();
+        }
+
         try {
             $user->save();
         } catch (InvalidException $e) {
@@ -125,7 +129,7 @@ $group
             );
         }
 
-        if (Config::get("email_verification.enabled")) {
+        if (Config::get("email_verification.enabled") && Config::get("mail.enabled")) {
             try {
                 Mailer::sendEmailVerification($user);
             } catch (\Exception $e) {
@@ -241,6 +245,10 @@ $group
             throw ApiException::badRequest("default", "Email expected");
         }
 
+        if(!Config::get("mail.enabled")){
+            throw ApiException::methodNotAllowed("email_disabled", "Emails are disabled on the server");
+        }
+
         $user = User::get("email = ?", [$data["email"]])->getFirst();
 
         if (!($user instanceof User) || User::isEmailVerified($user)) {
@@ -294,6 +302,10 @@ $group
 
         if (empty($data["email"])) {
             throw ApiException::badRequest("default", "Email expected");
+        }
+
+        if(!Config::get("mail.enabled")){
+            throw ApiException::methodNotAllowed("email_disabled", "Emails are disabled on the server");
         }
 
         $user = User::get("email = ?", [$data["email"]])->getFirst();

@@ -41,7 +41,8 @@ $group
         Mailer::send(
             $data["email"],
             "Cookbook test email",
-            "This is a test email"
+            "This is a test email",
+            true
         );
 
         return true;

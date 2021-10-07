@@ -34,6 +34,9 @@
       "last_admin": "Du bist der letzte Admin!",
       "old_password_wrong": "Altes Passwort ist falsch!",
       "setting_not_editable": "Diese Einstellung kann nicht bearbeitet werden!"
+    },
+    "method_not_allowed": {
+      "email_disabled": "Emails sind deaktiviert"
     }
   },
   "cancel": "Abbrechen",
@@ -231,6 +234,7 @@
         "edit_config": "Konfiguration bearbeiten",
         "json_config": "JSON Konfiguration",
         "mail": {
+          "enabled": "Emails aktiviert",
           "send_test_email": "Test-Email senden",
           "send": "Senden",
           "sender_mail": "Sender-Email",

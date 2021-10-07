@@ -308,6 +308,13 @@
             </thead>
             <tbody>
                 <tr>
+                    <td>{{ 'pages.admin.server.mail.enabled' | translate }}</td>
+                    <td>
+                        <ng-container *ngTemplateOutlet="yesNoSelect; context: { key: 'mail.enabled' }"></ng-container>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
                     <td>{{ 'pages.admin.server.mail.smtp_host' | translate }}</td>
                     <td>{{ serverConfig['mail.smtp.host'] }}</td>
                     <td>

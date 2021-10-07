@@ -373,6 +373,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+        '405':
+          description: |
+            Emails are disabled
+
+            Error keys:
+            - method_not_allowed.email_disabled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
       operationId: post-auth-verifyEmail
       description: Verify an email
   /auth/registrationEnabled:
@@ -456,6 +466,16 @@ paths:
 
             Error keys:
             - bad_request.default
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '405':
+          description: |
+            Emails are disabled
+
+            Error keys:
+            - method_not_allowed.email_disabled
           content:
             application/json:
               schema:
@@ -1706,6 +1726,8 @@ paths:
                     minimum: 0
                   hcaptcha.enabled:
                     type: boolean
+                  mail.enabled:
+                    type: boolean
                   mail.smtp.host:
                     type: string
                   mail.smtp.port:
@@ -1728,10 +1750,12 @@ paths:
                   - image_store
                   - token.ttl
                   - password.reset_ttl
+                  - bad_authentication_limit
                   - registration_enabled
                   - email_verification.enabled
                   - email_verification.ttl
                   - hcaptcha.enabled
+                  - mail.enabled
                   - mail.smtp.host
                   - mail.smtp.port
                   - mail.smtp.encrypted

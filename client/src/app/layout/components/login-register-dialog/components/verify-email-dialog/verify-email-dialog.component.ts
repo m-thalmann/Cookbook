@@ -74,7 +74,11 @@ export class VerifyEmailDialogComponent {
     if (res.isOK()) {
       this.snackbar.info('messages.email.verification_email_sent');
     } else {
-      this.snackbar.warn('messages.email.error_sending_email');
+      if (res.status === 405 && res.error) {
+        this.snackbar.warn(`api_error.${res.error.errorKey}`);
+      } else {
+        this.snackbar.warn('messages.email.error_sending_email');
+      }
 
       Logger.error('VerifyEmail', LoggerColor.red, 'Error sending email:', res.error);
     }
