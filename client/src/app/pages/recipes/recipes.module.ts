@@ -12,6 +12,7 @@ import { SkeletonPageRecipeComponent } from './page-recipe/skeleton/skeleton-pag
 import { CreateEditRecipeComponent } from './components/create-edit-recipe/create-edit-recipe.component';
 import { EditRecipeImagesComponent } from './components/create-edit-recipe/components/edit-recipe-images/edit-recipe-images.component';
 import { EditRecipeInformationComponent } from './components/create-edit-recipe/components/edit-recipe-information/edit-recipe-information.component';
+import { EditorComponent } from './components/editor/editor.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { EditRecipeInformationComponent } from './components/create-edit-recipe/
     CreateEditRecipeComponent,
     EditRecipeImagesComponent,
     EditRecipeInformationComponent,
+    EditorComponent,
   ],
   imports: [CommonModule, RecipesRoutingModule, CoreModule, ComponentsModule],
 })

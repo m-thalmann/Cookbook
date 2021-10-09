@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CoreModule } from '../core/core.module';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
-import { EditorComponent } from './editor/editor.component';
 import { HcaptchaComponent } from './hcaptcha/hcaptcha.component';
 import { ImageComponent } from './image/image.component';
 import { InputDialogComponent } from './input-dialog/input-dialog.component';
@@ -15,7 +14,6 @@ import { SkeletonComponent } from './skeleton/skeleton.component';
 
 const components = [
   ConfirmDialogComponent,
-  EditorComponent,
   HcaptchaComponent,
   ImageComponent,
   PaginatorComponent,
