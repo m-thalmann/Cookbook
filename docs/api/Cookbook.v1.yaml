@@ -781,6 +781,7 @@ paths:
       - schema:
           type: string
         name: search
+        description: Url-encoded search-string
         in: path
         required: true
     get:
@@ -824,7 +825,7 @@ paths:
         name: category
         in: path
         required: true
-        description: The name of the category (case-insensitive)
+        description: The name of the category (case-insensitive and url-encoded)
     get:
       summary: Return all recipes for a category
       tags:
@@ -1330,7 +1331,7 @@ paths:
           name: search
           in: query
           required: false
-          description: Search by name and email
+          description: Search by name and email (Url-encoded)
         - $ref: '#/components/parameters/ItemsPerPage'
         - $ref: '#/components/parameters/Page'
         - $ref: '#/components/parameters/Sort'
@@ -2200,4 +2201,4 @@ components:
       type: apiKey
       in: query
       name: token
-      description: Bearer token
+      description: Url-encoded bearer-token

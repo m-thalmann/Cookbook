@@ -166,6 +166,12 @@ class User extends Model {
         return $ret;
     }
 
+    /**
+     * Returns the result of jsonSerialize and appends the
+     * isAdmin-property
+     * 
+     * @return array
+     */
     public function getAuthUserJSON() {
         $ret = parent::jsonSerialize();
 
@@ -187,6 +193,9 @@ class User extends Model {
         );
     }
 
+    /**
+     * Generates the verify-email-code and sets the expires-timestamp
+     */
     public function generateVerifyEmailCode() {
         $this->editValue(
             "verifyEmailCode",
@@ -202,10 +211,24 @@ class User extends Model {
         );
     }
 
+    /**
+     * Changes the admin-state of the user
+     * 
+     * @param boolean $isAdmin
+     */
     public function setIsAdmin($isAdmin) {
         $this->editValue("isAdmin", $isAdmin, true, true);
     }
 
+    /**
+     * Tries to verify the email for the user, using the code.
+     * If the code is correct and did not expire yet, the verification-code
+     * is cleared and true is returned.
+     * 
+     * @param string $code The verification-code
+     * 
+     * @return boolean Whether it was verified or not
+     */
     public function verifyEmail($code) {
         if (!User::isEmailVerified($this)) {
             if ($this->verifyEmailCodeExpires >= time()) {
@@ -221,11 +244,21 @@ class User extends Model {
         return false;
     }
 
+    /**
+     * Clears the email-verification code and expires-timestamp
+     */
     public function clearEmailVerification() {
         $this->editValue("verifyEmailCode", null, false, true);
         $this->editValue("verifyEmailCodeExpires", null, false, true);
     }
 
+    /**
+     * Checks whether the email of a user is verified
+     * 
+     * @param Model $user The user to check
+     * 
+     * @return boolean
+     */
     public static function isEmailVerified($user) {
         return !$user->isNew() && $user->verifyEmailCode === null;
     }
@@ -272,6 +305,11 @@ class User extends Model {
         $this->save();
     }
 
+    /**
+     * Checks whether the user has too many bad login attempts
+     * 
+     * @return boolean
+     */
     public function hasTooManyBadLogins() {
         $limit = Config::get("bad_authentication_limit");
 
