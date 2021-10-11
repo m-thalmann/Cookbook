@@ -172,7 +172,16 @@ $group
 
         unset($data["oldPassword"]);
 
+        $sendVerifyEmail = false;
+
+        if(array_key_exists("email", $data) && $data["email"] !== $user->email && Config::get("mail.enabled")){
+            $user->generateVerifyEmailCode();
+            $sendVerifyEmail = Config::get("email_verification.enabled");
+        }
+
         $user->editValues($data, true);
+
+        Database::get()->beginTransaction();
 
         try {
             $user->save();
@@ -187,6 +196,17 @@ $group
                 "A user with this email already exists"
             );
         }
+
+        if ($sendVerifyEmail) {
+            try {
+                Mailer::sendEmailVerification($user);
+            } catch (\Exception $e) {
+                Database::get()->rollBack();
+                throw $e;
+            }
+        }
+
+        Database::get()->commit();
 
         return $user;
     })
