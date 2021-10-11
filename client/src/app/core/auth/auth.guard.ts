@@ -27,13 +27,13 @@ export class AuthGuard implements CanActivate, OnDestroy {
 
       this.subSink.push(
         this.user.userChanged.subscribe(() => {
-          subscriber.next(this.isAuthorized(route));
+          subscriber.next(this.isAuthorized(route, true));
         })
       );
     });
   }
 
-  private isAuthorized(route: ActivatedRouteSnapshot) {
+  private isAuthorized(route: ActivatedRouteSnapshot, userChanged = false) {
     let error: string | null = null;
 
     if (this.user.isLoggedin) {
@@ -44,7 +44,9 @@ export class AuthGuard implements CanActivate, OnDestroy {
       }
     }
 
-    this.snackbar.error(error || 'messages.auth.route.login_required');
+    if (!userChanged) {
+      this.snackbar.error(error || 'messages.auth.route.login_required');
+    }
 
     this.router.navigateByUrl('/home');
 
