@@ -146,9 +146,9 @@ class Config {
     /**
      * Edit the base config. The callback receives the current base-config
      * as parameter and has to return the new config (if returns null, it will not be saved)
-     * 
+     *
      * @param callable $callback The callback function
-     * 
+     *
      * @return boolean whether the config was saved
      */
     public static function editBaseConfig(callable $callback) {

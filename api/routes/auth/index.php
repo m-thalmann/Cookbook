@@ -111,7 +111,7 @@ $group
 
         $user = User::fromValues($data);
 
-        if(!Config::get("mail.enabled")){
+        if (!Config::get("mail.enabled")) {
             $user->clearEmailVerification();
         }
 
@@ -129,7 +129,10 @@ $group
             );
         }
 
-        if (Config::get("email_verification.enabled") && Config::get("mail.enabled")) {
+        if (
+            Config::get("email_verification.enabled") &&
+            Config::get("mail.enabled")
+        ) {
             try {
                 Mailer::sendEmailVerification($user);
             } catch (\Exception $e) {
@@ -174,7 +177,11 @@ $group
 
         $sendVerifyEmail = false;
 
-        if(array_key_exists("email", $data) && $data["email"] !== $user->email && Config::get("mail.enabled")){
+        if (
+            array_key_exists("email", $data) &&
+            $data["email"] !== $user->email &&
+            Config::get("mail.enabled")
+        ) {
             $user->generateVerifyEmailCode();
             $sendVerifyEmail = Config::get("email_verification.enabled");
         }
@@ -265,8 +272,11 @@ $group
             throw ApiException::badRequest("default", "Email expected");
         }
 
-        if(!Config::get("mail.enabled")){
-            throw ApiException::methodNotAllowed("email_disabled", "Emails are disabled on the server");
+        if (!Config::get("mail.enabled")) {
+            throw ApiException::methodNotAllowed(
+                "email_disabled",
+                "Emails are disabled on the server"
+            );
         }
 
         $user = User::get("email = ?", [$data["email"]])->getFirst();
@@ -324,8 +334,11 @@ $group
             throw ApiException::badRequest("default", "Email expected");
         }
 
-        if(!Config::get("mail.enabled")){
-            throw ApiException::methodNotAllowed("email_disabled", "Emails are disabled on the server");
+        if (!Config::get("mail.enabled")) {
+            throw ApiException::methodNotAllowed(
+                "email_disabled",
+                "Emails are disabled on the server"
+            );
         }
 
         $user = User::get("email = ?", [$data["email"]])->getFirst();

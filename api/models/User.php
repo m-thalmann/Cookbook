@@ -169,7 +169,7 @@ class User extends Model {
     /**
      * Returns the result of jsonSerialize and appends the
      * isAdmin-property
-     * 
+     *
      * @return array
      */
     public function getAuthUserJSON() {
@@ -213,7 +213,7 @@ class User extends Model {
 
     /**
      * Changes the admin-state of the user
-     * 
+     *
      * @param boolean $isAdmin
      */
     public function setIsAdmin($isAdmin) {
@@ -224,9 +224,9 @@ class User extends Model {
      * Tries to verify the email for the user, using the code.
      * If the code is correct and did not expire yet, the verification-code
      * is cleared and true is returned.
-     * 
+     *
      * @param string $code The verification-code
-     * 
+     *
      * @return boolean Whether it was verified or not
      */
     public function verifyEmail($code) {
@@ -254,9 +254,9 @@ class User extends Model {
 
     /**
      * Checks whether the email of a user is verified
-     * 
+     *
      * @param Model $user The user to check
-     * 
+     *
      * @return boolean
      */
     public static function isEmailVerified($user) {
@@ -307,7 +307,7 @@ class User extends Model {
 
     /**
      * Checks whether the user has too many bad login attempts
-     * 
+     *
      * @return boolean
      */
     public function hasTooManyBadLogins() {

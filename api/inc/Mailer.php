@@ -18,11 +18,16 @@ class Mailer {
      * @param boolean $ignoreEnabled Whether it should be ignored if emails are enabled in the config
      *
      * @throws ApiException If the email could not be sent
-     * 
+     *
      * @return boolean False if emails are disabled and the email was therefore not sent, true otherwise
      */
-    public static function send($to, $subject, $content, $ignoreEnabled = false) {
-        if(!$ignoreEnabled && !Config::get("mail.enabled")){
+    public static function send(
+        $to,
+        $subject,
+        $content,
+        $ignoreEnabled = false
+    ) {
+        if (!$ignoreEnabled && !Config::get("mail.enabled")) {
             return false;
         }
 
@@ -80,7 +85,7 @@ class Mailer {
      * @param User $user The user
      *
      * @throws ApiException If the email could not be sent
-     * 
+     *
      * @return boolean False if emails are disabled and the email was therefore not sent, true otherwise
      */
     public static function sendEmailVerification($user) {
@@ -100,7 +105,7 @@ class Mailer {
      * @param string $token The token used to identify the user
      *
      * @throws ApiException If the email could not be sent
-     * 
+     *
      * @return boolean False if emails are disabled and the email was therefore not sent, true otherwise
      */
     public static function sendResetPassword($user, $token) {

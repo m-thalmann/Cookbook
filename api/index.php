@@ -52,9 +52,9 @@ try {
 
     try {
         try {
-            Router::addRoutes()->get('/', function(){
+            Router::addRoutes()->get('/', function () {
                 return [
-                    "info" => "Cookbook API"
+                    "info" => "Cookbook API",
                 ];
             });
 

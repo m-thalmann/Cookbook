@@ -262,7 +262,7 @@ class ConfigSettings {
 
     /**
      * Returns the config-secret-path
-     * 
+     *
      * @return string
      */
     public static function getConfigSecretPath() {
@@ -457,27 +457,27 @@ class ConfigSettings {
 
     /**
      * Updates (saves) the config-values that are encrypted with the new secret
-     * 
+     *
      * @param string $newSecret The new secret to use
-     * 
+     *
      * @return void
      */
-    public static function updateConfigSecret($newSecret){
-        if(!self::$configLoaded){
+    public static function updateConfigSecret($newSecret) {
+        if (!self::$configLoaded) {
             throw new \Exception("Config was not yet loaded!");
         }
 
         $settings = [];
 
-        foreach(self::SETTINGS as $key => $setting){
-            if($setting["encrypted"] ?? false){
+        foreach (self::SETTINGS as $key => $setting) {
+            if ($setting["encrypted"] ?? false) {
                 $settings[$key] = Config::get($key);
             }
         }
 
         self::$configSecret = $newSecret;
 
-        foreach($settings as $key => $setting){
+        foreach ($settings as $key => $setting) {
             self::saveConfigValue($key, Config::get($key));
         }
     }
