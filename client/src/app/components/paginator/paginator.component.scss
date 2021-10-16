@@ -1,9 +1,10 @@
+@use '~@angular/material' as mat;
 @import 'variables.scss';
 
 button {
   &.active {
-    background: mat-color($accent);
-    color: mat-color($accent, default-contrast);
+    background: mat.get-color-from-palette($accent);
+    color: mat.get-color-from-palette($accent, default-contrast);
     cursor: default;
   }
 }

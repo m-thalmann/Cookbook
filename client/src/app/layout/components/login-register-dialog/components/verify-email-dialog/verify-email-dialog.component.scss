@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import 'variables.scss';
 
 :host {
@@ -24,7 +25,7 @@
 
     &:focus {
       outline: none;
-      border: 1px solid mat-color($primary);
+      border: 1px solid mat.get-color-from-palette($primary);
     }
   }
 

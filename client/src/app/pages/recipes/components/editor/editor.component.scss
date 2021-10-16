@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import 'variables.scss';
 
 ::ng-deep {
@@ -36,8 +37,8 @@
     right: 0;
     z-index: 2;
 
-    background: mat-color($primary);
-    color: mat-color($primary, default-contrast);
+    background: mat.get-color-from-palette($primary);
+    color: mat.get-color-from-palette($primary, default-contrast);
 
     .section {
       display: inline-block;

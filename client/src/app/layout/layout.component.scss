@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import 'variables.scss';
 
 $mobile-nav-items: 6;
@@ -95,11 +96,11 @@ header {
       }
 
       &.active {
-        color: mat-color($primary, default-contrast) !important;
+        color: mat.get-color-from-palette($primary, default-contrast) !important;
 
         &,
         &::after {
-          background: mat-color($primary);
+          background: mat.get-color-from-palette($primary);
         }
 
         &::after {
@@ -180,8 +181,8 @@ header {
       }
 
       &.active {
-        background: mat-color($primary);
-        color: mat-color($primary, default-contrast) !important;
+        background: mat.get-color-from-palette($primary);
+        color: mat.get-color-from-palette($primary, default-contrast) !important;
 
         &::before {
           content: '';

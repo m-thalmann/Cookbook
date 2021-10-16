@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import 'variables.scss';
 
 img {
@@ -56,8 +57,8 @@ img {
       border-radius: 1.5em;
 
       padding: 0.25em 0.75em;
-      background: mat-color($primary);
-      color: mat-color($primary, default-contrast);
+      background: mat.get-color-from-palette($primary);
+      color: mat.get-color-from-palette($primary, default-contrast);
 
       box-shadow: 0 0 15px -5px rgba(0, 0, 0, 0.6);
 

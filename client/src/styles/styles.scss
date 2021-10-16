@@ -1,9 +1,10 @@
+@use '~@angular/material' as mat;
 @import '~@angular/material/theming';
 @import 'variables.scss';
 
-@include mat-core();
+@include mat.core();
 
-$theme: mat-light-theme(
+$theme: mat.define-light-theme(
   (
     color: (
       primary: $primary,
@@ -13,7 +14,7 @@ $theme: mat-light-theme(
   )
 );
 
-@include angular-material-theme($theme);
+@include mat.all-component-themes($theme);
 
 * {
   box-sizing: border-box;
@@ -64,26 +65,26 @@ strong {
 }
 
 .mat-snack-bar-container.action-warn .mat-simple-snackbar-action {
-  color: mat-color($warn) !important;
+  color: mat.get-color-from-palette($warn) !important;
 }
 
 .fg-primary {
-  color: mat-color($primary) !important;
+  color: mat.get-color-from-palette($primary) !important;
 }
 .bg-primary {
-  background: mat-color($primary) !important;
+  background: mat.get-color-from-palette($primary) !important;
 }
 .fg-accent {
-  color: mat-color($accent) !important;
+  color: mat.get-color-from-palette($accent) !important;
 }
 .bg-accent {
-  background: mat-color($accent) !important;
+  background: mat.get-color-from-palette($accent) !important;
 }
 .fg-warn {
-  color: mat-color($warn) !important;
+  color: mat.get-color-from-palette($warn) !important;
 }
 .bg-warn {
-  background: mat-color($warn) !important;
+  background: mat.get-color-from-palette($warn) !important;
 }
 
 .fg-whatsapp {

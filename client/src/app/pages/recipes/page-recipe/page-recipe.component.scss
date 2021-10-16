@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import 'variables.scss';
 
 img {
@@ -137,7 +138,7 @@ h3 {
       }
 
       tr:nth-child(odd) > td {
-        background: #{mat-color($primary)}30;
+        background: #{mat.get-color-from-palette($primary)}30;
       }
     }
   }

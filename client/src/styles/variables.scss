@@ -1,10 +1,11 @@
+@use '~@angular/material' as mat;
 @import '~@angular/material/theming';
 
 // for color info see: https://material.io/design/color/
 
-$primary: mat-palette($mat-brown, 600);
-$accent: mat-palette($mat-teal, 400);
-$warn: mat-palette($mat-red);
+$primary: mat.define-palette(mat.$brown-palette, 600);
+$accent: mat.define-palette(mat.$teal-palette, 400);
+$warn: mat.define-palette(mat.$red-palette);
 
 $link: #1693ff;
 

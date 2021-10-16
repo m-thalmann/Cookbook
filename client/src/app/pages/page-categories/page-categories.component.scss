@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import 'variables.scss';
 
 .back-link {
@@ -63,8 +64,8 @@ mat-spinner {
       padding: 0.5rem 1rem;
       top: 0;
 
-      background: mat-color($primary);
-      color: mat-color($primary, default-contrast);
+      background: mat.get-color-from-palette($primary);
+      color: mat.get-color-from-palette($primary, default-contrast);
 
       box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.5);
       transition: transform 0.1s, top 0.1s;
