@@ -5,29 +5,29 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build-prod": "ng build --prod"
+    "build-prod": "ng build --configuration production"
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "~11.2.8",
+    "@angular/animations": "~12.2.10",
     "@angular/cdk": "^11.2.13",
-    "@angular/common": "~11.2.8",
-    "@angular/compiler": "~11.2.8",
-    "@angular/core": "~11.2.8",
-    "@angular/forms": "~11.2.8",
+    "@angular/common": "~12.2.10",
+    "@angular/compiler": "~12.2.10",
+    "@angular/core": "~12.2.10",
+    "@angular/forms": "~12.2.10",
     "@angular/material": "^11.2.13",
-    "@angular/platform-browser": "~11.2.8",
-    "@angular/platform-browser-dynamic": "~11.2.8",
-    "@angular/router": "~11.2.8",
+    "@angular/platform-browser": "~12.2.10",
+    "@angular/platform-browser-dynamic": "~12.2.10",
+    "@angular/router": "~12.2.10",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
-    "zone.js": "~0.11.3"
+    "zone.js": "~0.11.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1102.7",
-    "@angular/cli": "~11.2.7",
-    "@angular/compiler-cli": "~11.2.8",
+    "@angular/cli": "~12.2.10",
+    "@angular/compiler-cli": "~12.2.10",
     "@types/node": "^12.11.1",
-    "typescript": "~4.1.5"
+    "typescript": "~4.3.5"
   }
 }
