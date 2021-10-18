@@ -19,7 +19,7 @@ Cookbook is a web application that stores all your favorite recipes. Self-hostin
 
 ### From release
 
-1. Download the "Cookbook-<version>.zip" file from the release
+1. Download the `Cookbook-<version>.zip` file from the release
 1. Create a mysql-database
 1. Host the `api`-directory publicly on an Apache-Webserver
    - Make sure you enabled `AllowOverride All` in order for the `.htaccess` file to work
