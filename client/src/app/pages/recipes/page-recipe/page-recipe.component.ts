@@ -2,7 +2,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/core/api/api.service';
-import { RecipeFull } from 'src/app/core/api/ApiInterfaces';
+import { Ingredient, RecipeFull } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
 import { calculateTotalTime, Logger, LoggerColor, SubSink } from 'src/app/core/functions';
 import { TranslationService } from 'src/app/core/i18n/translation.service';
@@ -19,6 +19,7 @@ export class PageRecipeComponent implements OnInit, OnDestroy {
   error = false;
 
   recipe: RecipeFull | null = null;
+  ingredients: { [key: string]: Ingredient[] } | null = null;
 
   selectedPortions: number = 1;
 
@@ -77,6 +78,10 @@ export class PageRecipeComponent implements OnInit, OnDestroy {
     return calculateTotalTime(this.recipe);
   }
 
+  get ingredientGroups() {
+    return this.ingredients ? Object.keys(this.ingredients) : null;
+  }
+
   getCalculateIngredientAmount(amount: number) {
     if (!this.recipe) return amount;
 
@@ -96,10 +101,22 @@ export class PageRecipeComponent implements OnInit, OnDestroy {
 
     if (res.isOK()) {
       this.recipe = res.value;
+      this.ingredients = {};
       this.selectedPortions = res.value?.portions || 1;
 
       // set seo information
       if (res.value) {
+        let ingredients: any = {};
+
+        this.recipe?.ingredients.forEach((ingredient) => {
+          if (!ingredients[ingredient.group]) {
+            ingredients[ingredient.group] = [];
+          }
+          ingredients[ingredient.group].push(ingredient);
+        });
+
+        this.ingredients = ingredients;
+
         this.seo.setTitle(res.value.name);
 
         if (res.value.description) {

@@ -14,12 +14,16 @@ export interface UserFull extends AuthUser {
   lastUpdated: number;
 }
 
-export interface Ingredient {
-  id: number;
-  recipeId: number;
+export interface NewIngredient {
   name: string;
   unit: string | null;
   amount: number | null;
+  group: string;
+}
+
+export interface Ingredient extends NewIngredient {
+  id: number;
+  recipeId: number;
 }
 
 export interface Recipe {
@@ -50,12 +54,6 @@ export interface RecipeImage {
   mimeType: string;
 }
 
-export interface NewIngredient {
-  name: string;
-  unit: string | null;
-  amount: string | null;
-}
-
 export interface NewRecipe {
   public: boolean;
   languageCode: string;
@@ -75,6 +73,7 @@ export interface EditIngredient {
   name?: string;
   unit?: string | null;
   amount?: string | null;
+  group?: string;
 }
 
 export interface EditRecipe {
@@ -94,6 +93,7 @@ export interface EditRecipe {
 export interface ListIngredient {
   name: string;
   unit: string | null;
+  group: string;
 }
 
 export interface CategoryInformation {

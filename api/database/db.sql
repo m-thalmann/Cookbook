@@ -55,10 +55,11 @@ CREATE TABLE `ingredients` (
   `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `recipeId` INT(11) NOT NULL,
   `amount` FLOAT,
-  `unit` VARCHAR(10),
-  `name` VARCHAR(20),
+  `unit` VARCHAR(20),
+  `name` VARCHAR(40) NOT NULL,
+  `group` VARCHAR(20) NOT NULL,
 
-  UNIQUE(`recipeId`, `name`),
+  UNIQUE(`recipeId`, `name`, `group`),
 
   FOREIGN KEY (recipeId) REFERENCES recipes(id)
     ON UPDATE CASCADE ON DELETE CASCADE

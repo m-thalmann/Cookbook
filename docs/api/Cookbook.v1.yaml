@@ -573,28 +573,7 @@ paths:
                 ingredients:
                   type: array
                   items:
-                    type: object
-                    properties:
-                      name:
-                        type: string
-                        maxLength: 20
-                        example: Flour
-                      unit:
-                        type: string
-                        maxLength: 10
-                        nullable: true
-                        example: 'g'
-                        description: The unit used to measure this ingredient
-                      amount:
-                        type: number
-                        minimum: 0
-                        exclusiveMinimum: true
-                        nullable: true
-                        example: 100
-                    required:
-                      - name
-                      - unit
-                      - amount
+                    $ref: "#/components/schemas/NewIngredient"
               required:
                 - public
                 - name
@@ -916,28 +895,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  maxLength: 20
-                  example: Flour
-                unit:
-                  type: string
-                  maxLength: 10
-                  nullable: true
-                  example: 'g'
-                  description: The unit used to measure this ingredient
-                amount:
-                  type: number
-                  minimum: 0
-                  exclusiveMinimum: true
-                  nullable: true
-                  example: 100
-              required:
-                - name
-                - unit
-                - amount
+              $ref: "#/components/schemas/NewIngredient"
       responses:
         '201':
           description: Created
@@ -1025,11 +983,11 @@ paths:
               properties:
                 name:
                   type: string
-                  maxLength: 20
+                  maxLength: 40
                   example: Flour
                 unit:
                   type: string
-                  maxLength: 10
+                  maxLength: 20
                   nullable: true
                   example: 'g'
                   description: The unit used to measure this ingredient
@@ -1039,6 +997,11 @@ paths:
                   exclusiveMinimum: true
                   nullable: true
                   example: 100
+                group:
+                  type: string
+                  maxLength: 20
+                  example: 'Filling'
+                  description: The ingredient's group
       responses:
         '200':
           description: OK
@@ -1923,23 +1886,17 @@ components:
               type: boolean
           required:
             - isAdmin
-    Ingredient:
-      title: Ingredient
+    NewIngredient:
+      title: New ingredient
       type: object
       properties:
-        id:
-          type: integer
-          minimum: 1
-        recipeId:
-          type: integer
-          minimum: 1
         name:
           type: string
-          maxLength: 20
+          maxLength: 40
           example: Flour
         unit:
           type: string
-          maxLength: 10
+          maxLength: 20
           nullable: true
           example: 'g'
           description: The unit used to measure this ingredient
@@ -1949,12 +1906,31 @@ components:
           exclusiveMinimum: true
           nullable: true
           example: 100
+        group:
+          type: string
+          maxLength: 20
+          example: 'Filling'
+          description: The ingredient's group
       required:
-        - id
-        - recipeId
         - name
         - unit
         - amount
+        - group
+    Ingredient:
+      title: Ingredient
+      allOf:
+        - $ref: '#/components/schemas/NewIngredient'
+        - type: object
+          properties:
+            id:
+              type: integer
+              minimum: 1
+            recipeId:
+              type: integer
+              minimum: 1
+          required:
+            - id
+            - recipeId
     Recipe:
       title: Recipe
       type: object

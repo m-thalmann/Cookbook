@@ -113,32 +113,43 @@ h3 {
     }
   }
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
+  .ingredient-group {
+    margin-top: 1.25rem;
 
-    tbody {
-      tr {
-        :nth-child(1) {
-          text-align: right;
+    .ingredient-group-header {
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+    }
 
-          border-radius: 5px 0 0 5px;
+    table {
+      width: 100%;
+      border-collapse: collapse;
 
-          width: 40%;
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+
+      tbody {
+        tr {
+          :nth-child(1) {
+            text-align: right;
+            border-radius: 5px 0 0 5px;
+            width: 40%;
+          }
+          :nth-child(2) {
+            text-align: left;
+            border-radius: 0 5px 5px 0;
+            width: 60%;
+          }
+
+          td {
+            padding: 0.5em 0.25em;
+          }
+
+          &:nth-child(odd) > td {
+            background: #{mat.get-color-from-palette($primary)}30;
+          }
         }
-        :nth-child(2) {
-          text-align: left;
-          border-radius: 0 5px 5px 0;
-          width: 60%;
-        }
-
-        td {
-          padding: 0.5em 0.25em;
-        }
-      }
-
-      tr:nth-child(odd) > td {
-        background: #{mat.get-color-from-palette($primary)}30;
       }
     }
   }

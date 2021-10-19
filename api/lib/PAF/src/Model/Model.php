@@ -1039,9 +1039,9 @@ abstract class Model implements \JsonSerializable {
         self::init();
 
         $stmt = static::db()->prepare(
-            "SELECT COUNT(*) AS count FROM " .
+            "SELECT COUNT(*) AS `count` FROM `" .
                 self::$definitions[static::class]['tablename'] .
-                " WHERE " .
+                "` WHERE " .
                 $whereClause
         );
         $stmt->execute($values);
@@ -1168,9 +1168,9 @@ abstract class Model implements \JsonSerializable {
         $sql =
             "SELECT " .
             self::getSelectClause($allProperties) .
-            " FROM " .
+            " FROM `" .
             self::$definitions[static::class]['tablename'] .
-            " WHERE " .
+            "` WHERE " .
             $whereClause;
 
         if ($orderClause !== null) {
@@ -1241,9 +1241,9 @@ abstract class Model implements \JsonSerializable {
         self::init();
 
         $stmt = static::db()->prepare(
-            "DELETE FROM " .
+            "DELETE FROM `" .
                 self::$definitions[static::class]['tablename'] .
-                " WHERE {$whereClause}"
+                "` WHERE {$whereClause}"
         );
 
         return $stmt->execute($values);
@@ -1258,7 +1258,7 @@ abstract class Model implements \JsonSerializable {
         self::init();
 
         return !!static::db()->query(
-            'TRUNCATE TABLE ' . self::$definitions[static::class]['tablename']
+            'TRUNCATE TABLE `' . self::$definitions[static::class]['tablename'] . '`'
         );
     }
 
@@ -1293,9 +1293,9 @@ abstract class Model implements \JsonSerializable {
         $sql = null;
 
         if ($this->new) {
-            $sql = "INSERT INTO {$this->definition['tablename']} ";
+            $sql = "INSERT INTO `{$this->definition['tablename']}` ";
         } else {
-            $sql = "UPDATE {$this->definition['tablename']} SET ";
+            $sql = "UPDATE `{$this->definition['tablename']}` SET ";
         }
 
         $fields = [];
@@ -1317,7 +1317,7 @@ abstract class Model implements \JsonSerializable {
             }
 
             if ($this->new) {
-                $fields[] = "{$field['name']}";
+                $fields[] = "`{$field['name']}`";
 
                 if (in_array('timestamp', $field['extra'], true)) {
                     $placeholder[] = "FROM_UNIXTIME(?)";
@@ -1326,7 +1326,7 @@ abstract class Model implements \JsonSerializable {
                 }
             } else {
                 $fields[] =
-                    "{$field['name']} = " .
+                    "`{$field['name']}` = " .
                     (in_array('timestamp', $field['extra'], true)
                         ? "FROM_UNIXTIME(?)"
                         : "?");
@@ -1416,7 +1416,7 @@ abstract class Model implements \JsonSerializable {
         $sql =
             "SELECT " .
             self::getSelectClause() .
-            " FROM {$this->definition['tablename']} WHERE " .
+            " FROM `{$this->definition['tablename']}` WHERE " .
             $whereClause['sql'];
 
         $stmt = static::db()->prepare($sql);
@@ -1500,9 +1500,9 @@ abstract class Model implements \JsonSerializable {
             }
 
             if (in_array('timestamp', $prop['extra'], true)) {
-                $fields[] = "UNIX_TIMESTAMP({$prop['name']}) AS $name";
+                $fields[] = "UNIX_TIMESTAMP(`{$prop['name']}`) AS `$name`";
             } else {
-                $fields[] = "{$prop['name']} AS $name";
+                $fields[] = "`{$prop['name']}` AS `$name`";
             }
 
         }
@@ -1533,14 +1533,14 @@ abstract class Model implements \JsonSerializable {
                         true
                     )
                 ) {
-                    $primaries[] = "{$this->definition['props'][$primary]['name']} = FROM_UNIXTIME(?)";
+                    $primaries[] = "`{$this->definition['props'][$primary]['name']}` = FROM_UNIXTIME(?)";
                 } else {
-                    $primaries[] = "{$this->definition['props'][$primary]['name']} = ?";
+                    $primaries[] = "`{$this->definition['props'][$primary]['name']}` = ?";
                 }
 
                 $values[] = $this->fields[$primary]['original_value'];
             } else {
-                $primaries[] = "{$this->definition['props'][$primary]['name']} IS NULL";
+                $primaries[] = "`{$this->definition['props'][$primary]['name']}` IS NULL";
             }
         }
 

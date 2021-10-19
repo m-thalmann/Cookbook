@@ -13,7 +13,7 @@ use PAF\Router\Response;
 $group
     ->get('/list', Authorization::middleware(), function () {
         $stmt = Database::get()->prepare(
-            "SELECT DISTINCT `name`, `unit` FROM ingredients WHERE recipeId IN (SELECT id FROM recipes WHERE userId = ?)"
+            "SELECT DISTINCT `name`, `unit`, `group` FROM ingredients WHERE recipeId IN (SELECT id FROM recipes WHERE userId = ?)"
         );
 
         if (!$stmt->execute([Authorization::user()->id])) {

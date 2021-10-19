@@ -34,6 +34,7 @@ export class EditRecipeInformationComponent {
             amount: ingredient.amount,
             unit: ingredient.unit,
             name: ingredient.name,
+            group: ingredient.group,
             id: ingredient.id,
           },
           false
@@ -78,6 +79,7 @@ export class EditRecipeInformationComponent {
   categoryList: string[] | null = null;
 
   filteredIngredientLists: Observable<ListIngredient[]>[] = [];
+  filteredIngredientGroupLists: Observable<string[]>[] = [];
   filteredCategoryList: Observable<string[]> | null = null;
 
   private _disabled = false;
@@ -190,14 +192,21 @@ export class EditRecipeInformationComponent {
    * @param focus Whether the input field should be focused
    */
   addIngredient(
-    values: { amount: number | null; unit: string | null; name: string; id: number | null } | null = null,
+    values: {
+      amount: number | null;
+      unit: string | null;
+      name: string;
+      group: string;
+      id: number | null;
+    } | null = null,
     focus = true
   ) {
     this.ingredients.push(
       this.fb.group({
         amount: [values?.amount, [Validators.min(0.01)]],
-        unit: [values?.unit, [Validators.maxLength(10)]],
-        name: [values?.name, [Validators.maxLength(20), Validators.required]],
+        unit: [values?.unit, [Validators.maxLength(20)]],
+        name: [values?.name, [Validators.maxLength(40), Validators.required]],
+        group: [values?.group || '', [Validators.maxLength(20)]],
       })
     );
     this.ingredientIds.push(values ? values.id : null);
@@ -214,7 +223,26 @@ export class EditRecipeInformationComponent {
         })
       );
 
+    const filteredIngredientGroupLists = this.ingredients
+      .at(this.ingredients.length - 1)!
+      .get('group')!
+      .valueChanges.pipe(
+        startWith(''),
+        map((value: string | ListIngredient) => {
+          const filterValue = value.toString().toLowerCase();
+
+          const groups = this.ingredientList?.map((option) => option.group) || [];
+          return (
+            groups.filter(
+              (option, index) =>
+                option && option.toLowerCase().includes(filterValue) && groups.indexOf(option) === index
+            ) || []
+          );
+        })
+      );
+
     this.filteredIngredientLists.push(filteredIngredientList);
+    this.filteredIngredientGroupLists.push(filteredIngredientGroupLists);
 
     if (focus) {
       this.focusedIngredient = this.ingredients.length - 1;
@@ -230,6 +258,7 @@ export class EditRecipeInformationComponent {
     this.ingredients.removeAt(index);
     this.ingredientIds.splice(index, 1);
     this.filteredIngredientLists.splice(index, 1);
+    this.filteredIngredientGroupLists.splice(index, 1);
   }
 
   async onAutocompleteIngredientSelected(index: number, event: MatAutocompleteSelectedEvent) {
@@ -330,6 +359,7 @@ export class EditRecipeInformationComponent {
             editIngredient.name = editIngredient.name.trim();
           }
           editIngredient.unit = trimAndNull(editIngredient.unit);
+          editIngredient.group = editIngredient.group?.trim() || '';
 
           if (editIngredient.name === ingredient.name) {
             delete editIngredient.name;
@@ -339,6 +369,9 @@ export class EditRecipeInformationComponent {
           }
           if (editIngredient.unit === ingredient.unit) {
             delete editIngredient.unit;
+          }
+          if (editIngredient.group === ingredient.group) {
+            delete editIngredient.group;
           }
 
           if (Object.keys(editIngredient).length > 0) {

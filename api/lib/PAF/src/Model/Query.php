@@ -89,7 +89,7 @@ final class Query {
             }
         }
 
-        $this->orderBy[] = "$column $direction";
+        $this->orderBy[] = "`$column` $direction";
 
         return $this;
     }

@@ -190,6 +190,27 @@
                         </mat-option>
                     </mat-autocomplete>
                 </mat-form-field>
+                <mat-form-field appearance="outline" color="primary" class="ingredient-group">
+                    <mat-label>{{ 'group' | translate }}</mat-label>
+                    <input
+                        matInput
+                        formControlName="group"
+                        (keydown.enter)="$event.preventDefault(); addIngredient()"
+                        [matAutocomplete]="autocompleteGroup"
+                    />
+                    <mat-error *ngIf="getFormError('group', i) as formError">{{
+                        formError.key | translate: formError.replacements
+                    }}</mat-error>
+                    <mat-autocomplete #autocompleteGroup="matAutocomplete">
+                        <mat-option
+                            *ngFor="let option of filteredIngredientGroupLists[i] | async; let index = index"
+                            [value]="option"
+                            class="autocomplete-option"
+                        >
+                            {{ option }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
                 <button
                     mat-icon-button
                     (click)="removeIngredient(i)"

@@ -17,6 +17,7 @@ class Ingredient extends Model {
         "amount" => false,
         "unit" => true,
         "name" => true,
+        "group" => true,
     ];
 
     /**
@@ -43,17 +44,24 @@ class Ingredient extends Model {
 
     /**
      * @prop
-     * @maxLength 10
+     * @maxLength 20
      * @var string|null
      */
     public $unit;
 
     /**
      * @prop
-     * @maxLength 20
+     * @maxLength 40
      * @var string
      */
     public $name;
+
+    /**
+     * @prop
+     * @maxLength 20
+     * @var string
+     */
+    public $group = "";
 
     /**
      * Sets the recipeId for the ingredient and checks whether the user owns this recipe (or it exists)
@@ -119,7 +127,7 @@ class Ingredient extends Model {
             );
         }
 
-        $query->orderBy("name");
+        $query->orderBy("group")->orderBy("name");
 
         return $query->get();
     }
