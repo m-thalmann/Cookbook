@@ -19,12 +19,14 @@ jobs:
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
       - name: build
         run: |
-          npm i -g standard-version
+          npm i -g conventional-changelog-cli
           cd client
           npm i
           npm run build-prod
           cd ..
-          standard-version --skip.bump --skip.commit --skip.tag
+          conventional-changelog -p angular -o CHANGELOG.md -r 2
+          tail -n +2 CHANGELOG.md > CHANGELOG #remove first line
+          sed -i -e '/./,$!d' -e :a -e '/^\n*$/{$d;N;ba' -e '}' CHANGELOG #trim empty lines
           mkdir release
           cp -r api ./release/api
           cp -r client/dist/Cookbook ./release/client
@@ -41,7 +43,7 @@ jobs:
           prerelease: false
           release_name: Cookbook v${{ steps.get_version.outputs.VERSION }}
           tag_name: ${{ steps.get_version.outputs.VERSION }}
-          body_path: CHANGELOG.md
+          body_path: CHANGELOG
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: upload artifact
