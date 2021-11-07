@@ -165,6 +165,7 @@
       "error_loading_recipes": "Fehler beim Laden der Rezepte!",
       "error_saving_recipe": "Fehler beim Speichern des Rezeptes!",
       "ingredients_error": "Einige Zutaten konnten nicht gespeichert werden",
+      "no_recipes_found": "Keine Rezepte gefunden",
       "recipe_deleted_successfully": "Rezept wurde erfolgreich gelöscht!",
       "recipe_not_found": "Rezept nicht gefunden",
       "successfully_saved_ingredients_error": "Erfolgreich gespeichert! Einige Zutaten konnten nicht gespeichert werden.",

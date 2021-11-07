@@ -16,7 +16,7 @@ try {
     // Autoload
     require_once __DIR__ . '/autoload.php';
 
-    // Config
+    // Base-Config
     Config::loadBaseConfig(Config::getBaseConfigPath());
 
     if (Config::getBaseConfig("production", true)) {
@@ -33,8 +33,6 @@ try {
         Config::getBaseConfig('database.charset')
     );
 
-    Config::loadConfig();
-
     // Constants
     define('ROOT_URL', Config::getBaseConfig('root_url'));
 
@@ -47,6 +45,14 @@ try {
     ]);
 
     Router::init(ROOT_URL, true);
+
+    // Allow OPTIONS-requests for CORS
+    if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === "OPTIONS"){
+        exit;
+    }
+
+    // Config
+    Config::loadConfig();
 
     // Routes
 

@@ -10,15 +10,16 @@ mat-slide-toggle {
 }
 
 .language-item-container {
-  img,
+  cb-image,
   span {
     vertical-align: middle;
     display: inline-block;
   }
 
-  img {
+  cb-image {
     vertical-align: middle;
     height: 1.5em;
+    width: 1.5em;
     margin-right: 0.5em;
   }
 }

@@ -269,10 +269,12 @@ main {
 }
 
 .language-menu-item {
-  img {
+  cb-image {
     vertical-align: middle;
     height: 1.5rem;
+    width: 1.5rem;
     margin-right: 1rem;
+    display: inline-block;
   }
 
   span {

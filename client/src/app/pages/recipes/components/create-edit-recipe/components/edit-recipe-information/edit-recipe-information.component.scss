@@ -12,14 +12,17 @@ mat-form-field {
 
 .language-item-container {
   img,
+  cb-image,
   span {
     vertical-align: middle;
     display: inline-block;
   }
 
   img {
+  cb-image {
     vertical-align: middle;
     height: 1.25em;
+    width: 1.25em;
     margin-right: 0.5em;
   }
 }

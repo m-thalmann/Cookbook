@@ -134,10 +134,11 @@
         [disabled]="translation.loading || translation.language === language.key"
     >
         <div class="language-menu-item">
-            <img
+            <cb-image
                 src="https://www.countryflags.io/{{ language.flagCode }}/flat/32.png"
+                fallback="assets/images/language_icon.svg"
                 *ngIf="translation.language !== language.key"
-            />
+            ></cb-image>
             <mat-icon *ngIf="translation.language === language.key">check</mat-icon>
             <span>{{ language.name }}</span>
         </div>

@@ -51,7 +51,9 @@
         ></cb-recipe-item>
     </div>
 
-    <p class="icon-text" *ngIf="recipes.total_items === 0"><mat-icon>info</mat-icon><span>No recipes found</span></p>
+    <p class="icon-text" *ngIf="recipes.total_items === 0">
+        <mat-icon>info</mat-icon><span>{{ 'messages.recipes.no_recipes_found' | translate }}</span>
+    </p>
 
     <cb-paginator
         [(page)]="page"

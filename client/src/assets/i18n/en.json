@@ -165,6 +165,7 @@
       "error_loading_recipes": "Error loading recipes!",
       "error_saving_recipe": "Error saving recipe!",
       "ingredients_error": "Some ingredients could not be saved",
+      "no_recipes_found": "No recipes found",
       "recipe_deleted_successfully": "Recipe deleted successfully!",
       "recipe_not_found": "Recipe not found",
       "successfully_saved_ingredients_error": "Successfully saved! Some ingredients could not be saved.",

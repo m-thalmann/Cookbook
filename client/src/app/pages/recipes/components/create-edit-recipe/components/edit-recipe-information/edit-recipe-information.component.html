@@ -30,6 +30,10 @@
             <mat-select-trigger>
                 <div class="language-item-container" *ngIf="language?.value as _language">
                     <img src="https://www.countryflags.io/{{ _language.flagCode }}/flat/32.png" />
+                    <cb-image
+                        src="https://www.countryflags.io/{{ _language.flagCode }}/flat/32.png"
+                        fallback="assets/images/language_icon.svg"
+                    ></cb-image>
                     <span>
                         {{ _language.name }}
                     </span>
@@ -39,6 +43,10 @@
             <mat-option *ngFor="let language of translation.languages" [value]="language">
                 <div class="language-item-container">
                     <img src="https://www.countryflags.io/{{ language.flagCode }}/flat/32.png" />
+                    <cb-image
+                        src="https://www.countryflags.io/{{ language.flagCode }}/flat/32.png"
+                        fallback="assets/images/language_icon.svg"
+                    ></cb-image>
                     <span>
                         {{ language.name }}
                     </span>
