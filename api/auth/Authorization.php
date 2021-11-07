@@ -23,9 +23,9 @@ class Authorization {
      */
     public static function encryptPassword($password, $salt) {
         return hash_hmac(
-            'sha256',
+            "sha256",
             $password . $salt,
-            Config::get('password.secret')
+            Config::get("password.secret")
         );
     }
 
@@ -38,12 +38,12 @@ class Authorization {
      */
     public static function generateToken($user) {
         if ($user instanceof User) {
-            return \JWT::encode(Config::get('token.secret'), [
+            return \JWT::encode(Config::get("token.secret"), [
                 "user_id" => $user->id,
                 "user_email" => $user->email,
                 "user_isAdmin" => $user->isAdmin,
                 "user_lastUpdated" => $user->lastUpdated,
-                "exp" => time() + Config::get('token.ttl'),
+                "exp" => time() + Config::get("token.ttl"),
             ]);
         }
 
@@ -156,15 +156,15 @@ class Authorization {
             try {
                 if (
                     $request["authorization"] === null &&
-                    empty($_GET['token'])
+                    empty($_GET["token"])
                 ) {
                     throw new UnauthorizedException();
                 }
 
                 $token = $request["authorization"];
 
-                if (empty($token) && array_key_exists('token', $_GET)) {
-                    $token = $_GET['token'];
+                if (empty($token) && array_key_exists("token", $_GET)) {
+                    $token = $_GET["token"];
                 }
 
                 $tokenParts = explode(" ", $token); // token form: '<type> <token>'
@@ -201,7 +201,7 @@ class Authorization {
                     );
                 }
                 if (!empty($token)) {
-                    header('X-Logout: true');
+                    header("X-Logout: true");
                 }
             }
 

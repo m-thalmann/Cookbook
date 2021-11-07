@@ -6,7 +6,7 @@ use API\auth\Authorization;
 use API\inc\Functions;
 use API\models\Recipe;
 
-$group->get('/id/{{i:id}}/recipes', Authorization::middleware(false), function (
+$group->get("/id/{{i:id}}/recipes", Authorization::middleware(false), function (
     $req
 ) {
     if (empty($_GET["language"])) {

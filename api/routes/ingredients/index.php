@@ -11,7 +11,7 @@ use PAF\Model\InvalidException;
 use PAF\Router\Response;
 
 $group
-    ->get('/list', Authorization::middleware(), function () {
+    ->get("/list", Authorization::middleware(), function () {
         $stmt = Database::get()->prepare(
             "SELECT DISTINCT `name`, `unit`, `group` FROM ingredients WHERE recipeId IN (SELECT id FROM recipes WHERE userId = ?)"
         );
@@ -22,7 +22,7 @@ $group
 
         return $stmt->fetchAll();
     })
-    ->put('/id/{{i:id}}', Authorization::middleware(), function ($req) {
+    ->put("/id/{{i:id}}", Authorization::middleware(), function ($req) {
         $ingredient = Ingredient::getById(
             $req["params"]["id"],
             Authorization::user()->isAdmin ? null : Authorization::user()->id
@@ -45,7 +45,7 @@ $group
 
         return $ingredient;
     })
-    ->delete('/id/{{i:id}}', Authorization::middleware(), function ($req) {
+    ->delete("/id/{{i:id}}", Authorization::middleware(), function ($req) {
         if (
             Ingredient::getQueryForUser("id = :id", [
                 "id" => $req["params"]["id"],

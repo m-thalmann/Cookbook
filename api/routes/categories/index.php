@@ -6,7 +6,7 @@ use API\auth\Authorization;
 use API\models\Recipe;
 use PAF\Model\Database;
 
-$group->get('/', Authorization::middleware(false), function () {
+$group->get("/", Authorization::middleware(false), function () {
     if (Authorization::isAuthorized()) {
         if (Authorization::user()->isAdmin) {
             $stmt = Database::get()->query(

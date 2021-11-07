@@ -6,23 +6,23 @@ use API\auth\Authorization;
 use API\inc\Functions;
 use API\models\Recipe;
 
-$group->get('/', Authorization::middleware(true, true), function () {
+$group->get("/", Authorization::middleware(true, true), function () {
     $query = "1";
     $queryParameters = [];
 
-    if (!empty($_GET['search'])) {
+    if (!empty($_GET["search"])) {
         $query =
             "(name LIKE :search OR description LIKE :search OR category LIKE :search)";
 
-        $queryParameters["search"] = "%" . urldecode($_GET['search']) . "%";
+        $queryParameters["search"] = "%" . urldecode($_GET["search"]) . "%";
     }
-    if (!empty($_GET['filterUserId'])) {
+    if (!empty($_GET["filterUserId"])) {
         if ($query !== "1") {
             $query .= " AND userId = :userId";
         } else {
             $query = "userId = :userId";
         }
-        $queryParameters["userId"] = $_GET['filterUserId'];
+        $queryParameters["userId"] = $_GET["filterUserId"];
     }
 
     return Functions::pagination(

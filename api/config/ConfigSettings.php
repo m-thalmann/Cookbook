@@ -164,7 +164,7 @@ class ConfigSettings {
     const TYPE_INTEGER = "integer";
     const TYPE_NUMBER = "number";
 
-    const ENCRYPTION_ALGORITHM = 'aes-128-cfb';
+    const ENCRYPTION_ALGORITHM = "aes-128-cfb";
 
     private static $configLoaded = false;
     private static $configSecret = null;
@@ -360,7 +360,7 @@ class ConfigSettings {
         if ($stmt === false) {
             throw ApiException::error(
                 "config.loading",
-                'Config could not be loaded'
+                "Config could not be loaded"
             );
         }
 
@@ -417,7 +417,7 @@ class ConfigSettings {
         ) {
             throw ApiException::forbidden(
                 "setting_not_editable",
-                'Setting not editable'
+                "Setting not editable"
             );
         }
 
@@ -432,7 +432,7 @@ class ConfigSettings {
         if (!self::isSettingValid($path, $value)) {
             throw ApiException::badRequest(
                 "config.saving_value_invalid",
-                'Value is not valid'
+                "Value is not valid"
             );
         }
 

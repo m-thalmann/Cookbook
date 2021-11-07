@@ -8,7 +8,7 @@ use API\models\RecipeImage;
 use PAF\Router\Response;
 
 $group
-    ->get('/id/{{i:id}}', Authorization::middleware(false), function ($req) {
+    ->get("/id/{{i:id}}", Authorization::middleware(false), function ($req) {
         $recipeImage = RecipeImage::getQueryForUser(
             "id = :id",
             ["id" => $req["params"]["id"]],
@@ -28,7 +28,7 @@ $group
             return Response::notFound();
         }
     })
-    ->delete('/id/{{i:id}}', Authorization::middleware(), function ($req) {
+    ->delete("/id/{{i:id}}", Authorization::middleware(), function ($req) {
         if (
             RecipeImage::deleteById(
                 $req["params"]["id"],

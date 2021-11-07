@@ -94,7 +94,7 @@ class Config {
     public static function getBaseConfig($path, $default = null) {
         $curr = &self::$baseConfig;
 
-        foreach (explode('.', $path) as $key) {
+        foreach (explode(".", $path) as $key) {
             if (!isset($curr[$key])) {
                 return $default;
             }

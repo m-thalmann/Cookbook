@@ -72,10 +72,10 @@ class Functions {
             header("ETag: $etag");
 
             if (
-                !empty($_SERVER['HTTP_IF_NONE_MATCH']) &&
-                $etag === $_SERVER['HTTP_IF_NONE_MATCH']
+                !empty($_SERVER["HTTP_IF_NONE_MATCH"]) &&
+                $etag === $_SERVER["HTTP_IF_NONE_MATCH"]
             ) {
-                return new Response('', 304, 'text/plain');
+                return new Response("", 304, "text/plain");
             }
         }
 
@@ -139,7 +139,7 @@ class Functions {
 
         $size = filesize($image->path);
 
-        $fp = fopen($image->path, 'rb');
+        $fp = fopen($image->path, "rb");
         $file = fread($fp, $size);
 
         fclose($fp);

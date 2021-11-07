@@ -139,7 +139,7 @@ class RecipeImage extends Model {
      * @return string
      */
     public static function getImageStorePath() {
-        $path = Config::get('image_store');
+        $path = Config::get("image_store");
 
         if ($path === null) {
             $path = ROOT_DIR . "/data/image_store/";

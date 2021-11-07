@@ -10,11 +10,11 @@ use PAF\Router\Router;
 
 try {
     // Libraries
-    require_once __DIR__ . '/lib/PAF/src/autoload.php';
-    require_once __DIR__ . '/lib/PHP-JWT/JWT.php';
+    require_once __DIR__ . "/lib/PAF/src/autoload.php";
+    require_once __DIR__ . "/lib/PHP-JWT/JWT.php";
 
     // Autoload
-    require_once __DIR__ . '/autoload.php';
+    require_once __DIR__ . "/autoload.php";
 
     // Base-Config
     Config::loadBaseConfig(Config::getBaseConfigPath());
@@ -25,18 +25,18 @@ try {
 
     // Database
     Database::setDatabase(
-        'mysql',
-        Config::getBaseConfig('database.host'),
-        Config::getBaseConfig('database.database'),
-        Config::getBaseConfig('database.user'),
-        Config::getBaseConfig('database.password'),
-        Config::getBaseConfig('database.charset')
+        "mysql",
+        Config::getBaseConfig("database.host"),
+        Config::getBaseConfig("database.database"),
+        Config::getBaseConfig("database.user"),
+        Config::getBaseConfig("database.password"),
+        Config::getBaseConfig("database.charset")
     );
 
     // Constants
-    define('ROOT_URL', Config::getBaseConfig('root_url'));
+    define("ROOT_URL", Config::getBaseConfig("root_url"));
 
-    define('ROOT_DIR', __DIR__);
+    define("ROOT_DIR", __DIR__);
 
     // Router
     Router::setHeaders([
@@ -47,8 +47,11 @@ try {
     Router::init(ROOT_URL, true);
 
     // Allow OPTIONS-requests for CORS
-    if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === "OPTIONS"){
-        exit;
+    if (
+        isset($_SERVER["REQUEST_METHOD"]) &&
+        $_SERVER["REQUEST_METHOD"] === "OPTIONS"
+    ) {
+        exit();
     }
 
     // Config
@@ -58,28 +61,28 @@ try {
 
     try {
         try {
-            Router::addRoutes()->get('/', function () {
+            Router::addRoutes()->get("/", function () {
                 return [
                     "info" => "Cookbook API",
                 ];
             });
 
-            Router::group('/admin', __DIR__ . '/routes/admin/index.php');
-            Router::group('/auth', __DIR__ . '/routes/auth/index.php');
+            Router::group("/admin", __DIR__ . "/routes/admin/index.php");
+            Router::group("/auth", __DIR__ . "/routes/auth/index.php");
             Router::group(
-                '/categories',
-                __DIR__ . '/routes/categories/index.php'
+                "/categories",
+                __DIR__ . "/routes/categories/index.php"
             );
             Router::group(
-                '/ingredients',
-                __DIR__ . '/routes/ingredients/index.php'
+                "/ingredients",
+                __DIR__ . "/routes/ingredients/index.php"
             );
             Router::group(
-                '/recipeImages',
-                __DIR__ . '/routes/recipeImages/index.php'
+                "/recipeImages",
+                __DIR__ . "/routes/recipeImages/index.php"
             );
-            Router::group('/recipes', __DIR__ . '/routes/recipes/index.php');
-            Router::group('/users', __DIR__ . '/routes/users/index.php');
+            Router::group("/recipes", __DIR__ . "/routes/recipes/index.php");
+            Router::group("/users", __DIR__ . "/routes/users/index.php");
 
             if (!Router::execute()) {
                 throw ApiException::notImplemented(

@@ -16,13 +16,13 @@ use PAF\Model\InvalidException;
 use PAF\Router\Response;
 
 $group
-    ->get('/', Authorization::middleware(true, true), function () {
+    ->get("/", Authorization::middleware(true, true), function () {
         $query = "1";
         $queryValues = [];
 
-        if (!empty($_GET['search'])) {
+        if (!empty($_GET["search"])) {
             $query = "email LIKE :search OR name LIKE :search";
-            $queryValues["search"] = "%" . urldecode($_GET['search']) . "%";
+            $queryValues["search"] = "%" . urldecode($_GET["search"]) . "%";
         }
 
         $ret = Functions::pagination(
@@ -35,7 +35,7 @@ $group
 
         return $ret;
     })
-    ->get('/id/{{i:id}}', Authorization::middleware(true, true), function (
+    ->get("/id/{{i:id}}", Authorization::middleware(true, true), function (
         $req
     ) {
         $user = User::getById($req["params"]["id"]);
@@ -46,7 +46,7 @@ $group
 
         return $user->jsonSerialize(true);
     })
-    ->post('/', Authorization::middleware(true, true), function ($req) {
+    ->post("/", Authorization::middleware(true, true), function ($req) {
         $data = $req["post"] ?? [];
 
         $verifyEmail = true;
@@ -101,7 +101,7 @@ $group
 
         return Response::created($user->jsonSerialize(true));
     })
-    ->put('/id/{{i:id}}', Authorization::middleware(true, true), function (
+    ->put("/id/{{i:id}}", Authorization::middleware(true, true), function (
         $req
     ) {
         if ($req["params"]["id"] === Authorization::user()->id) {
@@ -154,7 +154,7 @@ $group
 
         return $user->jsonSerialize(true);
     })
-    ->delete('/id/{{i:id}}', Authorization::middleware(true, true), function (
+    ->delete("/id/{{i:id}}", Authorization::middleware(true, true), function (
         $req
     ) {
         if ($req["params"]["id"] === Authorization::user()->id) {
@@ -173,7 +173,7 @@ $group
         }
     })
     ->post(
-        '/id/{{i:id}}/resetPassword',
+        "/id/{{i:id}}/resetPassword",
         Authorization::middleware(true, true),
         function ($req) {
             $user = User::getById($req["params"]["id"]);

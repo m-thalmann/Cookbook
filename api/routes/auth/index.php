@@ -17,8 +17,8 @@ use PAF\Model\InvalidException;
 use PAF\Router\Response;
 
 $group
-    ->get('/', Authorization::middleware())
-    ->post('/login', function ($req) {
+    ->get("/", Authorization::middleware())
+    ->post("/login", function ($req) {
         $data = $req["post"] ?? [];
 
         if ($data["email"] && $data["password"]) {
@@ -77,7 +77,7 @@ $group
             );
         }
     })
-    ->post('/register', function ($req) {
+    ->post("/register", function ($req) {
         if (!Config::get("registration_enabled", true)) {
             throw ApiException::methodNotAllowed(
                 "registration_disabled",
@@ -145,7 +145,7 @@ $group
 
         return Response::created($user->getAuthUserJSON());
     })
-    ->put('/', Authorization::middleware(), function ($req) {
+    ->put("/", Authorization::middleware(), function ($req) {
         $user = Authorization::user();
 
         $data = $req["post"] ?? [];
@@ -217,7 +217,7 @@ $group
 
         return $user;
     })
-    ->delete('/', Authorization::middleware(), function () {
+    ->delete("/", Authorization::middleware(), function () {
         if (Authorization::user()->isAdmin) {
             if (User::query("isAdmin = 1")->count() === 1) {
                 throw ApiException::forbidden(
@@ -234,7 +234,7 @@ $group
             throw ApiException::error("default", "Error deleting user");
         }
     })
-    ->post('/verifyEmail', function ($req) {
+    ->post("/verifyEmail", function ($req) {
         $data = $req["post"] ?? [];
 
         if (empty($data["email"]) || empty($data["code"])) {
@@ -265,7 +265,7 @@ $group
 
         throw ApiException::error("default", "Error verifying email");
     })
-    ->post('/verifyEmail/resend', function ($req) {
+    ->post("/verifyEmail/resend", function ($req) {
         $data = $req["post"] ?? [];
 
         if (empty($data["email"])) {
@@ -294,10 +294,10 @@ $group
 
         return Response::ok();
     })
-    ->get('/registrationEnabled', function () {
+    ->get("/registrationEnabled", function () {
         return Config::get("registration_enabled", true);
     })
-    ->post('/resetPassword', function ($req) {
+    ->post("/resetPassword", function ($req) {
         $data = $req["post"] ?? [];
 
         if (
@@ -327,7 +327,7 @@ $group
 
         return Response::ok();
     })
-    ->post('/resetPassword/send', function ($req) {
+    ->post("/resetPassword/send", function ($req) {
         $data = $req["post"] ?? [];
 
         if (empty($data["email"])) {

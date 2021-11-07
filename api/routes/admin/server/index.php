@@ -10,10 +10,10 @@ use API\inc\Mailer;
 use PAF\Router\Response;
 
 $group
-    ->get('/config', Authorization::middleware(true, true), function () {
+    ->get("/config", Authorization::middleware(true, true), function () {
         return Config::getConfig(ConfigSettings::getVisiblePaths());
     })
-    ->put('/config', Authorization::middleware(true, true), function ($req) {
+    ->put("/config", Authorization::middleware(true, true), function ($req) {
         $data = $req["post"] ?? [];
 
         if (empty($data["path"]) || !array_key_exists("value", $data)) {
@@ -29,7 +29,7 @@ $group
 
         return Response::ok();
     })
-    ->post('/sendTestEmail', Authorization::middleware(true, true), function (
+    ->post("/sendTestEmail", Authorization::middleware(true, true), function (
         $req
     ) {
         $data = $req["post"] ?? [];

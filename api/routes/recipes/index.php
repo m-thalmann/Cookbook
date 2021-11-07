@@ -15,7 +15,7 @@ use PAF\Model\InvalidException;
 use PAF\Router\Response;
 
 $group
-    ->get('/', Authorization::middleware(false), function () {
+    ->get("/", Authorization::middleware(false), function () {
         if (empty($_GET["language"])) {
             $query = Recipe::getQueryForUser(
                 "1",
@@ -36,7 +36,7 @@ $group
             Functions::sort($query, Recipe::FORBIDDEN_SORT_PROPERTIES)
         );
     })
-    ->get('/id/{{i:id}}', Authorization::middleware(false), function ($req) {
+    ->get("/id/{{i:id}}", Authorization::middleware(false), function ($req) {
         $recipe = Recipe::getQueryForUser(
             "id = :id",
             [
@@ -54,7 +54,7 @@ $group
             return Response::notFound();
         }
     })
-    ->get('/search/{{:search}}', Authorization::middleware(false), function (
+    ->get("/search/{{:search}}", Authorization::middleware(false), function (
         $req
     ) {
         $search = "%" . urldecode($req["params"]["search"]) . "%";
@@ -79,7 +79,7 @@ $group
             Functions::sort($query, Recipe::FORBIDDEN_SORT_PROPERTIES)
         );
     })
-    ->get('/category/{{:name}}', Authorization::middleware(false), function (
+    ->get("/category/{{:name}}", Authorization::middleware(false), function (
         $req
     ) {
         if (empty($_GET["language"])) {
@@ -107,7 +107,7 @@ $group
             Functions::sort($query, Recipe::FORBIDDEN_SORT_PROPERTIES)
         );
     })
-    ->post('/', Authorization::middleware(), function ($req) {
+    ->post("/", Authorization::middleware(), function ($req) {
         Database::get()->beginTransaction();
 
         $data = $req["post"] ?? [];
@@ -160,7 +160,7 @@ $group
 
         return Response::created($recipe->jsonSerialize(true));
     })
-    ->put('/id/{{i:id}}', Authorization::middleware(), function ($req) {
+    ->put("/id/{{i:id}}", Authorization::middleware(), function ($req) {
         $recipe = Recipe::getById(
             $req["params"]["id"],
             Authorization::user()->isAdmin ? null : Authorization::user()->id
@@ -190,7 +190,7 @@ $group
 
         return $recipe->jsonSerialize(true);
     })
-    ->delete('/id/{{i:id}}', Authorization::middleware(), function ($req) {
+    ->delete("/id/{{i:id}}", Authorization::middleware(), function ($req) {
         $query = Recipe::getQueryForUser(
             "id = :id",
             [
@@ -207,7 +207,7 @@ $group
             throw ApiException::error("default", "Error deleting image");
         }
     })
-    ->post('/id/{{i:id}}/ingredients', Authorization::middleware(), function (
+    ->post("/id/{{i:id}}/ingredients", Authorization::middleware(), function (
         $req
     ) {
         $ingredient = Ingredient::fromValues($req["post"] ?? []);
@@ -239,7 +239,7 @@ $group
 
         return Response::created($ingredient);
     })
-    ->get('/id/{{i:id}}/images', Authorization::middleware(), function ($req) {
+    ->get("/id/{{i:id}}/images", Authorization::middleware(), function ($req) {
         return RecipeImage::getQueryForUser(
             "recipeId = :id",
             ["id" => $req["params"]["id"]],
@@ -248,7 +248,7 @@ $group
         )->get();
     })
     ->get(
-        '/id/{{i:id}}/images/count',
+        "/id/{{i:id}}/images/count",
         Authorization::middleware(false),
         function ($req) {
             return RecipeImage::getQueryForUser(
@@ -260,7 +260,7 @@ $group
         }
     )
     ->get(
-        '/id/{{i:id}}/images/number/{{i:number}}',
+        "/id/{{i:id}}/images/number/{{i:number}}",
         Authorization::middleware(false),
         function ($req) {
             $image = RecipeImage::getQueryForUser(
@@ -285,7 +285,7 @@ $group
             );
         }
     )
-    ->post('/id/{{i:id}}/images', Authorization::middleware(), function ($req) {
+    ->post("/id/{{i:id}}/images", Authorization::middleware(), function ($req) {
         if (
             Recipe::getQueryForUser(
                 "id = :id",
@@ -300,9 +300,9 @@ $group
         }
 
         if (
-            !isset($_FILES['image']) ||
-            !isset($_FILES['image']['error']) ||
-            is_array($_FILES['image']['error'])
+            !isset($_FILES["image"]) ||
+            !isset($_FILES["image"]["error"]) ||
+            is_array($_FILES["image"]["error"])
         ) {
             throw ApiException::badRequest(
                 "image.no_file",
@@ -310,7 +310,7 @@ $group
             );
         }
 
-        switch ($_FILES['image']['error']) {
+        switch ($_FILES["image"]["error"]) {
             case UPLOAD_ERR_OK:
                 break;
             case UPLOAD_ERR_NO_FILE:
@@ -328,10 +328,10 @@ $group
                 throw ApiException::error("default", "Upload error");
         }
 
-        $name = $_FILES['image']['name'];
+        $name = $_FILES["image"]["name"];
 
-        $tmpLocation = $_FILES['image']['tmp_name'];
-        $fileExtension = substr($name, strrpos($name, '.') + 1);
+        $tmpLocation = $_FILES["image"]["tmp_name"];
+        $fileExtension = substr($name, strrpos($name, ".") + 1);
 
         try {
             $image = RecipeImage::add(

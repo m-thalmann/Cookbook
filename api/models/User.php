@@ -129,7 +129,7 @@ class User extends Model {
         }
 
         switch ($property) {
-            case 'password':
+            case "password":
                 $this->generateSalt();
 
                 $value = Authorization::encryptPassword(
@@ -138,7 +138,7 @@ class User extends Model {
                 );
 
                 break;
-            case 'email':
+            case "email":
                 $this->generateVerifyEmailCode();
                 break;
         }
@@ -199,7 +199,7 @@ class User extends Model {
     public function generateVerifyEmailCode() {
         $this->editValue(
             "verifyEmailCode",
-            str_pad(random_int(0, 99999), 5, '0', STR_PAD_LEFT),
+            str_pad(random_int(0, 99999), 5, "0", STR_PAD_LEFT),
             false,
             true
         );

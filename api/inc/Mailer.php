@@ -35,18 +35,18 @@ class Mailer {
 
         try {
             $mail->isSMTP();
-            $mail->Host = Config::get('mail.smtp.host');
+            $mail->Host = Config::get("mail.smtp.host");
             $mail->SMTPAuth = true;
-            $mail->Username = Config::get('mail.smtp.username');
-            $mail->Password = Config::get('mail.smtp.password');
-            if (Config::get('mail.smtp.encrypted')) {
+            $mail->Username = Config::get("mail.smtp.username");
+            $mail->Password = Config::get("mail.smtp.password");
+            if (Config::get("mail.smtp.encrypted")) {
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
             }
-            $mail->Port = Config::get('mail.smtp.port');
+            $mail->Port = Config::get("mail.smtp.port");
 
             $mail->setFrom(
-                Config::get('mail.from.mail'),
-                Config::get('mail.from.name')
+                Config::get("mail.from.mail"),
+                Config::get("mail.from.name")
             );
             $mail->addAddress($to);
 
@@ -89,7 +89,7 @@ class Mailer {
      * @return boolean False if emails are disabled and the email was therefore not sent, true otherwise
      */
     public static function sendEmailVerification($user) {
-        $expires = date('d.m.Y H:i', $user->verifyEmailCodeExpires);
+        $expires = date("d.m.Y H:i", $user->verifyEmailCodeExpires);
 
         return self::send(
             $user->email,
