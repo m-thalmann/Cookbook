@@ -82,6 +82,7 @@
   },
   "email": "Email",
   "group": "Group",
+  "group_name": "Group-name",
   "id": "ID",
   "language": "Language",
   "login": "Login",
@@ -143,7 +144,8 @@
       "max_length": "The value is too long (max. {{maxLength}})",
       "min": "The value is too small (min. {{min}})",
       "passwords_mismatch": "The passwords don't match",
-      "required": "This field is required"
+      "required": "This field is required",
+      "too_few_elements": "Too few elements"
     },
     "login_register": {
       "error_verifying_email": "Error verifying email!",
@@ -276,6 +278,8 @@
     },
     "edit_recipe": {
       "add_ingredient": "Add ingredient",
+      "add_ingredient_group": "Add ingredient-group",
+      "remove_ingredient_group": "Remove ingredient-group",
       "delete_recipe": "Delete recipe",
       "edit_images": "Edit images",
       "edit_information": "Edit information",

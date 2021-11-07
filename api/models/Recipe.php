@@ -149,7 +149,9 @@ class Recipe extends Model {
         ]);
 
         if ($full) {
-            $ret["ingredients"] = Ingredient::getByRecipeId($this->id);
+            $ret["ingredients"] = Ingredient::group(
+                Ingredient::getByRecipeId($this->id)
+            );
         }
 
         return $ret;

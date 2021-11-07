@@ -28,3 +28,13 @@ export const getFormError = (field: AbstractControl | null): TranslationObject |
 
   return null;
 };
+
+export const minArrayLength = (min: number) => {
+  return (control: AbstractControl) => {
+    if (control.value.length < min) {
+      return { minArrayLength: true };
+    }
+
+    return null;
+  };
+};

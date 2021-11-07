@@ -45,7 +45,10 @@ export interface Recipe {
 }
 
 export interface RecipeFull extends Recipe {
-  ingredients: Ingredient[];
+  ingredients: {
+    group: string;
+    items: Ingredient[];
+  }[];
 }
 
 export interface RecipeImage {
@@ -72,7 +75,7 @@ export interface NewRecipe {
 export interface EditIngredient {
   name?: string;
   unit?: string | null;
-  amount?: string | null;
+  amount?: number | null;
   group?: string;
 }
 
@@ -93,7 +96,6 @@ export interface EditRecipe {
 export interface ListIngredient {
   name: string;
   unit: string | null;
-  group: string;
 }
 
 export interface CategoryInformation {

@@ -89,11 +89,11 @@
             <span>{{ 'recipe.portions' | translate }}</span>
         </h3>
 
-        <div class="ingredient-group" *ngFor="let group of ingredientGroups">
-            <h4 *ngIf="group" class="ingredient-group-header">{{ group }}:</h4>
+        <div class="ingredient-group" *ngFor="let group of recipe.ingredients">
+            <h4 *ngIf="group.group" class="ingredient-group-header">{{ group.group }}:</h4>
             <table>
                 <tbody>
-                    <tr *ngFor="let ingredient of (ingredients || {})[group]">
+                    <tr *ngFor="let ingredient of group.items">
                         <td>
                             <ng-container *ngIf="ingredient.amount">
                                 {{ getCalculateIngredientAmount(ingredient.amount) | amount }}

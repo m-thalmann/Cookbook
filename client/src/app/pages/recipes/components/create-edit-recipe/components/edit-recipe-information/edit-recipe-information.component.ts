@@ -1,12 +1,19 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ApiService } from 'src/app/core/api/api.service';
-import { EditIngredient, EditRecipe, ListIngredient, NewRecipe, RecipeFull } from 'src/app/core/api/ApiInterfaces';
+import {
+  EditIngredient,
+  EditRecipe,
+  ListIngredient,
+  NewIngredient,
+  NewRecipe,
+  RecipeFull,
+} from 'src/app/core/api/ApiInterfaces';
 import { ApiResponse } from 'src/app/core/api/ApiResponse';
-import { getFormError } from 'src/app/core/forms/Validation';
+import { getFormError, minArrayLength } from 'src/app/core/forms/Validation';
 import { Logger, LoggerColor, trimAndNull } from 'src/app/core/functions';
 import { TranslationService } from 'src/app/core/i18n/translation.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
@@ -25,20 +32,25 @@ export class EditRecipeInformationComponent {
       _editRecipe.language = this.getLanguageInformation(_editRecipe.languageCode);
 
       this.recipeForm.reset(_editRecipe);
-      this.ingredients.clear();
+      this.ingredientGroups.clear();
       this.ingredientIds = [];
+      this.ingredientAmount = 0;
 
-      editRecipe.ingredients.forEach((ingredient) => {
-        this.addIngredient(
-          {
-            amount: ingredient.amount,
-            unit: ingredient.unit,
-            name: ingredient.name,
-            group: ingredient.group,
-            id: ingredient.id,
-          },
-          false
-        );
+      editRecipe.ingredients.forEach((ingredientGroup, index) => {
+        this.addIngredientGroup(ingredientGroup.group);
+
+        ingredientGroup.items.forEach((ingredient) => {
+          this.addIngredient(
+            index,
+            {
+              amount: ingredient.amount,
+              unit: ingredient.unit,
+              name: ingredient.name,
+              id: ingredient.id,
+            },
+            false
+          );
+        });
       });
     }
 
@@ -65,10 +77,14 @@ export class EditRecipeInformationComponent {
   @Output() saved = new EventEmitter<{ recipe: RecipeFull | null; ingredientsError: boolean }>();
 
   recipeForm: FormGroup;
-  ingredients: FormArray;
-  ingredientIds: (number | null)[] = [];
+  ingredientGroups: FormArray;
+  /**
+   * Stores the id's of existing ingredients (values) for the ingredient-groups (key)
+   */
+  ingredientIds: (number | null)[][] = [];
+  ingredientAmount = 0;
 
-  focusedIngredient = -1;
+  focusedIngredient: string | null = null;
 
   saving = false;
   error: string | null = null;
@@ -78,9 +94,8 @@ export class EditRecipeInformationComponent {
   ingredientList: ListIngredient[] | null = null;
   categoryList: string[] | null = null;
 
-  filteredIngredientLists: Observable<ListIngredient[]>[] = [];
-  filteredIngredientGroupLists: Observable<string[]>[] = [];
   filteredCategoryList: Observable<string[]> | null = null;
+  filteredIngredientLists: Observable<ListIngredient[]>[][] = [];
 
   private _disabled = false;
 
@@ -92,7 +107,7 @@ export class EditRecipeInformationComponent {
     private snackbar: SnackbarService,
     public translation: TranslationService
   ) {
-    this.ingredients = this.fb.array([]);
+    this.ingredientGroups = this.fb.array([]);
 
     this.recipeForm = this.fb.group({
       name: [this.editRecipe?.name || '', [Validators.required, Validators.maxLength(50)]],
@@ -109,7 +124,7 @@ export class EditRecipeInformationComponent {
       preparationTime: [this.editRecipe?.preparationTime || null, [Validators.min(1)]],
       restTime: [this.editRecipe?.restTime || null, [Validators.min(1)]],
       cookTime: [this.editRecipe?.cookTime || null, [Validators.min(1)]],
-      ingredients: this.ingredients,
+      ingredientGroups: this.ingredientGroups,
     });
 
     this.loadIngredientList();
@@ -130,14 +145,20 @@ export class EditRecipeInformationComponent {
     return this.recipeForm.get('difficulty');
   }
 
-  getFormError(key: string, index: number | null = null) {
-    let field: AbstractControl | null;
+  getFormError(key: string) {
+    let field = this.recipeForm?.get(key);
 
-    if (index === null) {
-      field = this.recipeForm?.get(key);
-    } else {
-      field = this.ingredients.controls[index].get(key);
-    }
+    return getFormError(field);
+  }
+
+  getIngredientGroupFormError(key: string, groupIndex: number) {
+    let field = this.ingredientGroups.controls[groupIndex].get(key);
+
+    return getFormError(field);
+  }
+
+  getIngredientFormError(key: string, groupIndex: number, ingredientIndex: number) {
+    let field = (this.ingredientGroups.controls[groupIndex].get('items') as FormArray).at(ingredientIndex).get(key);
 
     return getFormError(field);
   }
@@ -160,8 +181,8 @@ export class EditRecipeInformationComponent {
 
       this.filteredCategoryList = this.recipeForm.get('category')!.valueChanges.pipe(
         startWith(''),
-        map((value: string) => {
-          const filterValue = value.toLowerCase();
+        map((value: string | null) => {
+          const filterValue = (value || '').toLowerCase();
 
           return this.categoryList?.filter((option) => option.toLowerCase().includes(filterValue)) || [];
         })
@@ -186,86 +207,146 @@ export class EditRecipeInformationComponent {
   }
 
   /**
+   * Returns the index of the ingredient group or -1 if not found
+   *
+   * @param name The name of the group
+   */
+  getIngredientGroupIndex(name: string) {
+    for (let i = 0; i < this.ingredientGroups.length; i++) {
+      if (this.ingredientGroups.at(i).get('name')?.value === name) return i;
+    }
+
+    return -1;
+  }
+
+  /**
+   * Returns the ingredients-group ingredients-array
+   *
+   * @param groupIndex The index of the group
+   *
+   * @returns the ingredients-array for the group
+   */
+  getIngredientGroupIngredients(groupIndex: number): FormArray | null {
+    return this.ingredientGroups.at(groupIndex).get('items') as FormArray;
+  }
+
+  /**
+   * Adds a new ingredient-group
+   *
+   * @param name The name of the group
+   * @param addIngredient Whether to add an empty ingredient or not
+   * @param focusIngredient Whether to focus the added ingredient or not
+   */
+  addIngredientGroup(name: string | null, addIngredient = false, focusIngredient = false) {
+    if (name !== null && this.getIngredientGroupIndex(name) !== -1) return;
+
+    this.ingredientGroups.push(
+      this.fb.group({
+        name: [name, Validators.maxLength(20)],
+        items: this.fb.array([], minArrayLength(1)),
+      })
+    );
+    this.ingredientIds.push([]);
+    this.filteredIngredientLists.push([]);
+
+    if (addIngredient) {
+      this.addIngredient(this.ingredientGroups.length - 1, null, focusIngredient);
+    }
+  }
+
+  /**
    * Adds a new ingredient
    *
+   * @param groupIndex The index of the group
    * @param values The values to set or null if empty
    * @param focus Whether the input field should be focused
    */
   addIngredient(
+    groupIndex: number,
     values: {
       amount: number | null;
       unit: string | null;
       name: string;
-      group: string;
       id: number | null;
     } | null = null,
     focus = true
   ) {
-    this.ingredients.push(
+    let ingredients = this.ingredientGroups.at(groupIndex).get('items') as FormArray;
+
+    ingredients.push(
       this.fb.group({
         amount: [values?.amount, [Validators.min(0.01)]],
         unit: [values?.unit, [Validators.maxLength(20)]],
         name: [values?.name, [Validators.maxLength(40), Validators.required]],
-        group: [values?.group || '', [Validators.maxLength(20)]],
       })
     );
-    this.ingredientIds.push(values ? values.id : null);
 
-    const filteredIngredientList = this.ingredients
-      .at(this.ingredients.length - 1)!
+    this.ingredientIds[groupIndex].push(values ? values.id : null);
+    this.ingredientAmount++;
+
+    let ingredientIndex = ingredients.length - 1;
+
+    const filteredIngredientList = ingredients
+      .at(ingredients.length - 1)!
       .get('name')!
       .valueChanges.pipe(
         startWith(''),
-        map((value: string | ListIngredient) => {
-          const filterValue = value.toString().toLowerCase();
+        map((value: string | null) => {
+          const filterValue = (value || '').toLowerCase();
 
           return this.ingredientList?.filter((option) => option.name.toLowerCase().includes(filterValue)) || [];
         })
       );
 
-    const filteredIngredientGroupLists = this.ingredients
-      .at(this.ingredients.length - 1)!
-      .get('group')!
-      .valueChanges.pipe(
-        startWith(''),
-        map((value: string | ListIngredient) => {
-          const filterValue = value.toString().toLowerCase();
-
-          const groups = this.ingredientList?.map((option) => option.group) || [];
-          return (
-            groups.filter(
-              (option, index) =>
-                option && option.toLowerCase().includes(filterValue) && groups.indexOf(option) === index
-            ) || []
-          );
-        })
-      );
-
-    this.filteredIngredientLists.push(filteredIngredientList);
-    this.filteredIngredientGroupLists.push(filteredIngredientGroupLists);
+    this.filteredIngredientLists[groupIndex].push(filteredIngredientList);
 
     if (focus) {
-      this.focusedIngredient = this.ingredients.length - 1;
+      this.focusedIngredient = `${groupIndex}-${ingredientIndex}`;
+    } else {
+      this.focusedIngredient = null;
     }
+  }
+
+  /**
+   * Removes the ingredient-group with the given name
+   *
+   * @param index The index of the group
+   */
+  removeIngredientGroup(index: number) {
+    this.ingredientGroups.removeAt(index);
+
+    this.ingredientAmount -= this.ingredientIds[index].length;
+    this.ingredientIds.splice(index, 1);
+    this.filteredIngredientLists.splice(index, 1);
   }
 
   /**
    * Removes the ingredient with the given index
    *
+   * @param groupIndex The index of the group
    * @param index the index of the ingredient
    */
-  removeIngredient(index: number) {
-    this.ingredients.removeAt(index);
-    this.ingredientIds.splice(index, 1);
-    this.filteredIngredientLists.splice(index, 1);
-    this.filteredIngredientGroupLists.splice(index, 1);
+  removeIngredient(groupIndex: number, index: number) {
+    let ingredients = this.ingredientGroups.at(groupIndex).get('items') as FormArray;
+
+    ingredients.removeAt(index);
+
+    this.ingredientIds[groupIndex].splice(index, 1);
+    this.ingredientAmount--;
+    this.filteredIngredientLists[groupIndex].splice(index, 1);
   }
 
-  async onAutocompleteIngredientSelected(index: number, event: MatAutocompleteSelectedEvent) {
+  async onAutocompleteIngredientSelected(groupIndex: number, index: number, event: MatAutocompleteSelectedEvent) {
+    let ingredients = this.getIngredientGroupIngredients(groupIndex);
+
+    if (!ingredients) {
+      return;
+    }
+
     let ingredient = event.option.value;
 
-    this.ingredients.at(index).get('name')?.setValue(ingredient.name);
-    this.ingredients.at(index).get('unit')?.setValue(ingredient.unit);
+    ingredients.at(index).get('name')?.setValue(ingredient.name);
+    ingredients.at(index).get('unit')?.setValue(ingredient.unit);
   }
 
   /**
@@ -281,10 +362,35 @@ export class EditRecipeInformationComponent {
     this.recipeForm.disable();
 
     let values = this.recipeForm.value;
-    let ingredients = values.ingredients;
+    let ingredientGroups: {
+      name: string | null;
+      items: { name: string; unit: string | null; amount: number | null }[];
+    }[] = values.ingredientGroups;
 
-    if (this.isEdit) {
-      delete values.ingredients;
+    delete values.ingredientGroups;
+
+    let ingredients: NewIngredient[] = [];
+    let ingredientIds: (number | null)[] = [];
+
+    ingredientGroups.forEach((group, groupIndex) => {
+      if (group.name === null) {
+        group.name = '';
+      }
+      group.name = group.name.trim();
+
+      group.items.forEach((ingredient, index) => {
+        ingredients.push({
+          name: ingredient.name.trim(),
+          unit: trimAndNull(ingredient.unit),
+          amount: ingredient.amount,
+          group: group.name || '',
+        });
+        ingredientIds.push(this.ingredientIds[groupIndex][index]);
+      });
+    });
+
+    if (!this.isEdit) {
+      values.ingredients = ingredients;
     }
 
     if (values.difficulty !== null) {
@@ -347,40 +453,43 @@ export class EditRecipeInformationComponent {
 
       const ingredientPromises: Promise<any>[] = [];
 
-      this._editRecipe.ingredients.forEach((ingredient) => {
-        let index = this.ingredientIds.indexOf(ingredient.id);
+      this._editRecipe.ingredients.forEach((group) => {
+        group.items.forEach((ingredient) => {
+          let index = ingredientIds.indexOf(ingredient.id);
 
-        if (index === -1) {
-          ingredientPromises.push(this.api.deleteIngredient(ingredient.id));
-        } else {
-          let editIngredient: EditIngredient = ingredients[index];
+          if (index === -1) {
+            ingredientPromises.push(this.api.deleteIngredient(ingredient.id));
+          } else {
+            let newIngredient: NewIngredient = ingredients[index];
+            let editIngredient: EditIngredient = {};
 
-          if (editIngredient.name) {
-            editIngredient.name = editIngredient.name.trim();
-          }
-          editIngredient.unit = trimAndNull(editIngredient.unit);
-          editIngredient.group = editIngredient.group?.trim() || '';
+            if (newIngredient.name) {
+              newIngredient.name = newIngredient.name.trim();
+            }
+            newIngredient.unit = trimAndNull(newIngredient.unit);
+            newIngredient.group = newIngredient.group?.trim() || '';
 
-          if (editIngredient.name === ingredient.name) {
-            delete editIngredient.name;
-          }
-          if (editIngredient.amount === ingredient.amount) {
-            delete editIngredient.amount;
-          }
-          if (editIngredient.unit === ingredient.unit) {
-            delete editIngredient.unit;
-          }
-          if (editIngredient.group === ingredient.group) {
-            delete editIngredient.group;
-          }
+            if (newIngredient.name !== ingredient.name) {
+              editIngredient.name = newIngredient.name;
+            }
+            if (newIngredient.amount !== ingredient.amount) {
+              editIngredient.amount = newIngredient.amount;
+            }
+            if (newIngredient.unit !== ingredient.unit) {
+              editIngredient.unit = newIngredient.unit;
+            }
+            if (newIngredient.group !== ingredient.group) {
+              editIngredient.group = newIngredient.group;
+            }
 
-          if (Object.keys(editIngredient).length > 0) {
-            ingredientPromises.push(this.api.editIngredient(ingredient.id, editIngredient));
+            if (Object.keys(editIngredient).length > 0) {
+              ingredientPromises.push(this.api.editIngredient(ingredient.id, editIngredient));
+            }
           }
-        }
+        });
       });
 
-      this.ingredientIds.forEach((id, index) => {
+      ingredientIds.forEach((id, index) => {
         if (id === null && this._editRecipe) {
           ingredientPromises.push(this.api.addIngredient(this._editRecipe.id, ingredients[index]));
         }
@@ -403,7 +512,7 @@ export class EditRecipeInformationComponent {
       if (Object.keys(recipe).length > 0) {
         res = await this.api.editRecipe(this._editRecipe.id, <EditRecipe>recipe);
       } else {
-        res = new ApiResponse<RecipeFull>(200, this._editRecipe);
+        res = await this.api.getRecipeById(this._editRecipe.id);
       }
     } else {
       res = await this.api.createRecipe(<NewRecipe>recipe);

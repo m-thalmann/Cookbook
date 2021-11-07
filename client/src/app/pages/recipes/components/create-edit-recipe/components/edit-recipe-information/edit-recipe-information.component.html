@@ -29,7 +29,6 @@
         <mat-select formControlName="language" required>
             <mat-select-trigger>
                 <div class="language-item-container" *ngIf="language?.value as _language">
-                    <img src="https://www.countryflags.io/{{ _language.flagCode }}/flat/32.png" />
                     <cb-image
                         src="https://www.countryflags.io/{{ _language.flagCode }}/flat/32.png"
                         fallback="assets/images/language_icon.svg"
@@ -42,7 +41,6 @@
 
             <mat-option *ngFor="let language of translation.languages" [value]="language">
                 <div class="language-item-container">
-                    <img src="https://www.countryflags.io/{{ language.flagCode }}/flat/32.png" />
                     <cb-image
                         src="https://www.countryflags.io/{{ language.flagCode }}/flat/32.png"
                         fallback="assets/images/language_icon.svg"
@@ -141,104 +139,144 @@
     </div>
 
     <div class="ingredients">
-        <h3>{{ 'recipe.ingredients' | translate }} ({{ ingredients.length }})</h3>
+        <h3>{{ 'recipe.ingredients' | translate }} ({{ ingredientAmount }})</h3>
         <div
-            class="ingredient-row"
-            formArrayName="ingredients"
-            *ngFor="let item of ingredients['controls']; let i = index"
+            class="ingredient-group"
+            [class.invalid]="group.get('items')?.hasError('minArrayLength')"
+            formArrayName="ingredientGroups"
+            *ngFor="let group of ingredientGroups.controls; let groupIndex = index"
         >
-            <div [formGroupName]="i">
-                <mat-form-field appearance="outline" color="primary" class="ingredient-amount">
-                    <mat-label>{{ 'amount' | translate }}</mat-label>
-                    <input
-                        matInput
-                        formControlName="amount"
-                        type="number"
-                        [cbFocus]="focusedIngredient === i"
-                        (keydown.enter)="$event.preventDefault(); addIngredient()"
-                    />
-                    <mat-error *ngIf="getFormError('amount', i) as formError">{{
-                        formError.key | translate: formError.replacements
-                    }}</mat-error>
-                </mat-form-field>
-                <mat-form-field appearance="outline" color="primary" class="ingredient-unit">
-                    <mat-label>{{ 'unit' | translate }}</mat-label>
-                    <input matInput formControlName="unit" (keydown.enter)="$event.preventDefault(); addIngredient()" />
-                    <mat-error *ngIf="getFormError('unit', i) as formError">{{
-                        formError.key | translate: formError.replacements
-                    }}</mat-error>
-                </mat-form-field>
-                <mat-form-field appearance="outline" color="primary" class="ingredient-name">
-                    <mat-label>{{ 'recipe.name' | translate }}</mat-label>
-                    <input
-                        matInput
-                        formControlName="name"
-                        required
-                        (keydown.enter)="$event.preventDefault(); addIngredient()"
-                        [matAutocomplete]="autocompleteIngredient"
-                    />
-                    <mat-error *ngIf="getFormError('name', i) as formError">{{
-                        formError.key | translate: formError.replacements
-                    }}</mat-error>
-                    <mat-autocomplete
-                        #autocompleteIngredient="matAutocomplete"
-                        (optionSelected)="onAutocompleteIngredientSelected(i, $event)"
-                    >
-                        <mat-option
-                            *ngFor="let option of filteredIngredientLists[i] | async; let index = index"
-                            [value]="option"
-                            class="autocomplete-option"
-                        >
-                            <span class="vertical-align-middle">
-                                {{ option.name }}
-                            </span>
-                            <span *ngIf="option.unit">
-                                &nbsp;&nbsp;|&nbsp;&nbsp;<small>{{ option.unit }}</small>
-                            </span>
-                        </mat-option>
-                    </mat-autocomplete>
-                </mat-form-field>
-                <mat-form-field appearance="outline" color="primary" class="ingredient-group">
-                    <mat-label>{{ 'group' | translate }}</mat-label>
-                    <input
-                        matInput
-                        formControlName="group"
-                        (keydown.enter)="$event.preventDefault(); addIngredient()"
-                        [matAutocomplete]="autocompleteGroup"
-                    />
-                    <mat-error *ngIf="getFormError('group', i) as formError">{{
-                        formError.key | translate: formError.replacements
-                    }}</mat-error>
-                    <mat-autocomplete #autocompleteGroup="matAutocomplete">
-                        <mat-option
-                            *ngFor="let option of filteredIngredientGroupLists[i] | async; let index = index"
-                            [value]="option"
-                            class="autocomplete-option"
-                        >
-                            {{ option }}
-                        </mat-option>
-                    </mat-autocomplete>
-                </mat-form-field>
-                <button
-                    mat-icon-button
-                    (click)="removeIngredient(i)"
-                    [disabled]="saving || disabled"
-                    type="button"
-                    tabindex="-1"
+            <div [formGroupName]="groupIndex">
+                <mat-form-field
+                    appearance="outline"
+                    color="primary"
+                    class="ingredient-group-name"
+                    *ngIf="ingredientGroups.controls.length > 1 || group.get('name')?.value"
                 >
-                    <mat-icon>delete</mat-icon>
-                </button>
+                    <mat-label>{{ 'group_name' | translate }}</mat-label>
+                    <input matInput formControlName="name" />
+                    <mat-error *ngIf="getIngredientGroupFormError('name', groupIndex) as formError">{{
+                        formError.key | translate: formError.replacements
+                    }}</mat-error>
+                </mat-form-field>
+
+                <p class="fg-warn" style="margin-bottom: 1.2rem" *ngIf="group.get('items')?.hasError('minArrayLength')">
+                    {{ 'messages.form_validation.too_few_elements' | translate }}
+                </p>
+
+                <div
+                    class="ingredient-row"
+                    formArrayName="items"
+                    *ngFor="let item of getIngredientGroupIngredients(groupIndex)!.controls; let i = index"
+                >
+                    <div [formGroupName]="i">
+                        <mat-form-field appearance="outline" color="primary" class="ingredient-amount">
+                            <mat-label>{{ 'amount' | translate }}</mat-label>
+                            <input
+                                matInput
+                                formControlName="amount"
+                                type="number"
+                                [cbFocus]="focusedIngredient === groupIndex + '-' + i"
+                                (keydown.enter)="$event.preventDefault(); addIngredient(groupIndex)"
+                            />
+                            <mat-error *ngIf="getIngredientFormError('amount', groupIndex, i) as formError">{{
+                                formError.key | translate: formError.replacements
+                            }}</mat-error>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" color="primary" class="ingredient-unit">
+                            <mat-label>{{ 'unit' | translate }}</mat-label>
+                            <input
+                                matInput
+                                formControlName="unit"
+                                (keydown.enter)="$event.preventDefault(); addIngredient(groupIndex)"
+                            />
+                            <mat-error *ngIf="getIngredientFormError('unit', groupIndex, i) as formError">{{
+                                formError.key | translate: formError.replacements
+                            }}</mat-error>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline" color="primary" class="ingredient-name">
+                            <mat-label>{{ 'recipe.name' | translate }}</mat-label>
+                            <input
+                                matInput
+                                formControlName="name"
+                                required
+                                (keydown.enter)="$event.preventDefault(); addIngredient(groupIndex)"
+                                [matAutocomplete]="autocompleteIngredient"
+                            />
+                            <mat-error *ngIf="getIngredientFormError('name', groupIndex, i) as formError">{{
+                                formError.key | translate: formError.replacements
+                            }}</mat-error>
+                            <mat-autocomplete
+                                #autocompleteIngredient="matAutocomplete"
+                                (optionSelected)="onAutocompleteIngredientSelected(groupIndex, i, $event)"
+                            >
+                                <mat-option
+                                    *ngFor="
+                                        let option of filteredIngredientLists[groupIndex][i] | async;
+                                        let index = index
+                                    "
+                                    [value]="option"
+                                    class="autocomplete-option"
+                                >
+                                    <span class="vertical-align-middle">
+                                        {{ option.name }}
+                                    </span>
+                                    <span *ngIf="option.unit">
+                                        &nbsp;&nbsp;|&nbsp;&nbsp;<small>{{ option.unit }}</small>
+                                    </span>
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                        <button
+                            mat-icon-button
+                            (click)="removeIngredient(groupIndex, i)"
+                            [disabled]="saving || disabled"
+                            type="button"
+                            tabindex="-1"
+                        >
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="ingredient-group-buttons">
+                    <button
+                        mat-raised-button
+                        (click)="addIngredient(groupIndex)"
+                        color="primary"
+                        [disabled]="saving || disabled"
+                        type="button"
+                        style="margin-right: 1em"
+                    >
+                        <mat-icon>add</mat-icon> {{ 'pages.edit_recipe.add_ingredient' | translate }}
+                    </button>
+
+                    <button
+                        mat-raised-button
+                        (click)="removeIngredientGroup(groupIndex)"
+                        [disabled]="saving || disabled"
+                        type="button"
+                    >
+                        <mat-icon>delete</mat-icon> {{ 'pages.edit_recipe.remove_ingredient_group' | translate }}
+                    </button>
+                </div>
             </div>
         </div>
 
         <button
             mat-raised-button
-            (click)="addIngredient()"
+            (click)="addIngredientGroup(null, true, ingredientGroups.length === 0)"
             color="primary"
             [disabled]="saving || disabled"
             type="button"
         >
-            <mat-icon>add</mat-icon> {{ 'pages.edit_recipe.add_ingredient' | translate }}
+            <mat-icon>add</mat-icon>
+            {{
+                (ingredientGroups.length === 0
+                    ? 'pages.edit_recipe.add_ingredient'
+                    : 'pages.edit_recipe.add_ingredient_group'
+                ) | translate
+            }}
         </button>
 
         <p class="fg-warn icon-text" style="display: inline-block; margin-left: 0.5em" *ngIf="ingredientsError">

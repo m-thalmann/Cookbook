@@ -13,7 +13,7 @@ use PAF\Router\Response;
 $group
     ->get("/list", Authorization::middleware(), function () {
         $stmt = Database::get()->prepare(
-            "SELECT DISTINCT `name`, `unit`, `group` FROM ingredients WHERE recipeId IN (SELECT id FROM recipes WHERE userId = ?)"
+            "SELECT DISTINCT `name`, `unit` FROM ingredients WHERE recipeId IN (SELECT id FROM recipes WHERE userId = ?)"
         );
 
         if (!$stmt->execute([Authorization::user()->id])) {
@@ -47,11 +47,14 @@ $group
     })
     ->delete("/id/{{i:id}}", Authorization::middleware(), function ($req) {
         if (
-            Ingredient::getQueryForUser("id = :id", [
-                "id" => $req["params"]["id"],
+            Ingredient::getQueryForUser(
+                "id = :id",
+                [
+                    "id" => $req["params"]["id"],
+                ],
                 Authorization::user(),
-                true,
-            ])->delete()
+                true
+            )->delete()
         ) {
             return Response::ok();
         } else {

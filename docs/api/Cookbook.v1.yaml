@@ -573,7 +573,7 @@ paths:
                 ingredients:
                   type: array
                   items:
-                    $ref: "#/components/schemas/NewIngredient"
+                    $ref: '#/components/schemas/NewIngredient'
               required:
                 - public
                 - name
@@ -895,7 +895,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/NewIngredient"
+              $ref: '#/components/schemas/NewIngredient'
       responses:
         '201':
           description: Created
@@ -2017,8 +2017,19 @@ components:
           properties:
             ingredients:
               type: array
+              description: Ingredient groups
               items:
-                $ref: '#/components/schemas/Ingredient'
+                type: object
+                properties:
+                  group:
+                    type: string
+                    description: The group's name
+                    example: Filling
+                  items:
+                    type: array
+                    description: The ingredients
+                    items:
+                      $ref: '#/components/schemas/Ingredient'
           required:
             - ingredients
     RecipeImage:

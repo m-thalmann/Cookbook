@@ -82,6 +82,7 @@
   },
   "email": "Email",
   "group": "Gruppe",
+  "group_name": "Gruppenname",
   "id": "ID",
   "language": "Sprache",
   "login": "Anmelden",
@@ -143,7 +144,8 @@
       "max_length": "Der Wert ist zu lange (max. {{maxLength}})",
       "min": "Der Wert ist zu klein (min. {{min}})",
       "passwords_mismatch": "Die Passwörter stimmen nicht überein",
-      "required": "Dieses Feld muss ausgefüllt werden"
+      "required": "Dieses Feld muss ausgefüllt werden",
+      "too_few_elements": "Zu wenige Elemente"
     },
     "login_register": {
       "error_verifying_email": "Fehler beim Verifizieren der Email!",
@@ -276,6 +278,8 @@
     },
     "edit_recipe": {
       "add_ingredient": "Zutat hinzufügen",
+      "add_ingredient_group": "Zutatengruppe hinzufügen",
+      "remove_ingredient_group": "Zutatengruppe löschen",
       "delete_recipe": "Rezept löschen",
       "edit_images": "Bilder bearbeiten",
       "edit_information": "Informationen bearbeiten",

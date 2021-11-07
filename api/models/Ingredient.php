@@ -91,6 +91,35 @@ class Ingredient extends Model {
     }
 
     /**
+     * Groups the ingredients
+     *
+     * @param Ingredient[] The ingredients
+     *
+     * @return array An array with each element having the following format:
+     *               - ["group"] - string - The name of the group
+     *               - ["items"] - Ingredient[] - The ingredients of this group
+     */
+    public static function group($ingredients) {
+        $ret = [];
+
+        $groupIndices = [];
+
+        foreach ($ingredients as $ingredient) {
+            if (!array_key_exists($ingredient->group, $groupIndices)) {
+                $ret[] = [
+                    "group" => $ingredient->group,
+                    "items" => [],
+                ];
+                $groupIndices[$ingredient->group] = count($ret) - 1;
+            }
+
+            $ret[$groupIndices[$ingredient->group]]["items"][] = $ingredient;
+        }
+
+        return $ret;
+    }
+
+    /**
      * Returns a specific ingredient
      *
      * @param int $id The id of the ingredient

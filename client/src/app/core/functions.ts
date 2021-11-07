@@ -38,9 +38,11 @@ export function trimAndNull(string: string | null | undefined) {
     if (string.length === 0) {
       string = null;
     }
+
+    return string;
   }
 
-  return string;
+  return null;
 }
 
 /**
