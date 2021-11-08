@@ -95,6 +95,19 @@ export class LayoutComponent implements AfterViewInit, OnDestroy {
     });
   }
 
+  /**
+   * Function needed to forcefully reload recipe-create page after history.push(...)
+   */
+  async navigateCreateRecipe() {
+    if (this.router.url.localeCompare('/recipes/create') === 0) {
+      await this.router.navigateByUrl('/reload', {
+        // non-existent location, does not matter
+        skipLocationChange: true,
+      });
+      await this.router.navigateByUrl('/recipes/create');
+    }
+  }
+
   ngOnDestroy() {
     this.subSink.clear();
   }

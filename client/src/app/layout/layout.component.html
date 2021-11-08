@@ -102,7 +102,13 @@
             <span>{{ 'pages.categories.title' | translate }}</span>
         </div>
     </a>
-    <a routerLink="/recipes/create" routerLinkActive="active" class="fg-accent create-recipe-link" *ngIf="isLoggedin">
+    <a
+        routerLink="/recipes/create"
+        routerLinkActive="active"
+        (click)="navigateCreateRecipe()"
+        class="fg-accent create-recipe-link"
+        *ngIf="isLoggedin"
+    >
         <div>
             <mat-icon>add</mat-icon>
             <span class="hide-desktop">{{ 'pages.create_recipe.title' | translate }}</span>

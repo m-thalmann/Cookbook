@@ -180,6 +180,7 @@
       "entered_password_wrong": "The entered password is wrong!",
       "error_deleting_account": "Error deleting account!",
       "error_loading_users": "Error loading users!",
+      "language_changed": "Your language was changed. Do you want to apply it?",
       "login_successful": "Successfully logged in!",
       "no_users_found": "No users found",
       "password_reset_successful": "Password was reset successfully!",

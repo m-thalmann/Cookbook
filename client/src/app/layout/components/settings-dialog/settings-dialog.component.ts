@@ -212,7 +212,11 @@ export class SettingsDialogComponent implements OnDestroy {
       if (res.isOK()) {
         this.dialogRef.close();
 
-        if ((await this.api.getAuthenticatedUser()).isOK()) {
+        let authUserPromise = this.api.getAuthenticatedUser();
+
+        if ((await authUserPromise).isOK()) {
+          this.user.loadUser(authUserPromise);
+
           this.snackbar.info('messages.users.settings_updated_successfully');
         } else {
           this.user.logout('settings_changed');

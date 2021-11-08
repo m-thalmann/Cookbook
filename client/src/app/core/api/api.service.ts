@@ -210,11 +210,7 @@ export class ApiService {
    * Loads the authenticated user and sets it in the user-service
    */
   getAuthenticatedUser() {
-    let promise = this.get<AuthUser>(`${this.URL}/auth`);
-
-    this.user.loadUser(promise);
-
-    return promise;
+    return this.get<AuthUser>(`${this.URL}/auth`);
   }
 
   verifyEmail(email: string, code: string) {

@@ -33,7 +33,7 @@ export function setupServices(
     await config.load();
 
     if (user.isLoggedin) {
-      api.getAuthenticatedUser();
+      user.loadUser(api.getAuthenticatedUser(), true);
     }
 
     await translation.init(config.get('language', null));

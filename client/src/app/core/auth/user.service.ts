@@ -129,18 +129,27 @@ export class UserService {
   /**
    * Loads the user by an API-Response-promise
    *
-   * @see {@link ApiService.getAuthenticatedUser}
    * @see {@link AppModule.setupServices}
    *
    * @param userPromise
    */
-  async loadUser(userPromise: Promise<ApiResponse<AuthUser>>) {
+  async loadUser(userPromise: Promise<ApiResponse<AuthUser>>, fromInit = false) {
     let res = await userPromise;
 
     if (res.isOK() && res.value) {
       let userJson = JSON.stringify(res.value);
 
       if (JSON.stringify(this._user) !== userJson) {
+        if (fromInit && res.value.languageCode !== this._user?.languageCode) {
+          Logger.info('UserService', LoggerColor.orange, 'Users language was changed');
+
+          this.snackbar.action('messages.users.language_changed', () => {
+            if (res.value?.languageCode) {
+              this.translation.use(res.value?.languageCode);
+            }
+          });
+        }
+
         this._user = res.value;
 
         if (this.isRemembered) {
