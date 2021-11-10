@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/core/api/api.service';
 import { RecipeFull } from 'src/app/core/api/ApiInterfaces';
 import { UserService } from 'src/app/core/auth/user.service';
-import { calculateTotalTime, Logger, LoggerColor, SubSink } from 'src/app/core/functions';
+import { Logger, LoggerColor, SubSink } from 'src/app/core/functions';
 import { TranslationService } from 'src/app/core/i18n/translation.service';
 import { SeoService } from 'src/app/core/services/seo.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
@@ -63,18 +63,6 @@ export class PageRecipeComponent implements OnInit, OnDestroy {
         this.selectedPortions = value;
       }
     }
-  }
-
-  get categoryURL() {
-    if (!this.recipe?.category) {
-      return null;
-    }
-
-    return '/categories/' + encodeURIComponent(this.recipe?.category);
-  }
-
-  get totalTime() {
-    return calculateTotalTime(this.recipe);
   }
 
   getCalculateIngredientAmount(amount: number) {

@@ -7,43 +7,6 @@ img {
   margin: 0 auto;
 }
 
-mat-chip-list {
-  mat-chip,
-  a[mat-chip] {
-    opacity: 1 !important;
-    font-weight: normal;
-
-    &:not(.difficulty) {
-      mat-icon {
-        font-size: 1.25em;
-        line-height: 1.25em;
-      }
-
-      mat-icon,
-      span {
-        vertical-align: middle;
-        display: inline;
-      }
-    }
-
-    &.difficulty {
-      mat-icon {
-        font-size: 1.5em;
-        line-height: 1.5em;
-        height: 1.5em;
-        &.disabled {
-          opacity: 0.25;
-        }
-      }
-    }
-  }
-
-  a[mat-chip] {
-    text-decoration: none;
-    cursor: pointer;
-  }
-}
-
 .author,
 .information,
 .image-slider,

@@ -13,47 +13,7 @@
     <span class="author">{{ 'recipe.by' | translate }} {{ recipe.user.name }}</span>
 
     <div class="information">
-        <mat-chip-list>
-            <a
-                mat-chip
-                [routerLink]="categoryURL"
-                *ngIf="recipe.category"
-                [matTooltip]="'recipe.category' | translate"
-                [matTooltipShowDelay]="500"
-            >
-                <mat-icon>menu_book</mat-icon> <span>{{ recipe.category }}</span>
-            </a>
-            <mat-chip
-                [disabled]="true"
-                *ngIf="totalTime as time"
-                matTooltip="{{ 'recipe.total_time' | translate }}"
-                [matTooltipShowDelay]="500"
-            >
-                <mat-icon>timer</mat-icon> <span>{{ time.key | translate: time.replacements }}</span>
-            </mat-chip>
-            <mat-chip
-                [disabled]="true"
-                *ngIf="recipe.difficulty !== null"
-                [matTooltip]="'recipe.difficulty' | translate"
-                [matTooltipShowDelay]="500"
-                class="difficulty"
-            >
-                <mat-icon *ngFor="let i of [0, 1, 2, 3, 4]" [class.disabled]="recipe.difficulty < i">
-                    whatshot
-                </mat-icon>
-            </mat-chip>
-            <mat-chip
-                [disabled]="true"
-                [matTooltip]="'language' | translate"
-                [matTooltipShowDelay]="500"
-                *ngIf="translation.getLanguageInformation(recipe.languageCode) as language"
-            >
-                <mat-icon>language</mat-icon> <span>{{ language.name }}</span>
-            </mat-chip>
-            <mat-chip [disabled]="true" [matTooltip]="'recipe.publish_date' | translate" [matTooltipShowDelay]="500">
-                <mat-icon>today</mat-icon> <span>{{ recipe.publishDate * 1000 | localizedDate: true }}</span>
-            </mat-chip>
-        </mat-chip-list>
+        <cb-recipe-tags [recipe]="recipe"></cb-recipe-tags>
     </div>
 
     <div class="actions">

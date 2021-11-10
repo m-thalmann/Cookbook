@@ -10,6 +10,7 @@ import { PaginatorComponent } from './paginator/paginator.component';
 import { RecipeItemComponent } from './recipe-item/recipe-item.component';
 import { SkeletonRecipeItemComponent } from './recipe-item/skeleton/skeleton-recipe-item.component';
 import { RecipeListComponent } from './recipe-list/recipe-list.component';
+import { RecipeTagsComponent } from './recipe-tags/recipe-tags.component';
 import { SkeletonComponent } from './skeleton/skeleton.component';
 
 const components = [
@@ -22,6 +23,7 @@ const components = [
   RecipeListComponent,
   SkeletonComponent,
   InputDialogComponent,
+  RecipeTagsComponent,
 ];
 
 @NgModule({
