@@ -302,7 +302,9 @@
     },
     "not_found": {
       "return_home": "Zurück zur Startseite",
-      "title": "Seite nicht gefunden"
+      "title": "Seite nicht gefunden",
+      "heading": "Oje...",
+      "text": "Die angeforderte Seite konnte nicht gefunden werden."
     },
     "recipe": {
       "ingredients_for": "Zutaten für",

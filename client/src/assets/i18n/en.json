@@ -302,7 +302,9 @@
     },
     "not_found": {
       "return_home": "Return to home",
-      "title": "Page not found"
+      "title": "Page not found",
+      "heading": "Oh My...",
+      "text": "The page you requested could not be found."
     },
     "recipe": {
       "ingredients_for": "Ingredients for",
