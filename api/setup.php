@@ -503,7 +503,7 @@ $adminUsers =
             }
         }
 
-        fetch('<?=getAPIUrl(); ?>').then((val) => {
+        fetch('<?=getAPIUrl(); ?>/info').then((val) => {
             setAPIWorks(val.ok);
         }).catch((err) => {
             setAPIWorks(false);

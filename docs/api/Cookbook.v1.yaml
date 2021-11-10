@@ -23,7 +23,7 @@ tags:
   - name: Category
   - name: Admin
 paths:
-  /:
+  /info:
     get:
       summary: Used to check if api is reachable
       tags:

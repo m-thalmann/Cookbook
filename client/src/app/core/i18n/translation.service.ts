@@ -18,7 +18,7 @@ export class TranslationService {
   private translations: { [key: string]: any } = {};
   private currentLanguage: string | null = null;
 
-  private availableLanguages: { key: string; name: string; flagCode: string }[] | null = null;
+  private availableLanguages: { key: string; name: string; flagIcon: string }[] | null = null;
 
   readonly languageChanged = new EventEmitter<string>();
   readonly languageSaved = new EventEmitter<string | null>();
@@ -193,6 +193,16 @@ export class TranslationService {
   private async loadAvailableLanguages() {
     try {
       this.availableLanguages = await this.http.get<any>(`${TRANSLATIONS_PATH}/_languages.json`).toPromise();
+
+      if (this.availableLanguages) {
+        this.availableLanguages = this.availableLanguages.map((language) => {
+          if (language.flagIcon) {
+            language.flagIcon = 'assets/i18n/flag_icons/' + language.flagIcon;
+          }
+
+          return language;
+        });
+      }
     } catch (e: any) {
       Logger.error('TranslationService', LoggerColor.orange, `Error loading available-translations-file:`, e.message);
     }

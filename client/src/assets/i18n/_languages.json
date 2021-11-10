@@ -2,11 +2,11 @@
   {
     "key": "en",
     "name": "English",
-    "flagCode": "gb"
+    "flagIcon": "gb.svg"
   },
   {
     "key": "de",
     "name": "Deutsch",
-    "flagCode": "de"
+    "flagIcon": "de.svg"
   }
 ]

@@ -141,7 +141,7 @@
     >
         <div class="language-menu-item">
             <cb-image
-                src="https://www.countryflags.io/{{ language.flagCode }}/flat/32.png"
+                [src]="language.flagIcon"
                 fallback="assets/images/language_icon.svg"
                 *ngIf="translation.language !== language.key"
             ></cb-image>

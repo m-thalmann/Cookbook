@@ -137,6 +137,7 @@ To add a new translation:
 
 1. Add a file to the `client/src/assets/i18n` directory (use the language-code (ISO 639-1 Language Code))
 1. Translate the keys used in the other translation-files
+1. Add an icon-file to the `client/src/assets/i18n/flag_icons` directory (see https://flagicons.lipis.dev/)
 1. Register the new language in the `_languages.json`-file:
 
    ```jsonc
@@ -145,7 +146,7 @@ To add a new translation:
      {
        "key": "en", // the name of the json-file
        "name": "English", // the name to display
-       "flagCode": "gb" // the code of the flag to use (see https://www.countryflags.io/)
+       "flagIcon": "gb.svg" // the icon-file to use
      }
      // ...
    ]
