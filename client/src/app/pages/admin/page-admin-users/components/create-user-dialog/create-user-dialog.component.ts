@@ -114,7 +114,7 @@ export class CreateUserDialogComponent implements OnDestroy {
       if (res.isOK()) {
         this.dialogRef.close(true);
 
-        this.snackbar.info('message.admin.user_created_successfully');
+        this.snackbar.info('messages.admin.user_created_successfully');
       } else if (res.isConflict()) {
         this.error = 'messages.users.email_already_taken';
       } else {

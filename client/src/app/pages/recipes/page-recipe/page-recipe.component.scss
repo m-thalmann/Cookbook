@@ -64,7 +64,7 @@ h3 {
       margin: 0 0.5em;
 
       background: transparent;
-      border: 1px solid #{$foreground}50;
+      border: 1px solid adjustColor($foreground, 75%);
       border-radius: 0.25em;
       font-size: 1em;
 
@@ -110,7 +110,7 @@ h3 {
           }
 
           &:nth-child(odd) > td {
-            background: #{mat.get-color-from-palette($primary)}30;
+            background: adjustColor(mat.get-color-from-palette($primary), 50%);
           }
         }
       }

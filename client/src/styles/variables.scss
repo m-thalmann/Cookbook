@@ -19,3 +19,14 @@ $foreground: #000000;
 
 $mobile-width: 700px;
 $desktop-width: 700.1px;
+
+// adjusts light colors to dark, darker colors to light
+@function adjustColor($color, $amount) {
+  @if (lightness($color) >= 50%) {
+    // light color -> make darker
+    @return darken($color, $amount);
+  } @else {
+    // dark color -> make lighter
+    @return lighten($color, $amount);
+  }
+}

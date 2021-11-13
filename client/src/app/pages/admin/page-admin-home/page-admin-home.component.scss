@@ -42,7 +42,7 @@
     padding: 1em;
     margin: 0 1em 1em 0;
 
-    border: 1px solid #{$foreground}20;
+    border: 1px solid adjustColor($background, 20%);
     border-radius: 0.25em;
 
     color: inherit;
@@ -82,7 +82,7 @@
 
     &:not(:last-of-type) {
       padding-bottom: 2rem;
-      border-bottom: 1px solid #{$foreground}20;
+      border-bottom: 1px solid adjustColor($background, 20%);
     }
   }
 }

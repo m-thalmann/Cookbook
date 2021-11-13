@@ -72,8 +72,8 @@ mat-form-field {
     margin-bottom: 1em;
     border-radius: 5px;
 
-    background: #{$foreground}05;
-    border: 1px solid #{$foreground}20;
+    background: adjustColor($background, 2%);
+    border: 1px solid adjustColor($background, 15%);
     border-left: 2px solid mat.get-color-from-palette($primary);
 
     &.invalid {
@@ -85,16 +85,17 @@ mat-form-field {
     }
 
     .ingredient-row {
-      border-bottom: 1px solid #{$foreground}50;
+      border-bottom: 1px solid adjustColor($background, 25%);
       margin-bottom: 1em;
 
       .ingredient-amount,
       .ingredient-unit {
-        width: 7em;
+        width: 9em;
       }
 
-      .ingredient-group {
-        width: 10em;
+      mat-error {
+        background: adjustColor($background, 2%);
+        padding: 0 -1em;
       }
     }
 
@@ -126,7 +127,7 @@ mat-form-field {
   }
 
   small {
-    color: #{$foreground}90;
+    color: adjustColor($foreground, 40%);
   }
 }
 

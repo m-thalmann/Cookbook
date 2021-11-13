@@ -18,7 +18,7 @@ img {
     text-align: center;
 
     border-radius: 5px;
-    border: 1px solid #{$foreground}70;
+    border: 1px solid adjustColor($background, 20%);
 
     position: relative;
     overflow: hidden;
@@ -98,13 +98,13 @@ img {
       cursor: pointer;
 
       border-radius: 3px;
-      border: 1px solid #{$foreground}20;
+      border: 1px solid adjustColor($background, 20%);
       opacity: 0.75;
 
       transition: opacity 0.2s;
 
       &.active {
-        border: 2px solid #{$foreground}70;
+        border: 2px solid adjustColor($background, 30%);
         opacity: 1;
       }
 

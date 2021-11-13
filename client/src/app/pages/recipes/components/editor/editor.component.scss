@@ -11,7 +11,7 @@
         display: inline-block;
         margin-left: 0.25em;
 
-        color: #{$foreground}80;
+        color: adjustColor($foreground, 50%);
 
         font-size: 0.75rem;
       }
@@ -23,7 +23,7 @@
   overflow: auto;
   max-height: 25em;
 
-  border: 1px solid #{$foreground}50;
+  border: 1px solid adjustColor($background, 40%);
   border-radius: 0.5em;
 
   &.disabled {

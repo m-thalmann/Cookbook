@@ -28,13 +28,13 @@ mat-spinner {
     text-decoration: none;
     text-align: center;
 
-    border: 1px solid #{$foreground}20;
+    border: 1px solid adjustColor($background, 20%);
     border-radius: 0.5em;
     overflow: hidden;
 
     transition: box-shadow 0.2s;
 
-    background: #{$foreground}10;
+    background: adjustColor($background, 5%);
 
     &:hover {
       box-shadow: 0 0 15px -5px rgba(0, 0, 0, 0.6);

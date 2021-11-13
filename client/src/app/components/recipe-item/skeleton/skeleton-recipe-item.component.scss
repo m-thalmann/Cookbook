@@ -3,7 +3,7 @@
 :host {
   display: block;
 
-  border: 1px solid #{$foreground}10;
+  border: 1px solid adjustColor($foreground, 80%);
   border-radius: 0.75em;
   padding: 1em;
 

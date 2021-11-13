@@ -67,7 +67,7 @@ details {
 
       background: $background;
 
-      border: 1px solid #{$foreground}50;
+      border: 1px solid adjustColor($foreground, 75%);
       border-radius: 0.25em;
 
       &:hover {
@@ -86,7 +86,7 @@ details {
 
     th,
     tr:not(:last-of-type) td {
-      border-bottom: 1px solid #{$foreground}25;
+      border-bottom: 1px solid adjustColor($foreground, 75%);
     }
 
     th,
@@ -95,7 +95,7 @@ details {
     }
 
     tbody tr:nth-child(odd) {
-      background: #{$foreground}20;
+      background: adjustColor($background, 10);
     }
   }
 

@@ -37,7 +37,7 @@
   text-decoration: none;
   position: relative;
 
-  border: 1px solid #{$foreground}25;
+  border: 1px solid adjustColor($foreground, 75%);
   border-radius: 0.75em;
   padding: 1em;
   cursor: pointer;
