@@ -252,7 +252,7 @@ $group
             }
 
             if ($user->verifyEmail($data["code"])) {
-                if ($user->save()) {
+                if ($user->save(false)) {
                     return Response::ok();
                 }
             } else {
@@ -287,7 +287,7 @@ $group
 
         if ($user->verifyEmailCodeExpires < time()) {
             $user->generateVerifyEmailCode();
-            $user->save();
+            $user->save(false);
         }
 
         Mailer::sendEmailVerification($user);
@@ -321,7 +321,7 @@ $group
 
         $user->password = $data["password"];
 
-        if (!$user->save()) {
+        if (!$user->save(false)) {
             throw ApiException::error("default", "Error saving user");
         }
 

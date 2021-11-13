@@ -196,7 +196,7 @@ if (array_key_exists("addUser", $_GET) && $databaseConnected) {
     $user->clearEmailVerification();
 
     try {
-        $user->save();
+        $user->save(false);
 
         header('Location: setup.php');
         exit();

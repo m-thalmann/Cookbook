@@ -140,7 +140,7 @@ $group
             $ingredient->setRecipeId($recipe->id, Authorization::user()->id);
 
             try {
-                $ingredient->save();
+                $ingredient->save(false);
             } catch (InvalidException $e) {
                 Database::get()->rollBack();
 

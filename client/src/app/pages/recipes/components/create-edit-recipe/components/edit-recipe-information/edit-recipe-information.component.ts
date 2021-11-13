@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { filter, map, startWith } from 'rxjs/operators';
 import { ApiService } from 'src/app/core/api/api.service';
 import {
   EditIngredient,
@@ -271,7 +271,7 @@ export class EditRecipeInformationComponent {
     } | null = null,
     focus = true
   ) {
-    let ingredients = this.ingredientGroups.at(groupIndex).get('items') as FormArray;
+    let ingredients = this.ingredientGroups.get([groupIndex, 'items']) as FormArray;
 
     ingredients.push(
       this.fb.group({
@@ -286,17 +286,16 @@ export class EditRecipeInformationComponent {
 
     let ingredientIndex = ingredients.length - 1;
 
-    const filteredIngredientList = ingredients
-      .at(ingredients.length - 1)!
-      .get('name')!
-      .valueChanges.pipe(
-        startWith(''),
-        map((value: string | null) => {
-          const filterValue = (value || '').toLowerCase();
+    const filteredIngredientList = ingredients.get([ingredients.length - 1, 'name'])!.valueChanges.pipe(
+      startWith(''),
+      // on autocomplete the value will be set to a ListIngredient (directly overwritten by onAutocompleteIngredientSelected(...)-function)
+      filter((value) => typeof value !== 'object'),
+      map((value: string | null) => {
+        const filterValue = (value || '').toLowerCase();
 
-          return this.ingredientList?.filter((option) => option.name.toLowerCase().includes(filterValue)) || [];
-        })
-      );
+        return this.ingredientList?.filter((option) => option.name.toLowerCase().includes(filterValue)) || [];
+      })
+    );
 
     this.filteredIngredientLists[groupIndex].push(filteredIngredientList);
 
