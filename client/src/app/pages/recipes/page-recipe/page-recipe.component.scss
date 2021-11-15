@@ -110,7 +110,7 @@ h3 {
           }
 
           &:nth-child(odd) > td {
-            background: adjustColor(mat.get-color-from-palette($primary), 50%);
+            background: #{mat.get-color-from-palette($primary)}30;
           }
         }
       }

@@ -22,6 +22,7 @@ $databaseConnected = false;
 $createUserError = null;
 
 const PASSWORD_PLACEHOLDER = "<db_password>";
+const REQUIRED_PHP_EXTENSIONS = ["pdo", "pdo_mysql", "openssl", "gd"];
 
 if (is_file(Config::getBaseConfigPath())) {
     try {
@@ -106,15 +107,7 @@ function connectDB() {
 function getAPIUrl(){
     $isHttps = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
 
-    $url = ($isHttps ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
-
-    if(($isHttps && $_SERVER['SERVER_PORT'] != 443) || (!$isHttps && $_SERVER['SERVER_PORT'] != 80)){
-        $url .= ":$_SERVER[SERVER_PORT]";
-    }
-
-    $url .= Config::getBaseConfig("root_url");
-
-    return $url;
+    return ($isHttps ? "https" : "http") . "://$_SERVER[HTTP_HOST]" . Config::getBaseConfig("root_url");
 }
 
 if (array_key_exists("complete", $_GET)) {
@@ -503,10 +496,12 @@ $adminUsers =
             }
         }
 
-        fetch('<?=getAPIUrl(); ?>/info').then((val) => {
-            setAPIWorks(val.ok);
-        }).catch((err) => {
-            setAPIWorks(false);
+        window.addEventListener('load', () => {
+            fetch('<?=getAPIUrl(); ?>/info').then((val) => {
+                setAPIWorks(val.ok);
+            }).catch((err) => {
+                setAPIWorks(false);
+            })
         })
     </script>
 </head>
@@ -565,7 +560,28 @@ $adminUsers =
                 <span class="material-icons" style="color: limegreen; vertical-align: middle">check</span>
                 <?php } ?>
             </section>
+
+            <section>
+                <h2>
+                    <span class="material-icons">extension</span>
+                    <span>PHP extensions</span>
+                </h2>
+
+                <ul>
+                    <?php foreach(REQUIRED_PHP_EXTENSIONS as $extension) { ?>
+                    <li>
+                        <span><?=$extension; ?></span>
+                        <?php if (extension_loaded($extension)) { ?>
+                        <span class="material-icons" style="color: limegreen">check</span>
+                        <?php } else { ?>
+                        <span class="material-icons" style="color: red">clear</span>
+                        <?php } ?>
+                    </li>
+                    <?php } ?>
+                </ul>
+            </section>
         
+            <?php if(extension_loaded("pdo") && extension_loaded("pdo_mysql")) { ?>
             <section>
                 <h2>
                     <span class="material-icons">storage</span>
@@ -626,8 +642,14 @@ $adminUsers =
                 </div>
                 <?php } ?>
             </section>
+            <?php } ?>
 
             <section style="padding: 1em">
+                <h2>
+                    <span class="material-icons">assignment</span>
+                    <span>Checks</span>
+                </h2>
+
                 <ul>
                     <li>
                         <span>Created config file</span>
