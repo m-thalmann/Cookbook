@@ -46,7 +46,7 @@ class RecipeImage extends Model {
      * @var string
      * @output false
      */
-    public $path;
+    public $fileName;
 
     /**
      * @prop
@@ -78,11 +78,12 @@ class RecipeImage extends Model {
 
         $mimeType = self::MIME_TYPES[$fileExtension];
 
-        $finalPath =
-            self::getImageStorePath() .
+        $finalFileName =
             "recipe_$recipeId-" .
             sha1_file($tmpLocation) .
             ".$fileExtension";
+        
+        $finalPath = self::getImageStorePath() . $finalFileName;
 
         if (file_exists($finalPath)) {
             throw new DuplicateException(
@@ -100,7 +101,7 @@ class RecipeImage extends Model {
         try {
             $recipeImage = self::create([
                 "recipeId" => $recipeId,
-                "path" => $finalPath,
+                "fileName" => $finalFileName,
                 "mimeType" => $mimeType,
             ]);
 
@@ -120,13 +121,13 @@ class RecipeImage extends Model {
         $images = scandir(self::getImageStorePath());
 
         $databaseImages = Database::get()
-            ->query("SELECT `path` FROM `recipe_images`")
+            ->query("SELECT `fileName` FROM `recipe_images`")
             ->fetchAll(\PDO::FETCH_COLUMN);
 
         foreach ($images as $image) {
             if (
                 $image[0] !== "." &&
-                !in_array(self::getImageStorePath() . $image, $databaseImages)
+                !in_array($image, $databaseImages)
             ) {
                 unlink(self::getImageStorePath() . $image);
             }
@@ -192,7 +193,7 @@ class RecipeImage extends Model {
         $image = self::get("id = ?", [$id])->getFirst();
 
         if ($image !== null) {
-            unlink($image->path);
+            unlink(self::getImageStorePath() . $image->fileName);
 
             return $image->delete();
         } else {

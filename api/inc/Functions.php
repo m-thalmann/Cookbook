@@ -61,7 +61,8 @@ class Functions {
         $cacheable = true,
         $maxSize = null
     ) {
-        if (!is_file($image->path)) {
+        $path = RecipeImage::getImageStorePath() . $image->fileName;
+        if (!is_file($path)) {
             return Response::notFound();
         }
 
@@ -83,19 +84,19 @@ class Functions {
         if ($maxSize !== null) {
             switch ($image->mimeType) {
                 case "image/jpeg":
-                    $img = imagecreatefromjpeg($image->path);
+                    $img = imagecreatefromjpeg($path);
                     break;
                 case "image/png":
-                    $img = imagecreatefrompng($image->path);
+                    $img = imagecreatefrompng($path);
                     break;
                 case "image/gif":
-                    $img = imagecreatefromgif($image->path);
+                    $img = imagecreatefromgif($path);
                     break;
                 default:
                     throw ApiException::error("image.type", "Bad image-type");
             }
 
-            list($width, $height) = getimagesize($image->path);
+            list($width, $height) = getimagesize($path);
 
             $ratio = $width / $height;
 
@@ -137,9 +138,9 @@ class Functions {
             }
         }
 
-        $size = filesize($image->path);
+        $size = filesize($path);
 
-        $fp = fopen($image->path, "rb");
+        $fp = fopen($path, "rb");
         $file = fread($fp, $size);
 
         fclose($fp);

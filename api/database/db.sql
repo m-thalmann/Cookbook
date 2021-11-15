@@ -68,7 +68,7 @@ CREATE TABLE `ingredients` (
 CREATE TABLE `recipe_images` (
   `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `recipeId` INT(11) NOT NULL,
-  `path` TEXT NOT NULL,
+  `fileName` TEXT NOT NULL,
   `mimeType` VARCHAR(20) NOT NULL,
 
   FOREIGN KEY (recipeId) REFERENCES recipes(id)

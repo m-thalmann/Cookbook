@@ -11,7 +11,7 @@
 
 ## Description
 
-Cookbook is a web application that stores all your favorite recipes. Self-hosting gives you full control over the precious, secret family recipes and lets you share them with your friends.
+Cookbook is a web application that stores all your favorite recipes. Self-hosting gives you full control over your personal recipes and lets you share them with your friends and family.
 
 ![Cookbook](docs/images/cookbook.png)
 
@@ -45,7 +45,14 @@ Cookbook is a web application that stores all your favorite recipes. Self-hostin
 
 ## API-Setup
 
-The API-Setup-Script (`<API-URL>/setup.php`) is used to setup the configuration of the API, without the need to configure everything yourself. You can still do it yourself:
+Make sure the following required php extensions are active:
+
+- `pdo`
+- `pdo_mysql`
+- `openssl`
+- `gd`
+
+The API-Setup-Script (`<API-URL>/setup.php`) is used to setup the configuration of the API, without the need to configure everything yourself. You can still do it yourself, but you will still need to use the `setup.php` script to create an admin-user:
 
 1. Create a configuration file by copying the file `api/config/config.example.json` to `api/config/config.json` and setting the values accordingly (see section [Configuration](#configuration))
 1. Create a configuration-secret file: `api/config/config_secret` with a random-string secret (see section [Configuration](#configuration))
