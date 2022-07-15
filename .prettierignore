@@ -1,5 +1,10 @@
 build
 dist
 node_modules
-api/lib
-api/setup.php
+composer.lock
+package-lock.json
+
+/api/vendor
+/api/storage
+/api/public/hot
+/api/public/storage

@@ -1,0 +1,12 @@
+{
+  "private": false,
+  "scripts": {
+    "api": "cd api && php artisan serve",
+    "client": "cd client && ng serve --open",
+    "prettier": "npx prettier --write ."
+  },
+  "devDependencies": {
+    "@prettier/plugin-php": "0.18.8",
+    "prettier": "2.7.1"
+  }
+}

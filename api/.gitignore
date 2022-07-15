@@ -1,2 +1,8 @@
-data/image_store/**
-!data/image_store/.gitkeep
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+.env
+.env.backup
+.phpunit.result.cache
