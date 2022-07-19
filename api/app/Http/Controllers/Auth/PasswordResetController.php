@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Api\V1\Controllers\Auth;
+namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -39,9 +40,7 @@ class PasswordResetController extends Controller {
         if ($status === Password::PASSWORD_RESET) {
             return response()->noContent();
         } else {
-            $httpStatus = $status === PASSWORD::INVALID_USER ? 404 : 403;
-
-            throw new HttpException($httpStatus, __($status));
+            throw new AuthorizationException();
         }
     }
 

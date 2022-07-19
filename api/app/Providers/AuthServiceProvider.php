@@ -43,11 +43,13 @@ class AuthServiceProvider extends ServiceProvider {
             $id = $notifiable->getKey();
             $hash = sha1($notifiable->getEmailForVerification());
 
+            $apiVersion = config('app.api_version');
+
             list(
                 'signature' => $signature,
                 'expires' => $expires,
             ) = signedRouteParameters(
-                'auth.email.verify',
+                "api.v{$apiVersion}.auth.email_verification.verify",
                 [
                     'id' => $id,
                     'hash' => $hash,

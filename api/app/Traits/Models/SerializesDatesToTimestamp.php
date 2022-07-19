@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Traits;
+namespace App\Traits\Models;
 
 use DateTimeInterface;
 
-trait SerializesDateToTimestamp {
+trait SerializesDatesToTimestamp {
     protected function serializeDate(DateTimeInterface $date) {
         return $date->getTimestamp();
     }

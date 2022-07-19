@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Traits\QueryOrganizable;
-use App\Traits\SerializesDateToTimestamp;
+use App\Traits\Models\QueryOrganizable;
+use App\Traits\Models\SerializesDatesToTimestamp;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,7 +16,7 @@ class User extends Authenticatable implements MustVerifyEmail {
         Notifiable,
         HasAuthTokens,
         QueryOrganizable,
-        SerializesDateToTimestamp;
+        SerializesDatesToTimestamp;
 
     protected $fillable = [
         'first_name',

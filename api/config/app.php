@@ -28,6 +28,7 @@ return [
     */
 
     'env' => env('APP_ENV', 'production'),
+    'api_version' => intval(env('APP_API_VERSION', 1)),
 
     /*
     |--------------------------------------------------------------------------
@@ -71,7 +72,7 @@ return [
 
     'asset_url' => env('ASSET_URL'),
 
-    'base_path' => env('APP_BASE_PATH', '/'),
+    'url_base_path' => env('APP_URL_BASE_PATH', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -97,7 +98,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => env('APP_LANGUAGE', 'en'),
 
     /*
     |--------------------------------------------------------------------------
@@ -206,6 +207,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\HCaptchaServiceProvider::class,
     ],
 
     /*

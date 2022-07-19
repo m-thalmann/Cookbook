@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Api\V1\Controllers\Auth;
+namespace App\Http\Controllers\Auth;
 
-use App\Api\V1\Resources\AuthTokenResource;
+use App\Http\Resources\AuthTokenResource;
 use App\Http\Controllers\Controller;
 use App\Models\AuthToken;
-use TokenAuth\TokenAuth;
 
 class AuthTokenController extends Controller {
     public function index() {
@@ -13,9 +12,8 @@ class AuthTokenController extends Controller {
             AuthTokenResource::collection(
                 authUser()
                     ->tokens()
-                    ->where('expires_at', '>', now())
-                    ->whereNull('revoked_at')
-                    ->where('type', TokenAuth::TYPE_ACCESS)
+                    ->active()
+                    ->accessTokens()
                     ->paginate()
             )
         );
@@ -54,4 +52,3 @@ class AuthTokenController extends Controller {
         return response()->noContent();
     }
 }
-

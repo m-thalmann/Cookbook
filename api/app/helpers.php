@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
@@ -40,5 +42,21 @@ if (!function_exists('signedRouteParameters')) {
             'signature' => $query['signature'],
             'expires' => $expires !== null ? $query['expires'] : null,
         ];
+    }
+}
+
+if (!function_exists('httpClient')) {
+    /**
+     * Returns a pending request for the http-client
+     * with the set options for the current environment
+     *
+     * @see Http::withOptions()
+     *
+     * @return PendingRequest
+     */
+    function httpClient(): PendingRequest {
+        return Http::withOptions([
+            'verify' => !app()->environment('local', 'testing'),
+        ]);
     }
 }

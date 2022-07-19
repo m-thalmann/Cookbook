@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Api\V1\Controllers;
+namespace App\Http\Controllers;
 
-use App\Api\V1\Resources\UserResource;
+use App\Http\Resources\UserResource;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -86,6 +86,16 @@ class UserController extends Controller {
             'do_logout' => ['boolean'],
         ]);
 
+        // has to confirm current password if updating self credentials
+        if (
+            $user->id === auth()->id() &&
+            Arr::hasAny($data, ['email', 'password'])
+        ) {
+            $request->validate([
+                'current_password' => ['required', 'current_password'],
+            ]);
+        }
+
         $isAdmin = Arr::pull($data, 'is_admin');
         $isVerified = Arr::pull($data, 'is_verified');
 
@@ -141,4 +151,3 @@ class UserController extends Controller {
         return response()->noContent();
     }
 }
-

@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Api\V1\Controllers\Auth;
+namespace App\Http\Controllers\Auth;
 
-use App\Api\V1\Resources\UserResource;
+use App\Http\Resources\UserResource;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\HCaptchaService;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
@@ -44,7 +46,21 @@ class AuthenticationController extends Controller {
 
     public function register(Request $request) {
         if (!config('app.registration_enabled')) {
-            throw new HttpException(403, __('auth.registration_disabled'));
+            throw new HttpException(405, __('auth.registration_disabled'));
+        }
+
+        if (config('services.hcaptcha.enabled')) {
+            /**
+             * @var HCaptchaService
+             */
+            $hcaptchaService = app(HCaptchaService::class);
+
+            $hcaptchaToken = $request->get('hcaptcha_token');
+            if (!$hcaptchaToken || !$hcaptchaService->verify($hcaptchaToken)) {
+                throw new AuthorizationException(
+                    'The hCaptcha token is invalid'
+                );
+            }
         }
 
         $data = $request->validate([

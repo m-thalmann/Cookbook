@@ -13,6 +13,11 @@ return [
     |
     */
 
+    'hcaptcha' => [
+        'secret' => env('HCAPTCHA_SECRET'),
+        'enabled' => env('HCAPTCHA_ENABLED', false),
+    ],
+
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),
