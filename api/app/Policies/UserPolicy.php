@@ -78,4 +78,3 @@ class UserPolicy {
         return $user->is_admin && $user->id !== $model->id;
     }
 }
-

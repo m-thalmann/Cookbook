@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Traits\Models\QueryOrganizable;
 use App\Traits\Models\SerializesDatesToTimestamp;
-use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -63,12 +62,12 @@ class User extends Authenticatable implements MustVerifyEmail {
 
     public function hasVerifiedEmail() {
         return !config('app.email_verification_enabled') ||
-            !is_null($this->email_verified_at);
+            parent::hasVerifiedEmail();
     }
 
     public function sendEmailVerificationNotification() {
         if (config('app.email_verification_enabled')) {
-            $this->notify(new VerifyEmail());
+            parent::sendEmailVerificationNotification();
         }
     }
 }

@@ -31,7 +31,7 @@ class UserController extends Controller {
             'first_name' => ['required', 'filled', 'string', 'max:255'],
             'last_name' => ['required', 'filled', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', Password::default()],
+            'password' => ['required', 'confirmed', Password::default()],
             'language_code' => ['nullable', 'min:2', 'max:2'],
             'is_admin' => ['boolean'],
             'is_verified' => ['boolean'],
@@ -50,12 +50,11 @@ class UserController extends Controller {
         $user->is_admin = $isAdmin;
 
         if ($isVerified) {
-            $user->email_verified_at = now();
+            $user->markEmailAsVerified(); // saves after marking as verified
         } else {
+            $user->save();
             $user->sendEmailVerificationNotification();
         }
-
-        $user->save();
 
         return UserResource::make($user)
             ->response()
@@ -63,7 +62,7 @@ class UserController extends Controller {
     }
 
     public function show(User $user) {
-        $this->authorizeAnonymously('show', $user);
+        $this->authorizeAnonymously('view', $user);
 
         return UserResource::make($user);
     }
@@ -79,7 +78,7 @@ class UserController extends Controller {
                 'max:255',
                 Rule::unique('users', 'email')->ignore($user->id),
             ],
-            'password' => [Password::default()],
+            'password' => ['confirmed', Password::default()],
             'language_code' => ['nullable', 'min:2', 'max:2'],
             'is_admin' => ['boolean'],
             'is_verified' => ['boolean'],

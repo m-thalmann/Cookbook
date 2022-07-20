@@ -16,14 +16,25 @@ abstract class TestCase extends BaseTestCase {
      * Creates a test-user
      *
      * @param string $password The password to set for the user
+     * @param bool $isAdmin Whether the user is an admin user
+     * @param bool $isEmailVerified Whether the email is verified
      *
      * @return User
      */
     protected static function createUser(
-        $password = self::DEFAULT_USER_PASSWORD
+        $password = self::DEFAULT_USER_PASSWORD,
+        $isAdmin = false,
+        $isEmailVerified = true
     ) {
-        return User::factory()->create([
+        $factory = User::factory();
+
+        if (!$isEmailVerified) {
+            $factory = $factory->unverified();
+        }
+
+        return $factory->create([
             'password' => Hash::make($password),
+            'is_admin' => $isAdmin,
         ]);
     }
 
@@ -32,13 +43,17 @@ abstract class TestCase extends BaseTestCase {
      * using the `Sanctum::actingAs` function
      *
      * @param string $password The password to set for the user
+     * @param bool $isAdmin Whether the user is an admin user
+     * @param bool $isEmailVerified Whether the email is verified
      *
      * @return User
      */
     protected static function createAndLoginUser(
-        $password = self::DEFAULT_USER_PASSWORD
+        $password = self::DEFAULT_USER_PASSWORD,
+        $isAdmin = false,
+        $isEmailVerified = true
     ) {
-        $user = self::createUser($password);
+        $user = self::createUser($password, $isAdmin, $isEmailVerified);
 
         TokenAuth::actingAs($user);
 
