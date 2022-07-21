@@ -60,6 +60,10 @@ class User extends Authenticatable implements MustVerifyEmail {
     ];
     protected $searchProperties = ['first_name', 'last_name'];
 
+    public function recipes() {
+        return $this->hasMany(Recipe::class);
+    }
+
     public function hasVerifiedEmail() {
         return !config('app.email_verification_enabled') ||
             parent::hasVerifiedEmail();

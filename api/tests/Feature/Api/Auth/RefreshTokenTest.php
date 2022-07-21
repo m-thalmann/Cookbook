@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Auth\Api;
+namespace Tests\Feature\Api\Auth;
 
 use App\Models\AuthToken;
 use Tests\TestCase;
@@ -16,7 +16,7 @@ class RefreshTokenTest extends TestCase {
             'name2'
         );
 
-        $response = $this->post(
+        $response = $this->postJson(
             '/v1/auth/refresh',
             [],
             [
@@ -54,7 +54,7 @@ class RefreshTokenTest extends TestCase {
             'name2'
         );
 
-        $response = $this->post(
+        $response = $this->postJson(
             '/v1/auth/refresh',
             [],
             [

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Auth\Api;
+namespace Tests\Feature\Api\Auth;
 
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Hash;

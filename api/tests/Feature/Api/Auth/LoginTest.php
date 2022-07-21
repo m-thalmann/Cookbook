@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Auth\Api;
+namespace Tests\Feature\Api\Auth;
 
 use Tests\TestCase;
 
@@ -38,7 +38,7 @@ class LoginTest extends TestCase {
 
         $accessToken = $loginResponse->json('data.access_token');
 
-        $response = $this->get('/v1/auth', [
+        $response = $this->getJson('/v1/auth', [
             'Authorization' => "Bearer $accessToken",
         ]);
 
@@ -56,7 +56,7 @@ class LoginTest extends TestCase {
 
         $refreshToken = $loginResponse->json('data.refresh_token');
 
-        $response = $this->post(
+        $response = $this->postJson(
             '/v1/auth/refresh',
             [],
             [

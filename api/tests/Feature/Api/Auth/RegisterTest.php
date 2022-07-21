@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Auth\Api;
+namespace Tests\Feature\Api\Auth;
 
 use App\Models\AuthToken;
 use App\Models\User;

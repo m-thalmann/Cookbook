@@ -12,7 +12,10 @@ class AuthToken extends BaseAuthToken {
     protected $hidden = ['token'];
 
     public function scopeNotExpired($query) {
-        $query->where('expires_at', '>', now());
+        $query->where(function ($query) {
+            $query->orWhere('expires_at', '>', now());
+            $query->orWhereNull('expires_at');
+        });
     }
 
     public function scopeNotRevoked($query) {

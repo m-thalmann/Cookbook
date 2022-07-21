@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Auth\Api;
+namespace Tests\Feature\Api\Auth;
 
 use Tests\TestCase;
 use TokenAuth\TokenAuth;
@@ -27,7 +27,7 @@ class LogoutTest extends TestCase {
 
         TokenAuth::actingAs(null);
 
-        $newResponse = $this->get('/v1/auth', [
+        $newResponse = $this->getJson('/v1/auth', [
             'Authorization' => "Bearer {$accessToken->plainTextToken}",
         ]);
         $newResponse->assertUnauthorized();

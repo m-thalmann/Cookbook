@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Auth\Api;
+namespace Tests\Feature\Api\Auth;
 
 use Illuminate\Support\Arr;
 use Tests\TestCase;
@@ -172,7 +172,7 @@ class AuthTokenTest extends TestCase {
 
         TokenAuth::actingAs(null);
 
-        $newResponse = $this->get('/v1/auth', [
+        $newResponse = $this->getJson('/v1/auth', [
             'Authorization' => "Bearer {$token->plainTextToken}",
         ]);
         $newResponse->assertUnauthorized();
@@ -189,7 +189,7 @@ class AuthTokenTest extends TestCase {
 
         TokenAuth::actingAs(null);
 
-        $newResponse = $this->post('/v1/auth/refresh', [
+        $newResponse = $this->postJson('/v1/auth/refresh', [
             'Authorization' => "Bearer {$token->plainTextToken}",
         ]);
         $newResponse->assertUnauthorized();
