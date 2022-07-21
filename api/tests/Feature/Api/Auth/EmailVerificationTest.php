@@ -5,7 +5,6 @@ namespace Tests\Feature\Auth\Api;
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Auth\Notifications\VerifyEmail;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
@@ -14,8 +13,6 @@ use Tests\TestCase;
 use TokenAuth\TokenAuth;
 
 class EmailVerificationTest extends TestCase {
-    use RefreshDatabase;
-
     public function testSucceedsWithValidHashAndSignature() {
         $user = User::factory()->create([
             'email_verified_at' => null,

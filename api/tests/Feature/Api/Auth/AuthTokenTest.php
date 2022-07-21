@@ -2,14 +2,11 @@
 
 namespace Tests\Feature\Auth\Api;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
 use Tests\TestCase;
 use TokenAuth\TokenAuth;
 
 class AuthTokenTest extends TestCase {
-    use RefreshDatabase;
-
     public function testShowAllAccessTokensForUserSucceeds() {
         $user = $this->createAndLoginUser();
         $otherUser = $this->createUser();

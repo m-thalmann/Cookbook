@@ -3,12 +3,13 @@
 namespace Tests;
 
 use App\Models\User;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Hash;
 use TokenAuth\TokenAuth;
 
 abstract class TestCase extends BaseTestCase {
-    use CreatesApplication;
+    use CreatesApplication, LazilyRefreshDatabase;
 
     protected const DEFAULT_USER_PASSWORD = 'lA-8pass';
 

@@ -2,15 +2,12 @@
 
 namespace Tests\Feature\Auth\Api;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class PasswordResetTest extends TestCase {
-    use RefreshDatabase;
-
     public function testSendResetPasswordLinkSuccess() {
         Notification::fake();
 

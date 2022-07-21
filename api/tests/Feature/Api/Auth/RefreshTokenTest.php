@@ -3,13 +3,10 @@
 namespace Tests\Feature\Auth\Api;
 
 use App\Models\AuthToken;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use TokenAuth\TokenAuth;
 
 class RefreshTokenTest extends TestCase {
-    use RefreshDatabase;
-
     public function testRefreshingTokenSucceeds() {
         $user = $this->createUser();
 

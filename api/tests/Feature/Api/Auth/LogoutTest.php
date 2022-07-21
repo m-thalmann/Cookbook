@@ -2,14 +2,10 @@
 
 namespace Tests\Feature\Auth\Api;
 
-use App\Models\AuthToken;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use TokenAuth\TokenAuth;
 
 class LogoutTest extends TestCase {
-    use RefreshDatabase;
-
     public function testLogoutSuccess() {
         $user = $this->createUser();
 

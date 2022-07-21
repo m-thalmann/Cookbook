@@ -4,7 +4,6 @@ namespace Tests\Feature\Api;
 
 use App\Models\User;
 use Illuminate\Auth\Notifications\VerifyEmail;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Notification;
@@ -12,7 +11,7 @@ use Tests\TestCase;
 use TokenAuth\TokenAuth;
 
 class UsersTest extends TestCase {
-    use RefreshDatabase, WithFaker;
+    use WithFaker;
 
     public function testShowAllUsersSucceedsForAdmin() {
         $amountUsers = 10;
