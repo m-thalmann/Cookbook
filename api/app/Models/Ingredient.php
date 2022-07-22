@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use App\Traits\Models\QuerySearchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Ingredient extends BaseModel {
-    use HasFactory;
+    use HasFactory, QuerySearchable;
 
     protected $fillable = ['name', 'amount', 'unit', 'group'];
 
@@ -18,6 +19,8 @@ class Ingredient extends BaseModel {
         'unit' => null,
         'group' => null,
     ];
+
+    protected $searchProperties = ['name'];
 
     public function recipe() {
         return $this->belongsTo(Recipe::class);

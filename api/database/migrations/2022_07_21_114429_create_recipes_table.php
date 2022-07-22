@@ -32,6 +32,10 @@ return new class extends Migration {
             $table->integer('preparation_time_minutes')->nullable();
             $table->integer('resting_time_minutes')->nullable();
             $table->integer('cooking_time_minutes')->nullable();
+            $table
+                ->uuid('share_uuid')
+                ->unique()
+                ->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

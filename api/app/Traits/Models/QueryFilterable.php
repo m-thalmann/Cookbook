@@ -29,6 +29,7 @@ trait QueryFilterable {
      * Here the type is one of:
      * - `not`
      * - `like`
+     * - `in` &rArr; requires a list of comma-separated items
      * - `lt` &rArr; `<`
      * - `le` &rArr; `<=`
      * - `ge` &rArr; `>=`
@@ -77,6 +78,10 @@ trait QueryFilterable {
 
                 if ($filterType === 'not') {
                     $query->whereNot($filterProperty, $filterValue);
+                } elseif ($filterType === 'in') {
+                    $list = explode(',', $filterValue);
+
+                    $query->whereIn($filterProperty, $list);
                 } else {
                     $operator = null;
 

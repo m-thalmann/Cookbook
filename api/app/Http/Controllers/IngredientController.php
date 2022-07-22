@@ -8,8 +8,13 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class IngredientController extends Controller {
-    public function list() {
+    public function list(Request $request) {
+        $request->validate([
+            'search' => ['required', 'min:2'],
+        ]);
+
         return Ingredient::query()
+            ->search($request)
             ->whereHas('recipe', function ($query) {
                 $query->whereHas('user', function ($query) {
                     $query->where('user_id', auth()->id());
@@ -29,9 +34,10 @@ class IngredientController extends Controller {
             'group' => ['nullable', 'filled', 'max:20'],
         ]);
 
-        $data['recipe_id'] = $recipe->id;
+        $ingredient = Ingredient::make($data);
+        $ingredient->recipe_id = $recipe->id;
 
-        $ingredient = Ingredient::create($data);
+        $ingredient->save();
 
         return JsonResource::make($ingredient)
             ->response()

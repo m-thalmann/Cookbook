@@ -6,7 +6,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Route;
 
-const ROUTE_FILES = ['auth', 'recipes', 'ingredients'];
+const ROUTE_FILES = ['auth', 'recipes', 'ingredients', 'recipe-images'];
 
 Route::get(
     '/',

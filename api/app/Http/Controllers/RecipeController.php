@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Resources\RecipeResource;
 use App\Models\Recipe;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class RecipeController extends Controller {
     public function index(Request $request) {
@@ -66,7 +68,24 @@ class RecipeController extends Controller {
     public function show(Recipe $recipe) {
         $this->authorizeAnonymously('view', $recipe);
 
-        $recipe->load(['user', 'ingredients']);
+        $recipe
+            ->load(['user', 'ingredients', 'images'])
+            ->makeHidden('thumbnail');
+
+        if (authUser()->can('update', $recipe)) {
+            $recipe->makeVisible('share_uuid');
+        }
+
+        return RecipeResource::make($recipe);
+    }
+
+    public function showShared(string $recipeShareUuid) {
+        $recipe = Recipe::query()
+            ->with(['user', 'ingredients', 'images'])
+            ->where('share_uuid', $recipeShareUuid)
+            ->firstOrFail();
+
+        $recipe->makeHidden('thumbnail');
 
         return RecipeResource::make($recipe);
     }
@@ -87,17 +106,56 @@ class RecipeController extends Controller {
             'preparation_time_minutes' => ['nullable', 'integer', 'min:1'],
             'resting_time_minutes' => ['nullable', 'integer', 'min:1'],
             'cooking_time_minutes' => ['nullable', 'integer', 'min:1'],
+            'shared' => ['boolean'],
         ]);
+
+        if (isset($data['shared'])) {
+            $shared = $data['shared'];
+
+            if ($shared) {
+                if ($recipe->share_uuid === null) {
+                    $recipe->share_uuid = Str::uuid();
+                }
+            } else {
+                $recipe->share_uuid = null;
+            }
+
+            Arr::forget($data, 'shared');
+        }
 
         $recipe->update($data);
 
-        return RecipeResource::make($recipe);
+        return RecipeResource::make($recipe->makeVisible('share_uuid'));
     }
 
     public function destroy(Recipe $recipe) {
         $this->authorizeAnonymously('delete', $recipe);
 
         $recipe->delete();
+
+        return response()->noContent();
+    }
+
+    public function indexTrash(Request $request) {
+        $recipes = authUser()
+            ->recipes()
+            ->with('user')
+            ->onlyTrashed()
+            ->organized($request);
+
+        return response()->pagination(
+            RecipeResource::collection($recipes->paginate())
+        );
+    }
+
+    public function truncateTrash() {
+        $query = authUser()
+            ->recipes()
+            ->onlyTrashed();
+
+        Recipe::deleteImageFiles($query->clone());
+
+        $query->forceDelete();
 
         return response()->noContent();
     }
