@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Services\HTMLPurifierService;
 use App\Traits\Models\QueryOrganizable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Prunable;
@@ -37,8 +38,6 @@ class Recipe extends BaseModel {
     protected $attributes = [
         'is_public' => false,
     ];
-
-    protected $appends = ['thumbnail'];
 
     /*
      * Organize properties
@@ -75,10 +74,6 @@ class Recipe extends BaseModel {
         );
     }
 
-    public function getThumbnailAttribute() {
-        return $this->images()->first();
-    }
-
     public function user() {
         return $this->belongsTo(User::class);
     }
@@ -89,6 +84,36 @@ class Recipe extends BaseModel {
 
     public function images() {
         return $this->hasMany(RecipeImage::class);
+    }
+
+    public function thumbnail() {
+        return $this->hasOne(RecipeImage::class)->whereRaw(
+            'id = (
+                SELECT MIN(id)
+                FROM recipe_images ri
+                WHERE
+                    ri.recipe_id = recipe_images.recipe_id
+            )'
+        );
+    }
+
+    public function scopeForUser(
+        Builder $query,
+        ?User $user,
+        bool $all = false
+    ) {
+        $query->where(function ($query) use ($user, $all) {
+            $hasUser = $user !== null;
+            $isAdminUser = $hasUser && $user->is_admin;
+
+            if ($hasUser && (!$all || !$isAdminUser)) {
+                $query->where('user_id', auth()->id());
+            }
+
+            if (!$hasUser || ($all && !$isAdminUser)) {
+                $query->orWhere('is_public', true);
+            }
+        });
     }
 
     public function prunable() {

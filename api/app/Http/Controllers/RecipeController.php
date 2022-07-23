@@ -10,29 +10,12 @@ use Illuminate\Support\Str;
 
 class RecipeController extends Controller {
     public function index(Request $request) {
-        $user = authUser();
-
-        $isLoggedIn = $user !== null;
         $all = $request->exists('all');
-        $isAdminUser = (bool) $user?->is_admin;
 
         $recipes = Recipe::query()
-            ->with('user')
-            ->organized($request);
-
-        $recipes->where(function ($query) use (
-            $isLoggedIn,
-            $all,
-            $isAdminUser
-        ) {
-            if ($isLoggedIn && (!$all || !$isAdminUser)) {
-                $query->where('user_id', auth()->id());
-            }
-
-            if (!$isLoggedIn || ($all && !$isAdminUser)) {
-                $query->orWhere('is_public', true);
-            }
-        });
+            ->with(['user', 'thumbnail'])
+            ->organized($request)
+            ->forUser(authUser(), $all);
 
         return response()->pagination(
             RecipeResource::collection($recipes->paginate())

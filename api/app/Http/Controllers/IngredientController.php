@@ -9,10 +9,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class IngredientController extends Controller {
     public function list(Request $request) {
-        $request->validate([
-            'search' => ['required', 'min:2'],
-        ]);
-
         return Ingredient::query()
             ->search($request)
             ->whereHas('recipe', function ($query) {

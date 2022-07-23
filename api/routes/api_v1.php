@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\IngredientController;
+use App\Http\Controllers\RecipeCategoryController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -31,5 +32,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::apiResource('ingredients', IngredientController::class)->only([
         'update',
         'destroy',
+    ]);
+    Route::apiResource('categories', RecipeCategoryController::class)->only([
+        'index',
     ]);
 });
