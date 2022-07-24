@@ -33,11 +33,6 @@ class Kernel extends HttpKernel {
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
-        'auth' => ['auth-no-save:token', 'save-token:after'],
-        'auth:token-refresh' => [
-            'auth-no-save:token-refresh',
-            'save-token:after',
-        ],
     ];
 
     /**
@@ -48,8 +43,7 @@ class Kernel extends HttpKernel {
      * @var array<string, class-string|string>
      */
     protected $routeMiddleware = [
-        'auth-no-save' => \Illuminate\Auth\Middleware\Authenticate::class,
-        'save-token' => \TokenAuth\Http\Middleware\SaveAuthToken::class,
+        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,

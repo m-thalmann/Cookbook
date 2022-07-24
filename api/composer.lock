@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5237d85d5e73239973e5a0b51b72b073",
+    "content-hash": "fc1e2cc0e31676ded7c37ccb7d206cde",
     "packages": [
         {
             "name": "brick/math",
@@ -1587,20 +1587,19 @@
         },
         {
             "name": "m-thalmann/laravel-token-auth",
-            "version": "v0.3.0",
+            "version": "v0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/m-thalmann/laravel-token-auth.git",
-                "reference": "f865cc329578ab6e10d8913a19c065c13d9d3882"
+                "reference": "28fdad5316ab4c94d2cf70c6edc3c1b3d42a93df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/m-thalmann/laravel-token-auth/zipball/f865cc329578ab6e10d8913a19c065c13d9d3882",
-                "reference": "f865cc329578ab6e10d8913a19c065c13d9d3882",
+                "url": "https://api.github.com/repos/m-thalmann/laravel-token-auth/zipball/28fdad5316ab4c94d2cf70c6edc3c1b3d42a93df",
+                "reference": "28fdad5316ab4c94d2cf70c6edc3c1b3d42a93df",
                 "shasum": ""
             },
             "require": {
-                "illuminate/console": "^9.0|^10.0",
                 "illuminate/contracts": "^9.0|^10.0",
                 "illuminate/database": "^9.0|^10.0",
                 "illuminate/support": "^9.0|^10.0",
@@ -1645,9 +1644,9 @@
             ],
             "support": {
                 "issues": "https://github.com/m-thalmann/laravel-token-auth/issues",
-                "source": "https://github.com/m-thalmann/laravel-token-auth/tree/v0.3.0"
+                "source": "https://github.com/m-thalmann/laravel-token-auth/tree/v0.4.0"
             },
-            "time": "2022-07-21T17:06:54+00:00"
+            "time": "2022-07-23T18:11:30+00:00"
         },
         {
             "name": "monolog/monolog",

@@ -7,7 +7,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Route;
 
-const ROUTE_FILES = ['auth', 'recipes', 'ingredients', 'recipe-images'];
+$routeFiles = ['auth', 'recipes', 'ingredients', 'recipe-images'];
 
 Route::get(
     '/',
@@ -17,7 +17,7 @@ Route::get(
     ])
 )->name('index');
 
-foreach (ROUTE_FILES as $name) {
+foreach ($routeFiles as $name) {
     Route::prefix($name)
         ->as("$name.")
         ->group(base_path("routes/api/v1/$name.php"));

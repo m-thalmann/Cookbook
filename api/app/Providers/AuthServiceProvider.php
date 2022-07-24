@@ -30,7 +30,8 @@ class AuthServiceProvider extends ServiceProvider {
      */
     public function boot() {
         $this->registerPolicies();
-        $this->setupTokenAuth();
+
+        TokenAuth::useAuthTokenModel(AuthToken::class);
 
         // set the function to generate the url for a password-reset
         ResetPassword::createUrlUsing(function ($notifiable, $token) {
@@ -62,10 +63,5 @@ class AuthServiceProvider extends ServiceProvider {
             return config('app.frontend_url') .
                 "/verify-email/$id/$hash?expires=$expires&signature=$signature";
         });
-    }
-
-    private function setupTokenAuth() {
-        TokenAuth::dontSaveTokenOnAuthentication();
-        TokenAuth::useAuthTokenModel(AuthToken::class);
     }
 }

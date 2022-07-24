@@ -22,7 +22,7 @@ Route::controller(AuthenticationController::class)->group(function () {
         ->name('logout');
 
     Route::post('/refresh', 'refresh')
-        ->middleware(['auth-no-save:token-refresh', 'verified'])
+        ->middleware(['auth:token-refresh', 'verified'])
         ->name('refresh');
 });
 
