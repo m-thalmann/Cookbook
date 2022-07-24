@@ -31,5 +31,11 @@ class RecipeImage extends BaseModel {
             }
         });
     }
+
+    public static function deleteAllImages() {
+        $images = Storage::disk('public')->allFiles(self::IMAGE_DIRECTORY);
+
+        Storage::disk('public')->delete($images);
+    }
 }
 

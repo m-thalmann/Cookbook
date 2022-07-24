@@ -19,6 +19,7 @@ class Kernel extends ConsoleKernel {
         $schedule
             ->command('tokenAuth:prune-expired refresh --hours=' . 24 * 7 * 2)
             ->daily();
+        $schedule->command('recipeImages:prune')->daily();
 
         $schedule->command('model:prune')->daily();
     }

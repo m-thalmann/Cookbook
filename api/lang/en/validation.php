@@ -158,6 +158,15 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Custom validations
+    |--------------------------------------------------------------------------
+    */
+
+    'ingredient_not_unique' =>
+        'Ingredient is not unique in this recipe and group',
+
+    /*
+    |--------------------------------------------------------------------------
     | Custom Validation Language Lines
     |--------------------------------------------------------------------------
     |
@@ -167,11 +176,7 @@ return [
     |
     */
 
-    'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
-        ],
-    ],
+    'custom' => [],
 
     /*
     |--------------------------------------------------------------------------
@@ -184,5 +189,33 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'amount' => 'amount',
+        'category' => 'category',
+        'cooking_time_minutes' => 'cooking time',
+        'current_password' => 'current password',
+        'description' => 'description',
+        'difficulty' => 'difficulty',
+        'do_logout' => 'logout',
+        'email' => 'email',
+        'first_name' => 'first name',
+        'group' => 'group',
+        'image' => 'image',
+        'is_admin' => 'admin',
+        'is_public' => 'public',
+        'is_shared' => 'shared',
+        'is_verified' => 'verified',
+        'language_code' => 'language code',
+        'last_name' => 'last name',
+        'name' => 'name',
+        'password' => 'password',
+        'portions' => 'portions',
+        'preparation' => 'preparation',
+        'preparation_time_minutes' => 'preparation time',
+        'recipe_id' => 'recipe',
+        'resting_time_minutes' => 'resting time',
+        'token' => 'token',
+        'unit' => 'unit',
+        'user_id' => 'user',
+    ],
 ];

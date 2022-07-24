@@ -6,6 +6,7 @@ use App\Models\Ingredient;
 use App\Models\Recipe;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Validation\ValidationException;
 
 class IngredientController extends Controller {
     public function list(Request $request) {
@@ -29,6 +30,18 @@ class IngredientController extends Controller {
             'unit' => ['nullable', 'filled', 'max:20'],
             'group' => ['nullable', 'filled', 'max:20'],
         ]);
+
+        if (
+            !Ingredient::isUniqueInRecipe(
+                $recipe,
+                $data['name'],
+                $data['group'] ?? null
+            )
+        ) {
+            throw ValidationException::withMessages([
+                'name' => __('validation.ingredient_not_unique'),
+            ]);
+        }
 
         $ingredient = Ingredient::make($data);
         $ingredient->recipe_id = $recipe->id;

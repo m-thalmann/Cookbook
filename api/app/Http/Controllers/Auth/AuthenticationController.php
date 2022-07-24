@@ -58,7 +58,7 @@ class AuthenticationController extends Controller {
             $hcaptchaToken = $request->get('hcaptcha_token');
             if (!$hcaptchaToken || !$hcaptchaService->verify($hcaptchaToken)) {
                 throw new AuthorizationException(
-                    'The hCaptcha token is invalid'
+                    __('auth.hcpatcha_token_invalid')
                 );
             }
         }

@@ -89,13 +89,13 @@ class RecipeController extends Controller {
             'preparation_time_minutes' => ['nullable', 'integer', 'min:1'],
             'resting_time_minutes' => ['nullable', 'integer', 'min:1'],
             'cooking_time_minutes' => ['nullable', 'integer', 'min:1'],
-            'shared' => ['boolean'],
+            'is_shared' => ['boolean'],
         ]);
 
-        if (isset($data['shared'])) {
-            $shared = $data['shared'];
+        if (isset($data['is_shared'])) {
+            $isShared = $data['is_shared'];
 
-            if ($shared) {
+            if ($isShared) {
                 if ($recipe->share_uuid === null) {
                     $recipe->share_uuid = Str::uuid();
                 }
@@ -103,7 +103,7 @@ class RecipeController extends Controller {
                 $recipe->share_uuid = null;
             }
 
-            Arr::forget($data, 'shared');
+            Arr::forget($data, 'is_shared');
         }
 
         $recipe->update($data);

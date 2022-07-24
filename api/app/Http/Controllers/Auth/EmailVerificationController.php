@@ -25,7 +25,9 @@ class EmailVerificationController extends Controller {
 
     private function checkEnabled() {
         if (!config('app.email_verification_enabled')) {
-            throw new AuthorizationException('Email verification is disabled');
+            throw new AuthorizationException(
+                __('auth.email_verification_disabled')
+            );
         }
     }
 }
