@@ -18,16 +18,12 @@ Route::controller(RecipeController::class)
             ->withTrashed();
     });
 
-Route::controller(RecipeController::class)
-    ->middleware('save-token')
-    ->group(function () {
-        Route::get('/shared/{recipeShareUuid}', 'showShared')->name(
-            'shared.show'
-        );
+Route::controller(RecipeController::class)->group(function () {
+    Route::get('/shared/{recipeShareUuid}', 'showShared')->name('shared.show');
 
-        Route::get('/', 'index')->name('index');
-        Route::get('/{recipe}', 'show')->name('show');
-    });
+    Route::get('/', 'index')->name('index');
+    Route::get('/{recipe}', 'show')->name('show');
+});
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/{recipe}/ingredients', [

@@ -66,7 +66,13 @@ class AuthenticationController extends Controller {
         $data = $request->validate([
             'first_name' => ['required', 'filled', 'string', 'max:255'],
             'last_name' => ['required', 'filled', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'email' => [
+                'bail',
+                'required',
+                'email',
+                'max:255',
+                'unique:users,email',
+            ],
             'password' => ['required', 'confirmed', Password::default()],
             'language_code' => ['nullable', 'min:2', 'max:2'],
         ]);

@@ -9,16 +9,15 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Validation\ValidationException;
 
 class IngredientController extends Controller {
-    public function list(Request $request) {
+    public function index(Request $request) {
         return Ingredient::query()
             ->search($request)
             ->whereHas('recipe', function ($query) {
-                $query->whereHas('user', function ($query) {
-                    $query->where('user_id', auth()->id());
-                });
+                $query->whereRelation('user', 'user_id', auth()->id());
             })
+            ->select(['name', 'unit'])
             ->distinct()
-            ->get(['name', 'unit']);
+            ->get();
     }
 
     public function store(Request $request, Recipe $recipe) {

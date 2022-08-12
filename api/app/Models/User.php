@@ -64,6 +64,17 @@ class User extends Authenticatable implements MustVerifyEmail {
         return $this->hasMany(Recipe::class);
     }
 
+    public function recipeCollections() {
+        return $this->belongsToMany(
+            RecipeCollection::class,
+            'recipe_collection_user'
+        )
+            ->using(RecipeCollectionUser::class)
+            ->withPivot('is_admin')
+            ->withTimestamps()
+            ->as('meta');
+    }
+
     public function hasVerifiedEmail() {
         return !config('app.email_verification_enabled') ||
             parent::hasVerifiedEmail();

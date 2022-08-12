@@ -4,16 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\RecipeResource;
 use App\Models\Recipe;
+use App\Models\RecipeCollection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class RecipeController extends Controller {
     public function index(Request $request) {
         $all = $request->exists('all');
 
         $recipes = Recipe::query()
-            ->with(['user', 'thumbnail'])
+            ->with(['user', 'recipeCollection', 'thumbnail'])
             ->organized($request)
             ->forUser(authUser(), $all);
 
@@ -37,13 +39,31 @@ class RecipeController extends Controller {
             'preparation_time_minutes' => ['nullable', 'integer', 'min:1'],
             'resting_time_minutes' => ['nullable', 'integer', 'min:1'],
             'cooking_time_minutes' => ['nullable', 'integer', 'min:1'],
+            'recipe_collection_id' => [
+                'bail',
+                'nullable',
+                Rule::exists('recipe_collections', 'id')->where(function (
+                    $query
+                ) {
+                    (new RecipeCollection())->scopeForUser(
+                        $query,
+                        authUser(),
+                        mustBeAdmin: true
+                    );
+                }),
+            ],
         ]);
 
         $data['user_id'] = auth()->id();
 
         $recipe = Recipe::create($data);
 
-        return RecipeResource::make($recipe)
+        return RecipeResource::make(
+            $recipe
+                ->refresh()
+                ->load(['user', 'recipeCollection'])
+                ->makeVisible('share_uuid')
+        )
             ->response()
             ->setStatusCode(201);
     }
@@ -52,10 +72,10 @@ class RecipeController extends Controller {
         $this->authorizeAnonymously('view', $recipe);
 
         $recipe
-            ->load(['user', 'ingredients', 'images'])
+            ->load(['user', 'recipeCollection', 'ingredients', 'images'])
             ->makeHidden('thumbnail');
 
-        if (authUser()->can('update', $recipe)) {
+        if (optional(authUser())->can('update', $recipe)) {
             $recipe->makeVisible('share_uuid');
         }
 
@@ -64,7 +84,7 @@ class RecipeController extends Controller {
 
     public function showShared(string $recipeShareUuid) {
         $recipe = Recipe::query()
-            ->with(['user', 'ingredients', 'images'])
+            ->with(['user', 'recipeCollection', 'ingredients', 'images'])
             ->where('share_uuid', $recipeShareUuid)
             ->firstOrFail();
 
@@ -90,6 +110,19 @@ class RecipeController extends Controller {
             'resting_time_minutes' => ['nullable', 'integer', 'min:1'],
             'cooking_time_minutes' => ['nullable', 'integer', 'min:1'],
             'is_shared' => ['boolean'],
+            'recipe_collection_id' => [
+                'bail',
+                'nullable',
+                Rule::exists('recipe_collections', 'id')->where(function (
+                    $query
+                ) {
+                    (new RecipeCollection())->scopeForUser(
+                        $query,
+                        authUser(),
+                        mustBeAdmin: true
+                    );
+                }),
+            ],
         ]);
 
         if (isset($data['is_shared'])) {
@@ -122,7 +155,7 @@ class RecipeController extends Controller {
     public function indexTrash(Request $request) {
         $recipes = authUser()
             ->recipes()
-            ->with('user')
+            ->with(['user', 'recipeCollection'])
             ->onlyTrashed()
             ->organized($request);
 

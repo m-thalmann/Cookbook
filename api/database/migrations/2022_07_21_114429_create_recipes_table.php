@@ -18,6 +18,12 @@ return new class extends Migration {
                 ->constrained('users')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
+            $table
+                ->foreignId('recipe_collection_id')
+                ->nullable()
+                ->constrained('recipe_collections')
+                ->cascadeOnUpdate()
+                ->nullOnDelete();
             $table->boolean('is_public')->default(false);
             $table->string('language_code', 2);
             $table->string('name');

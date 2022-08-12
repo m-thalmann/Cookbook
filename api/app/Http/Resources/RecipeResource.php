@@ -12,7 +12,9 @@ class RecipeResource extends JsonResource {
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request) {
-        return $this->resource->makeHidden(['user_id'])->toArray();
+        return $this->resource
+            ->makeHidden(['user_id', 'recipe_collection_id'])
+            ->toArray();
     }
 }
 

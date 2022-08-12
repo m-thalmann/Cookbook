@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Recipe;
+use App\Models\RecipeCollection;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -33,7 +34,21 @@ class RecipePolicy {
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function view(?User $user, Recipe $recipe) {
-        return optional($user)->id === $recipe->user_id || $recipe->is_public;
+        $isUserOwnerOrRecipePublic =
+            optional($user)->id === $recipe->user_id || $recipe->is_public;
+
+        if (
+            $isUserOwnerOrRecipePublic ||
+            $user === null ||
+            $recipe->recipe_collection_id === null
+        ) {
+            return $isUserOwnerOrRecipePublic;
+        }
+
+        return RecipeCollection::query()
+            ->where('id', $recipe->recipe_collection_id)
+            ->forUser($user, mustBeAdmin: false)
+            ->exists();
     }
 
     /**
@@ -43,7 +58,7 @@ class RecipePolicy {
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function create(User $user) {
-        true;
+        return true;
     }
 
     /**
@@ -54,7 +69,14 @@ class RecipePolicy {
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function update(User $user, Recipe $recipe) {
-        return $user->id === $recipe->user_id;
+        if ($user->id === $recipe->user_id) {
+            return true;
+        }
+
+        return RecipeCollection::query()
+            ->where('id', $recipe->recipe_collection_id)
+            ->forUser($user, mustBeAdmin: true)
+            ->exists();
     }
 
     /**

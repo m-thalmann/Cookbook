@@ -13,7 +13,9 @@ class RecipeCategoryController extends Controller {
         $categories = Recipe::query()
             ->forUser(authUser(), $all)
             ->orderBy('category', 'asc')
-            ->get('category')
+            ->select('category')
+            ->distinct()
+            ->get()
             ->pluck('category');
 
         return JsonResource::make($categories);

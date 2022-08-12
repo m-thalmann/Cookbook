@@ -16,6 +16,7 @@ class Recipe extends BaseModel {
 
     protected $fillable = [
         'user_id',
+        'recipe_collection_id',
         'is_public',
         'language_code',
         'name',
@@ -55,6 +56,7 @@ class Recipe extends BaseModel {
     ];
     protected $filterableProperties = [
         'user_id',
+        'recipe_collection_id',
         'name',
         'category',
         'language_code',
@@ -76,6 +78,10 @@ class Recipe extends BaseModel {
 
     public function user() {
         return $this->belongsTo(User::class);
+    }
+
+    public function recipeCollection() {
+        return $this->belongsTo(RecipeCollection::class);
     }
 
     public function ingredients() {
@@ -102,16 +108,26 @@ class Recipe extends BaseModel {
         ?User $user,
         bool $all = false
     ) {
-        $query->where(function ($query) use ($user, $all) {
+        $query->where(function (Builder $query) use ($user, $all) {
             $hasUser = $user !== null;
             $isAdminUser = $hasUser && $user->is_admin;
 
-            if ($hasUser && (!$all || !$isAdminUser)) {
+            if ($all && $isAdminUser) {
+                return;
+            }
+
+            if ($hasUser) {
                 $query->where('user_id', auth()->id());
             }
 
-            if (!$hasUser || ($all && !$isAdminUser)) {
+            if (!$hasUser || $all) {
                 $query->orWhere('is_public', true);
+            }
+
+            if ($hasUser && $all) {
+                $query->orWhereHas('recipeCollection', function ($query) {
+                    $query->whereRelation('users', 'user_id', auth()->id());
+                });
             }
         });
     }

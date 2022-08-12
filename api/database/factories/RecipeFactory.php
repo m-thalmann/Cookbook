@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Arr;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Recipe>
@@ -18,7 +17,8 @@ class RecipeFactory extends Factory {
     public function definition() {
         return [
             'user_id' => User::factory(),
-            'is_public' => Arr::random([true, false]),
+            'recipe_collection_id' => null,
+            'is_public' => $this->faker->boolean(),
             'language_code' => 'en',
             'name' => $this->faker->name(),
             'category' => $this->faker->name(),

@@ -30,7 +30,13 @@ class UserController extends Controller {
         $data = $request->validate([
             'first_name' => ['required', 'filled', 'string', 'max:255'],
             'last_name' => ['required', 'filled', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'email' => [
+                'bail',
+                'required',
+                'email',
+                'max:255',
+                'unique:users,email',
+            ],
             'password' => ['required', 'confirmed', Password::default()],
             'language_code' => ['nullable', 'min:2', 'max:2'],
             'is_admin' => ['boolean'],
@@ -67,6 +73,12 @@ class UserController extends Controller {
         return UserResource::make($user);
     }
 
+    public function showByEmail(string $email) {
+        return User::query()
+            ->where('email', $email)
+            ->firstOrFail();
+    }
+
     public function update(Request $request, User $user) {
         $this->authorizeAnonymously('update', $user);
 
@@ -74,6 +86,7 @@ class UserController extends Controller {
             'first_name' => ['filled', 'string', 'max:255'],
             'last_name' => ['filled', 'string', 'max:255'],
             'email' => [
+                'bail',
                 'email',
                 'max:255',
                 Rule::unique('users', 'email')->ignore($user->id),
