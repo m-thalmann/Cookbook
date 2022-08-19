@@ -93,14 +93,14 @@ class Recipe extends BaseModel {
     }
 
     public function thumbnail() {
-        return $this->hasOne(RecipeImage::class)->whereRaw(
-            'id = (
-                SELECT MIN(id)
-                FROM recipe_images ri
-                WHERE
-                    ri.recipe_id = recipe_images.recipe_id
-            )'
-        );
+        return $this->hasOne(RecipeImage::class)->where('id', function (
+            $query
+        ) {
+            $query
+                ->selectRaw('min(ri.id)')
+                ->from('recipe_images as ri')
+                ->whereColumn('ri.recipe_id', 'recipe_images.recipe_id');
+        });
     }
 
     public function scopeForUser(

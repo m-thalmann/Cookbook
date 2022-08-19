@@ -14,10 +14,17 @@ class RecipeController extends Controller {
     public function index(Request $request) {
         $all = $request->exists('all');
 
-        $recipes = Recipe::query()
-            ->with(['user', 'recipeCollection', 'thumbnail'])
-            ->organized($request)
-            ->forUser(authUser(), $all);
+        $recipes = Recipe::query()->with(['user', 'thumbnail']);
+
+        if (auth()->check()) {
+            $recipes->with([
+                'recipeCollection' => function ($query) {
+                    $query->forUser(authUser())->exists();
+                },
+            ]);
+        }
+
+        $recipes->organized($request)->forUser(authUser(), $all);
 
         return response()->pagination(
             RecipeResource::collection($recipes->paginate())
@@ -71,9 +78,20 @@ class RecipeController extends Controller {
     public function show(Recipe $recipe) {
         $this->authorizeAnonymously('view', $recipe);
 
-        $recipe
-            ->load(['user', 'recipeCollection', 'ingredients', 'images'])
-            ->makeHidden('thumbnail');
+        $recipe->load(['user', 'ingredients', 'images']);
+
+        if (auth()->check() && $recipe->recipe_collection_id !== null) {
+            // load recipe-collection if user is part of it
+
+            if (
+                RecipeCollection::query()
+                    ->where('id', $recipe->recipe_collection_id)
+                    ->forUser(authUser())
+                    ->exists()
+            ) {
+                $recipe->load('recipeCollection');
+            }
+        }
 
         if (optional(authUser())->can('update', $recipe)) {
             $recipe->makeVisible('share_uuid');
@@ -83,10 +101,19 @@ class RecipeController extends Controller {
     }
 
     public function showShared(string $recipeShareUuid) {
-        $recipe = Recipe::query()
-            ->with(['user', 'recipeCollection', 'ingredients', 'images'])
-            ->where('share_uuid', $recipeShareUuid)
-            ->firstOrFail();
+        $recipe = Recipe::query()->with(['user', 'ingredients', 'images']);
+
+        if (auth()->check()) {
+            // load recipe-collection if user is part of it
+
+            $recipe->with([
+                'recipeCollection' => function ($query) {
+                    $query->forUser(authUser())->exists();
+                },
+            ]);
+        }
+
+        $recipe->where('share_uuid', $recipeShareUuid)->firstOrFail();
 
         $recipe->makeHidden('thumbnail');
 
@@ -155,7 +182,12 @@ class RecipeController extends Controller {
     public function indexTrash(Request $request) {
         $recipes = authUser()
             ->recipes()
-            ->with(['user', 'recipeCollection'])
+            ->with('user')
+            ->with([
+                'recipeCollection' => function ($query) {
+                    $query->forUser(authUser())->exists();
+                },
+            ])
             ->onlyTrashed()
             ->organized($request);
 

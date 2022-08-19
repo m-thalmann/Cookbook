@@ -9,6 +9,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class RecipeCollectionUserController extends Controller {
     public function index(RecipeCollection $collection) {
@@ -70,6 +71,18 @@ class RecipeCollectionUserController extends Controller {
 
     public function destroy(RecipeCollection $collection, int $user) {
         $this->authorizeAnonymously('update', $collection);
+
+        if (
+            $collection
+                ->users()
+                ->whereNot('users.id', $user)
+                ->where('recipe_collection_user.is_admin', true)
+                ->count() === 0
+        ) {
+            throw new ConflictHttpException(
+                __('messages.recipe_collections.cant_delete_last_admin_user')
+            );
+        }
 
         $collection->users()->detach($user);
 

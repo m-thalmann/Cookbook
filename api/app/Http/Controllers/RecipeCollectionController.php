@@ -16,7 +16,7 @@ class RecipeCollectionController extends Controller {
         ]);
 
         if (!$all || !authUser()->is_admin) {
-            $collections->whereRelation('users', 'user_id', auth()->id());
+            $collections->forUser(authUser());
         }
 
         return response()->pagination($collections->paginate());
