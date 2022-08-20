@@ -12,11 +12,11 @@ class RecipeResource extends JsonResource {
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request) {
-        $array = $this->resource
-            ->makeHidden(['user_id', 'cookbook_id'])
-            ->toArray();
+        $array = $this->resource->toArray();
 
         if (array_key_exists('ingredients', $array)) {
+            // group ingredients
+
             $array['ingredients'] = collect($array['ingredients'])
                 ->groupBy('group')
                 ->map(fn($group, $key) => ['group' => $key, 'items' => $group])

@@ -10,6 +10,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class UserController extends Controller {
     public function index(Request $request) {
@@ -157,6 +158,22 @@ class UserController extends Controller {
 
     public function destroy(User $user) {
         $this->authorizeAnonymously('delete', $user);
+
+        // check if user is last admin user in at least one cookbook
+        $userDeleteRestrictedByCookbooks = $user
+            ->cookbooks()
+            ->whereDoesntHave('users', function ($query) {
+                $query
+                    ->whereNot('user_id', auth()->id())
+                    ->where('cookbook_user.is_admin', true);
+            })
+            ->exists();
+
+        if ($userDeleteRestrictedByCookbooks) {
+            throw new ConflictHttpException(
+                __('messages.cookbooks.is_last_admin_user_in_some')
+            );
+        }
 
         $user->delete();
 

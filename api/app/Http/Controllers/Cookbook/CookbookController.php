@@ -11,7 +11,10 @@ class CookbookController extends Controller {
     public function index(Request $request) {
         $all = $request->exists('all');
 
-        $cookbooks = Cookbook::query()->withCount(['recipes', 'users']);
+        $cookbooks = Cookbook::query()
+            ->withCount(['recipes', 'users'])
+            ->sort($request)
+            ->search($request);
 
         if (!$all || !authUser()->is_admin) {
             $cookbooks->forUser(authUser());

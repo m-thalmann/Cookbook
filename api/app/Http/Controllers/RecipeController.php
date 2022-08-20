@@ -78,17 +78,14 @@ class RecipeController extends Controller {
 
         $recipe->load(['user', 'ingredients', 'images']);
 
-        if (auth()->check() && $recipe->cookbook_id !== null) {
-            // load cookbook if user is part of it
+        if (auth()->check()) {
+            // load cookbook if user is part of it or is owner
 
-            if (
-                Cookbook::query()
-                    ->where('id', $recipe->cookbook_id)
-                    ->forUser(authUser())
-                    ->exists()
-            ) {
-                $recipe->load('cookbook');
-            }
+            $recipe->load([
+                'cookbook' => function ($query) {
+                    $query->forUser(authUser())->exists();
+                },
+            ]);
         }
 
         if (optional(authUser())->can('update', $recipe)) {
@@ -121,7 +118,7 @@ class RecipeController extends Controller {
     public function update(Request $request, Recipe $recipe) {
         $this->authorizeAnonymously('update', $recipe);
 
-        $data = $request->validate([
+        $validationRules = [
             'user_id' => ['exists:App\Models\User,id'],
             'is_public' => ['boolean'],
             'language_code' => ['filled', 'min:2', 'max:2'],
@@ -135,7 +132,12 @@ class RecipeController extends Controller {
             'resting_time_minutes' => ['nullable', 'integer', 'min:1'],
             'cooking_time_minutes' => ['nullable', 'integer', 'min:1'],
             'is_shared' => ['boolean'],
-            'cookbook_id' => [
+        ];
+
+        if (auth()->id() === $recipe->user_id) {
+            // if the user is the owner it can update the cookbook
+
+            $validationRules['cookbook_id'] = [
                 'bail',
                 'nullable',
                 Rule::exists('cookbooks', 'id')->where(function ($query) {
@@ -145,8 +147,10 @@ class RecipeController extends Controller {
                         mustBeAdmin: true
                     );
                 }),
-            ],
-        ]);
+            ];
+        }
+
+        $data = $request->validate($validationRules);
 
         if (isset($data['is_shared'])) {
             $isShared = $data['is_shared'];

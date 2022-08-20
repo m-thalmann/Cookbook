@@ -13,10 +13,15 @@ use Illuminate\Validation\Rule;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 class CookbookUserController extends Controller {
-    public function index(Cookbook $cookbook) {
+    public function index(Request $request, Cookbook $cookbook) {
         $this->authorizeAnonymously('update', $cookbook);
 
-        return response()->pagination($cookbook->users()->paginate());
+        return response()->pagination(
+            $cookbook
+                ->users()
+                ->organized($request)
+                ->paginate()
+        );
     }
 
     public function store(Request $request, Cookbook $cookbook) {

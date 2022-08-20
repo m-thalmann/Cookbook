@@ -13,7 +13,7 @@ class CookbookRecipeController extends Controller {
 
         $recipes = $cookbook
             ->recipes()
-            ->with(['user', 'cookbook', 'thumbnail'])
+            ->with(['user', 'thumbnail', 'cookbook'])
             ->organized($request);
 
         return response()->pagination(

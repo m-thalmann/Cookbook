@@ -73,10 +73,11 @@ class RecipePolicy {
             return true;
         }
 
-        return Cookbook::query()
-            ->where('id', $recipe->cookbook_id)
-            ->forUser($user, mustBeAdmin: true)
-            ->exists();
+        return $recipe->cookbook_id !== null &&
+            Cookbook::query()
+                ->where('id', $recipe->cookbook_id)
+                ->forUser($user, mustBeAdmin: true)
+                ->exists();
     }
 
     /**
