@@ -6,6 +6,7 @@ use App\Models\Ingredient;
 use App\Models\Recipe;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 class IngredientController extends Controller {
@@ -23,29 +24,7 @@ class IngredientController extends Controller {
     public function store(Request $request, Recipe $recipe) {
         $this->authorizeAnonymously('update', $recipe);
 
-        $data = $request->validate([
-            'name' => ['required', 'filled', 'max:40'],
-            'amount' => ['nullable', 'numeric', 'min:0'],
-            'unit' => ['nullable', 'filled', 'max:20'],
-            'group' => ['nullable', 'filled', 'max:20'],
-        ]);
-
-        if (
-            !Ingredient::isUniqueInRecipe(
-                $recipe,
-                $data['name'],
-                $data['group'] ?? null
-            )
-        ) {
-            throw ValidationException::withMessages([
-                'name' => __('validation.ingredient_not_unique'),
-            ]);
-        }
-
-        $ingredient = Ingredient::make($data);
-        $ingredient->recipe_id = $recipe->id;
-
-        $ingredient->save();
+        $ingredient = self::storeIngredient($request->all(), $recipe);
 
         return JsonResource::make($ingredient)
             ->response()
@@ -73,6 +52,40 @@ class IngredientController extends Controller {
         $ingredient->delete();
 
         return response()->noContent();
+    }
+
+    /**
+     * Validates and stores the given data for the ingredient
+     *
+     * @param array $ingredientData
+     * @param Recipe $recipe
+     *
+     * @return Ingredient
+     */
+    public static function storeIngredient(
+        array $ingredientData,
+        Recipe $recipe
+    ) {
+        $data = Validator::make($ingredientData, [
+            'name' => ['required', 'filled', 'max:40'],
+            'amount' => ['nullable', 'numeric', 'min:0'],
+            'unit' => ['nullable', 'filled', 'max:20'],
+            'group' => ['nullable', 'filled', 'max:20'],
+        ])->validate();
+
+        if (
+            !Ingredient::isUniqueInRecipe(
+                $recipe,
+                $data['name'],
+                $data['group'] ?? null
+            )
+        ) {
+            throw ValidationException::withMessages([
+                'name' => __('validation.ingredient_not_unique'),
+            ]);
+        }
+
+        return $recipe->ingredients()->create($data);
     }
 }
 

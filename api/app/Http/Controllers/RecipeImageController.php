@@ -30,10 +30,8 @@ class RecipeImageController extends Controller {
             throw new HttpException(500);
         }
 
-        $image = new RecipeImage();
-        $image->recipe_id = $recipe->id;
+        $image = $recipe->images()->make();
         $image->image_path = $imagePath;
-
         $image->save();
 
         return JsonResource::make($image)

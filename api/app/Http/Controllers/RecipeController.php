@@ -7,6 +7,7 @@ use App\Models\Recipe;
 use App\Models\Cookbook;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
@@ -59,18 +60,38 @@ class RecipeController extends Controller {
             ],
         ]);
 
-        $data['user_id'] = auth()->id();
+        $recipe = DB::transaction(function () use ($data, $request) {
+            $recipe = authUser()
+                ->recipes()
+                ->create($data);
 
-        $recipe = Recipe::create($data);
+            $this->storeRecipeIngredients($request, $recipe);
+
+            return $recipe;
+        });
 
         return RecipeResource::make(
             $recipe
                 ->refresh()
-                ->load(['user', 'cookbook'])
+                ->load(['user', 'ingredients', 'cookbook'])
                 ->makeVisible('share_uuid')
         )
             ->response()
             ->setStatusCode(201);
+    }
+
+    private function storeRecipeIngredients(Request $request, Recipe $recipe) {
+        $data = $request->validate([
+            'ingredients' => ['array'],
+        ]);
+
+        $ingredients = Arr::get($data, 'ingredients', []);
+
+        if (count($ingredients) > 0) {
+            foreach ($ingredients as $ingredient) {
+                IngredientController::storeIngredient($ingredient, $recipe);
+            }
+        }
     }
 
     public function show(Recipe $recipe) {
