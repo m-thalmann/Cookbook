@@ -16,18 +16,7 @@ class Localization {
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request, Closure $next) {
-        $requestLanguage = $request->getPreferredLanguage();
-
-        if ($requestLanguage) {
-            $requestLanguage = Str::before($requestLanguage, '_');
-        }
-
-        // defines the priority of the set languages (null values are ignored)
-        $preferredLanguages = [
-            $request->query('lang'),
-            $request->header('X-Language'),
-            $requestLanguage,
-        ];
+        $preferredLanguages = $this->getPreferredLanguages($request);
 
         $selectedLanguage = null;
 
@@ -47,5 +36,34 @@ class Localization {
         }
 
         return $next($request);
+    }
+
+    /**
+     * Returns the list of preferred languages in order of their priority.
+     * May contain null-values.
+     *
+     * @param Request $request
+     *
+     * @return string[]
+     */
+    private function getPreferredLanguages(Request $request) {
+        $requestLanguage = $request->getPreferredLanguage();
+
+        if ($requestLanguage) {
+            $requestLanguage = Str::before($requestLanguage, '_');
+        }
+
+        $preferredLanguages = [
+            $request->query('lang'),
+            $request->header('X-Language'),
+        ];
+
+        if (auth()->check()) {
+            $preferredLanguages[] = authUser()->language_code;
+        }
+
+        $preferredLanguages[] = $requestLanguage;
+
+        return $preferredLanguages;
     }
 }
