@@ -13,7 +13,7 @@ class RecipeResource extends JsonResource {
      */
     public function toArray($request) {
         $array = $this->resource
-            ->makeHidden(['user_id', 'recipe_collection_id'])
+            ->makeHidden(['user_id', 'cookbook_id'])
             ->toArray();
 
         if (array_key_exists('ingredients', $array)) {

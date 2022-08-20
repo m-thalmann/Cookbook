@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Recipe;
-use App\Models\RecipeCollection;
+use App\Models\Cookbook;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -40,13 +40,13 @@ class RecipePolicy {
         if (
             $isUserOwnerOrRecipePublic ||
             $user === null ||
-            $recipe->recipe_collection_id === null
+            $recipe->cookbook_id === null
         ) {
             return $isUserOwnerOrRecipePublic;
         }
 
-        return RecipeCollection::query()
-            ->where('id', $recipe->recipe_collection_id)
+        return Cookbook::query()
+            ->where('id', $recipe->cookbook_id)
             ->forUser($user, mustBeAdmin: false)
             ->exists();
     }
@@ -73,8 +73,8 @@ class RecipePolicy {
             return true;
         }
 
-        return RecipeCollection::query()
-            ->where('id', $recipe->recipe_collection_id)
+        return Cookbook::query()
+            ->where('id', $recipe->cookbook_id)
             ->forUser($user, mustBeAdmin: true)
             ->exists();
     }

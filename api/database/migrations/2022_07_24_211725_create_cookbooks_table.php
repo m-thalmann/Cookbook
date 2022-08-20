@@ -11,7 +11,7 @@ return new class extends Migration {
      * @return void
      */
     public function up() {
-        Schema::create('recipe_collections', function (Blueprint $table) {
+        Schema::create('cookbooks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->timestamps();
@@ -24,7 +24,7 @@ return new class extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('recipe_collections');
+        Schema::dropIfExists('cookbooks');
     }
 };
 

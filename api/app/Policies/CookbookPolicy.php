@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\RecipeCollection;
+use App\Models\Cookbook;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class RecipeCollectionPolicy {
+class CookbookPolicy {
     use HandlesAuthorization;
 
     public function before(User $user, $ability) {
@@ -29,11 +29,11 @@ class RecipeCollectionPolicy {
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\RecipeCollection  $recipeCollection
+     * @param  \App\Models\Cookbook  $cookbook
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, RecipeCollection $recipeCollection) {
-        return $recipeCollection
+    public function view(User $user, Cookbook $cookbook) {
+        return $cookbook
             ->users()
             ->where('id', $user->id)
             ->exists();
@@ -53,33 +53,33 @@ class RecipeCollectionPolicy {
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\RecipeCollection  $recipeCollection
+     * @param  \App\Models\Cookbook  $cookbook
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, RecipeCollection $recipeCollection) {
-        return $this->admin($user, $recipeCollection);
+    public function update(User $user, Cookbook $cookbook) {
+        return $this->admin($user, $cookbook);
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\RecipeCollection  $recipeCollection
+     * @param  \App\Models\Cookbook  $cookbook
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, RecipeCollection $recipeCollection) {
-        return $this->admin($user, $recipeCollection);
+    public function delete(User $user, Cookbook $cookbook) {
+        return $this->admin($user, $cookbook);
     }
 
     /**
      * Determine whether the user can administrate the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\RecipeCollection  $recipeCollection
+     * @param  \App\Models\Cookbook  $cookbook
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function admin(User $user, RecipeCollection $recipeCollection) {
-        return $recipeCollection
+    public function admin(User $user, Cookbook $cookbook) {
+        return $cookbook
             ->users()
             ->wherePivot('is_admin', true)
             ->where('user_id', $user->id)

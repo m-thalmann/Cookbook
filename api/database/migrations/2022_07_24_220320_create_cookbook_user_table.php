@@ -11,10 +11,10 @@ return new class extends Migration {
      * @return void
      */
     public function up() {
-        Schema::create('recipe_collection_user', function (Blueprint $table) {
+        Schema::create('cookbook_user', function (Blueprint $table) {
             $table
-                ->foreignId('recipe_collection_id')
-                ->constrained('recipe_collections')
+                ->foreignId('cookbook_id')
+                ->constrained('cookbooks')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table
@@ -25,7 +25,7 @@ return new class extends Migration {
             $table->boolean('is_admin')->default(false);
             $table->timestamps();
 
-            $table->primary(['recipe_collection_id', 'user_id']);
+            $table->primary(['cookbook_id', 'user_id']);
         });
     }
 
@@ -35,7 +35,7 @@ return new class extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('recipe_collection_user');
+        Schema::dropIfExists('cookbook_user');
     }
 };
 

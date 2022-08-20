@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\RecipeResource;
 use App\Models\Recipe;
-use App\Models\RecipeCollection;
+use App\Models\Cookbook;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -18,7 +18,7 @@ class RecipeController extends Controller {
 
         if (auth()->check()) {
             $recipes->with([
-                'recipeCollection' => function ($query) {
+                'cookbook' => function ($query) {
                     $query->forUser(authUser())->exists();
                 },
             ]);
@@ -46,13 +46,11 @@ class RecipeController extends Controller {
             'preparation_time_minutes' => ['nullable', 'integer', 'min:1'],
             'resting_time_minutes' => ['nullable', 'integer', 'min:1'],
             'cooking_time_minutes' => ['nullable', 'integer', 'min:1'],
-            'recipe_collection_id' => [
+            'cookbook_id' => [
                 'bail',
                 'nullable',
-                Rule::exists('recipe_collections', 'id')->where(function (
-                    $query
-                ) {
-                    (new RecipeCollection())->scopeForUser(
+                Rule::exists('cookbooks', 'id')->where(function ($query) {
+                    (new Cookbook())->scopeForUser(
                         $query,
                         authUser(),
                         mustBeAdmin: true
@@ -68,7 +66,7 @@ class RecipeController extends Controller {
         return RecipeResource::make(
             $recipe
                 ->refresh()
-                ->load(['user', 'recipeCollection'])
+                ->load(['user', 'cookbook'])
                 ->makeVisible('share_uuid')
         )
             ->response()
@@ -80,16 +78,16 @@ class RecipeController extends Controller {
 
         $recipe->load(['user', 'ingredients', 'images']);
 
-        if (auth()->check() && $recipe->recipe_collection_id !== null) {
-            // load recipe-collection if user is part of it
+        if (auth()->check() && $recipe->cookbook_id !== null) {
+            // load cookbook if user is part of it
 
             if (
-                RecipeCollection::query()
-                    ->where('id', $recipe->recipe_collection_id)
+                Cookbook::query()
+                    ->where('id', $recipe->cookbook_id)
                     ->forUser(authUser())
                     ->exists()
             ) {
-                $recipe->load('recipeCollection');
+                $recipe->load('cookbook');
             }
         }
 
@@ -104,10 +102,10 @@ class RecipeController extends Controller {
         $recipe = Recipe::query()->with(['user', 'ingredients', 'images']);
 
         if (auth()->check()) {
-            // load recipe-collection if user is part of it
+            // load cookbook if user is part of it
 
             $recipe->with([
-                'recipeCollection' => function ($query) {
+                'cookbook' => function ($query) {
                     $query->forUser(authUser())->exists();
                 },
             ]);
@@ -137,13 +135,11 @@ class RecipeController extends Controller {
             'resting_time_minutes' => ['nullable', 'integer', 'min:1'],
             'cooking_time_minutes' => ['nullable', 'integer', 'min:1'],
             'is_shared' => ['boolean'],
-            'recipe_collection_id' => [
+            'cookbook_id' => [
                 'bail',
                 'nullable',
-                Rule::exists('recipe_collections', 'id')->where(function (
-                    $query
-                ) {
-                    (new RecipeCollection())->scopeForUser(
+                Rule::exists('cookbooks', 'id')->where(function ($query) {
+                    (new Cookbook())->scopeForUser(
                         $query,
                         authUser(),
                         mustBeAdmin: true
@@ -184,7 +180,7 @@ class RecipeController extends Controller {
             ->recipes()
             ->with('user')
             ->with([
-                'recipeCollection' => function ($query) {
+                'cookbook' => function ($query) {
                     $query->forUser(authUser())->exists();
                 },
             ])

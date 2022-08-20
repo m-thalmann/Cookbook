@@ -16,7 +16,7 @@ class Recipe extends BaseModel {
 
     protected $fillable = [
         'user_id',
-        'recipe_collection_id',
+        'cookbook_id',
         'is_public',
         'language_code',
         'name',
@@ -56,7 +56,7 @@ class Recipe extends BaseModel {
     ];
     protected $filterableProperties = [
         'user_id',
-        'recipe_collection_id',
+        'cookbook_id',
         'name',
         'category',
         'language_code',
@@ -80,8 +80,8 @@ class Recipe extends BaseModel {
         return $this->belongsTo(User::class);
     }
 
-    public function recipeCollection() {
-        return $this->belongsTo(RecipeCollection::class);
+    public function cookbook() {
+        return $this->belongsTo(Cookbook::class);
     }
 
     public function ingredients() {
@@ -125,7 +125,7 @@ class Recipe extends BaseModel {
             }
 
             if ($hasUser && $all) {
-                $query->orWhereHas('recipeCollection', function ($query) {
+                $query->orWhereHas('cookbook', function ($query) {
                     $query->whereRelation('users', 'user_id', auth()->id());
                 });
             }

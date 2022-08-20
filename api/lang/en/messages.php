@@ -8,8 +8,8 @@ return [
     */
 
     'cant_update_self' => "You can't update yourself",
-    'recipe_collections' => [
+    'cookbooks' => [
         'cant_delete_last_admin_user' =>
-            "You can't delete the last user in the collection",
+            "You can't delete the last user in the cookbook",
     ],
 ];

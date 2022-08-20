@@ -3,8 +3,13 @@
 namespace App\Providers;
 
 use App\Models\AuthToken;
+use App\Models\Cookbook;
+use App\Models\Ingredient;
 use App\Models\User;
 use App\Policies\AuthTokenPolicy;
+use App\Policies\CookbookPolicy;
+use App\Policies\IngredientPolicy;
+use App\Policies\RecipePolicy;
 use App\Policies\UserPolicy;
 use Carbon\Carbon;
 use Illuminate\Auth\Notifications\ResetPassword;
@@ -20,6 +25,9 @@ class AuthServiceProvider extends ServiceProvider {
      */
     protected $policies = [
         AuthToken::class => AuthTokenPolicy::class,
+        Cookbook::class => CookbookPolicy::class,
+        Ingredient::class => IngredientPolicy::class,
+        Recipe::class => RecipePolicy::class,
         User::class => UserPolicy::class,
     ];
 

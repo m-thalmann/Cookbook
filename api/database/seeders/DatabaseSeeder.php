@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Ingredient;
 use App\Models\Recipe;
-use App\Models\RecipeCollection;
+use App\Models\Cookbook;
 use App\Models\RecipeImage;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder {
     ];
 
     const RECIPE_AMOUNT = 10;
-    const RECIPE_COLLECTION_USERS_AMOUNT = 5;
+    const COOKBOOK_USERS_AMOUNT = 5;
 
     /**
      * Seed the application's database.
@@ -45,8 +45,8 @@ class DatabaseSeeder extends Seeder {
             'user_id' => $user->id,
         ]);
 
-        $collection = RecipeCollection::factory()->create();
-        $collection->users()->attach($user->id, ['is_admin' => true]);
+        $cookbook = Cookbook::factory()->create();
+        $cookbook->users()->attach($user->id, ['is_admin' => true]);
 
         foreach ($recipes as $recipe) {
             Ingredient::factory(rand(1, 10))->create([
@@ -58,12 +58,12 @@ class DatabaseSeeder extends Seeder {
             ]);
 
             if (Arr::random([true, false])) {
-                $recipe->update(['recipe_collection_id' => $collection->id]);
+                $recipe->update(['cookbook_id' => $cookbook->id]);
             }
         }
 
-        for ($i = 0; $i < self::RECIPE_COLLECTION_USERS_AMOUNT; $i++) {
-            $collection->users()->attach(User::factory()->create()->id, [
+        for ($i = 0; $i < self::COOKBOOK_USERS_AMOUNT; $i++) {
+            $cookbook->users()->attach(User::factory()->create()->id, [
                 'is_admin' => Arr::random([true, false]),
             ]);
         }

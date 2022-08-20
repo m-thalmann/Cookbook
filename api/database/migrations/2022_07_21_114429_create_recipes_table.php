@@ -19,9 +19,9 @@ return new class extends Migration {
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table
-                ->foreignId('recipe_collection_id')
+                ->foreignId('cookbook_id')
                 ->nullable()
-                ->constrained('recipe_collections')
+                ->constrained('cookbooks')
                 ->cascadeOnUpdate()
                 ->nullOnDelete();
             $table->boolean('is_public')->default(false);

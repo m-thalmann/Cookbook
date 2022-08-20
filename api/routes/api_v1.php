@@ -2,14 +2,11 @@
 
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\RecipeCategoryController;
-use App\Http\Controllers\RecipeCollectionController;
-use App\Http\Controllers\RecipeCollectionRecipeController;
-use App\Http\Controllers\RecipeCollectionUserController;
+use App\Http\Controllers\Cookbook\CookbookController;
+use App\Http\Controllers\Cookbook\CookbookRecipeController;
+use App\Http\Controllers\Cookbook\CookbookUserController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\UserController;
-use App\Http\Resources\RecipeResource;
-use App\Models\Recipe;
-use App\Models\RecipeCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Route;
 
@@ -42,18 +39,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::apiResource('categories', RecipeCategoryController::class)->only([
         'index',
     ]);
+    Route::apiResource('cookbooks', CookbookController::class)->except([
+        'show',
+    ]);
     Route::apiResource(
-        'collections',
-        RecipeCollectionController::class
-    )->except(['show']);
-    Route::apiResource(
-        'collections.recipes',
-        RecipeCollectionRecipeController::class
+        'cookbooks.recipes',
+        CookbookRecipeController::class
     )->only(['index']);
-    Route::apiResource(
-        'collections.users',
-        RecipeCollectionUserController::class
-    )
+    Route::apiResource('cookbooks.users', CookbookUserController::class)
         ->except(['show'])
         ->scoped(['user' => 'id']);
 });

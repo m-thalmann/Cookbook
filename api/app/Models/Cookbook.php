@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class RecipeCollection extends BaseModel {
+class Cookbook extends BaseModel {
     use HasFactory;
 
     protected $fillable = ['name'];
@@ -18,8 +18,8 @@ class RecipeCollection extends BaseModel {
     }
 
     public function users() {
-        return $this->belongsToMany(User::class, 'recipe_collection_user')
-            ->using(RecipeCollectionUser::class)
+        return $this->belongsToMany(User::class, 'cookbook_user')
+            ->using(CookbookUser::class)
             ->withPivot('is_admin')
             ->withTimestamps()
             ->as('meta');
@@ -31,9 +31,9 @@ class RecipeCollection extends BaseModel {
         bool $mustBeAdmin = false
     ) {
         $query->whereExists(function ($query) use ($user, $mustBeAdmin) {
-            $query->from('recipe_collection_user');
+            $query->from('cookbook_user');
             $query
-                ->whereColumn('recipe_collection_id', 'recipe_collections.id')
+                ->whereColumn('cookbook_id', 'cookbooks.id')
                 ->where('user_id', $user->id);
 
             if ($mustBeAdmin) {

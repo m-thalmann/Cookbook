@@ -17,7 +17,7 @@ class RecipeFactory extends Factory {
     public function definition() {
         return [
             'user_id' => User::factory(),
-            'recipe_collection_id' => null,
+            'cookbook_id' => null,
             'is_public' => $this->faker->boolean(),
             'language_code' => 'en',
             'name' => $this->faker->name(),
