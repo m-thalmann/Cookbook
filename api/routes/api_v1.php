@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Cookbook\CookbookCategoryController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\RecipeCategoryController;
 use App\Http\Controllers\Cookbook\CookbookController;
@@ -49,4 +50,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::apiResource('cookbooks.users', CookbookUserController::class)
         ->except(['show'])
         ->scoped(['user' => 'id']);
+    Route::apiResource(
+        'cookbooks.categories',
+        CookbookCategoryController::class
+    )->only(['index']);
 });

@@ -56,7 +56,6 @@ class Recipe extends BaseModel {
     ];
     protected $filterableProperties = [
         'user_id',
-        'cookbook_id',
         'name',
         'category',
         'language_code',
