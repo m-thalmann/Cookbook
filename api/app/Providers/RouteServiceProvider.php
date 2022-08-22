@@ -19,7 +19,6 @@ class RouteServiceProvider extends ServiceProvider {
 
         $this->routes(function () {
             Route::middleware('api')
-                ->prefix(config('app.url_base_path'))
                 ->as('api.')
                 ->group(function () {
                     Route::prefix('v1')

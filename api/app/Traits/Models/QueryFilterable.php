@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
+const NULL_CHARACTER = "\x00";
+
 trait QueryFilterable {
     /**
      * Returns the properties the query should be filterable by
@@ -23,13 +25,14 @@ trait QueryFilterable {
     /**
      * Filters the query using the `filter` query-parameter(s).
      * It has one of the formats:
-     * - `filter[<property>]=<value>`
+     * - `filter[<property>]=<value>` (NULL values encoded as `%00`)
      * - `filter[<property>][<type>]=<value>`
      *
      * Here the type is one of:
      * - `not`
      * - `like`
      * - `in` &rArr; requires a list of comma-separated items
+     * - `notin` &rArr; requires a list of comma-separated items
      * - `lt` &rArr; `<`
      * - `le` &rArr; `<=`
      * - `ge` &rArr; `>=`
@@ -77,11 +80,19 @@ trait QueryFilterable {
                 $filterValue = $filter[$filterType];
 
                 if ($filterType === 'not') {
-                    $query->whereNot($filterProperty, $filterValue);
+                    if ($filterValue === NULL_CHARACTER) {
+                        $query->whereNotNull($filterProperty);
+                    } else {
+                        $query->whereNot($filterProperty, $filterValue);
+                    }
                 } elseif ($filterType === 'in') {
                     $list = explode(',', $filterValue);
 
                     $query->whereIn($filterProperty, $list);
+                } elseif ($filterType === 'notin') {
+                    $list = explode(',', $filterValue);
+
+                    $query->whereNotIn($filterProperty, $list);
                 } else {
                     $operator = null;
 
@@ -108,7 +119,11 @@ trait QueryFilterable {
                     }
                 }
             } else {
-                $query->where($filterProperty, $filter);
+                if ($filter === NULL_CHARACTER) {
+                    $query->whereNull($filterProperty);
+                } else {
+                    $query->where($filterProperty, $filter);
+                }
             }
         }
     }

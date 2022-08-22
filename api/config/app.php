@@ -72,8 +72,6 @@ return [
 
     'asset_url' => env('ASSET_URL'),
 
-    'url_base_path' => env('APP_URL_BASE_PATH', ''),
-
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

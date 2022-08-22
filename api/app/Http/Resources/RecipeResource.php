@@ -19,7 +19,12 @@ class RecipeResource extends JsonResource {
 
             $array['ingredients'] = collect($array['ingredients'])
                 ->groupBy('group')
-                ->map(fn($group, $key) => ['group' => $key, 'items' => $group])
+                ->map(
+                    fn($group, $key) => [
+                        'group' => empty($key) ? null : $key,
+                        'items' => $group,
+                    ]
+                )
                 ->sortBy('group')
                 ->values()
                 ->toArray();

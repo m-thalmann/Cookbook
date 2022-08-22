@@ -52,6 +52,22 @@ class QueryFilterableTest extends TestCase {
         $this->instance->scopeFilter($this->query, $this->request);
     }
 
+    public function testQueryIsFilteredByNullValue() {
+        $this->instance->filterableProperties = ['name'];
+
+        $this->request
+            ->shouldReceive('query')
+            ->with('filter')
+            ->andReturn(['name' => "\x00"]);
+
+        $this->query
+            ->shouldReceive('whereNull')
+            ->with('name')
+            ->once();
+
+        $this->instance->scopeFilter($this->query, $this->request);
+    }
+
     public function testQueryIsFilteredWithNotByOneProperty() {
         $this->instance->filterableProperties = ['name'];
 
@@ -85,6 +101,58 @@ class QueryFilterableTest extends TestCase {
         $this->query
             ->shouldReceive('where')
             ->with('name', $expectedOperator, $this->testFilter)
+            ->once();
+
+        $this->instance->scopeFilter($this->query, $this->request);
+    }
+
+    public function testQueryIsFilteredByNullValueWithNotOperator() {
+        $this->instance->filterableProperties = ['name'];
+
+        $this->request
+            ->shouldReceive('query')
+            ->with('filter')
+            ->andReturn(['name' => ['not' => "\x00"]]);
+
+        $this->query
+            ->shouldReceive('whereNotNull')
+            ->with('name')
+            ->once();
+
+        $this->instance->scopeFilter($this->query, $this->request);
+    }
+
+    public function testQueryIsFilteredByInOperator() {
+        $this->instance->filterableProperties = ['name'];
+
+        $filter = ['a', 'b', 'c'];
+
+        $this->request
+            ->shouldReceive('query')
+            ->with('filter')
+            ->andReturn(['name' => ['in' => implode(',', $filter)]]);
+
+        $this->query
+            ->shouldReceive('whereIn')
+            ->with('name', $filter)
+            ->once();
+
+        $this->instance->scopeFilter($this->query, $this->request);
+    }
+
+    public function testQueryIsFilteredByNotInOperator() {
+        $this->instance->filterableProperties = ['name'];
+
+        $filter = ['a', 'b', 'c'];
+
+        $this->request
+            ->shouldReceive('query')
+            ->with('filter')
+            ->andReturn(['name' => ['notin' => implode(',', $filter)]]);
+
+        $this->query
+            ->shouldReceive('whereNotIn')
+            ->with('name', $filter)
             ->once();
 
         $this->instance->scopeFilter($this->query, $this->request);
