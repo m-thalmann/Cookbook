@@ -5,7 +5,7 @@ namespace Tests\Feature\Api\Auth;
 use App\Models\AuthToken;
 use App\Models\User;
 use App\Services\HCaptchaService;
-use Illuminate\Auth\Notifications\VerifyEmail;
+use App\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;

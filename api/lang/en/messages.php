@@ -14,4 +14,5 @@ return [
         'is_last_admin_user_in_some' =>
             "This user is the last administrator in at least one cookbook. Therefore it can't be deleted.",
     ],
+    'email_must_be_verified' => 'You must verify your email.',
 ];

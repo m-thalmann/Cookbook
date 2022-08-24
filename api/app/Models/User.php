@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Notifications\ResetPassword;
+use App\Notifications\VerifyEmail;
 use App\Traits\Models\QueryOrganizable;
 use App\Traits\Models\SerializesDatesToTimestamp;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -79,7 +81,11 @@ class User extends Authenticatable implements MustVerifyEmail {
 
     public function sendEmailVerificationNotification() {
         if (config('app.email_verification_enabled')) {
-            parent::sendEmailVerificationNotification();
+            $this->notify(new VerifyEmail());
         }
+    }
+
+    public function sendPasswordResetNotification($token) {
+        $this->notify(new ResetPassword($token));
     }
 }
