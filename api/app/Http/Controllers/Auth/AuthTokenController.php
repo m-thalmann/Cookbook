@@ -18,7 +18,12 @@ class AuthTokenController extends Controller {
     /**
      * Returns the active access tokens for the user (only access tokens)
      */
-    #[OpenApi\Operation(tags: ['Auth/Tokens'])]
+    #[
+        OpenApi\Operation(
+            tags: ['Auth/Tokens'],
+            security: 'AccessTokenSecurityScheme'
+        )
+    ]
     #[OpenApi\Response(factory: TokenIndexResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[
@@ -44,7 +49,12 @@ class AuthTokenController extends Controller {
      *
      * @param AuthToken $authToken The id of the searched auth-token
      */
-    #[OpenApi\Operation(tags: ['Auth/Tokens'])]
+    #[
+        OpenApi\Operation(
+            tags: ['Auth/Tokens'],
+            security: 'AccessTokenSecurityScheme'
+        )
+    ]
     #[OpenApi\Response(factory: TokenShowResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
@@ -65,7 +75,12 @@ class AuthTokenController extends Controller {
      *
      * @param int $groupId The id of the group
      */
-    #[OpenApi\Operation(tags: ['Auth/Tokens'])]
+    #[
+        OpenApi\Operation(
+            tags: ['Auth/Tokens'],
+            security: 'AccessTokenSecurityScheme'
+        )
+    ]
     #[OpenApi\Response(factory: TokenIndexResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[
@@ -90,7 +105,12 @@ class AuthTokenController extends Controller {
      *
      * @param AuthToken $authToken The id of the searched auth-token
      */
-    #[OpenApi\Operation(tags: ['Auth/Tokens'])]
+    #[
+        OpenApi\Operation(
+            tags: ['Auth/Tokens'],
+            security: 'AccessTokenSecurityScheme'
+        )
+    ]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
@@ -111,7 +131,12 @@ class AuthTokenController extends Controller {
     /**
      * Deletes all tokens for the authenticated user
      */
-    #[OpenApi\Operation(tags: ['Auth/Tokens'])]
+    #[
+        OpenApi\Operation(
+            tags: ['Auth/Tokens'],
+            security: 'AccessTokenSecurityScheme'
+        )
+    ]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[
