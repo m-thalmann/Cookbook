@@ -12,24 +12,19 @@ Route::controller(AuthenticationController::class)->group(function () {
         ->name('me');
 
     Route::post('/login', 'login')
-        ->middleware(['throttle:6,1'])
+        ->middleware(['throttle:auth'])
         ->name('login');
     Route::post('/register', 'register')
-        ->middleware(['throttle:6,1'])
+        ->middleware(['throttle:auth'])
         ->name('register');
     Route::post('/logout', 'logout')
         ->middleware('auth')
         ->name('logout');
 
     Route::post('/refresh', 'refresh')
-        ->middleware(['auth:token-refresh', 'verified'])
+        ->middleware(['auth:token-refresh', 'verified', 'throttle:auth'])
         ->name('refresh');
 });
-
-Route::get(
-    '/registration-enabled',
-    fn() => ['data' => config('app.registration_enabled')]
-)->name('registration_enabled');
 
 Route::controller(EmailVerificationController::class)
     ->middleware('auth')
@@ -43,7 +38,7 @@ Route::controller(EmailVerificationController::class)
     });
 
 Route::controller(PasswordResetController::class)
-    ->middleware(['throttle:6,1'])
+    ->middleware(['throttle:auth'])
     ->prefix('reset-password')
     ->as('reset_password.')
     ->group(function () {

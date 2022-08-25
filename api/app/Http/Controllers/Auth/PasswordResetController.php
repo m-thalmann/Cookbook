@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Exceptions\HttpException;
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Events\PasswordReset;
@@ -9,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\Rules\Password as PasswordRule;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class PasswordResetController extends Controller {
     public function reset(Request $request) {

@@ -7,6 +7,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
+    'unauthorized' => 'Unauthorized.',
     'cant_update_self' => "You can't update yourself",
     'cookbooks' => [
         'cant_delete_last_admin_user' =>

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\HttpException;
 use App\Models\Recipe;
 use App\Models\RecipeImage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class RecipeImageController extends Controller {
     public function index(Recipe $recipe) {
