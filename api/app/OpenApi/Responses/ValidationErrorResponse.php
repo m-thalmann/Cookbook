@@ -44,4 +44,3 @@ class ValidationErrorResponse extends ResponseFactory {
             );
     }
 }
-

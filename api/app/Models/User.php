@@ -88,4 +88,14 @@ class User extends Authenticatable implements MustVerifyEmail {
     public function sendPasswordResetNotification($token) {
         $this->notify(new ResetPassword($token));
     }
+
+    public function getSortableProperties() {
+        return $this->sortableProperties;
+    }
+    public function getFilterableProperties() {
+        return $this->filterableProperties;
+    }
+    public function getSearchProperties() {
+        return $this->searchProperties;
+    }
 }

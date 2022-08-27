@@ -32,6 +32,9 @@ return [
                 [
                     'name' => 'Auth/Tokens',
                 ],
+                [
+                    'name' => 'Users',
+                ],
             ],
 
             'route' => [

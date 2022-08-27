@@ -5,14 +5,45 @@ namespace App\Http\Controllers;
 use App\Http\Resources\UserResource;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\OpenApi\Parameters\SortParameters;
+use App\OpenApi\Parameters\Users\IndexUsersParameters;
+use App\OpenApi\RequestBodies\Users\CreateUserRequestBody;
+use App\OpenApi\RequestBodies\Users\UpdateUserRequestBody;
+use App\OpenApi\Responses\ConflictResponse;
+use App\OpenApi\Responses\ForbiddenResponse;
+use App\OpenApi\Responses\NoContentResponse;
+use App\OpenApi\Responses\NotFoundResponse;
+use App\OpenApi\Responses\TooManyRequestsResponse;
+use App\OpenApi\Responses\UnauthorizedResponse;
+use App\OpenApi\Responses\Users\UserCreatedResponse;
+use App\OpenApi\Responses\Users\UserIndexResponse;
+use App\OpenApi\Responses\Users\UserShowDetailedResponse;
+use App\OpenApi\Responses\Users\UserShowResponse;
+use App\OpenApi\Responses\ValidationErrorResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
+use Vyuldashev\LaravelOpenApi\Attributes as OpenApi;
 
+#[OpenApi\PathItem]
 class UserController extends Controller {
+    /**
+     * Lists all users
+     */
+    #[OpenApi\Operation(tags: ['Users'], security: 'AccessTokenSecurityScheme')]
+    #[OpenApi\Parameters(factory: IndexUsersParameters::class)]
+    #[OpenApi\Response(factory: UserIndexResponse::class, statusCode: 200)]
+    #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
+    #[OpenApi\Response(factory: ForbiddenResponse::class, statusCode: 403)]
+    #[
+        OpenApi\Response(
+            factory: TooManyRequestsResponse::class,
+            statusCode: 429
+        )
+    ]
     public function index(Request $request) {
         $this->authorize('viewAny', User::class);
 
@@ -25,6 +56,26 @@ class UserController extends Controller {
         );
     }
 
+    /**
+     * Creates a new user
+     */
+    #[OpenApi\Operation(tags: ['Users'], security: 'AccessTokenSecurityScheme')]
+    #[OpenApi\RequestBody(factory: CreateUserRequestBody::class)]
+    #[OpenApi\Response(factory: UserCreatedResponse::class, statusCode: 201)]
+    #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
+    #[OpenApi\Response(factory: ForbiddenResponse::class, statusCode: 403)]
+    #[
+        OpenApi\Response(
+            factory: ValidationErrorResponse::class,
+            statusCode: 422
+        )
+    ]
+    #[
+        OpenApi\Response(
+            factory: TooManyRequestsResponse::class,
+            statusCode: 429
+        )
+    ]
     public function store(Request $request) {
         $this->authorize('create', User::class);
 
@@ -68,18 +119,81 @@ class UserController extends Controller {
             ->setStatusCode(201);
     }
 
+    /**
+     * Returns the user with the given id
+     *
+     * @param User $user The user's id
+     */
+    #[OpenApi\Operation(tags: ['Users'], security: 'AccessTokenSecurityScheme')]
+    #[
+        OpenApi\Response(
+            factory: UserShowDetailedResponse::class,
+            statusCode: 200
+        )
+    ]
+    #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
+    #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
+    #[
+        OpenApi\Response(
+            factory: TooManyRequestsResponse::class,
+            statusCode: 429
+        )
+    ]
     public function show(User $user) {
         $this->authorizeAnonymously('view', $user);
 
         return UserResource::make($user);
     }
 
+    /**
+     * Returns the user with the given email
+     *
+     * @param string $email The email of the searched user
+     */
+    #[OpenApi\Operation(tags: ['Users'], security: 'AccessTokenSecurityScheme')]
+    #[OpenApi\Response(factory: UserShowResponse::class, statusCode: 200)]
+    #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
+    #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
+    #[
+        OpenApi\Response(
+            factory: TooManyRequestsResponse::class,
+            statusCode: 429
+        )
+    ]
     public function showByEmail(string $email) {
         return User::query()
             ->where('email', $email)
             ->firstOrFail();
     }
 
+    /**
+     * Updates an existing user
+     *
+     * @param User $user The user's id
+     */
+    #[OpenApi\Operation(tags: ['Users'], security: 'AccessTokenSecurityScheme')]
+    #[OpenApi\RequestBody(factory: UpdateUserRequestBody::class)]
+    #[
+        OpenApi\Response(
+            factory: UserShowDetailedResponse::class,
+            statusCode: 200
+        )
+    ]
+    #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
+    #[OpenApi\Response(factory: ForbiddenResponse::class, statusCode: 403)]
+    #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
+    #[
+        OpenApi\Response(
+            factory: ValidationErrorResponse::class,
+            statusCode: 422
+        )
+    ]
+    #[
+        OpenApi\Response(
+            factory: TooManyRequestsResponse::class,
+            statusCode: 429
+        )
+    ]
     public function update(Request $request, User $user) {
         $this->authorizeAnonymously('update', $user);
 
@@ -156,6 +270,22 @@ class UserController extends Controller {
         return UserResource::make($user);
     }
 
+    /**
+     * Deletes the user
+     *
+     * @param User $user The user's id
+     */
+    #[OpenApi\Operation(tags: ['Users'], security: 'AccessTokenSecurityScheme')]
+    #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
+    #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
+    #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
+    #[OpenApi\Response(factory: ConflictResponse::class, statusCode: 409)]
+    #[
+        OpenApi\Response(
+            factory: TooManyRequestsResponse::class,
+            statusCode: 429
+        )
+    ]
     public function destroy(User $user) {
         $this->authorizeAnonymously('delete', $user);
 

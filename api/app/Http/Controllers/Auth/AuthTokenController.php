@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Resources\AuthTokenResource;
 use App\Http\Controllers\Controller;
 use App\Models\AuthToken;
+use App\OpenApi\Parameters\PaginationParameters;
 use App\OpenApi\Responses\Auth\Tokens\TokenIndexResponse;
 use App\OpenApi\Responses\Auth\Tokens\TokenShowResponse;
 use App\OpenApi\Responses\NoContentResponse;
@@ -24,6 +25,7 @@ class AuthTokenController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: PaginationParameters::class)]
     #[OpenApi\Response(factory: TokenIndexResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[
@@ -81,6 +83,7 @@ class AuthTokenController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: PaginationParameters::class)]
     #[OpenApi\Response(factory: TokenIndexResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[
