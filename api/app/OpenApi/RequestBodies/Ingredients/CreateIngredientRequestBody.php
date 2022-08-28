@@ -11,15 +11,13 @@ use Vyuldashev\LaravelOpenApi\Factories\RequestBodyFactory;
 class CreateIngredientRequestBody extends RequestBodyFactory implements
     ExtendableFactory {
     public function build(): RequestBody {
-        return RequestBody::create()
-            ->description('Create-ingredient request')
-            ->content(
-                MediaType::json()->schema(
-                    Schema::object()
-                        ->properties(...$this->getProperties())
-                        ->required(...$this->getRequired())
-                )
-            );
+        return RequestBody::create()->content(
+            MediaType::json()->schema(
+                Schema::object()
+                    ->properties(...$this->getProperties())
+                    ->required(...$this->getRequired())
+            )
+        );
     }
 
     public function getProperties(): array {

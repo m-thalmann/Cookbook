@@ -25,14 +25,18 @@ Route::controller(RecipeController::class)->group(function () {
     Route::get('/{recipe}', 'show')->name('show');
 });
 
+Route::get('/{recipe}/images', [RecipeImageController::class, 'index'])->name(
+    'images.index'
+);
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/{recipe}/ingredients', [
         IngredientController::class,
         'store',
     ])->name('ingredients.store');
 
-    Route::controller(RecipeImageController::class)->group(function () {
-        Route::get('/{recipe}/images', 'index')->name('images.index');
-        Route::post('/{recipe}/images', 'store')->name('images.store');
-    });
+    Route::post('/{recipe}/images', [
+        RecipeImageController::class,
+        'store',
+    ])->name('images.store');
 });

@@ -29,10 +29,14 @@
 
     <script src="https://unpkg.com/swagger-ui-dist@4.5.0/swagger-ui-bundle.js" crossorigin></script>
     <script>
+        const spec = {!! $spec !!};
+
+        console.info('OpenAPI Specification:', spec);
+
         window.onload = function() {
             window.ui = SwaggerUIBundle({
                 dom_id: '#swagger-ui',
-                spec: {!! $spec !!},
+                spec: spec,
                 presets: [
                     SwaggerUIBundle.presets.apis,
                 ],

@@ -11,17 +11,13 @@ class UpdateIngredientRequestBody extends RequestBodyFactory {
     public function build(): RequestBody {
         $createIngredientSchema = new CreateIngredientRequestBody();
 
-        return RequestBody::create()
-            ->description('Update-ingredient request')
-            ->content(
-                MediaType::json()->schema(
-                    Schema::object()
-                        ->properties(
-                            ...$createIngredientSchema->getProperties()
-                        )
-                        ->required()
-                )
-            );
+        return RequestBody::create()->content(
+            MediaType::json()->schema(
+                Schema::object()
+                    ->properties(...$createIngredientSchema->getProperties())
+                    ->required()
+            )
+        );
     }
 }
 
