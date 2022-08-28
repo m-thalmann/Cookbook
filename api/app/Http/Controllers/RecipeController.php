@@ -5,13 +5,50 @@ namespace App\Http\Controllers;
 use App\Http\Resources\RecipeResource;
 use App\Models\Recipe;
 use App\Models\Cookbook;
+use App\OpenApi\Parameters\Recipes\IndexRecipesParameters;
+use App\OpenApi\Parameters\Recipes\IndexRecipesTrashParameters;
+use App\OpenApi\RequestBodies\Recipes\CreateRecipeRequestBody;
+use App\OpenApi\RequestBodies\Recipes\UpdateRecipeRequestBody;
+use App\OpenApi\Responses\ForbiddenResponse;
+use App\OpenApi\Responses\NoContentResponse;
+use App\OpenApi\Responses\NotFoundResponse;
+use App\OpenApi\Responses\Recipes\RecipeCreatedResponse;
+use App\OpenApi\Responses\TooManyRequestsResponse;
+use App\OpenApi\Responses\UnauthorizedResponse;
+use App\OpenApi\Responses\Recipes\RecipeIndexResponse;
+use App\OpenApi\Responses\Recipes\RecipeShowResponse;
+use App\OpenApi\Responses\ValidationErrorResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Vyuldashev\LaravelOpenApi\Attributes as OpenApi;
 
+#[OpenApi\PathItem]
 class RecipeController extends Controller {
+    /**
+     * Lists all recipes (visible to the user)
+     *
+     * If authentication is provided it will show all recipes owned by the user.
+     * If furthermore the `all` parameter is set, all visible recipes for the user are returned (admin can see any recipe).
+     *
+     * If no authentication is provided all public recipes are returned (independent of the `all` parameter)
+     */
+    #[
+        OpenApi\Operation(
+            tags: ['Recipes'],
+            security: 'OptionalAccessTokenSecurityScheme'
+        )
+    ]
+    #[OpenApi\Parameters(factory: IndexRecipesParameters::class)]
+    #[OpenApi\Response(factory: RecipeIndexResponse::class, statusCode: 200)]
+    #[
+        OpenApi\Response(
+            factory: TooManyRequestsResponse::class,
+            statusCode: 429
+        )
+    ]
     public function index(Request $request) {
         $all = $request->exists('all');
 
@@ -32,6 +69,31 @@ class RecipeController extends Controller {
         );
     }
 
+    /**
+     * Creates a new recipe
+     */
+    #[
+        OpenApi\Operation(
+            tags: ['Recipes'],
+            security: 'AccessTokenSecurityScheme'
+        )
+    ]
+    #[OpenApi\RequestBody(factory: CreateRecipeRequestBody::class)]
+    #[OpenApi\Response(factory: RecipeCreatedResponse::class, statusCode: 201)]
+    #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
+    #[OpenApi\Response(factory: ForbiddenResponse::class, statusCode: 403)]
+    #[
+        OpenApi\Response(
+            factory: ValidationErrorResponse::class,
+            statusCode: 422
+        )
+    ]
+    #[
+        OpenApi\Response(
+            factory: TooManyRequestsResponse::class,
+            statusCode: 429
+        )
+    ]
     public function store(Request $request) {
         $this->authorize('create', Recipe::class);
 
@@ -65,7 +127,17 @@ class RecipeController extends Controller {
                 ->recipes()
                 ->create($data);
 
-            $this->storeRecipeIngredients($request, $recipe);
+            $ingredientsData = $request->validate([
+                'ingredients' => ['array'],
+            ]);
+
+            $ingredients = Arr::get($ingredientsData, 'ingredients', []);
+
+            if (count($ingredients) > 0) {
+                foreach ($ingredients as $ingredient) {
+                    IngredientController::storeIngredient($ingredient, $recipe);
+                }
+            }
 
             return $recipe;
         });
@@ -80,20 +152,25 @@ class RecipeController extends Controller {
             ->setStatusCode(201);
     }
 
-    private function storeRecipeIngredients(Request $request, Recipe $recipe) {
-        $data = $request->validate([
-            'ingredients' => ['array'],
-        ]);
-
-        $ingredients = Arr::get($data, 'ingredients', []);
-
-        if (count($ingredients) > 0) {
-            foreach ($ingredients as $ingredient) {
-                IngredientController::storeIngredient($ingredient, $recipe);
-            }
-        }
-    }
-
+    /**
+     * Returns the recipe with the given id
+     *
+     * @param Recipe $recipe The recipe's id
+     */
+    #[
+        OpenApi\Operation(
+            tags: ['Recipes'],
+            security: 'OptionalAccessTokenSecurityScheme'
+        )
+    ]
+    #[OpenApi\Response(factory: RecipeShowResponse::class, statusCode: 200)]
+    #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
+    #[
+        OpenApi\Response(
+            factory: TooManyRequestsResponse::class,
+            statusCode: 429
+        )
+    ]
     public function show(Recipe $recipe) {
         $this->authorizeAnonymously('view', $recipe);
 
@@ -116,7 +193,26 @@ class RecipeController extends Controller {
         return RecipeResource::make($recipe);
     }
 
-    public function showShared(string $recipeShareUuid) {
+    /**
+     * Returns the recipe with the given share-uuid
+     *
+     * @param string $shareUuid The recipe's share-uuid
+     */
+    #[
+        OpenApi\Operation(
+            tags: ['Recipes'],
+            security: 'OptionalAccessTokenSecurityScheme'
+        )
+    ]
+    #[OpenApi\Response(factory: RecipeShowResponse::class, statusCode: 200)]
+    #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
+    #[
+        OpenApi\Response(
+            factory: TooManyRequestsResponse::class,
+            statusCode: 429
+        )
+    ]
+    public function showShared(string $shareUuid) {
         $recipe = Recipe::query()->with(['user', 'ingredients', 'images']);
 
         if (auth()->check()) {
@@ -129,13 +225,40 @@ class RecipeController extends Controller {
             ]);
         }
 
-        $recipe->where('share_uuid', $recipeShareUuid)->firstOrFail();
+        $recipe->where('share_uuid', $shareUuid)->firstOrFail();
 
         $recipe->makeHidden('thumbnail');
 
         return RecipeResource::make($recipe);
     }
 
+    /**
+     * Updates an existing recipe
+     *
+     * @param Recipe $recipe The recipe's id
+     */
+    #[
+        OpenApi\Operation(
+            tags: ['Recipes'],
+            security: 'AccessTokenSecurityScheme'
+        )
+    ]
+    #[OpenApi\RequestBody(factory: UpdateRecipeRequestBody::class)]
+    #[OpenApi\Response(factory: RecipeShowResponse::class, statusCode: 200)]
+    #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
+    #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
+    #[
+        OpenApi\Response(
+            factory: ValidationErrorResponse::class,
+            statusCode: 422
+        )
+    ]
+    #[
+        OpenApi\Response(
+            factory: TooManyRequestsResponse::class,
+            statusCode: 429
+        )
+    ]
     public function update(Request $request, Recipe $recipe) {
         $this->authorizeAnonymously('update', $recipe);
 
@@ -192,6 +315,26 @@ class RecipeController extends Controller {
         return RecipeResource::make($recipe->makeVisible('share_uuid'));
     }
 
+    /**
+     * Moves the recipe to the trash
+     *
+     * @param Recipe $recipe The recipe's id
+     */
+    #[
+        OpenApi\Operation(
+            tags: ['Recipes'],
+            security: 'AccessTokenSecurityScheme'
+        )
+    ]
+    #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
+    #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
+    #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
+    #[
+        OpenApi\Response(
+            factory: TooManyRequestsResponse::class,
+            statusCode: 429
+        )
+    ]
     public function destroy(Recipe $recipe) {
         $this->authorizeAnonymously('delete', $recipe);
 
@@ -200,11 +343,29 @@ class RecipeController extends Controller {
         return response()->noContent();
     }
 
+    /**
+     * Lists all recipes in the authenticated user's trash
+     */
+    #[
+        OpenApi\Operation(
+            tags: ['Recipes'],
+            security: 'AccessTokenSecurityScheme'
+        )
+    ]
+    #[OpenApi\Parameters(factory: IndexRecipesTrashParameters::class)]
+    #[OpenApi\Response(factory: RecipeIndexResponse::class, statusCode: 200)]
+    #[
+        OpenApi\Response(
+            factory: TooManyRequestsResponse::class,
+            statusCode: 429
+        )
+    ]
     public function indexTrash(Request $request) {
         $recipes = authUser()
             ->recipes()
-            ->with('user')
             ->with([
+                'user',
+                'thumbnail',
                 'cookbook' => function ($query) {
                     $query->forUser(authUser())->exists();
                 },
@@ -217,6 +378,23 @@ class RecipeController extends Controller {
         );
     }
 
+    /**
+     * Deletes all recipes in the trash for the authenticated user
+     */
+    #[
+        OpenApi\Operation(
+            tags: ['Recipes'],
+            security: 'AccessTokenSecurityScheme'
+        )
+    ]
+    #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
+    #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
+    #[
+        OpenApi\Response(
+            factory: TooManyRequestsResponse::class,
+            statusCode: 429
+        )
+    ]
     public function truncateTrash() {
         $query = authUser()
             ->recipes()
@@ -229,6 +407,26 @@ class RecipeController extends Controller {
         return response()->noContent();
     }
 
+    /**
+     * Deletes the recipe
+     *
+     * @param Recipe $recipe The recipe's id
+     */
+    #[
+        OpenApi\Operation(
+            tags: ['Recipes'],
+            security: 'AccessTokenSecurityScheme'
+        )
+    ]
+    #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
+    #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
+    #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
+    #[
+        OpenApi\Response(
+            factory: TooManyRequestsResponse::class,
+            statusCode: 429
+        )
+    ]
     public function forceDestroy(Recipe $recipe) {
         $this->authorizeAnonymously('forceDelete', $recipe);
 
@@ -237,6 +435,26 @@ class RecipeController extends Controller {
         return response()->noContent();
     }
 
+    /**
+     * Restores the recipe from the trash
+     *
+     * @param Recipe $recipe The recipe's id
+     */
+    #[
+        OpenApi\Operation(
+            tags: ['Recipes'],
+            security: 'AccessTokenSecurityScheme'
+        )
+    ]
+    #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
+    #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
+    #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
+    #[
+        OpenApi\Response(
+            factory: TooManyRequestsResponse::class,
+            statusCode: 429
+        )
+    ]
     public function restore(Recipe $recipe) {
         $this->authorizeAnonymously('restore', $recipe);
 

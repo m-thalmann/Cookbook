@@ -8,6 +8,7 @@ use Vyuldashev\LaravelOpenApi\Contracts\Reusable;
 use Vyuldashev\LaravelOpenApi\Factories\SchemaFactory;
 
 abstract class ExtendableSchemaFactory extends SchemaFactory implements
+    ExtendableFactory,
     Reusable {
     public function build(): SchemaContract {
         return Schema::object($this->getName())

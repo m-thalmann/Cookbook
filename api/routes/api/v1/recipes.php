@@ -19,7 +19,7 @@ Route::controller(RecipeController::class)
     });
 
 Route::controller(RecipeController::class)->group(function () {
-    Route::get('/shared/{recipeShareUuid}', 'showShared')->name('shared.show');
+    Route::get('/shared/{shareUuid}', 'showShared')->name('shared.show');
 
     Route::get('/', 'index')->name('index');
     Route::get('/{recipe}', 'show')->name('show');

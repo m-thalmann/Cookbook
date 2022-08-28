@@ -47,7 +47,7 @@ class FilterParameters extends ParametersFactory {
                     "The column(s) (key) to filter by (value) with optional type of filter as secondary key. Use one of the following:\n" .
                         "- `filter[column]=value`\n" .
                         "- `filter[column][type]=value`\n\n" .
-                        "`NULL` is encoded as `%00`'"
+                        '`NULL` is encoded as `%00`'
                 )
                 ->required(false)
                 ->style('deepObject')

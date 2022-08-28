@@ -27,6 +27,9 @@ return [
 
             'tags' => [
                 [
+                    'name' => 'Recipes',
+                ],
+                [
                     'name' => 'Auth',
                 ],
                 [
