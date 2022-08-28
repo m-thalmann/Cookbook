@@ -30,6 +30,12 @@ return [
                     'name' => 'Recipes',
                 ],
                 [
+                    'name' => 'Ingredients',
+                ],
+                [
+                    'name' => 'Categories',
+                ],
+                [
                     'name' => 'Auth',
                 ],
                 [
