@@ -14,7 +14,7 @@ trait QueryFilterable {
      *
      * @return string[]
      */
-    private function getFilterableProperties() {
+    public function getFilterableProperties() {
         if (!isset($this->filterableProperties)) {
             return [];
         }

@@ -39,6 +39,12 @@ return [
                     'name' => 'Categories',
                 ],
                 [
+                    'name' => 'Cookbooks',
+                ],
+                [
+                    'name' => 'Cookbooks/Users',
+                ],
+                [
                     'name' => 'Auth',
                 ],
                 [
@@ -50,7 +56,8 @@ return [
             ],
 
             'route' => [
-                'uri' => null,
+                'uri' => 'docs/openapi',
+                'middleware' => [],
             ],
         ],
     ],

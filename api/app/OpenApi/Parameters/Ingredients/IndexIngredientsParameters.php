@@ -3,7 +3,6 @@
 namespace App\OpenApi\Parameters\Ingredients;
 
 use App\Models\Ingredient;
-use App\OpenApi\Parameters\PaginationParameters;
 use App\OpenApi\Parameters\SearchParameters;
 use App\OpenApi\Parameters\SortParameters;
 use GoldSpecDigital\ObjectOrientedOAS\Objects\Parameter;

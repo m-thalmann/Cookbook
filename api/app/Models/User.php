@@ -53,11 +53,13 @@ class User extends Authenticatable implements MustVerifyEmail {
         'id',
         'first_name',
         'last_name',
+        'email',
         'language_code',
     ];
     protected $filterableProperties = [
         'first_name',
         'last_name',
+        'email',
         'language_code',
     ];
     protected $searchProperties = ['first_name', 'last_name'];
@@ -87,15 +89,5 @@ class User extends Authenticatable implements MustVerifyEmail {
 
     public function sendPasswordResetNotification($token) {
         $this->notify(new ResetPassword($token));
-    }
-
-    public function getSortableProperties() {
-        return $this->sortableProperties;
-    }
-    public function getFilterableProperties() {
-        return $this->filterableProperties;
-    }
-    public function getSearchProperties() {
-        return $this->searchProperties;
     }
 }

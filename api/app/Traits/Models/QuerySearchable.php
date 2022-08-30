@@ -12,7 +12,7 @@ trait QuerySearchable {
      *
      * @return string[]
      */
-    private function getSearchProperties() {
+    public function getSearchProperties() {
         if (!isset($this->searchProperties)) {
             return [];
         }

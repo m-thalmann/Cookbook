@@ -162,15 +162,5 @@ class Recipe extends BaseModel {
 
         Storage::disk('public')->delete($imagePaths);
     }
-
-    public function getSortableProperties() {
-        return $this->sortableProperties;
-    }
-    public function getFilterableProperties() {
-        return $this->filterableProperties;
-    }
-    public function getSearchProperties() {
-        return $this->searchProperties;
-    }
 }
 

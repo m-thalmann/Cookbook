@@ -12,7 +12,7 @@ trait QuerySortable {
      *
      * @return string[]
      */
-    private function getSortableProperties() {
+    public function getSortableProperties() {
         if (!isset($this->sortableProperties)) {
             return ['id'];
         }

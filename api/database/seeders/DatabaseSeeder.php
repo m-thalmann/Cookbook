@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder {
         $user = User::factory()->create([
             'first_name' => 'John',
             'last_name' => 'Doe',
-            'email' => 'john@example.com',
+            'email' => 'john.doe@example.com',
         ]);
 
         $recipes = Recipe::factory(self::RECIPE_AMOUNT)->create([

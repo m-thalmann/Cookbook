@@ -54,12 +54,5 @@ class Ingredient extends BaseModel {
 
         return !$query->exists();
     }
-
-    public function getSortableProperties() {
-        return $this->sortableProperties;
-    }
-    public function getSearchProperties() {
-        return $this->searchProperties;
-    }
 }
 
