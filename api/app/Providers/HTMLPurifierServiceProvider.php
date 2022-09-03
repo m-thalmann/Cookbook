@@ -18,7 +18,7 @@ class HTMLPurifierServiceProvider extends ServiceProvider implements
     public function register() {
         $this->app->singleton(HTMLPurifierService::class, function ($app) {
             return new HTMLPurifierService(
-                new HTMLPurifier($this->getDefaultConfig())
+                new HTMLPurifier(self::getDefaultConfig())
             );
         });
     }
@@ -32,7 +32,7 @@ class HTMLPurifierServiceProvider extends ServiceProvider implements
         return [HTMLPurifierService::class];
     }
 
-    private function getDefaultConfig() {
+    public static function getDefaultConfig() {
         $config = HTMLPurifier_Config::createDefault();
 
         return $config;

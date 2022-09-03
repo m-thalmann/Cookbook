@@ -5,6 +5,7 @@ namespace Tests\Feature\Api\Auth;
 use App\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
+use ReflectionClass;
 use Tests\TestCase;
 
 class PasswordResetTest extends TestCase {
@@ -20,6 +21,29 @@ class PasswordResetTest extends TestCase {
         $response->assertNoContent();
 
         Notification::assertSentTo($user, ResetPassword::class);
+    }
+
+    public function testSendResetPasswordLinkNotification() {
+        $token = 'testToken';
+
+        $user = $this->createUser();
+        $notification = new ResetPassword($token);
+
+        $notificationReflection = new ReflectionClass(ResetPassword::class);
+        $resetUrlMethodAccessor = $notificationReflection->getMethod(
+            'resetUrl'
+        );
+        $resetUrlMethodAccessor->setAccessible(true);
+
+        $resetUrl = $resetUrlMethodAccessor->invokeArgs($notification, [$user]);
+
+        $mail = $notification->toMail($user);
+
+        $this->assertEquals(
+            __('notifications.reset_password.subject'),
+            $mail->subject
+        );
+        $this->assertEquals($resetUrl, $mail->actionUrl);
     }
 
     public function testResetPasswordSucceedsWithSentToken() {

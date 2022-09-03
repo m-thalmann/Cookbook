@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Exceptions\UnauthorizedHttpException;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -16,12 +17,9 @@ class EnsureEmailIsVerified {
      */
     public function handle(Request $request, Closure $next) {
         if (!$request->user() || !$request->user()->hasVerifiedEmail()) {
-            $unverifiedResponse = [
-                'message' => __('messages.email_must_be_verified'),
-                'meta' => 'unverified',
-            ];
-
-            return response()->json($unverifiedResponse, 401);
+            throw UnauthorizedHttpException::unverified(
+                __('messages.email_must_be_verified')
+            );
         }
 
         return $next($request);

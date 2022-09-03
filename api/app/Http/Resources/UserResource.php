@@ -22,4 +22,3 @@ class UserResource extends JsonResource {
             ->toArray();
     }
 }
-
