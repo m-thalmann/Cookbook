@@ -18,6 +18,14 @@ return [
         'enabled' => env('HCAPTCHA_ENABLED', false),
     ],
 
+    'github' => [
+        'enabled' => env('OAUTH_GITHUB_ENABLED', false),
+        'client_id' => env('OAUTH_GITHUB_CLIENT_ID', null),
+        'client_secret' => env('OAUTH_GITHUB_CLIENT_SECRET', null),
+        'redirect' =>
+            env('APP_URL', 'http://localhost') . '/v1/auth/oauth/github/login',
+    ],
+
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),

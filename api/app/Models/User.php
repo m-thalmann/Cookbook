@@ -64,6 +64,10 @@ class User extends Authenticatable implements MustVerifyEmail {
     ];
     protected $searchProperties = ['first_name', 'last_name'];
 
+    public function oauthIdentities() {
+        return $this->hasMany(OAuthIdentity::class);
+    }
+
     public function recipes() {
         return $this->hasMany(Recipe::class);
     }

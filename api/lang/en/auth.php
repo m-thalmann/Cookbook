@@ -14,4 +14,10 @@ return [
     'registration_disabled' => 'Registration is disabled.',
     'email_verification_disabled' => 'Email verification is disabled',
     'hcpatcha_token_invalid' => 'The hCaptcha token is invalid',
+
+    'oauth' => [
+        'provider_not_supported' =>
+            'This authentication-provider is not supported.',
+        'failed' => 'OAuth authentication has failed.',
+    ],
 ];

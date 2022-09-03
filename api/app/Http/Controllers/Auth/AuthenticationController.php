@@ -72,6 +72,8 @@ class AuthenticationController extends Controller {
             config('auth.token_names.access')
         );
 
+        $user->load('oauthIdentities'); // TODO: doc
+
         return JsonResource::make([
             'user' => UserResource::make($user),
             'access_token' => $accessToken->plainTextToken,
@@ -149,6 +151,8 @@ class AuthenticationController extends Controller {
             config('auth.token_names.refresh'),
             config('auth.token_names.access')
         );
+
+        $user->load('oauthIdentities'); // TODO: doc
 
         return JsonResource::make([
             'user' => UserResource::make($user),

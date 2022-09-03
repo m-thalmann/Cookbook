@@ -218,6 +218,8 @@ class UserController extends Controller {
             $user->id === auth()->id() &&
             Arr::hasAny($data, ['email', 'password'])
         ) {
+            // TODO: only if current_password is not null
+            // TODO: if current_password is null -> email can't be changed
             $request->validate([
                 'current_password' => ['required', 'current_password'],
             ]);

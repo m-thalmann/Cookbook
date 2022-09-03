@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\Auth\AuthTokenController;
 use App\Http\Controllers\Auth\EmailVerificationController;
+use App\Http\Controllers\Auth\OAuthController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,15 @@ Route::controller(AuthenticationController::class)->group(function () {
         ->middleware(['auth:token-refresh', 'verified', 'throttle:auth'])
         ->name('refresh');
 });
+
+Route::controller(OAuthController::class)
+    ->prefix('oauth')
+    ->as('oauth.')
+    ->group(function () {
+        Route::get('/{provider}/redirect', 'redirect')->name('redirect');
+
+        Route::get('/{provider}/login', 'login')->name('callback');
+    });
 
 Route::controller(EmailVerificationController::class)
     ->middleware('auth')
