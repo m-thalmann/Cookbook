@@ -1,0 +1,38 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use './variables' as *;
+
+@import '@angular/material/theming';
+
+@include mat.core();
+
+// initialize theme
+
+@mixin -html-styles($variables) {
+  $app-theme: map.get($variables, 'theme');
+
+  background: mat-color(map.get($app-theme, 'background'), 'background');
+  color: mat-color(map.get($app-theme, 'foreground'), 'text');
+
+  a {
+    color: mat-color(map.get($variables, 'link-palette'));
+  }
+}
+
+@each $theme, $variables in $themes {
+  $app-theme: map.get($variables, 'theme');
+
+  @if ($theme == $default-theme) {
+    html {
+      @include angular-material-theme($app-theme);
+
+      @include -html-styles($variables);
+    }
+  } @else {
+    html.theme-#{$theme} {
+      @include angular-material-color($app-theme);
+
+      @include -html-styles($variables);
+    }
+  }
+}

@@ -8,3 +8,5 @@ package-lock.json
 /api/storage
 /api/public/hot
 /api/public/storage
+
+/client/.angular

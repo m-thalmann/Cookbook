@@ -1,0 +1,55 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@import '@angular/material/theming';
+
+// themes-config
+
+$themes: (
+  'dark': (
+    'primary-palette': mat.define-palette(mat.$teal-palette, 800),
+    'accent-palette': mat.define-palette(mat.$green-palette, A400),
+    'warn-palette': mat.define-palette(mat.$red-palette, 700),
+    'link-palette': mat.define-palette(mat.$teal-palette, A400),
+    'type': 'dark',
+  ),
+  'light': (
+    'primary-palette': mat.define-palette(mat.$teal-palette, 800),
+    'accent-palette': mat.define-palette(mat.$green-palette, A400),
+    'warn-palette': mat.define-palette(mat.$red-palette, 700),
+    'link-palette': mat.define-palette(mat.$teal-palette, A400),
+    'type': 'light',
+  ),
+);
+
+$default-theme: 'dark';
+
+// initialize the themes-map
+
+@each $theme, $variables in $themes {
+  $color-config: (
+    'primary': map.get($variables, 'primary-palette'),
+    'accent': map.get($variables, 'accent-palette'),
+    'warn': map.get($variables, 'warn-palette'),
+  );
+
+  $app-theme: ();
+
+  @if (map.get($variables, 'type') == 'light') {
+    $app-theme: mat-light-theme(
+      (
+        color: $color-config,
+      )
+    );
+  } @else {
+    $app-theme: mat-dark-theme(
+      (
+        color: $color-config,
+      )
+    );
+  }
+
+  $variables: map.set($variables, 'theme', $app-theme);
+
+  $themes: map.set($themes, $theme, $variables);
+}
