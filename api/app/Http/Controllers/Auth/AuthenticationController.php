@@ -125,8 +125,7 @@ class AuthenticationController extends Controller {
         }
 
         $data = $request->validate([
-            'first_name' => ['required', 'filled', 'string', 'max:255'],
-            'last_name' => ['required', 'filled', 'string', 'max:255'],
+            'name' => ['required', 'filled', 'string', 'max:255'],
             'email' => [
                 'bail',
                 'required',

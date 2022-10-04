@@ -15,12 +15,9 @@ class UserSchema extends ExtendableSchemaFactory {
             Schema::integer('id')
                 ->description('The id of the user')
                 ->example(1),
-            Schema::string('first_name')
-                ->description('The user\'s first name')
-                ->example('John'),
-            Schema::string('last_name')
-                ->description('The user\'s last name')
-                ->example('Doe'),
+            Schema::string('name')
+                ->description('The user\'s full name')
+                ->example('John Doe'),
             Schema::string('email')
                 ->description('The user\'s email')
                 ->example('john.doe@example.com'),
@@ -32,7 +29,7 @@ class UserSchema extends ExtendableSchemaFactory {
     }
 
     public function getRequired(): array {
-        return ['id', 'first_name', 'last_name', 'email', 'language_code'];
+        return ['id', 'name', 'email', 'language_code'];
     }
 }
 

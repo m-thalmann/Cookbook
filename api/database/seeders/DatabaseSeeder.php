@@ -36,8 +36,7 @@ class DatabaseSeeder extends Seeder {
         $this->clearImages();
 
         $user = User::factory()->create([
-            'first_name' => 'John',
-            'last_name' => 'Doe',
+            'name' => 'John Doe',
             'email' => 'john.doe@example.com',
         ]);
 

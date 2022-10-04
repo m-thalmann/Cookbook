@@ -80,8 +80,7 @@ class UserController extends Controller {
         $this->authorize('create', User::class);
 
         $data = $request->validate([
-            'first_name' => ['required', 'filled', 'string', 'max:255'],
-            'last_name' => ['required', 'filled', 'string', 'max:255'],
+            'name' => ['required', 'filled', 'string', 'max:255'],
             'email' => [
                 'bail',
                 'required',
@@ -198,8 +197,7 @@ class UserController extends Controller {
         $this->authorizeAnonymously('update', $user);
 
         $data = $request->validate([
-            'first_name' => ['filled', 'string', 'max:255'],
-            'last_name' => ['filled', 'string', 'max:255'],
+            'name' => ['filled', 'string', 'max:255'],
             'email' => [
                 'bail',
                 'email',

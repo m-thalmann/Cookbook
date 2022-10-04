@@ -13,14 +13,10 @@ class CreateUserRequestBody extends RequestBodyFactory {
             MediaType::json()->schema(
                 Schema::object()
                     ->properties(
-                        Schema::string('first_name')
-                            ->maxLength(255)
-                            ->description('The user\'s first name')
-                            ->example('John'),
-                        Schema::string('last_name')
+                        Schema::string('name')
                             ->maxLength(255)
                             ->description('The user\'s last name')
-                            ->example('Doe'),
+                            ->example('John Doe'),
                         Schema::string('email')
                             ->maxLength(255)
                             ->description('The user\'s email')
@@ -47,8 +43,7 @@ class CreateUserRequestBody extends RequestBodyFactory {
                         )
                     )
                     ->required(
-                        'first_name',
-                        'last_name',
+                        'name',
                         'email',
                         'password',
                         'password_confirmation'

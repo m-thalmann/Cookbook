@@ -27,8 +27,7 @@ class UsersTest extends TestCase {
 
         $this->assertJsonPagination(
             [
-                'first_name',
-                'last_name',
+                'name',
                 'email',
                 'language_code',
                 'is_admin',
@@ -55,8 +54,7 @@ class UsersTest extends TestCase {
         Notification::fake();
 
         $userData = [
-            'first_name' => $this->faker->firstName(),
-            'last_name' => $this->faker->lastName(),
+            'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'password' => self::DEFAULT_USER_PASSWORD,
             'password_confirmation' => self::DEFAULT_USER_PASSWORD,
@@ -84,8 +82,7 @@ class UsersTest extends TestCase {
         Notification::fake();
 
         $userData = [
-            'first_name' => $this->faker->firstName(),
-            'last_name' => $this->faker->lastName(),
+            'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'password' => self::DEFAULT_USER_PASSWORD,
             'password_confirmation' => self::DEFAULT_USER_PASSWORD,
@@ -109,8 +106,7 @@ class UsersTest extends TestCase {
         Notification::fake();
 
         $userData = [
-            'first_name' => $this->faker->firstName(),
-            'last_name' => $this->faker->lastName(),
+            'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'password' => self::DEFAULT_USER_PASSWORD,
             'password_confirmation' => self::DEFAULT_USER_PASSWORD,
@@ -132,8 +128,7 @@ class UsersTest extends TestCase {
         $this->createAndLoginUser(isAdmin: false);
 
         $userData = [
-            'first_name' => $this->faker->firstName(),
-            'last_name' => $this->faker->lastName(),
+            'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'password' => self::DEFAULT_USER_PASSWORD,
             'password_confirmation' => self::DEFAULT_USER_PASSWORD,
@@ -148,7 +143,7 @@ class UsersTest extends TestCase {
         $this->createAndLoginUser(isAdmin: true);
 
         $userData = [
-            'first_name' => '',
+            'name' => '',
             'email' => 'no_email',
             'password' => self::DEFAULT_USER_PASSWORD,
         ];
@@ -156,12 +151,7 @@ class UsersTest extends TestCase {
         $response = $this->postJson('/v1/users', $userData);
 
         $response->assertUnprocessable();
-        $response->assertJsonValidationErrors([
-            'first_name',
-            'last_name',
-            'email',
-            'password',
-        ]);
+        $response->assertJsonValidationErrors(['name', 'email', 'password']);
     }
 
     public function testUserCanViewItself() {
@@ -197,17 +187,17 @@ class UsersTest extends TestCase {
     public function testUserCanUpdateItself() {
         $user = $this->createAndLoginUser(isAdmin: false);
 
-        $newFirstName = "new_{$user->first_name}";
+        $newName = "new_{$user->name}";
 
         $response = $this->putJson("/v1/users/{$user->id}", [
-            'first_name' => $newFirstName,
+            'name' => $newName,
         ]);
 
         $response->assertOk();
 
         $user->refresh();
 
-        $this->assertEquals($newFirstName, $user->first_name);
+        $this->assertEquals($newName, $user->name);
 
         $response->assertJson(['data' => $user->toArray()]);
     }
@@ -217,10 +207,10 @@ class UsersTest extends TestCase {
 
         $user->createToken(TokenAuth::TYPE_ACCESS, 'TestToken');
 
-        $newFirstName = "new_{$user->first_name}";
+        $newName = "new_{$user->name}";
 
         $response = $this->putJson("/v1/users/{$user->id}", [
-            'first_name' => $newFirstName,
+            'name' => $newName,
             'do_logout' => true,
         ]);
 
@@ -316,17 +306,17 @@ class UsersTest extends TestCase {
         $this->createAndLoginUser(isAdmin: true);
         $otherUser = $this->createUser();
 
-        $newFirstName = "new_{$otherUser->first_name}";
+        $newName = "new_{$otherUser->name}";
 
         $response = $this->putJson("/v1/users/{$otherUser->id}", [
-            'first_name' => $newFirstName,
+            'name' => $newName,
         ]);
 
         $response->assertOk();
 
         $otherUser->refresh();
 
-        $this->assertEquals($newFirstName, $otherUser->first_name);
+        $this->assertEquals($newName, $otherUser->name);
 
         $response->assertJson(['data' => $otherUser->toArray()]);
     }
@@ -385,7 +375,7 @@ class UsersTest extends TestCase {
         $otherUser = $this->createUser();
 
         $response = $this->putJson("/v1/users/{$otherUser->id}", [
-            'first_name' => 'John',
+            'name' => 'John Doe',
         ]);
 
         $response->assertNotFound();
@@ -435,7 +425,7 @@ class UsersTest extends TestCase {
         $user = $this->createAndLoginUser(isAdmin: true);
 
         $userData = [
-            'first_name' => '',
+            'name' => '',
             'email' => 'no_email',
             'password' => '123',
         ];
@@ -443,11 +433,7 @@ class UsersTest extends TestCase {
         $response = $this->putJson("/v1/users/{$user->id}", $userData);
 
         $response->assertUnprocessable();
-        $response->assertJsonValidationErrors([
-            'first_name',
-            'email',
-            'password',
-        ]);
+        $response->assertJsonValidationErrors(['name', 'email', 'password']);
     }
 
     public function testUserCanDeleteItself() {

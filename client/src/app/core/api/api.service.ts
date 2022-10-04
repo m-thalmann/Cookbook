@@ -82,6 +82,8 @@ export class ApiService {
 
   public get auth() {
     return {
+      getAuthenticatedUser: () => this.get<{ data: DetailedUser }>('/auth', TokenType.Access),
+
       login: (email: string, password: string) =>
         this.post<{ data: { user: DetailedUser; access_token: string; refresh_token: string } }>(
           '/auth/login',

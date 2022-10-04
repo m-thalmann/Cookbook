@@ -19,8 +19,7 @@ class RegisterTest extends TestCase {
         Notification::fake();
 
         $userData = [
-            'first_name' => $this->faker->firstName(),
-            'last_name' => $this->faker->lastName(),
+            'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'password' => self::DEFAULT_USER_PASSWORD,
             'password_confirmation' => self::DEFAULT_USER_PASSWORD,
@@ -39,7 +38,7 @@ class RegisterTest extends TestCase {
         ]);
         $response->assertJsonStructure([
             'data' => [
-                'user' => ['first_name', 'last_name', 'email', 'id'],
+                'user' => ['name', 'email', 'id'],
                 'access_token',
                 'refresh_token',
             ],
@@ -64,8 +63,7 @@ class RegisterTest extends TestCase {
         Notification::fake();
 
         $userData = [
-            'first_name' => $this->faker->firstName(),
-            'last_name' => $this->faker->lastName(),
+            'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'password' => self::DEFAULT_USER_PASSWORD,
             'password_confirmation' => self::DEFAULT_USER_PASSWORD,
@@ -95,12 +93,7 @@ class RegisterTest extends TestCase {
         $response = $this->postJson('/v1/auth/register', $userData);
 
         $response->assertUnprocessable();
-        $response->assertJsonValidationErrors([
-            'first_name',
-            'last_name',
-            'email',
-            'password',
-        ]);
+        $response->assertJsonValidationErrors(['name', 'email', 'password']);
 
         Notification::assertNothingSent();
     }
@@ -111,8 +104,7 @@ class RegisterTest extends TestCase {
         $user = $this->createUser();
 
         $userData = [
-            'first_name' => $this->faker->firstName(),
-            'last_name' => $this->faker->lastName(),
+            'name' => $this->faker->name(),
             'email' => $user->email,
             'password' => self::DEFAULT_USER_PASSWORD,
             'password_confirmation' => self::DEFAULT_USER_PASSWORD,
@@ -132,8 +124,7 @@ class RegisterTest extends TestCase {
         Notification::fake();
 
         $userData = [
-            'first_name' => $this->faker->firstName(),
-            'last_name' => $this->faker->lastName(),
+            'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'password' => self::DEFAULT_USER_PASSWORD,
             'password_confirmation' => self::DEFAULT_USER_PASSWORD,
@@ -153,8 +144,7 @@ class RegisterTest extends TestCase {
         Notification::fake();
 
         $userData = [
-            'first_name' => $this->faker->firstName(),
-            'last_name' => $this->faker->lastName(),
+            'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'password' => self::DEFAULT_USER_PASSWORD,
             'password_confirmation' => self::DEFAULT_USER_PASSWORD,

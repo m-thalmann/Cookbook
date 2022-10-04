@@ -19,13 +19,7 @@ class User extends Authenticatable implements MustVerifyEmail {
         QueryOrganizable,
         SerializesDatesToTimestamp;
 
-    protected $fillable = [
-        'first_name',
-        'last_name',
-        'email',
-        'password',
-        'language_code',
-    ];
+    protected $fillable = ['name', 'email', 'password', 'language_code'];
 
     protected $hidden = [
         'password',
@@ -49,20 +43,9 @@ class User extends Authenticatable implements MustVerifyEmail {
     /*
      * Organize properties
      */
-    protected $sortableProperties = [
-        'id',
-        'first_name',
-        'last_name',
-        'email',
-        'language_code',
-    ];
-    protected $filterableProperties = [
-        'first_name',
-        'last_name',
-        'email',
-        'language_code',
-    ];
-    protected $searchProperties = ['first_name', 'last_name'];
+    protected $sortableProperties = ['id', 'name', 'email', 'language_code'];
+    protected $filterableProperties = ['name', 'email', 'language_code'];
+    protected $searchProperties = ['name'];
 
     public function recipes() {
         return $this->hasMany(Recipe::class);
