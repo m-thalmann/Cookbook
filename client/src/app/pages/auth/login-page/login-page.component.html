@@ -1,0 +1,34 @@
+<form [formGroup]="loginForm" (submit)="doLogin()">
+    <img src="/assets/images/cookbook.svg" alt="Cookbook Logo" />
+    <h1>Cookbook</h1>
+
+    <mat-form-field appearance="outline" color="accent">
+        <mat-icon matPrefix>email</mat-icon>
+        <mat-label>Email</mat-label>
+        <input matInput type="email" ngModel formControlName="email" autofocus />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" color="accent">
+        <mat-icon matPrefix>key</mat-icon>
+        <mat-label>Password</mat-label>
+        <input matInput type="password" ngModel formControlName="password" />
+    </mat-form-field>
+
+    <a routerLink="/forgot-password">Don't remember your password?</a>
+
+    <button mat-raised-button color="accent" type="submit" [disabled]="isLoading">
+        <ng-container *ngIf="!isLoading; else loginButtonLoading">
+            <mat-icon>login</mat-icon>
+            &nbsp; Login
+        </ng-container>
+
+        <ng-template #loginButtonLoading>
+            <mat-spinner [diameter]="24" color="accent" class="login-button-loading-spinner"></mat-spinner>
+        </ng-template>
+    </button>
+
+    <p class="error mat-elevation-z2" *ngIf="error">
+        <mat-icon>error</mat-icon>
+        <span>{{ error }}</span>
+    </p>
+</form>

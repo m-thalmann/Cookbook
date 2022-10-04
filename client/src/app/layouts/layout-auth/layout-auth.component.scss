@@ -1,0 +1,61 @@
+@use 'sass:map';
+@use 'theme';
+@use 'variables' as *;
+
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  position: relative;
+
+  @include theme.apply() using ($variables) {
+    background: linear-gradient(
+      50deg,
+      rgba(map.get($variables, 'primary'), 0.25) 0%,
+      rgba(map.get($variables, 'accent'), 0.25) 100%
+    );
+  }
+}
+
+.top-navigation {
+  position: absolute;
+  top: 2em;
+
+  &.navigate-back-button {
+    left: 2em;
+  }
+  &.goto-auth-button {
+    right: 2em;
+
+    a.is-current {
+      display: none;
+    }
+
+    // if neither login nor sign-up route, show login button as default
+    a.login-button:not(.is-current) + a.sign-up-button:not(.is-current) {
+      display: none;
+    }
+  }
+
+  mat-icon {
+    margin-right: 0.25em;
+  }
+}
+
+@media screen and (max-width: #{$layout-auth-mobile-breakpoint}px) {
+  :host {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .top-navigation {
+    position: relative;
+    top: unset;
+    left: unset !important;
+    right: unset !important;
+
+    margin-top: 2em;
+  }
+}

@@ -1,0 +1,85 @@
+@use 'sass:map';
+@use 'theme';
+@use '@angular/material' as mat;
+@use 'variables' as *;
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 350px;
+  padding: 4em;
+
+  img {
+    width: 10em;
+  }
+
+  h1 {
+    margin: 0.25em 0 0.75em 0;
+  }
+
+  mat-form-field {
+    width: 100%;
+
+    &:first-of-type {
+      margin-bottom: -0.5em;
+    }
+
+    [matPrefix] {
+      margin-right: 0.5em;
+    }
+  }
+
+  a {
+    text-decoration: none;
+    margin-bottom: 2em;
+  }
+
+  button {
+    width: 100%;
+
+    .login-button-loading-spinner {
+      margin: 0.5em auto;
+    }
+  }
+
+  .error {
+    box-sizing: border-box;
+
+    margin: 0;
+    margin-top: 1.5em;
+
+    width: 100%;
+    padding: 0.5em;
+
+    border-radius: 5px;
+
+    @include theme.apply() using ($variables) {
+      background: map.get($variables, 'warn');
+      color: mat.get-color-from-palette(map.get($variables, 'warn-palette'), 'foreground');
+    }
+
+    display: flex;
+    gap: 0.75em;
+    align-items: center;
+
+    span {
+      flex: 1;
+    }
+  }
+}
+
+@media screen and (max-width: #{$layout-auth-mobile-breakpoint}px) {
+  :host,
+  form {
+    width: 100%;
+  }
+
+  form {
+    box-sizing: border-box;
+
+    box-shadow: none;
+    padding: 2em;
+  }
+}

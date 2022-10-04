@@ -1,4 +1,5 @@
 @use 'sass:map';
+@use '@angular/material' as mat;
 @use 'theme/variables' as *;
 
 @mixin apply() {
@@ -6,8 +7,11 @@
     $app-theme: map.get($variables, 'theme');
 
     $additional-variables: (
-      'background': mat-color(map.get($app-theme, 'background'), 'background'),
-      'foreground': mat-color(map.get($app-theme, 'foreground'), 'text'),
+      'primary': mat.get-color-from-palette(map.get($variables, 'primary-palette')),
+      'accent': mat.get-color-from-palette(map.get($variables, 'accent-palette')),
+      'warn': mat.get-color-from-palette(map.get($variables, 'warn-palette')),
+      'background': mat.get-color-from-palette(map.get($app-theme, 'background'), 'background'),
+      'foreground': mat.get-color-from-palette(map.get($app-theme, 'foreground'), 'text'),
     );
 
     $variables: map.merge($variables, $additional-variables);

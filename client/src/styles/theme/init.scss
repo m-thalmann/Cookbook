@@ -11,11 +11,11 @@
 @mixin -html-styles($variables) {
   $app-theme: map.get($variables, 'theme');
 
-  background: mat-color(map.get($app-theme, 'background'), 'background');
-  color: mat-color(map.get($app-theme, 'foreground'), 'text');
+  background: mat.get-color-from-palette(map.get($app-theme, 'background'), 'background');
+  color: mat.get-color-from-palette(map.get($app-theme, 'foreground'), 'text');
 
   a {
-    color: mat-color(map.get($variables, 'link-palette'));
+    color: mat.get-color-from-palette(map.get($variables, 'link-palette'));
   }
 }
 

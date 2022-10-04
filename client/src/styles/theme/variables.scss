@@ -15,9 +15,9 @@ $themes: (
   ),
   'light': (
     'primary-palette': mat.define-palette(mat.$teal-palette, 800),
-    'accent-palette': mat.define-palette(mat.$green-palette, A400),
+    'accent-palette': mat.define-palette(mat.$green-palette, A700),
     'warn-palette': mat.define-palette(mat.$red-palette, 700),
-    'link-palette': mat.define-palette(mat.$teal-palette, A400),
+    'link-palette': mat.define-palette(mat.$teal-palette, 400),
     'type': 'light',
   ),
 );

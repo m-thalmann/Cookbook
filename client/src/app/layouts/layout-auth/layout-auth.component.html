@@ -1,0 +1,19 @@
+<a mat-button routerLink="/dashboard" class="top-navigation navigate-back-button">
+    <mat-icon>arrow_back</mat-icon>
+    Go back to dashboard
+</a>
+
+<div class="top-navigation goto-auth-button">
+    <a mat-button routerLink="/sign-up" routerLinkActive="is-current" color="accent" class="sign-up-button">
+        <mat-icon>person_add</mat-icon>
+        Sign up
+    </a>
+
+    <a mat-button routerLink="/login" routerLinkActive="is-current" color="accent" class="login-button">
+        <mat-icon>login</mat-icon>
+        Login
+    </a>
+</div>
+
+<router-outlet></router-outlet>
+
