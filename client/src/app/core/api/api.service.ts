@@ -90,6 +90,23 @@ export class ApiService {
           { email, password },
           TokenType.None
         ),
+
+      signUp: (
+        data: { name: string; email: string; password: string; language_code?: string },
+        hcaptchaToken?: string
+      ) => {
+        const signUpData = {
+          ...data,
+          hcaptcha_token: hcaptchaToken,
+        };
+
+        return this.post<{ data: { user: DetailedUser; access_token: string; refresh_token: string } }>(
+          '/auth/register',
+          signUpData,
+          TokenType.None
+        );
+      },
+
       refreshToken: () =>
         this.post<{ data: { access_token: string; refresh_token: string } }>('/auth/refresh', {}, TokenType.Refresh),
     };
