@@ -84,3 +84,32 @@ mat-toolbar {
     }
   }
 }
+
+// desktop layout
+
+@include mixins.desktop() {
+  mat-toolbar {
+    height: 100%;
+    width: $navbar-desktop-width;
+
+    border-top-left-radius: unset;
+    border-bottom-right-radius: 0.5em;
+
+    nav ul {
+      flex-direction: column;
+
+      li {
+        flex: unset;
+
+        button {
+          padding: 1em 0;
+
+          span {
+            max-height: 2em;
+            margin-top: 0.5em;
+          }
+        }
+      }
+    }
+  }
+}

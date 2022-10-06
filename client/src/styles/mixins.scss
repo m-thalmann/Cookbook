@@ -1,3 +1,17 @@
+@use 'variables' as *;
+
 @mixin font-handwriting() {
   font-family: 'Courgette', cursive;
+}
+
+@mixin mobile() {
+  @media screen and (max-width: #{$mobile-breakpoint}px) {
+    @content;
+  }
+}
+
+@mixin desktop() {
+  @media screen and (min-width: #{$mobile-breakpoint + 1}px) {
+    @content;
+  }
 }

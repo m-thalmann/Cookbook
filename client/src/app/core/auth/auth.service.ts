@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, map, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
 import { DetailedUser } from '../models/user';
 import { StorageService } from '../services/storage.service';
 
