@@ -18,6 +18,11 @@ export enum TokenType {
   None,
 }
 
+export interface SignedRoute {
+  signature: string;
+  expires: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -29,11 +34,17 @@ export class ApiService {
   }
 
   private get httpHeaders() {
+    // TODO: add language header
+
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
 
     return headers;
+  }
+
+  private getSignedRouteParams(signature: SignedRoute) {
+    return new HttpParams().append('signature', signature.signature).append('expires', signature.expires);
   }
 
   private request<T>(request: HttpRequest<T>, tokenType?: TokenType) {
@@ -106,6 +117,8 @@ export class ApiService {
           TokenType.None
         );
       },
+
+      logout: () => this.post<void>('/auth/logout', {}, TokenType.Access),
 
       refreshToken: () =>
         this.post<{ data: { access_token: string; refresh_token: string } }>('/auth/refresh', {}, TokenType.Refresh),

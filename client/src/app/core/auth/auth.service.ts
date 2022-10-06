@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { ReplaySubject } from 'rxjs';
+import { BehaviorSubject, map, ReplaySubject } from 'rxjs';
 import { DetailedUser } from '../models/user';
 import { StorageService } from '../services/storage.service';
 
@@ -15,9 +15,9 @@ export class AuthService {
   private _accessToken: string | null;
   private _refreshToken: string | null;
 
-  private _user$ = new ReplaySubject<DetailedUser | null>();
+  private _user$ = new BehaviorSubject<DetailedUser | null>(null);
 
-  private _isAuthenticated: boolean;
+  isAuthenticated$ = this._user$.pipe(map((user) => user !== null));
 
   constructor(private storage: StorageService, private router: Router) {
     this._accessToken = this.storage.session.get<string>(ACCESS_TOKEN_KEY);
@@ -26,8 +26,6 @@ export class AuthService {
     const user = this.storage.local.get<DetailedUser>(USER_KEY);
 
     this._user$.next(user);
-
-    this._isAuthenticated = user !== null;
   }
 
   get user$() {
@@ -35,7 +33,7 @@ export class AuthService {
   }
 
   get isAuthenticated() {
-    return this._isAuthenticated;
+    return this._user$.getValue() !== null;
   }
 
   get accessToken() {
@@ -68,7 +66,6 @@ export class AuthService {
 
   public setUser(user: DetailedUser | null) {
     this._user$.next(user);
-    this._isAuthenticated = user !== null;
 
     if (user !== null) {
       this.storage.local.set(USER_KEY, user);
@@ -91,6 +88,8 @@ export class AuthService {
     this.refreshToken = null;
 
     this.setUser(null);
+
+    // TODO: also logout from api
 
     this.router.navigate(['/dashboard']);
   }

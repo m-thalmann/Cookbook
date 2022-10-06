@@ -9,18 +9,23 @@ import { MaterialModule } from './core/material/material.module';
 import { LayoutDefaultComponent } from './layouts/layout-default/layout-default.component';
 import { LoginPageComponent } from './pages/auth/login-page/login-page.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DashboardPageComponent } from './pages/dashboard-page/dashboard-page.component';
+import { HomePageComponent } from './pages/home-page/home-page.component';
 import { LayoutAuthComponent } from './layouts/layout-auth/layout-auth.component';
 import { SignUpPageComponent } from './pages/auth/sign-up-page/sign-up-page.component';
+import { MatIconRegistry } from '@angular/material/icon';
+import { LayoutDefaultNavbarComponent } from './layouts/layout-default/components/layout-default-navbar/layout-default-navbar.component';
+import { AccountMenuBottomSheetComponent } from './layouts/layout-default/components/account-menu-bottom-sheet/account-menu-bottom-sheet.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LayoutDefaultComponent,
     LoginPageComponent,
-    DashboardPageComponent,
+    HomePageComponent,
     LayoutAuthComponent,
     SignUpPageComponent,
+    LayoutDefaultNavbarComponent,
+    AccountMenuBottomSheetComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,4 +39,8 @@ import { SignUpPageComponent } from './pages/auth/sign-up-page/sign-up-page.comp
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(iconRegistry: MatIconRegistry) {
+    iconRegistry.setDefaultFontSetClass('material-icons-round');
+  }
+}

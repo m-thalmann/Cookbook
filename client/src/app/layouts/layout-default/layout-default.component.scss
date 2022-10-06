@@ -1,0 +1,49 @@
+@use 'variables' as *;
+@use 'mixins';
+
+header {
+  display: flex;
+  align-items: center;
+
+  padding: $layout-padding;
+
+  img {
+    height: 3em;
+    margin-right: 0.5em;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 2rem;
+
+    @include mixins.font-handwriting();
+  }
+
+  .spacer {
+    flex: 1;
+  }
+
+  .account-button {
+    all: unset;
+    display: block;
+    padding: 0.5em;
+    cursor: pointer;
+
+    mat-icon {
+      padding: 0.125em;
+      transform: scale(1.5);
+      border-radius: 50%;
+    }
+  }
+}
+
+main {
+  margin-bottom: calc($navbar-height + 1em);
+}
+
+app-layout-default-navbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
