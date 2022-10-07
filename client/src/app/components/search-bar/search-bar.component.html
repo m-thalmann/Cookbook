@@ -1,0 +1,13 @@
+<div class="container mat-elevation-z2">
+    <label for="search-bar-input">
+        <mat-icon>search</mat-icon>
+    </label>
+    <input
+        (keydown.enter)="doSearch(searchBarInput.value)"
+        placeholder="Search recipes..."
+        [value]="initialValue"
+        id="search-bar-input"
+        #searchBarInput
+    />
+</div>
+

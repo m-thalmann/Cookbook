@@ -8,7 +8,7 @@ import {
   HttpResponse,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { filter, Observable } from 'rxjs';
+import { filter, Observable, shareReplay } from 'rxjs';
 import { DetailedUser } from '../models/user';
 import { TOKEN_TYPE_HTTP_CONTEXT } from './auth.interceptor';
 
@@ -43,10 +43,6 @@ export class ApiService {
     return headers;
   }
 
-  private getSignedRouteParams(signature: SignedRoute) {
-    return new HttpParams().append('signature', signature.signature).append('expires', signature.expires);
-  }
-
   private request<T>(request: HttpRequest<T>, tokenType?: TokenType) {
     let headers = this.httpHeaders;
 
@@ -56,9 +52,10 @@ export class ApiService {
       context: new HttpContext().set(TOKEN_TYPE_HTTP_CONTEXT, tokenType),
     });
 
-    return this.http.request(request).pipe(filter((response) => response instanceof HttpResponse)) as Observable<
-      HttpResponse<T>
-    >;
+    return this.http.request(request).pipe(
+      shareReplay(1),
+      filter((response) => response instanceof HttpResponse)
+    ) as Observable<HttpResponse<T>>;
   }
 
   public get<T>(path: string, tokenType: TokenType, params?: HttpParams) {
@@ -83,6 +80,20 @@ export class ApiService {
     } else {
       return error.error.message;
     }
+  }
+
+  private static generateParams(params: { [key: string]: string | undefined }) {
+    for (const key in params) {
+      if (params[key] === undefined) {
+        delete params[key];
+      }
+    }
+
+    return new HttpParams().appendAll(params as { [key: string]: string });
+  }
+
+  private static generateSignedRouteParams(signature: SignedRoute) {
+    return new HttpParams().append('signature', signature.signature).append('expires', signature.expires);
   }
 
   /*
@@ -122,6 +133,17 @@ export class ApiService {
 
       refreshToken: () =>
         this.post<{ data: { access_token: string; refresh_token: string } }>('/auth/refresh', {}, TokenType.Refresh),
+    };
+  }
+
+  public get categories() {
+    return {
+      getList: (all = false) =>
+        this.get<{ data: string[] }>(
+          '/categories',
+          TokenType.Access,
+          ApiService.generateParams({ all: all ? '' : undefined })
+        ),
     };
   }
 }

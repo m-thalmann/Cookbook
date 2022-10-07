@@ -1,1 +1,37 @@
-<p>dashboard works!</p>
+<ng-container
+    *ngIf="{
+        isAuthenticated: auth.isAuthenticated$ | async,
+        categories: categories$ | async,
+        recipes: recipes$ | async
+    } as vm"
+>
+    <div class="search-bar-container">
+        <app-search-bar></app-search-bar>
+    </div>
+
+    <div class="sections">
+        <app-home-page-section
+            title="Categories"
+            seeAllLink="/categories"
+            [showTitleMy]="!!vm.isAuthenticated"
+            class="categories"
+        >
+            <mat-chip-list *ngIf="vm.categories?.body?.data | clampArray: 5 as categories">
+                <a
+                    mat-chip
+                    *ngFor="let category of categories.items"
+                    [routerLink]="['/categories', category]"
+                    color="primary"
+                    selected
+                    >{{ category }}
+                </a>
+                <a mat-chip *ngIf="categories.overflowAmount > 0" routerLink="/categories">
+                    +{{ categories.overflowAmount }}
+                </a>
+
+                <mat-chip *ngIf="categories.items.length === 0" disabled>No categories found</mat-chip>
+            </mat-chip-list>
+        </app-home-page-section>
+    </div>
+</ng-container>
+

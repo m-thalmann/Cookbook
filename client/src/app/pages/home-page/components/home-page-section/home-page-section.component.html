@@ -1,0 +1,13 @@
+<section>
+    <h2>
+        <span>
+            <span *ngIf="showTitleMy" class="title-my-text">My</span>
+            {{ title }}
+        </span>
+        <span class="spacer"></span>
+        <a [routerLink]="seeAllLink" class="see-all-link" *ngIf="seeAllLink">See all</a>
+    </h2>
+
+    <ng-content></ng-content>
+</section>
+

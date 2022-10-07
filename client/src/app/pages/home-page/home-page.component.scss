@@ -1,0 +1,33 @@
+@use 'sass:map';
+@use 'variables' as *;
+@use 'theme';
+
+.search-bar-container {
+  position: sticky;
+  top: 0;
+
+  padding: $layout-padding;
+
+  @include theme.apply() using ($variables) {
+    background: map.get($variables, 'background');
+  }
+}
+
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+
+  app-home-page-section {
+    &.categories {
+      mat-chip-list {
+        overflow: auto;
+
+        a[mat-chip] {
+          text-decoration: none;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

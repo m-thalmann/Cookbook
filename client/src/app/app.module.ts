@@ -15,6 +15,9 @@ import { SignUpPageComponent } from './pages/auth/sign-up-page/sign-up-page.comp
 import { MatIconRegistry } from '@angular/material/icon';
 import { LayoutDefaultNavbarComponent } from './layouts/layout-default/components/layout-default-navbar/layout-default-navbar.component';
 import { AccountMenuBottomSheetComponent } from './layouts/layout-default/components/account-menu-bottom-sheet/account-menu-bottom-sheet.component';
+import { SearchBarComponent } from './components/search-bar/search-bar.component';
+import { ClampArrayPipe } from './core/pipes/clamp-array.pipe';
+import { HomePageSectionComponent } from './pages/home-page/components/home-page-section/home-page-section.component';
 import { AuthInterceptor } from './core/api/auth.interceptor';
 
 @NgModule({
@@ -27,6 +30,9 @@ import { AuthInterceptor } from './core/api/auth.interceptor';
     SignUpPageComponent,
     LayoutDefaultNavbarComponent,
     AccountMenuBottomSheetComponent,
+    SearchBarComponent,
+    ClampArrayPipe,
+    HomePageSectionComponent,
   ],
   imports: [
     BrowserModule,
