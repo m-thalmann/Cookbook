@@ -1,23 +1,25 @@
-<header>
-    <img src="/assets/images/cookbook.svg" alt="Cookbook Logo" />
-    <h1>Cookbook</h1>
+<ng-container *ngIf="{ isAuthenticated: auth.isAuthenticated$ | async } as vm">
+    <header>
+        <img src="/assets/images/cookbook.svg" alt="Cookbook Logo" />
+        <h1>Cookbook</h1>
 
-    <div class="spacer"></div>
+        <div class="spacer"></div>
 
-    <ng-container *ngIf="auth.isAuthenticated$ | async; else loginButton">
-        <button class="account-button" (click)="openAccountMenu()">
-            <mat-icon matRipple>account_circle</mat-icon>
-        </button>
-    </ng-container>
-    <ng-template #loginButton>
-        <button mat-icon-button routerLink="/login" color="accent">
-            <mat-icon>login</mat-icon>
-        </button>
-    </ng-template>
-</header>
+        <ng-container *ngIf="vm.isAuthenticated; else loginButton">
+            <button class="account-button" (click)="openAccountMenu()">
+                <mat-icon matRipple>account_circle</mat-icon>
+            </button>
+        </ng-container>
+        <ng-template #loginButton>
+            <button mat-icon-button routerLink="/login" color="accent">
+                <mat-icon>login</mat-icon>
+            </button>
+        </ng-template>
+    </header>
 
-<main>
-    <router-outlet></router-outlet>
-</main>
+    <main>
+        <router-outlet></router-outlet>
+    </main>
 
-<app-layout-default-navbar></app-layout-default-navbar>
+    <app-layout-default-navbar></app-layout-default-navbar>
+</ng-container>

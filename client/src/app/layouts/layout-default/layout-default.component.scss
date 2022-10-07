@@ -48,17 +48,14 @@ app-layout-default-navbar {
   right: 0;
 }
 
-// desktop layout
-
 @include mixins.desktop() {
   header,
   main {
-    margin-bottom: unset;
-    margin-left: calc($navbar-desktop-width + 1em);
+    margin-left: $navbar-desktop-width;
   }
 
-  header {
-    padding-left: 0;
+  main {
+    margin-bottom: unset;
   }
 
   app-layout-default-navbar {

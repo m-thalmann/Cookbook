@@ -8,7 +8,7 @@ import { SignUpPageComponent } from './pages/auth/sign-up-page/sign-up-page.comp
 import { HomePageComponent } from './pages/home-page/home-page.component';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: '/dashboard' },
+  { path: '', pathMatch: 'full', redirectTo: '/home' },
 
   {
     path: '',
@@ -23,7 +23,7 @@ const routes: Routes = [
   {
     path: '',
     component: LayoutDefaultComponent,
-    children: [{ path: 'dashboard', component: HomePageComponent }],
+    children: [{ path: 'home', component: HomePageComponent }],
   },
 ];
 

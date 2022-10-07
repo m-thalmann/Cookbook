@@ -80,7 +80,7 @@ export class AuthService {
     this.accessToken = accessToken;
     this.refreshToken = refreshToken;
 
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/home']);
   }
 
   public logout() {
@@ -91,7 +91,7 @@ export class AuthService {
 
     // TODO: also logout from api
 
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/home']);
   }
 
   public refreshAccessToken(accessToken: string, refreshToken: string) {
