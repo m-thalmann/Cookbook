@@ -5,43 +5,45 @@
         recipes: recipes$ | async
     } as vm"
 >
-    <div class="search-bar-container">
+    <div class="search-bar-container" #searchBarContainer>
         <app-search-bar></app-search-bar>
     </div>
 
     <div class="sections">
-        <app-home-page-section
-            title="Categories"
-            seeAllLink="/categories"
-            [showTitleMy]="!!vm.isAuthenticated"
-            class="categories"
-        >
-            <mat-chip-list *ngIf="vm.categories?.body?.data | clampArray: 5 as categories">
+        <app-home-page-section heading="Categories" [showMy]="!!vm.isAuthenticated" class="categories">
+            <mat-chip-list *ngIf="vm.categories?.body?.data | clampArray: categoriesClampAmount as categories">
                 <a
                     mat-chip
                     *ngFor="let category of categories.items"
-                    [routerLink]="['/categories', category]"
+                    routerLink="/recipes"
+                    [queryParams]="{ category }"
                     color="primary"
                     selected
                     >{{ category }}
                 </a>
-                <a mat-chip *ngIf="categories.overflowAmount > 0" routerLink="/categories">
+                <button mat-chip *ngIf="categories.overflowAmount > 0" (click)="revealMoreCategories()">
                     +{{ categories.overflowAmount }}
-                </a>
+                </button>
 
-                <mat-chip *ngIf="categories.items.length === 0" disabled>No categories found</mat-chip>
+                <p *ngIf="categories.items.length === 0" class="not-found-item">No categories found ...</p>
             </mat-chip-list>
         </app-home-page-section>
 
-        <app-home-page-section
-            title="Recipes"
-            seeAllLink="/recipes"
-            [showTitleMy]="!!vm.isAuthenticated"
-            class="recipes"
-        >
+        <app-home-page-section heading="Recipes" seeAllLink="/recipes" [showMy]="!!vm.isAuthenticated" class="recipes">
             <div *ngIf="vm.recipes?.body?.data as recipes">
                 <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe"></app-recipe-card>
+
+                <p *ngIf="recipes.length === 0" class="not-found-item">No recipes found ...</p>
             </div>
+        </app-home-page-section>
+
+        <app-home-page-section
+            heading="Cookbooks"
+            seeAllLink="/cookbooks"
+            [showMy]="true"
+            class="cookbooks"
+            *ngIf="vm.isAuthenticated"
+        >
         </app-home-page-section>
     </div>
 </ng-container>

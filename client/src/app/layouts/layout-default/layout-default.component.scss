@@ -1,6 +1,13 @@
 @use 'variables' as *;
 @use 'mixins';
 
+$main-space-bottom: 2em;
+$desktop-content-width: 1080px;
+
+.desktop-spacer {
+  display: none;
+}
+
 header {
   display: flex;
   align-items: center;
@@ -38,7 +45,7 @@ header {
 }
 
 main {
-  margin-bottom: calc($navbar-height + 1em);
+  margin-bottom: calc($navbar-height + $main-space-bottom);
 }
 
 app-layout-default-navbar {
@@ -46,20 +53,43 @@ app-layout-default-navbar {
   bottom: 0;
   left: 0;
   right: 0;
+
+  z-index: 10;
 }
 
 @include mixins.desktop() {
-  header,
-  main {
-    margin-left: $navbar-desktop-width;
+  :host {
+    display: flex;
+  }
+
+  .desktop-spacer {
+    display: block;
+    width: $navbar-desktop-width;
+  }
+
+  .container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+
+    > div {
+      width: 100%;
+      max-width: $desktop-content-width;
+    }
   }
 
   main {
-    margin-bottom: unset;
+    margin-bottom: $main-space-bottom;
   }
 
   app-layout-default-navbar {
     top: 0;
     right: unset;
+  }
+}
+
+@media screen and (max-width: calc($desktop-content-width + $navbar-desktop-width * 4)) {
+  .desktop-spacer.right {
+    display: none;
   }
 }

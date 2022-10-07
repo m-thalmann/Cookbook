@@ -21,7 +21,7 @@ export class SearchBarComponent {
     this.search.emit(search);
 
     if (this.searchOnSubmit) {
-      this.router.navigate(['search', search]);
+      this.router.navigate(['/recipes'], { queryParams: { search } });
     }
   }
 }

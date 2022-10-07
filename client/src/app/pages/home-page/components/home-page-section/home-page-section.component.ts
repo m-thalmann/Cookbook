@@ -7,8 +7,8 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomePageSectionComponent {
-  @Input() title!: string;
-  @Input() showTitleMy = false;
+  @Input() heading!: string;
+  @Input() showMy = false;
 
   @Input() seeAllLink?: string | string[];
 

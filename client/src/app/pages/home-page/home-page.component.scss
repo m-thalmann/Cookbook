@@ -4,13 +4,20 @@
 
 .search-bar-container {
   position: sticky;
-  top: 0;
+  top: -1px; // to be able to trigger the intersection-observer
   z-index: 10;
 
   padding: $layout-padding;
 
   @include theme.apply() using ($variables) {
     background: map.get($variables, 'background');
+  }
+
+  border-bottom-left-radius: 2em;
+  border-bottom-right-radius: 2em;
+
+  &.stuck {
+    box-shadow: 0 8px 8px -8px rgba(0, 0, 0, 0.75);
   }
 }
 
@@ -20,11 +27,19 @@
   gap: 1em;
 
   app-home-page-section {
+    .not-found-item {
+      margin: 0;
+      margin-top: 0.5em;
+
+      font-style: italic;
+    }
+
     &.categories {
       mat-chip-list {
         overflow: auto;
 
-        a[mat-chip] {
+        a[mat-chip],
+        button {
           text-decoration: none;
           cursor: pointer;
         }

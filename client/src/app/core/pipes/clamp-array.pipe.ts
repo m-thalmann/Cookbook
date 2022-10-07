@@ -4,16 +4,20 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'clampArray',
 })
 export class ClampArrayPipe implements PipeTransform {
-  transform(array: any[] | undefined | null, limitAmount: number) {
+  transform(array: any[] | undefined | null, limitAmount: number | null) {
     if (typeof array === 'undefined' || array === null) {
       return array;
     }
 
-    let overflowAmount = array.splice(limitAmount).length;
+    let items = array;
+
+    if (limitAmount !== null && limitAmount > 0) {
+      items = array.slice(0, limitAmount);
+    }
 
     return {
-      items: array,
-      overflowAmount,
+      items,
+      overflowAmount: array.length - items.length,
     };
   }
 }
