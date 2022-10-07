@@ -1,0 +1,21 @@
+<div class="container" [class.has-category]="!!recipe.category">
+    <a [routerLink]="['/recipe', recipe.id]" class="recipe" [title]="recipe.name">
+        <div class="image-container">
+            <div class="image" [style]="thumbnailImageCSS"></div>
+        </div>
+
+        <div class="title">
+            <h3>{{ recipe.name }}</h3>
+            <h4>by {{ recipe.user.name }}</h4>
+        </div>
+
+        <div *ngIf="recipe.is_public" class="public-icon">
+            <mat-icon>public</mat-icon>
+        </div>
+    </a>
+
+    <a routerLink="/recipes" [queryParams]="{ category: recipe.category }" class="category" *ngIf="recipe.category">{{
+        recipe.category
+    }}</a>
+</div>
+

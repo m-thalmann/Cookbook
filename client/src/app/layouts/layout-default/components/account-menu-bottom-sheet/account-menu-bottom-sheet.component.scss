@@ -2,7 +2,7 @@
 @use 'theme';
 
 mat-list-item[disabled] {
-  background: transparent;
+  background: transparent !important;
 }
 
 mat-divider {

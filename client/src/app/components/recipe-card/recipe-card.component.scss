@@ -1,0 +1,160 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use 'theme';
+@use 'mixins';
+
+$category-offset: 0.5rem;
+$border-radius: 1em;
+$transition-time: 0.2s;
+
+.container {
+  display: block;
+  position: relative;
+  height: 13em;
+
+  .recipe {
+    box-sizing: border-box;
+    display: block;
+    height: 100%;
+
+    color: white;
+    text-decoration: none;
+
+    @include mat.elevation(2);
+
+    display: flex;
+    align-items: flex-end;
+    position: relative;
+
+    padding: 1em;
+    padding-bottom: 2em;
+
+    transition: box-shadow $transition-time;
+
+    &::after {
+      content: '';
+      background: linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+    }
+
+    &,
+    &::after,
+    .image-container {
+      border-radius: $border-radius;
+    }
+
+    &::after,
+    .image-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: -1;
+    }
+
+    &:hover {
+      @include mat.elevation(4);
+
+      .title {
+        padding-bottom: 0.5em;
+      }
+
+      .image {
+        transform: scale(1.2);
+        filter: blur(2px);
+      }
+    }
+
+    .image-container {
+      overflow: hidden;
+
+      .image {
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+
+        transition: transform $transition-time, filter $transition-time;
+      }
+    }
+
+    .title {
+      transition: padding $transition-time;
+
+      h3 {
+        margin-bottom: 0.25em !important;
+      }
+
+      h4 {
+        font-weight: lighter;
+        font-size: 0.8em;
+        @include mixins.font-handwriting();
+
+        opacity: 0.75;
+      }
+
+      h3,
+      h4 {
+        margin: 0;
+      }
+    }
+
+    .public-icon {
+      position: absolute;
+      top: 0;
+      right: 0;
+
+      border-top-right-radius: $border-radius;
+      border-bottom-left-radius: $border-radius / 2;
+
+      width: 2.25em;
+      height: 2.25em;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @include mat.elevation(1);
+
+      @include theme.apply() using ($variables) {
+        background: map.get($variables, 'primary');
+        color: mat.get-color-from-palette(map.get($variables, 'primary-palette'), 'foreground');
+      }
+    }
+  }
+
+  &.has-category {
+    margin-bottom: $category-offset;
+  }
+
+  .category {
+    all: unset;
+    cursor: pointer;
+
+    position: absolute;
+    bottom: -$category-offset;
+    left: 1em;
+    z-index: 1;
+
+    padding: 0.25em 0.5em;
+
+    border-radius: 0.5em;
+
+    transition: background $transition-time, bottom $transition-time;
+
+    @include theme.apply() using ($variables) {
+      box-shadow:
+        // shadow used from angular material (elevation 2)
+        0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12),
+        // border
+        0 0 0 0.25em map.get($variables, 'background');
+
+      background: map.get($variables, 'accent');
+      color: mat.get-color-from-palette(map.get($variables, 'accent-palette'), 'foreground');
+
+      &:hover {
+        bottom: calc(-1 * ($category-offset - 0.25rem));
+        background: rgba(map.get($variables, 'accent'), 0.75);
+      }
+    }
+  }
+}

@@ -11,6 +11,7 @@ import { AuthService } from 'src/app/core/auth/auth.service';
 })
 export class HomePageComponent {
   categories$ = this.auth.isAuthenticated$.pipe(switchMap(() => this.api.categories.getList()));
+  recipes$ = this.auth.isAuthenticated$.pipe(switchMap(() => this.api.recipes.getList()));
 
   constructor(private api: ApiService, public auth: AuthService) {}
 }

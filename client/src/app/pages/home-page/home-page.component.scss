@@ -5,6 +5,7 @@
 .search-bar-container {
   position: sticky;
   top: 0;
+  z-index: 10;
 
   padding: $layout-padding;
 
@@ -26,6 +27,21 @@
         a[mat-chip] {
           text-decoration: none;
           cursor: pointer;
+        }
+      }
+    }
+
+    &.recipes {
+      div {
+        display: grid;
+
+        gap: 1em;
+
+        @media screen and (min-width: 500px) {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        @media screen and (min-width: 800px) {
+          grid-template-columns: repeat(3, 1fr);
         }
       }
     }

@@ -9,6 +9,10 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { filter, Observable, shareReplay } from 'rxjs';
+import { FilterOptions } from '../models/filter-options';
+import { PaginationMeta } from '../models/pagination-meta';
+import { ListRecipe } from '../models/recipe';
+import { SortOption } from '../models/sort-option';
 import { DetailedUser } from '../models/user';
 import { TOKEN_TYPE_HTTP_CONTEXT } from './auth.interceptor';
 
@@ -92,8 +96,50 @@ export class ApiService {
     return new HttpParams().appendAll(params as { [key: string]: string });
   }
 
+  private static mergeParams(...httpParams: (HttpParams | null)[]) {
+    let mergedParams: { [key: string]: string[] } = {};
+
+    for (let params of httpParams) {
+      if (params) {
+        for (let param of params.keys()) {
+          mergedParams[param] = params.getAll(param)!;
+        }
+      }
+    }
+
+    if (Object.keys(mergedParams).length === 0) {
+      return undefined;
+    }
+
+    return new HttpParams().appendAll(mergedParams);
+  }
+
   private static generateSignedRouteParams(signature: SignedRoute) {
     return new HttpParams().append('signature', signature.signature).append('expires', signature.expires);
+  }
+
+  private static generateSortParams(sort?: SortOption[]) {
+    if (!sort) {
+      return null;
+    }
+
+    const sortString = sort
+      .map((option) => {
+        const dirPrefix = option.dir === 'desc' ? '-' : '';
+
+        return dirPrefix + option.column;
+      })
+      .join(',');
+
+    return new HttpParams().append('sort', sortString);
+  }
+
+  private static generateFilterParams(filter?: FilterOptions) {
+    if (!filter) {
+      return null;
+    }
+
+    return null; // TODO:
   }
 
   /*
@@ -144,6 +190,22 @@ export class ApiService {
           TokenType.Access,
           ApiService.generateParams({ all: all ? '' : undefined })
         ),
+    };
+  }
+
+  public get recipes() {
+    return {
+      getList: (all?: boolean, page: number = 1, sort?: SortOption[], search?: string, filter?: FilterOptions) => {
+        const allParams = ApiService.generateParams({ all: all ? '' : undefined, search, page: page.toString() });
+        const sortParams = ApiService.generateSortParams(sort);
+        const filterParams = ApiService.generateFilterParams(filter);
+
+        return this.get<{ data: ListRecipe[]; meta: PaginationMeta }>(
+          '/recipes',
+          TokenType.Access,
+          ApiService.mergeParams(allParams, sortParams, filterParams)
+        );
+      },
     };
   }
 }

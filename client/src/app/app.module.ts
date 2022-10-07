@@ -19,6 +19,7 @@ import { SearchBarComponent } from './components/search-bar/search-bar.component
 import { ClampArrayPipe } from './core/pipes/clamp-array.pipe';
 import { HomePageSectionComponent } from './pages/home-page/components/home-page-section/home-page-section.component';
 import { AuthInterceptor } from './core/api/auth.interceptor';
+import { RecipeCardComponent } from './components/recipe-card/recipe-card.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { AuthInterceptor } from './core/api/auth.interceptor';
     SearchBarComponent,
     ClampArrayPipe,
     HomePageSectionComponent,
+    RecipeCardComponent,
   ],
   imports: [
     BrowserModule,

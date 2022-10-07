@@ -32,6 +32,17 @@
                 <mat-chip *ngIf="categories.items.length === 0" disabled>No categories found</mat-chip>
             </mat-chip-list>
         </app-home-page-section>
+
+        <app-home-page-section
+            title="Recipes"
+            seeAllLink="/recipes"
+            [showTitleMy]="!!vm.isAuthenticated"
+            class="recipes"
+        >
+            <div *ngIf="vm.recipes?.body?.data as recipes">
+                <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe"></app-recipe-card>
+            </div>
+        </app-home-page-section>
     </div>
 </ng-container>
 
