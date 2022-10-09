@@ -58,10 +58,10 @@ class CookbookUserController extends Controller {
         $this->authorizeAnonymously('update', $cookbook);
 
         return response()->pagination(
-            $cookbook
+            fn($perPage) => $cookbook
                 ->users()
                 ->organized($request)
-                ->paginate()
+                ->paginate($perPage)
         );
     }
 

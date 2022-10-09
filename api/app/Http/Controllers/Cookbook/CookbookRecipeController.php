@@ -45,7 +45,9 @@ class CookbookRecipeController extends Controller {
             ->organized($request);
 
         return response()->pagination(
-            RecipeResource::collection($recipes->paginate())
+            fn($perPage) => RecipeResource::collection(
+                $recipes->paginate($perPage)
+            )
         );
     }
 }

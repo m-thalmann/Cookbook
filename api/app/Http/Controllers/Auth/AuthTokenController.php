@@ -36,12 +36,12 @@ class AuthTokenController extends Controller {
     ]
     public function index() {
         return response()->pagination(
-            AuthTokenResource::collection(
+            fn($perPage) => AuthTokenResource::collection(
                 authUser()
                     ->tokens()
                     ->active()
                     ->accessTokens()
-                    ->paginate()
+                    ->paginate($perPage)
             )
         );
     }
@@ -94,11 +94,11 @@ class AuthTokenController extends Controller {
     ]
     public function indexGroup(int $groupId) {
         return response()->pagination(
-            AuthTokenResource::collection(
+            fn($perPage) => AuthTokenResource::collection(
                 authUser()
                     ->tokens()
                     ->where('group_id', $groupId)
-                    ->paginate()
+                    ->paginate($perPage)
             )
         );
     }

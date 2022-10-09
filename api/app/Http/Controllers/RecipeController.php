@@ -65,7 +65,9 @@ class RecipeController extends Controller {
         $recipes->organized($request)->forUser(authUser(), $all);
 
         return response()->pagination(
-            RecipeResource::collection($recipes->paginate())
+            fn($perPage) => RecipeResource::collection(
+                $recipes->paginate($perPage)
+            )
         );
     }
 
@@ -374,7 +376,9 @@ class RecipeController extends Controller {
             ->organized($request);
 
         return response()->pagination(
-            RecipeResource::collection($recipes->paginate())
+            fn($perPage) => RecipeResource::collection(
+                $recipes->paginate($perPage)
+            )
         );
     }
 

@@ -54,7 +54,9 @@ class CookbookController extends Controller {
             $cookbooks->forUser(authUser());
         }
 
-        return response()->pagination($cookbooks->paginate());
+        return response()->pagination(
+            fn($perPage) => $cookbooks->paginate($perPage)
+        );
     }
 
     /**

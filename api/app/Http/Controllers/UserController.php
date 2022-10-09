@@ -48,10 +48,10 @@ class UserController extends Controller {
         $this->authorize('viewAny', User::class);
 
         return response()->pagination(
-            UserResource::collection(
+            fn($perPage) => UserResource::collection(
                 User::query()
                     ->organized($request)
-                    ->paginate()
+                    ->paginate($perPage)
             )
         );
     }

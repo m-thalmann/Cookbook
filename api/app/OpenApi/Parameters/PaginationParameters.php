@@ -17,6 +17,12 @@ class PaginationParameters extends ParametersFactory {
                 ->description('The page of the paginated items')
                 ->required(false)
                 ->schema(Schema::integer()->minimum(1)),
+
+            Parameter::query()
+                ->name('per_page')
+                ->description('The amount of items per page')
+                ->required(false)
+                ->schema(Schema::integer()->minimum(1)),
         ];
     }
 }

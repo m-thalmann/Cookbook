@@ -42,7 +42,13 @@ class AppServiceProvider extends ServiceProvider {
     }
 
     private function registerResponseMarcos() {
-        Response::macro('pagination', function ($value) {
+        Response::macro('pagination', function (callable $callback) {
+            $perPage = request(
+                'per_page',
+                config('app.pagination.default_per_page')
+            );
+            $value = $callback($perPage);
+
             return Response::make(new PaginationResource($value));
         });
     }
