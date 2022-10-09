@@ -60,7 +60,7 @@ $transition-time: 0.2s;
       }
 
       .image {
-        transform: scale(1.2);
+        scale: 1.2;
         filter: blur(2px);
       }
     }
@@ -73,7 +73,7 @@ $transition-time: 0.2s;
         height: 100%;
         background-size: cover;
 
-        transition: transform $transition-time, filter $transition-time;
+        transition: scale $transition-time, filter $transition-time;
       }
     }
 

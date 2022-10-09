@@ -9,11 +9,14 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { filter, Observable, shareReplay } from 'rxjs';
+import { CookbookWithCounts } from '../models/cookbook';
 import { FilterOptions } from '../models/filter-options';
 import { PaginationMeta } from '../models/pagination-meta';
+import { PaginationOptions } from '../models/pagination-options';
 import { ListRecipe } from '../models/recipe';
 import { SortOption } from '../models/sort-option';
 import { DetailedUser } from '../models/user';
+import { ConfigService } from '../services/config.service';
 import { TOKEN_TYPE_HTTP_CONTEXT } from './auth.interceptor';
 
 export enum TokenType {
@@ -31,10 +34,10 @@ export interface SignedRoute {
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private config: ConfigService) {}
 
   public get url() {
-    return 'http://localhost:8000/v1'; // TODO: add url from config
+    return this.config.get('API_URL');
   }
 
   private get httpHeaders() {
@@ -78,12 +81,16 @@ export class ApiService {
     return this.request(new HttpRequest<T>('DELETE', path, { params: params }), tokenType);
   }
 
-  public static getErrorMessage(error: HttpErrorResponse) {
-    if (error.status === 422) {
-      return error.error.errors[Object.keys(error.error.errors)[0]][0];
-    } else {
-      return error.error.message;
+  public static getErrorMessage(error: unknown) {
+    if (error instanceof HttpErrorResponse) {
+      if (error.status === 422) {
+        return error.error.errors[Object.keys(error.error.errors)[0]][0];
+      } else {
+        return error.error.message;
+      }
     }
+
+    return error;
   }
 
   private static generateParams(params: { [key: string]: string | undefined }) {
@@ -116,6 +123,19 @@ export class ApiService {
 
   private static generateSignedRouteParams(signature: SignedRoute) {
     return new HttpParams().append('signature', signature.signature).append('expires', signature.expires);
+  }
+
+  private static generatePaginationParams(pagination?: PaginationOptions) {
+    if (!pagination) {
+      return null;
+    }
+
+    const paginationParams = {
+      page: pagination.page?.toString(),
+      per_page: pagination.perPage?.toString(),
+    };
+
+    return ApiService.generateParams(paginationParams);
   }
 
   private static generateSortParams(sort?: SortOption[]) {
@@ -169,7 +189,7 @@ export class ApiService {
         };
 
         return this.post<{ data: { user: DetailedUser; access_token: string; refresh_token: string } }>(
-          '/auth/register',
+          '/auth/sign-up',
           signUpData,
           TokenType.None
         );
@@ -195,15 +215,38 @@ export class ApiService {
 
   public get recipes() {
     return {
-      getList: (all?: boolean, page: number = 1, sort?: SortOption[], search?: string, filter?: FilterOptions) => {
-        const allParams = ApiService.generateParams({ all: all ? '' : undefined, search, page: page.toString() });
+      getList: (
+        all?: boolean,
+        pagination?: PaginationOptions,
+        sort?: SortOption[],
+        search?: string,
+        filter?: FilterOptions
+      ) => {
+        const baseParams = ApiService.generateParams({ all: all ? '' : undefined, search });
+        const paginationParams = ApiService.generatePaginationParams(pagination);
         const sortParams = ApiService.generateSortParams(sort);
         const filterParams = ApiService.generateFilterParams(filter);
 
         return this.get<{ data: ListRecipe[]; meta: PaginationMeta }>(
           '/recipes',
           TokenType.Access,
-          ApiService.mergeParams(allParams, sortParams, filterParams)
+          ApiService.mergeParams(baseParams, paginationParams, sortParams, filterParams)
+        );
+      },
+    };
+  }
+
+  public get cookbooks() {
+    return {
+      getList: (all?: boolean, pagination?: PaginationOptions, sort?: SortOption[], search?: string) => {
+        const baseParams = ApiService.generateParams({ all: all ? '' : undefined, search });
+        const paginationParams = ApiService.generatePaginationParams(pagination);
+        const sortParams = ApiService.generateSortParams(sort);
+
+        return this.get<{ data: CookbookWithCounts[]; meta: PaginationMeta }>(
+          '/cookbooks',
+          TokenType.Access,
+          ApiService.mergeParams(baseParams, paginationParams, sortParams)
         );
       },
     };

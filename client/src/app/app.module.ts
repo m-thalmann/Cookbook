@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -20,6 +20,16 @@ import { ClampArrayPipe } from './core/pipes/clamp-array.pipe';
 import { HomePageSectionComponent } from './pages/home-page/components/home-page-section/home-page-section.component';
 import { AuthInterceptor } from './core/api/auth.interceptor';
 import { RecipeCardComponent } from './components/recipe-card/recipe-card.component';
+import { ConfigService } from './core/services/config.service';
+import { AuthService } from './core/auth/auth.service';
+
+function setup(config: ConfigService, auth: AuthService) {
+  return async () => {
+    await config.load();
+
+    auth.initialize();
+  };
+}
 
 @NgModule({
   declarations: [
@@ -49,6 +59,12 @@ import { RecipeCardComponent } from './components/recipe-card/recipe-card.compon
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
+      multi: true,
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: setup,
+      deps: [ConfigService, AuthService],
       multi: true,
     },
   ],

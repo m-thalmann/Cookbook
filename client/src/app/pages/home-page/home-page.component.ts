@@ -4,6 +4,8 @@ import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { createIntersectionObserver } from 'src/app/core/helpers/intersection-observer';
 
+const AMOUNT_ITEMS = 12;
+
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
@@ -16,7 +18,9 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
   @ViewChild('searchBarContainer', { read: ElementRef }) searchBarContainer!: ElementRef;
 
   categories$ = this.auth.isAuthenticated$.pipe(switchMap(() => this.api.categories.getList()));
-  recipes$ = this.auth.isAuthenticated$.pipe(switchMap(() => this.api.recipes.getList())); // TODO: load 12
+  recipes$ = this.auth.isAuthenticated$.pipe(
+    switchMap(() => this.api.recipes.getList(false, { perPage: AMOUNT_ITEMS }))
+  );
 
   categoriesClampAmount: number = 5;
 

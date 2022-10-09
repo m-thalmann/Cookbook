@@ -1,6 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, lastValueFrom, map } from 'rxjs';
+import { ApiService } from '../api/api.service';
+import { Logger } from '../helpers/logger';
 import { DetailedUser } from '../models/user';
 import { StorageService } from '../services/storage.service';
 
@@ -12,20 +15,56 @@ const USER_KEY = 'USER';
   providedIn: 'root',
 })
 export class AuthService {
+  private logger = new Logger('AuthService');
+
+  private _isInitialized$ = new BehaviorSubject<boolean>(false);
+
   private _accessToken: string | null;
   private _refreshToken: string | null;
 
   private _user$ = new BehaviorSubject<DetailedUser | null>(null);
 
-  isAuthenticated$ = this._user$.pipe(map((user) => user !== null));
+  isAuthenticated$ = this._user$.pipe(
+    map((user) => user !== null),
+    distinctUntilChanged()
+  );
 
-  constructor(private storage: StorageService, private router: Router) {
+  constructor(private storage: StorageService, private router: Router, private api: ApiService) {
     this._accessToken = this.storage.session.get<string>(ACCESS_TOKEN_KEY);
     this._refreshToken = this.storage.local.get(REFRESH_TOKEN_KEY);
 
     const user = this.storage.local.get<DetailedUser>(USER_KEY);
 
     this._user$.next(user);
+  }
+
+  get isInitialized$() {
+    return this._isInitialized$.asObservable();
+  }
+
+  async initialize() {
+    if (this.accessToken === null) {
+      this.setUser(null);
+      return;
+    }
+
+    try {
+      const userResponse = await lastValueFrom(this.api.auth.getAuthenticatedUser());
+
+      this.setUser(userResponse.body!.data);
+    } catch (e) {
+      this.logout();
+
+      let error = e;
+
+      if (e instanceof HttpErrorResponse) {
+        error = e.error.message;
+      }
+
+      this.logger.info('User logged out due to the following error:', error);
+    }
+
+    this._isInitialized$.next(true);
   }
 
   get user$() {
