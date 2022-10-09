@@ -44,16 +44,11 @@ class PasswordResetController extends Controller {
         $request->validate([
             'token' => ['required'],
             'email' => ['required', 'email'],
-            'password' => ['required', 'confirmed', PasswordRule::default()],
+            'password' => ['required', PasswordRule::default()],
         ]);
 
         $status = Password::reset(
-            $request->only(
-                'email',
-                'password',
-                'password_confirmation',
-                'token'
-            ),
+            $request->only('email', 'password', 'token'),
             function ($user, $password) {
                 $user->forceFill([
                     'password' => Hash::make($password),

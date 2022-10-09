@@ -21,19 +21,9 @@ class ResetPasswordRequestBody extends RequestBodyFactory {
                             ->example('john.doe@example.com'),
                         Schema::string('password')
                             ->description('The new password for the user')
-                            ->example('password'),
-                        Schema::string('password_confirmation')
-                            ->description(
-                                'The new password for the user (repeated)'
-                            )
                             ->example('password')
                     )
-                    ->required(
-                        'token',
-                        'email',
-                        'password',
-                        'password_confirmation'
-                    )
+                    ->required('token', 'email', 'password')
             )
         );
     }

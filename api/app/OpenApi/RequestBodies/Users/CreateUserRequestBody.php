@@ -24,9 +24,6 @@ class CreateUserRequestBody extends RequestBodyFactory {
                         Schema::string('password')
                             ->description('The user\'s password')
                             ->example('password'),
-                        Schema::string('password_confirmation')
-                            ->description('The user\'s password (repeated)')
-                            ->example('password'),
                         Schema::string('language_code')
                             ->minLength(2)
                             ->maxLength(2)
@@ -42,12 +39,7 @@ class CreateUserRequestBody extends RequestBodyFactory {
                             'Whether the user\'s email should be marked as verified (default false)'
                         )
                     )
-                    ->required(
-                        'name',
-                        'email',
-                        'password',
-                        'password_confirmation'
-                    )
+                    ->required('name', 'email', 'password')
             )
         );
     }

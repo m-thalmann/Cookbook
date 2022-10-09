@@ -12,28 +12,24 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
-class RegisterTest extends TestCase {
+class SignUpTest extends TestCase {
     use WithFaker;
 
-    public function testUserRegistrationSucceeds() {
+    public function testUserSignUpSucceeds() {
         Notification::fake();
 
         $userData = [
             'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'password' => self::DEFAULT_USER_PASSWORD,
-            'password_confirmation' => self::DEFAULT_USER_PASSWORD,
         ];
 
-        $response = $this->postJson('/v1/auth/register', $userData);
+        $response = $this->postJson('/v1/auth/sign-up', $userData);
 
         $response->assertCreated();
         $response->assertJson([
             'data' => [
-                'user' => Arr::except($userData, [
-                    'password',
-                    'password_confirmation',
-                ]),
+                'user' => Arr::except($userData, ['password']),
             ],
         ]);
         $response->assertJsonStructure([
@@ -57,7 +53,7 @@ class RegisterTest extends TestCase {
         );
     }
 
-    public function testUserRegistrationSucceedsWithValidHCaptchaToken() {
+    public function testUserSignUpSucceedsWithValidHCaptchaToken() {
         Config::set('services.hcaptcha.enabled', true);
 
         Notification::fake();
@@ -66,11 +62,10 @@ class RegisterTest extends TestCase {
             'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'password' => self::DEFAULT_USER_PASSWORD,
-            'password_confirmation' => self::DEFAULT_USER_PASSWORD,
             'hcaptcha_token' => HCaptchaService::VALID_TEST_TOKEN,
         ];
 
-        $response = $this->postJson('/v1/auth/register', $userData);
+        $response = $this->postJson('/v1/auth/sign-up', $userData);
 
         $response->assertCreated();
 
@@ -80,17 +75,16 @@ class RegisterTest extends TestCase {
         );
     }
 
-    public function testUserRegistrationFailsWithValidationErrors() {
+    public function testUserSignUpFailsWithValidationErrors() {
         Notification::fake();
 
         $password = 'insecure';
 
         $userData = [
             'password' => $password,
-            'password_confirmation' => 'not-correct',
         ];
 
-        $response = $this->postJson('/v1/auth/register', $userData);
+        $response = $this->postJson('/v1/auth/sign-up', $userData);
 
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors(['name', 'email', 'password']);
@@ -98,7 +92,7 @@ class RegisterTest extends TestCase {
         Notification::assertNothingSent();
     }
 
-    public function testUserRegistrationFailsWhenEmailIsNotUnique() {
+    public function testUserSignUpFailsWhenEmailIsNotUnique() {
         Notification::fake();
 
         $user = $this->createUser();
@@ -107,10 +101,9 @@ class RegisterTest extends TestCase {
             'name' => $this->faker->name(),
             'email' => $user->email,
             'password' => self::DEFAULT_USER_PASSWORD,
-            'password_confirmation' => self::DEFAULT_USER_PASSWORD,
         ];
 
-        $response = $this->postJson('/v1/auth/register', $userData);
+        $response = $this->postJson('/v1/auth/sign-up', $userData);
 
         $response->assertUnprocessable();
         $response->assertJsonValidationErrorFor('email');
@@ -118,7 +111,7 @@ class RegisterTest extends TestCase {
         Notification::assertNothingSent();
     }
 
-    public function testUserRegistrationFailsWithInvalidHCaptchaToken() {
+    public function testUserSignUpFailsWithInvalidHCaptchaToken() {
         Config::set('services.hcaptcha.enabled', true);
 
         Notification::fake();
@@ -127,19 +120,18 @@ class RegisterTest extends TestCase {
             'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'password' => self::DEFAULT_USER_PASSWORD,
-            'password_confirmation' => self::DEFAULT_USER_PASSWORD,
             'hcaptcha_token' => HCaptchaService::INVALID_TEST_TOKEN,
         ];
 
-        $response = $this->postJson('/v1/auth/register', $userData);
+        $response = $this->postJson('/v1/auth/sign-up', $userData);
 
         $response->assertForbidden();
 
         Notification::assertNothingSent();
     }
 
-    public function testUserRegistrationFailsWhenIsDisabled() {
-        Config::set('app.registration_enabled', false);
+    public function testUserSignUpFailsWhenIsDisabled() {
+        Config::set('app.sign_up_enabled', false);
 
         Notification::fake();
 
@@ -147,10 +139,9 @@ class RegisterTest extends TestCase {
             'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'password' => self::DEFAULT_USER_PASSWORD,
-            'password_confirmation' => self::DEFAULT_USER_PASSWORD,
         ];
 
-        $response = $this->postJson('/v1/auth/register', $userData);
+        $response = $this->postJson('/v1/auth/sign-up', $userData);
 
         $response->assertStatus(405);
 

@@ -24,9 +24,6 @@ class UpdateUserRequestBody extends RequestBodyFactory {
                         Schema::string('password')
                             ->description('The user\'s password')
                             ->example('password'),
-                        Schema::string('password_confirmation')
-                            ->description('The user\'s password (repeated)')
-                            ->example('password'),
                         Schema::string('language_code')
                             ->minLength(2)
                             ->maxLength(2)

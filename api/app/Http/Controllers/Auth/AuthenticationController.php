@@ -8,10 +8,10 @@ use App\Http\Resources\UserResource;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\OpenApi\RequestBodies\Auth\LoginRequestBody;
-use App\OpenApi\RequestBodies\Auth\RegisterRequestBody;
+use App\OpenApi\RequestBodies\Auth\SignUpRequestBody;
 use App\OpenApi\Responses\Auth\LoginSuccessResponse;
 use App\OpenApi\Responses\Auth\RefreshTokenResponse;
-use App\OpenApi\Responses\Auth\RegisterSuccessResponse;
+use App\OpenApi\Responses\Auth\SignUpSuccessResponse;
 use App\OpenApi\Responses\Auth\UserResponse;
 use App\OpenApi\Responses\ForbiddenResponse;
 use App\OpenApi\Responses\NoContentResponse;
@@ -23,6 +23,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use TokenAuth\TokenAuth;
@@ -80,18 +81,13 @@ class AuthenticationController extends Controller {
     }
 
     /**
-     * Registers a new user
+     * Creates an account for a new user
      *
      * Uses the data supplied to create a new user
      */
     #[OpenApi\Operation(tags: ['Auth'])]
-    #[OpenApi\RequestBody(factory: RegisterRequestBody::class)]
-    #[
-        OpenApi\Response(
-            factory: RegisterSuccessResponse::class,
-            statusCode: 200
-        )
-    ]
+    #[OpenApi\RequestBody(factory: SignUpRequestBody::class)]
+    #[OpenApi\Response(factory: SignUpSuccessResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: ForbiddenResponse::class, statusCode: 403)]
     #[
         OpenApi\Response(
@@ -105,9 +101,9 @@ class AuthenticationController extends Controller {
             statusCode: 429
         )
     ]
-    public function register(Request $request) {
-        if (!config('app.registration_enabled')) {
-            throw new HttpException(405, __('auth.registration_disabled'));
+    public function signUp(Request $request) {
+        if (!config('app.sign_up_enabled')) {
+            throw new HttpException(405, __('auth.sign_up_disabled'));
         }
 
         if (config('services.hcaptcha.enabled')) {
@@ -133,7 +129,7 @@ class AuthenticationController extends Controller {
                 'max:255',
                 'unique:users,email',
             ],
-            'password' => ['required', 'confirmed', Password::default()],
+            'password' => ['required', Password::default()],
             'language_code' => ['nullable', 'min:2', 'max:2'],
         ]);
 

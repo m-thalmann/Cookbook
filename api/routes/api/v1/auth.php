@@ -14,9 +14,9 @@ Route::controller(AuthenticationController::class)->group(function () {
     Route::post('/login', 'login')
         ->middleware(['throttle:auth'])
         ->name('login');
-    Route::post('/register', 'register')
+    Route::post('/sign-up', 'signUp')
         ->middleware(['throttle:auth'])
-        ->name('register');
+        ->name('signUp');
     Route::post('/logout', 'logout')
         ->middleware('auth')
         ->name('logout');
@@ -29,7 +29,7 @@ Route::controller(AuthenticationController::class)->group(function () {
 Route::controller(EmailVerificationController::class)
     ->middleware('auth')
     ->prefix('email-verification')
-    ->as('email_verification.')
+    ->as('emailVerification.')
     ->group(function () {
         Route::post('/verify/{id}/{hash}', 'verify')
             ->middleware('signed')
@@ -40,7 +40,7 @@ Route::controller(EmailVerificationController::class)
 Route::controller(PasswordResetController::class)
     ->middleware(['throttle:auth'])
     ->prefix('reset-password')
-    ->as('reset_password.')
+    ->as('resetPassword.')
     ->group(function () {
         Route::post('/', 'reset')->name('reset');
         Route::post('/send', 'sendResetEmail')->name('send');

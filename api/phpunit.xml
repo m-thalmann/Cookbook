@@ -24,7 +24,7 @@
         <env name="APP_ENV" value="testing"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="CACHE_DRIVER" value="array"/>
-        <env name="APP_REGISTRATION_ENABLED" value="true"/>
+        <env name="APP_SIGN_UP_ENABLED" value="true"/>
         <env name="APP_EMAIL_VERIFICATION_ENABLED" value="true"/>
         <env name="HCAPTCHA_SECRET" value="0x0000000000000000000000000000000000000000"/>
         <env name="HCAPTCHA_ENABLED" value="false"/>

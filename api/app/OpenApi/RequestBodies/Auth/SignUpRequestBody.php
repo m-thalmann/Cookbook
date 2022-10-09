@@ -7,7 +7,7 @@ use GoldSpecDigital\ObjectOrientedOAS\Objects\RequestBody;
 use GoldSpecDigital\ObjectOrientedOAS\Objects\Schema;
 use Vyuldashev\LaravelOpenApi\Factories\RequestBodyFactory;
 
-class RegisterRequestBody extends RequestBodyFactory {
+class SignUpRequestBody extends RequestBodyFactory {
     public function build(): RequestBody {
         return RequestBody::create()->content(
             MediaType::json()->schema(
@@ -24,9 +24,6 @@ class RegisterRequestBody extends RequestBodyFactory {
                         Schema::string('password')
                             ->description('The user\'s password')
                             ->example('password'),
-                        Schema::string('password_confirmation')
-                            ->description('The user\'s password (repeated)')
-                            ->example('password'),
                         Schema::string('language_code')
                             ->minLength(2)
                             ->maxLength(2)
@@ -41,12 +38,7 @@ class RegisterRequestBody extends RequestBodyFactory {
                             )
                             ->example('10000000-aaaa-bbbb-cccc-000000000001')
                     )
-                    ->required(
-                        'name',
-                        'email',
-                        'password',
-                        'password_confirmation'
-                    )
+                    ->required('name', 'email', 'password')
             )
         );
     }

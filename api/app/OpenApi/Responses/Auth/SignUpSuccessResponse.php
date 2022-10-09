@@ -8,7 +8,7 @@ use GoldSpecDigital\ObjectOrientedOAS\Objects\Response;
 use GoldSpecDigital\ObjectOrientedOAS\Objects\Schema;
 use Vyuldashev\LaravelOpenApi\Factories\ResponseFactory;
 
-class RegisterSuccessResponse extends ResponseFactory {
+class SignUpSuccessResponse extends ResponseFactory {
     public function build(): Response {
         return Response::created()
             ->description('OK')

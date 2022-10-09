@@ -25,7 +25,7 @@ class VerifyEmail extends VerifyEmailBase {
             'signature' => $signature,
             'expires' => $expires,
         ) = signedRouteParameters(
-            "api.v{$apiVersion}.auth.email_verification.verify",
+            "api.v{$apiVersion}.auth.emailVerification.verify",
             [
                 'id' => $id,
                 'hash' => $hash,

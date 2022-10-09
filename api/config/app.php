@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'registration_enabled' => env('APP_REGISTRATION_ENABLED', true),
+    'sign_up_enabled' => env('APP_SIGN_UP_ENABLED', true),
     'email_verification_enabled' => env('APP_EMAIL_VERIFICATION_ENABLED', true),
 
     /*

@@ -57,17 +57,13 @@ class UsersTest extends TestCase {
             'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'password' => self::DEFAULT_USER_PASSWORD,
-            'password_confirmation' => self::DEFAULT_USER_PASSWORD,
         ];
 
         $response = $this->postJson('/v1/users', $userData);
 
         $response->assertCreated();
         $response->assertJson([
-            'data' => Arr::except($userData, [
-                'password',
-                'password_confirmation',
-            ]),
+            'data' => Arr::except($userData, ['password']),
         ]);
 
         Notification::assertSentTo(
@@ -85,7 +81,6 @@ class UsersTest extends TestCase {
             'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'password' => self::DEFAULT_USER_PASSWORD,
-            'password_confirmation' => self::DEFAULT_USER_PASSWORD,
             'is_admin' => true,
         ];
 
@@ -109,7 +104,6 @@ class UsersTest extends TestCase {
             'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'password' => self::DEFAULT_USER_PASSWORD,
-            'password_confirmation' => self::DEFAULT_USER_PASSWORD,
             'is_verified' => true,
         ];
 
@@ -131,7 +125,6 @@ class UsersTest extends TestCase {
             'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'password' => self::DEFAULT_USER_PASSWORD,
-            'password_confirmation' => self::DEFAULT_USER_PASSWORD,
         ];
 
         $response = $this->postJson('/v1/users', $userData);
@@ -151,7 +144,7 @@ class UsersTest extends TestCase {
         $response = $this->postJson('/v1/users', $userData);
 
         $response->assertUnprocessable();
-        $response->assertJsonValidationErrors(['name', 'email', 'password']);
+        $response->assertJsonValidationErrors(['name', 'email']);
     }
 
     public function testUserCanViewItself() {
@@ -236,7 +229,6 @@ class UsersTest extends TestCase {
 
         $response = $this->putJson("/v1/users/{$user->id}", [
             'password' => self::DEFAULT_USER_PASSWORD,
-            'password_confirmation' => self::DEFAULT_USER_PASSWORD,
         ]);
 
         $response->assertUnprocessable();
@@ -271,7 +263,6 @@ class UsersTest extends TestCase {
         $response = $this->putJson("/v1/users/{$user->id}", [
             'current_password' => self::DEFAULT_USER_PASSWORD,
             'password' => $newPassword,
-            'password_confirmation' => $newPassword,
         ]);
 
         $response->assertOk();
@@ -289,7 +280,6 @@ class UsersTest extends TestCase {
         $response = $this->putJson("/v1/users/{$user->id}", [
             'current_password' => self::DEFAULT_USER_PASSWORD,
             'password' => self::DEFAULT_USER_PASSWORD,
-            'password_confirmation' => self::DEFAULT_USER_PASSWORD,
         ]);
 
         $response->assertOk();

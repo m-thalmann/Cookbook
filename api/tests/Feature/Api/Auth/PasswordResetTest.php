@@ -64,7 +64,6 @@ class PasswordResetTest extends TestCase {
                 'token' => $notification->token,
                 'email' => $user->email,
                 'password' => $newPassword,
-                'password_confirmation' => $newPassword,
             ]);
 
             $response->assertNoContent();
@@ -95,7 +94,6 @@ class PasswordResetTest extends TestCase {
             'token' => 'invalid-token',
             'email' => $user->email,
             'password' => self::DEFAULT_USER_PASSWORD,
-            'password_confirmation' => self::DEFAULT_USER_PASSWORD,
         ]);
 
         $response->assertForbidden();
@@ -116,8 +114,7 @@ class PasswordResetTest extends TestCase {
             $response = $this->postJson('/v1/auth/reset-password', [
                 'token' => $notification->token,
                 'email' => $user->email,
-                'password' => 'week',
-                'password_confirmation' => 'week',
+                'password' => 'weak',
             ]);
 
             $response->assertUnprocessable();
@@ -132,7 +129,6 @@ class PasswordResetTest extends TestCase {
             'token' => 'invalid-token',
             'email' => 'no_user@email.com',
             'password' => self::DEFAULT_USER_PASSWORD,
-            'password_confirmation' => self::DEFAULT_USER_PASSWORD,
         ]);
 
         $response->assertForbidden();

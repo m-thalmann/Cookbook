@@ -204,7 +204,7 @@ class EmailVerificationTest extends TestCase {
 
     private function getVerificationPath($userId, $email) {
         $verificationUrl = URL::temporarySignedRoute(
-            'api.v1.auth.email_verification.verify',
+            'api.v1.auth.emailVerification.verify',
             now()->addMinutes(60),
             ['id' => $userId, 'hash' => sha1($email)]
         );
