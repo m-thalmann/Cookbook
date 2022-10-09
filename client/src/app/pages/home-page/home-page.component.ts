@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
-import { Subscription, switchMap } from 'rxjs';
+import { filter, Subscription, switchMap } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { createIntersectionObserver } from 'src/app/core/helpers/intersection-observer';
@@ -20,6 +20,10 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
   categories$ = this.auth.isAuthenticated$.pipe(switchMap(() => this.api.categories.getList()));
   recipes$ = this.auth.isAuthenticated$.pipe(
     switchMap(() => this.api.recipes.getList(false, { perPage: AMOUNT_ITEMS }))
+  );
+  cookbooks$ = this.auth.isAuthenticated$.pipe(
+    filter((authenticated) => authenticated),
+    switchMap(() => this.api.cookbooks.getList(false, { perPage: AMOUNT_ITEMS }))
   );
 
   categoriesClampAmount: number = 5;

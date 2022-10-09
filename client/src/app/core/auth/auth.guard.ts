@@ -14,6 +14,7 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
+    // TODO: add link to current route for redirect after login
     return this.router.createUrlTree(['login']);
   }
 }

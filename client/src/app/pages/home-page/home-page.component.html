@@ -2,7 +2,8 @@
     *ngIf="{
         isAuthenticated: auth.isAuthenticated$ | async,
         categories: categories$ | async,
-        recipes: recipes$ | async
+        recipes: recipes$ | async,
+        cookbooks: cookbooks$ | async
     } as vm"
 >
     <div class="search-bar-container" #searchBarContainer>
@@ -44,6 +45,11 @@
             class="cookbooks"
             *ngIf="vm.isAuthenticated"
         >
+            <div *ngIf="vm.cookbooks?.body?.data as cookbooks">
+                <app-cookbook-card *ngFor="let cookbook of cookbooks" [cookbook]="cookbook"></app-cookbook-card>
+
+                <p *ngIf="cookbooks.length === 0" class="not-found-item">No cookbooks found ...</p>
+            </div>
         </app-home-page-section>
     </div>
 </ng-container>

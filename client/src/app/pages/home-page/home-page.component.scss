@@ -46,7 +46,8 @@
       }
     }
 
-    &.recipes {
+    &.recipes,
+    &.cookbooks {
       div {
         display: grid;
 

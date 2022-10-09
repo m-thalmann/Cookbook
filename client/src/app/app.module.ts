@@ -22,6 +22,7 @@ import { AuthInterceptor } from './core/api/auth.interceptor';
 import { RecipeCardComponent } from './components/recipe-card/recipe-card.component';
 import { ConfigService } from './core/services/config.service';
 import { AuthService } from './core/auth/auth.service';
+import { CookbookCardComponent } from './components/cookbook-card/cookbook-card.component';
 
 function setup(config: ConfigService, auth: AuthService) {
   return async () => {
@@ -45,6 +46,7 @@ function setup(config: ConfigService, auth: AuthService) {
     ClampArrayPipe,
     HomePageSectionComponent,
     RecipeCardComponent,
+    CookbookCardComponent,
   ],
   imports: [
     BrowserModule,
