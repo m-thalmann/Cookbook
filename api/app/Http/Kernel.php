@@ -44,6 +44,7 @@ class Kernel extends HttpKernel {
      */
     protected $routeMiddleware = [
         'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
+        'auth.optional' => \App\Http\Middleware\OptionalAuthenticate::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,

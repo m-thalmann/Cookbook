@@ -18,16 +18,18 @@ Route::controller(RecipeController::class)
             ->withTrashed();
     });
 
-Route::controller(RecipeController::class)->group(function () {
-    Route::get('/shared/{shareUuid}', 'showShared')->name('shared.show');
+Route::controller(RecipeController::class)
+    ->middleware('auth.optional')
+    ->group(function () {
+        Route::get('/shared/{shareUuid}', 'showShared')->name('shared.show');
 
-    Route::get('/', 'index')->name('index');
-    Route::get('/{recipe}', 'show')->name('show');
-});
+        Route::get('/', 'index')->name('index');
+        Route::get('/{recipe}', 'show')->name('show');
+    });
 
-Route::get('/{recipe}/images', [RecipeImageController::class, 'index'])->name(
-    'images.index'
-);
+Route::get('/{recipe}/images', [RecipeImageController::class, 'index'])
+    ->middleware('auth.optional')
+    ->name('images.index');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/{recipe}/ingredients', [

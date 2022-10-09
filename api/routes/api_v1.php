@@ -60,6 +60,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     )->only(['index']);
 });
 
-Route::apiResource('categories', RecipeCategoryController::class)->only([
-    'index',
-]);
+Route::apiResource('categories', RecipeCategoryController::class)
+    ->middleware('auth.optional')
+    ->only(['index']);
