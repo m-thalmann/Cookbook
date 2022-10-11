@@ -1,0 +1,53 @@
+@use 'sass:map';
+@use 'theme';
+@use '../../styles/variables.scss' as *;
+
+.container {
+  height: $image-height;
+  white-space: nowrap;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    button {
+      opacity: 1;
+    }
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: calc(100% + 2 * $content-border-radius); // since content overlaps on bottom and image is aligned in middle
+    object-fit: cover;
+  }
+
+  button {
+    opacity: 0;
+    transition: opacity 0.2s, background 0.2s;
+
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    &:first-of-type {
+      left: 1em;
+    }
+    &:last-of-type {
+      right: 1em;
+    }
+
+    @include theme.apply() using ($variables) {
+      background: rgba(map.get($variables, 'background'), 0.75);
+
+      &:hover {
+        background: rgba(map.get($variables, 'background'), 1);
+      }
+    }
+  }
+}

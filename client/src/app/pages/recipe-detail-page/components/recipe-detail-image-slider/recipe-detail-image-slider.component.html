@@ -1,0 +1,10 @@
+<div class="container" (swipe)="onSwipe($event)">
+    <button mat-icon-button (click)="nextImage(-1)">
+        <mat-icon>arrow_left</mat-icon>
+    </button>
+    <img [src]="images[currentImageIndex].url" *ngIf="images.length > 0" />
+    <button mat-icon-button (click)="nextImage(1)">
+        <mat-icon>arrow_right</mat-icon>
+    </button>
+</div>
+

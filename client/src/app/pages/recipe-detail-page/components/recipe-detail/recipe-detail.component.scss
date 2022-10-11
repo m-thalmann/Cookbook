@@ -1,0 +1,191 @@
+@use 'sass:map';
+@use 'mixins';
+@use 'theme';
+@use 'variables' as *;
+@use '../../styles/variables.scss' as *;
+
+.navigate-back-button {
+  position: fixed;
+  left: 1em;
+  top: 1em;
+  z-index: 1;
+}
+
+.content-spacer {
+  height: $image-height;
+  position: relative;
+  pointer-events: none;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: -$content-border-radius;
+
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0) 100%);
+  }
+}
+
+.container {
+  box-sizing: border-box;
+
+  min-height: calc(100% - $image-height);
+  position: relative;
+  z-index: 2;
+
+  border-top-left-radius: $content-border-radius;
+  border-top-right-radius: $content-border-radius;
+
+  padding: 0 $layout-padding;
+  padding-top: $content-border-radius;
+  padding-bottom: $main-space-bottom;
+
+  @include theme.apply() using ($variables) {
+    background: map.get($variables, 'background');
+  }
+
+  header {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1.5em;
+
+    .title {
+      flex: 1;
+
+      h2 {
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+
+        > * {
+          vertical-align: middle;
+        }
+
+        span {
+          margin-right: 0.5em;
+        }
+      }
+
+      h3 {
+        margin: 0;
+
+        font-weight: lighter;
+        font-size: 1em;
+        @include mixins.font-handwriting();
+        opacity: 0.75;
+      }
+    }
+  }
+
+  section {
+    h3 {
+      box-sizing: border-box;
+
+      position: sticky;
+      top: calc(-0.75em - 1px);
+
+      padding: 1.5em 0;
+      margin-bottom: 0;
+
+      @include mixins.font-handwriting();
+
+      &::before,
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+      }
+
+      &::before {
+        top: 0.75em;
+      }
+      &::after {
+        bottom: 0.75em;
+      }
+
+      @include theme.apply() using ($variables) {
+        background: map.get($variables, 'background');
+
+        &::before,
+        &::after {
+          border-top: 1px dotted rgba(map.get($variables, 'foreground'), 0.5);
+        }
+      }
+
+      span {
+        opacity: 0.75;
+      }
+    }
+
+    &.properties {
+      display: flex;
+
+      > div {
+        flex: 1;
+
+        display: flex;
+        gap: 0.5em;
+        flex-direction: column;
+        align-items: center;
+
+        span {
+          text-align: center;
+        }
+      }
+    }
+
+    &.ingredients {
+      h3 {
+        display: flex;
+        align-items: center;
+
+        span {
+          flex: 1;
+        }
+      }
+
+      > div {
+        .ingredient-group {
+          &:not(:last-of-type) {
+            padding-bottom: 0.5em;
+            margin-bottom: 1em;
+
+            @include theme.apply() using ($variables) {
+              border-bottom: 1px solid rgba(map.get($variables, 'foreground'), 0.05);
+            }
+          }
+
+          h4 {
+            margin-top: 0;
+            font-weight: 500;
+          }
+
+          .ingredient {
+            display: flex;
+            align-items: center;
+
+            padding: 0.5em 0;
+
+            .name {
+              flex: 1;
+            }
+            .amount {
+              opacity: 0.75;
+            }
+          }
+        }
+      }
+    }
+
+    &.preparation {
+      > div ::ng-deep {
+        ul,
+        ol {
+          padding-left: 1.125em;
+        }
+      }
+    }
+  }
+}

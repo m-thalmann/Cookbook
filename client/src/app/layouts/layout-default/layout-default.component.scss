@@ -1,9 +1,6 @@
 @use 'variables' as *;
 @use 'mixins';
 
-$main-space-bottom: 2em;
-$desktop-content-width: 1080px;
-
 .desktop-spacer {
   display: none;
 }

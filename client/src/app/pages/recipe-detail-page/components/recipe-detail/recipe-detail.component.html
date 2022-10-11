@@ -1,0 +1,71 @@
+<button mat-icon-button (click)="navigateBack()" class="navigate-back-button"><mat-icon>arrow_back</mat-icon></button>
+
+<app-recipe-detail-image-slider [images]="recipe.images" class="images-container"> </app-recipe-detail-image-slider>
+
+<div class="content-spacer"></div>
+
+<div class="container mat-elevation-z4">
+    <header>
+        <div class="title">
+            <h2>
+                <span>{{ recipe.name }}</span>
+                <mat-icon *ngIf="recipe.is_public">public</mat-icon>
+            </h2>
+            <h3>by {{ recipe.user.name }}</h3>
+        </div>
+
+        <button mat-icon-button color="accent">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+    </header>
+
+    <section class="properties">
+        <div class="property-total-time" *ngIf="totalTime">
+            <mat-icon color="primary">timer</mat-icon>
+            <span>
+                {{ totalTime }}
+                min
+            </span>
+        </div>
+
+        <div class="property-difficulty" *ngIf="recipe.difficulty !== null">
+            <mat-icon color="primary">local_fire_department</mat-icon>
+            <span> {{ recipe.difficulty }} / 5 </span>
+        </div>
+    </section>
+
+    <section class="description" *ngIf="recipe.description">
+        <h3>
+            <span>Description</span>
+        </h3>
+
+        {{ recipe.description }}
+    </section>
+
+    <section class="ingredients">
+        <h3>
+            <span>Ingredients</span>
+            <input type="number" [value]="recipe.portions || 1" />
+        </h3>
+
+        <div>
+            <div class="ingredient-group" *ngFor="let groupData of recipe.ingredients">
+                <h4 *ngIf="groupData.group">{{ groupData.group }}</h4>
+
+                <div class="ingredient" *ngFor="let ingredient of groupData.items">
+                    <div class="name">{{ ingredient.name }}</div>
+                    <div class="amount">{{ ingredient.amount }} {{ ingredient.unit }}</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="preparation" *ngIf="recipe.preparation">
+        <h3>
+            <span>Preparation</span>
+        </h3>
+
+        <div [innerHTML]="recipe.preparation"></div>
+    </section>
+</div>
+

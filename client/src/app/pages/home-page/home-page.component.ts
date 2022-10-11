@@ -3,6 +3,7 @@ import { filter, Subscription, switchMap } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { createIntersectionObserver } from 'src/app/core/helpers/intersection-observer';
+import { PaginationMeta } from 'src/app/core/models/pagination-meta';
 
 const AMOUNT_ITEMS = 12;
 
@@ -44,6 +45,14 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
 
   revealMoreCategories() {
     this.categoriesClampAmount += 5;
+  }
+
+  getRemainingItems(meta?: PaginationMeta) {
+    if (!meta) {
+      return 0;
+    }
+
+    return meta.total - meta.count;
   }
 }
 

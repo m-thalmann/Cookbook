@@ -1,4 +1,5 @@
 import { Cookbook } from './cookbook';
+import { Ingredient } from './ingredient';
 import { RecipeImage } from './recipe-image';
 import { User } from './user';
 
@@ -26,4 +27,14 @@ export interface Recipe {
 export interface ListRecipe extends Recipe {
   thumbnail: RecipeImage | null;
   cookbook: Cookbook | null;
+}
+
+export interface DetailedRecipe extends Recipe {
+  share_uuid: string | null;
+  ingredients: {
+    group: string | null;
+    items: Ingredient[];
+  }[];
+  images: RecipeImage[];
+  cookbook?: Cookbook | null;
 }

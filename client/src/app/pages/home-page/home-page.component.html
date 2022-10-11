@@ -36,6 +36,18 @@
 
                 <p *ngIf="recipes.length === 0" class="not-found-item">No recipes found ...</p>
             </div>
+
+            <a
+                routerLink="/recipes"
+                mat-raised-button
+                color="primary"
+                class="show-more-items"
+                *ngIf="getRemainingItems(vm.recipes?.body?.meta) as remainingItems"
+            >
+                <mat-icon>restaurant</mat-icon>
+                Show {{ remainingItems }} more recipes
+                <mat-icon>arrow_forward</mat-icon>
+            </a>
         </app-home-page-section>
 
         <app-home-page-section
@@ -50,6 +62,18 @@
 
                 <p *ngIf="cookbooks.length === 0" class="not-found-item">No cookbooks found ...</p>
             </div>
+
+            <a
+                routerLink="/cookbooks"
+                mat-raised-button
+                color="primary"
+                class="show-more-items"
+                *ngIf="getRemainingItems(vm.cookbooks?.body?.meta) as remainingItems"
+            >
+                <mat-icon>menu_book</mat-icon>
+                Show {{ remainingItems }} more cookbooks
+                <mat-icon>arrow_forward</mat-icon>
+            </a>
         </app-home-page-section>
     </div>
 </ng-container>
