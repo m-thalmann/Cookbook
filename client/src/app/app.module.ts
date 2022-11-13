@@ -28,6 +28,9 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
 import { RecipeDetailImageSliderComponent } from './pages/recipe-detail-page/components/recipe-detail-image-slider/recipe-detail-image-slider.component';
 import { RecipeDetailComponent } from './pages/recipe-detail-page/components/recipe-detail/recipe-detail.component';
 import { RecipeDetailPageComponent } from './pages/recipe-detail-page/recipe-detail-page.component';
+import { NumberInputComponent } from './components/number-input/number-input.component';
+import { AmountPipe } from './core/pipes/amount.pipe';
+import { ShareMenuComponent } from './components/share-menu/share-menu.component';
 
 function setup(config: ConfigService, auth: AuthService) {
   return async () => {
@@ -55,6 +58,9 @@ function setup(config: ConfigService, auth: AuthService) {
     RecipeDetailPageComponent,
     RecipeDetailComponent,
     RecipeDetailImageSliderComponent,
+    NumberInputComponent,
+    AmountPipe,
+    ShareMenuComponent,
   ],
   imports: [
     BrowserModule,

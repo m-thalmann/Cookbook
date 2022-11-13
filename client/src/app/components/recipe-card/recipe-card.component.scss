@@ -3,10 +3,10 @@
 @use '@angular/material' as mat;
 @use 'theme';
 @use 'mixins';
+@use 'variables' as *;
 
 $category-offset: 0.5rem;
 $border-radius: 1em;
-$transition-time: 0.2s;
 
 .container {
   display: block;

@@ -1,4 +1,5 @@
 @use 'sass:map';
+@use 'sass:math';
 @use '@angular/material' as mat;
 @use 'theme/variables' as *;
 
@@ -30,4 +31,14 @@
       }
     }
   }
+}
+
+@function adjust-color($variables, $color, $amount) {
+  $theme-type: map.get($variables, 'type');
+
+  @if (($theme-type == 'light' and $amount >= 0) or ($theme-type != 'light' and $amount < 0)) {
+    @return lighten($color, math.abs($amount));
+  }
+
+  @return darken($color, math.abs($amount));
 }

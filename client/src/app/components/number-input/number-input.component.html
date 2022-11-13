@@ -1,0 +1,13 @@
+<div class="container">
+    <button (click)="decrementValue()" [disabled]="isDisabled"><mat-icon>remove</mat-icon></button>
+
+    <input
+        type="text"
+        [step]="step"
+        [value]="value | amount"
+        (change)="onInputChange($event)"
+        [disabled]="isDisabled || !inputEnabled"
+    />
+
+    <button (click)="incrementValue()" [disabled]="isDisabled"><mat-icon>add</mat-icon></button>
+</div>

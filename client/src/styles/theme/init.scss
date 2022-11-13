@@ -32,10 +32,17 @@
       @include mat.icon-theme($app-theme);
       @include mat.input-theme($app-theme);
       @include mat.list-theme($app-theme);
+      @include mat.menu-theme($app-theme);
       @include mat.progress-spinner-theme($app-theme);
+      @include mat.snack-bar-theme($app-theme);
       @include mat.toolbar-theme($app-theme);
+      @include mat.tooltip-theme($app-theme);
 
       @include -html-styles($variables);
+
+      .mat-snack-bar-container.action-warn .mat-simple-snackbar-action {
+        color: mat.get-color-from-palette(map.get($variables, 'warn-palette')) !important;
+      }
     }
   } @else {
     html.theme-#{$theme} {
@@ -47,10 +54,17 @@
       @include mat.icon-color($app-theme);
       @include mat.input-color($app-theme);
       @include mat.list-color($app-theme);
+      @include mat.menu-color($app-theme);
       @include mat.progress-spinner-color($app-theme);
+      @include mat.snack-bar-color($app-theme);
       @include mat.toolbar-color($app-theme);
+      @include mat.tooltip-color($app-theme);
 
       @include -html-styles($variables);
+
+      .mat-snack-bar-container.action-warn .mat-simple-snackbar-action {
+        color: mat.get-color-from-palette(map.get($variables, 'warn-palette')) !important;
+      }
     }
   }
 }

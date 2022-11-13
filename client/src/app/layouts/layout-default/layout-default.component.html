@@ -1,9 +1,9 @@
-<ng-container *ngIf="{ isAuthenticated: auth.isAuthenticated$ | async } as vm">
+<ng-container *ngIf="{ isAuthenticated: auth.isAuthenticated$ | async, isOverlayRoute: isOverlayRoute$ | async } as vm">
     <div class="desktop-spacer left"></div>
 
     <div class="container">
         <div>
-            <header>
+            <header [class.hide-mobile]="vm.isOverlayRoute">
                 <img src="/assets/images/cookbook.svg" alt="Cookbook Logo" />
                 <h1>Cookbook</h1>
 
@@ -29,5 +29,5 @@
 
     <div class="desktop-spacer right"></div>
 
-    <app-layout-default-navbar></app-layout-default-navbar>
+    <app-layout-default-navbar [class.hide-mobile]="vm.isOverlayRoute"></app-layout-default-navbar>
 </ng-container>

@@ -1,5 +1,10 @@
 <button mat-icon-button (click)="navigateBack()" class="navigate-back-button"><mat-icon>arrow_back</mat-icon></button>
 
+<!-- TODO: only show if can edit -->
+<button mat-icon-button class="options-button" [matMenuTriggerFor]="menu">
+    <mat-icon>more_vert</mat-icon>
+</button>
+
 <app-recipe-detail-image-slider [images]="recipe.images" class="images-container"> </app-recipe-detail-image-slider>
 
 <div class="content-spacer"></div>
@@ -7,30 +12,49 @@
 <div class="container mat-elevation-z4">
     <header>
         <div class="title">
-            <h2>
-                <span>{{ recipe.name }}</span>
-                <mat-icon *ngIf="recipe.is_public">public</mat-icon>
-            </h2>
-            <h3>by {{ recipe.user.name }}</h3>
+            <div>
+                <h2>
+                    <span>{{ recipe.name }}</span>
+                    <mat-icon *ngIf="recipe.is_public">public</mat-icon>
+                </h2>
+                <h3>by {{ recipe.user.name }}</h3>
+            </div>
+
+            <app-share-menu color="primary" [text]="'Recipe: ' + recipe.name"></app-share-menu>
         </div>
 
-        <button mat-icon-button color="accent">
-            <mat-icon>more_vert</mat-icon>
-        </button>
+        <div class="tags">
+            <a
+                routerLink="/recipes"
+                [queryParams]="{ category: recipe.category }"
+                class="category"
+                *ngIf="recipe.category"
+            >
+                <mat-icon>local_dining</mat-icon>
+                {{ recipe.category }}
+            </a>
+
+            <a [routerLink]="['/cookbooks', cookbook.id]" class="cookbook" *ngIf="recipe.cookbook as cookbook">
+                <mat-icon>menu_book</mat-icon>
+                {{ cookbook.name }}
+            </a>
+        </div>
     </header>
 
     <section class="properties">
         <div class="property-total-time" *ngIf="totalTime">
-            <mat-icon color="primary">timer</mat-icon>
-            <span>
-                {{ totalTime }}
-                min
-            </span>
+            <mat-icon color="primary" matTooltip="Total time">timer</mat-icon>
+            <span> ~ {{ totalTime }}<small>m</small> </span>
         </div>
 
         <div class="property-difficulty" *ngIf="recipe.difficulty !== null">
-            <mat-icon color="primary">local_fire_department</mat-icon>
+            <mat-icon color="primary" matTooltip="Difficulty">local_fire_department</mat-icon>
             <span> {{ recipe.difficulty }} / 5 </span>
+        </div>
+
+        <div class="property-portions" *ngIf="recipe.portions !== null">
+            <mat-icon color="primary" matTooltip="Portions">flatware</mat-icon>
+            <span> {{ recipe.portions * portionsMultiplier | amount }} </span>
         </div>
     </section>
 
@@ -45,7 +69,14 @@
     <section class="ingredients">
         <h3>
             <span>Ingredients</span>
-            <input type="number" [value]="recipe.portions || 1" />
+
+            <app-number-input
+                [(ngModel)]="portionsMultiplier"
+                [min]="0.25"
+                [max]="100"
+                [step]="0.25"
+                [stepFunction]="portionsMultiplierStepFunction"
+            ></app-number-input>
         </h3>
 
         <div>
@@ -54,7 +85,11 @@
 
                 <div class="ingredient" *ngFor="let ingredient of groupData.items">
                     <div class="name">{{ ingredient.name }}</div>
-                    <div class="amount">{{ ingredient.amount }} {{ ingredient.unit }}</div>
+                    <div class="amount">
+                        {{ getIngredientAmount(ingredient.amount) | amount }}
+
+                        {{ ingredient.unit }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -65,7 +100,48 @@
             <span>Preparation</span>
         </h3>
 
-        <div [innerHTML]="recipe.preparation"></div>
+        <div class="preparation-content">
+            <div class="preparation-times">
+                <span *ngIf="recipe.preparation_time_minutes">
+                    <mat-icon>timer</mat-icon>
+                    <span>
+                        Preparation time ~
+                        {{ recipe.preparation_time_minutes }}<small>m</small>
+                    </span>
+                </span>
+                <span *ngIf="recipe.resting_time_minutes">
+                    <mat-icon>timer</mat-icon>
+                    <span>
+                        Resting time ~
+                        {{ recipe.resting_time_minutes }}<small>m</small>
+                    </span>
+                </span>
+                <span *ngIf="recipe.cooking_time_minutes">
+                    <mat-icon>timer</mat-icon>
+                    <span>
+                        Cooking-/Baking time ~
+                        {{ recipe.cooking_time_minutes }}<small>m</small>
+                    </span>
+                </span>
+            </div>
+
+            <div [innerHTML]="recipe.preparation"></div>
+        </div>
     </section>
 </div>
 
+<mat-menu #menu="matMenu">
+    <!-- TODO: add view to manage public share -->
+    <button mat-menu-item>
+        <mat-icon>share</mat-icon>
+        <span>Public share</span>
+    </button>
+    <button mat-menu-item>
+        <mat-icon>edit</mat-icon>
+        <span>Edit</span>
+    </button>
+    <button mat-menu-item>
+        <mat-icon color="warn">delete</mat-icon>
+        <span>Move to trash</span>
+    </button>
+</mat-menu>
