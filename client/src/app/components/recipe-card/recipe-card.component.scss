@@ -118,7 +118,7 @@ $transition-time: 0.2s;
 
       @include theme.apply() using ($variables) {
         background: map.get($variables, 'primary');
-        color: mat.get-color-from-palette(map.get($variables, 'primary-palette'), 'foreground');
+        color: map.get($variables, 'primary-text');
       }
     }
   }
@@ -139,8 +139,24 @@ $transition-time: 0.2s;
     padding: 0.25em 0.5em;
 
     border-radius: 0.5em;
+    overflow: hidden;
 
-    transition: background $transition-time, bottom $transition-time;
+    transition: bottom $transition-time;
+
+    &::before {
+      content: '';
+
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: -1;
+
+      background: transparent;
+
+      transition: background $transition-time;
+    }
 
     @include theme.apply() using ($variables) {
       box-shadow:
@@ -150,11 +166,14 @@ $transition-time: 0.2s;
         0 0 0 0.25em map.get($variables, 'background');
 
       background: map.get($variables, 'accent');
-      color: mat.get-color-from-palette(map.get($variables, 'accent-palette'), 'foreground');
+      color: map.get($variables, 'accent-text');
 
       &:hover {
         bottom: calc(-1 * ($category-offset - 0.25rem));
-        background: rgba(map.get($variables, 'accent'), 0.75);
+
+        &::before {
+          background: rgba(map.get($variables, 'background'), 0.25);
+        }
       }
     }
   }

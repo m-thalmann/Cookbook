@@ -8,8 +8,11 @@
 
     $additional-variables: (
       'primary': mat.get-color-from-palette(map.get($variables, 'primary-palette')),
+      'primary-text': mat.get-color-from-palette(map.get($variables, 'primary-palette'), 'default-contrast'),
       'accent': mat.get-color-from-palette(map.get($variables, 'accent-palette')),
+      'accent-text': mat.get-color-from-palette(map.get($variables, 'accent-palette'), 'default-contrast'),
       'warn': mat.get-color-from-palette(map.get($variables, 'warn-palette')),
+      'warn-text': mat.get-color-from-palette(map.get($variables, 'warn-palette'), 'default-contrast'),
       'background': mat.get-color-from-palette(map.get($app-theme, 'background'), 'background'),
       'foreground': mat.get-color-from-palette(map.get($app-theme, 'foreground'), 'text'),
     );

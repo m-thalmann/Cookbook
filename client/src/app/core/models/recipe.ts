@@ -8,7 +8,6 @@ export interface Recipe {
   user_id: number;
   cookbook_id: number | null;
   is_public: boolean;
-  language_code: string;
   name: string;
   description: string | null;
   category: string | null;

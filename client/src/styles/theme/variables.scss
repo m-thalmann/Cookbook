@@ -6,14 +6,14 @@
 $themes: (
   'dark': (
     'primary-palette': mat.define-palette(mat.$blue-palette, 700),
-    'accent-palette': mat.define-palette(mat.$orange-palette, A400),
+    'accent-palette': mat.define-palette(mat.$deep-orange-palette, 500),
     'warn-palette': mat.define-palette(mat.$red-palette, 700),
     'link-palette': mat.define-palette(mat.$orange-palette, A700),
     'type': 'dark',
   ),
   'light': (
     'primary-palette': mat.define-palette(mat.$blue-palette, 700),
-    'accent-palette': mat.define-palette(mat.$orange-palette, A400),
+    'accent-palette': mat.define-palette(mat.$deep-orange-palette, 500),
     'warn-palette': mat.define-palette(mat.$red-palette, 700),
     'link-palette': mat.define-palette(mat.$orange-palette, A700),
     'type': 'light',

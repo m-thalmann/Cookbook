@@ -106,7 +106,8 @@
       }
 
       @include theme.apply() using ($variables) {
-        background: map.get($variables, 'background');
+        color: map.get($variables, 'primary-text');
+        background: rgba(map.get($variables, 'primary'), 0.5);
 
         &::before,
         &::after {

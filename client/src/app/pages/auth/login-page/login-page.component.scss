@@ -1,6 +1,5 @@
 @use 'sass:map';
 @use 'theme';
-@use '@angular/material' as mat;
 @use 'variables' as *;
 
 form {
@@ -57,7 +56,7 @@ form {
 
     @include theme.apply() using ($variables) {
       background: map.get($variables, 'warn');
-      color: mat.get-color-from-palette(map.get($variables, 'warn-palette'), 'foreground');
+      color: map.get($variables, 'warn-text');
     }
 
     display: flex;
