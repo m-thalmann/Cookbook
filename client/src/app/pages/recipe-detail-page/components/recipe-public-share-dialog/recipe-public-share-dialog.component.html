@@ -1,0 +1,34 @@
+<h2 mat-dialog-title>
+    <mat-icon color="primary">share</mat-icon>
+    <div class="title">
+        <span> Public share </span>
+        <small>{{ recipe.name }} by {{ recipe.user.name }}</small>
+    </div>
+</h2>
+
+<div mat-dialog-content>
+    <div class="toggle-container">
+        <mat-slide-toggle [checked]="recipe.share_uuid" [disabled]="updating" (change)="enabledChanged($event)">
+            Enabled
+        </mat-slide-toggle>
+        <mat-spinner [diameter]="24" *ngIf="updating"></mat-spinner>
+    </div>
+
+    <div class="link-input" *ngIf="recipe.share_uuid">
+        <input [value]="shareLink" readonly [disabled]="updating" #linkInput />
+        <button
+            mat-icon-button
+            matSuffix
+            [disabled]="updating"
+            [cdkCopyToClipboard]="shareLink"
+            (cdkCopyToClipboardCopied)="linkCopied()"
+        >
+            <mat-icon>copy</mat-icon>
+        </button>
+    </div>
+</div>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close [disabled]="updating">OK</button>
+</mat-dialog-actions>
+

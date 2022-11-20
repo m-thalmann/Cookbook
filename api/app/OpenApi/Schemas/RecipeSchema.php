@@ -86,6 +86,9 @@ class RecipeSchema extends ExtendableSchemaFactory {
             UserSchema::ref('user')->description(
                 'The user that owns this recipe'
             ),
+            Schema::boolean('user_can_edit')->description(
+                'Whether the authenticated user can edit the recipe. Only set if a user is authenticated.'
+            ),
         ];
     }
 

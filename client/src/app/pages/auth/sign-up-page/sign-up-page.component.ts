@@ -4,6 +4,9 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { lastValueFrom } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
+import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
+
+const Logger = new LoggerClass('Authentication');
 
 @Component({
   selector: 'app-sign-up-page',
@@ -80,19 +83,16 @@ export class SignUpPageComponent {
               formControl.setErrors({
                 serverError: validationErrors[controlName][0],
               });
-
-              console.log(formControl.errors);
             }
           });
         }
       } else {
         this.error = 'An error occurred.';
 
-        console.error('Error on login:', e);
+        Logger.error('Error on sign up:', e);
       }
 
       this.isLoading = false;
     }
   }
 }
-

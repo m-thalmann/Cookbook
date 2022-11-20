@@ -4,6 +4,9 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { lastValueFrom } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
+import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
+
+const Logger = new LoggerClass('Authentication');
 
 @Component({
   selector: 'app-login-page',
@@ -46,7 +49,7 @@ export class LoginPageComponent {
       } else {
         this.error = 'An error occurred.';
 
-        console.error('Error on login:', e);
+        Logger.error('Error on login:', e);
       }
 
       this.isLoading = false;

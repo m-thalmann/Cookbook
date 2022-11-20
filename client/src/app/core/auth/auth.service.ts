@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, distinctUntilChanged, lastValueFrom, map } from 'rxjs';
 import { ApiService } from '../api/api.service';
-import { Logger } from '../helpers/logger';
+import { Logger as LoggerClass } from '../helpers/logger';
 import { DetailedUser } from '../models/user';
 import { StorageService } from '../services/storage.service';
 
@@ -11,12 +11,12 @@ const ACCESS_TOKEN_KEY = 'ACCESS_TOKEN';
 const REFRESH_TOKEN_KEY = 'REFRESH_TOKEN';
 const USER_KEY = 'USER';
 
+const Logger = new LoggerClass('AuthService');
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private logger = new Logger('AuthService');
-
   private _isInitialized$ = new BehaviorSubject<boolean>(false);
 
   private _accessToken: string | null;
@@ -61,7 +61,7 @@ export class AuthService {
         error = e.error.message;
       }
 
-      this.logger.info('User logged out due to the following error:', error);
+      Logger.info('User logged out due to the following error:', error);
     }
 
     this._isInitialized$.next(true);

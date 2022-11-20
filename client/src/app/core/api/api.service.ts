@@ -13,7 +13,7 @@ import { CookbookWithCounts } from '../models/cookbook';
 import { FilterOptions } from '../models/filter-options';
 import { PaginationMeta } from '../models/pagination-meta';
 import { PaginationOptions } from '../models/pagination-options';
-import { DetailedRecipe, ListRecipe } from '../models/recipe';
+import { DetailedRecipe, EditRecipeData, ListRecipe } from '../models/recipe';
 import { SortOption } from '../models/sort-option';
 import { DetailedUser } from '../models/user';
 import { ConfigService } from '../services/config.service';
@@ -234,7 +234,12 @@ export class ApiService {
         );
       },
 
-      getRecipe: (id: number) => this.get<{ data: DetailedRecipe }>(`/recipes/${id}`, TokenType.Access),
+      get: (id: number) => this.get<{ data: DetailedRecipe }>(`/recipes/${id}`, TokenType.Access),
+
+      update: (id: number, data: EditRecipeData) =>
+        this.put<{ data: DetailedRecipe }>(`/recipes/${id}`, data, TokenType.Access),
+
+      delete: (id: number) => this.delete<void>(`/recipes/${id}`, TokenType.Access),
     };
   }
 
@@ -254,4 +259,3 @@ export class ApiService {
     };
   }
 }
-

@@ -5,8 +5,20 @@ const LoggerModulesConfig = {
     background: '#d10000',
     foreground: 'white',
   },
+  StorageService: {
+    background: '#630000',
+    foreground: 'white',
+  },
   AuthService: {
     background: '#037ffc',
+    foreground: 'white',
+  },
+  Authentication: {
+    background: '#030bfc',
+    foreground: 'white',
+  },
+  Recipes: {
+    background: '#fc9d03',
     foreground: 'white',
   },
 };

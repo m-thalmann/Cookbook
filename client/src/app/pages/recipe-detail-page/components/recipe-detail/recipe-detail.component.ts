@@ -1,7 +1,12 @@
 import { Location } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { lastValueFrom } from 'rxjs';
+import { ApiService } from 'src/app/core/api/api.service';
 import { DetailedRecipe } from 'src/app/core/models/recipe';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { RecipePublicShareDialogComponent } from '../recipe-public-share-dialog/recipe-public-share-dialog.component';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -14,7 +19,13 @@ export class RecipeDetailComponent {
 
   portionsMultiplier: number = 1;
 
-  constructor(private location: Location, private router: Router) {}
+  constructor(
+    private location: Location,
+    private router: Router,
+    private api: ApiService,
+    private snackbar: SnackbarService,
+    private dialog: MatDialog
+  ) {}
 
   get totalTime() {
     if (
@@ -42,14 +53,6 @@ export class RecipeDetailComponent {
     return Math.round(amount * 100) / 100;
   }
 
-  navigateBack() {
-    if (document.referrer.indexOf(window.location.host) !== -1) {
-      this.location.back();
-    } else {
-      this.router.navigateByUrl('/');
-    }
-  }
-
   portionsMultiplierStepFunction(currentValue: number, direction: 'up' | 'down') {
     let step = 1;
 
@@ -60,5 +63,29 @@ export class RecipeDetailComponent {
     }
 
     return step * (direction === 'up' ? 1 : -1);
+  }
+
+  navigateBack() {
+    if (document.referrer.indexOf(window.location.host) !== -1) {
+      this.location.back();
+    } else {
+      this.router.navigateByUrl('/');
+    }
+  }
+
+  openPublicShareDialog() {
+    this.dialog.open(RecipePublicShareDialogComponent, { data: { recipe: this.recipe } });
+  }
+
+  async deleteRecipe() {
+    try {
+      await lastValueFrom(this.api.recipes.delete(this.recipe.id));
+
+      this.snackbar.info('Recipe moved to trash successfully');
+
+      this.navigateBack();
+    } catch (e) {
+      this.snackbar.error('Error moving recipe to trash');
+    }
   }
 }

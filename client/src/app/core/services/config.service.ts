@@ -1,18 +1,18 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
-import { Logger } from '../helpers/logger';
+import { Logger as LoggerClass } from '../helpers/logger';
 
 const CONFIG_URL = '/assets/config.json';
 
 type ConfigType = { [key: string]: any };
 
+const Logger = new LoggerClass('ConfigService');
+
 @Injectable({
   providedIn: 'root',
 })
 export class ConfigService {
-  private logger = new Logger('ConfigService');
-
   private data: ConfigType = {};
 
   constructor(private http: HttpClient) {}
@@ -35,7 +35,7 @@ export class ConfigService {
         error = e.statusText;
       }
 
-      this.logger.error('Config could not be loaded:', error);
+      Logger.error('Config could not be loaded:', error);
     }
   }
 }

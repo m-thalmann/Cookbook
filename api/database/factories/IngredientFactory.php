@@ -18,7 +18,7 @@ class IngredientFactory extends Factory {
         return [
             'recipe_id' => Recipe::factory(),
             'name' => $this->faker->name(),
-            'amount' => rand(1, 10000) / 100,
+            'amount' => rand(4, 1000) * 0.25,
             'unit' => 'g',
             'group' => null,
         ];

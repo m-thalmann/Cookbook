@@ -1,7 +1,6 @@
 <button mat-icon-button (click)="navigateBack()" class="navigate-back-button"><mat-icon>arrow_back</mat-icon></button>
 
-<!-- TODO: only show if can edit -->
-<button mat-icon-button class="options-button" [matMenuTriggerFor]="menu">
+<button mat-icon-button class="options-button" [matMenuTriggerFor]="menu" *ngIf="recipe.user_can_edit">
     <mat-icon>more_vert</mat-icon>
 </button>
 
@@ -131,16 +130,15 @@
 </div>
 
 <mat-menu #menu="matMenu">
-    <!-- TODO: add view to manage public share -->
-    <button mat-menu-item>
+    <button mat-menu-item (click)="openPublicShareDialog()">
         <mat-icon>share</mat-icon>
         <span>Public share</span>
     </button>
-    <button mat-menu-item>
+    <a [routerLink]="['/recipe', recipe.id, 'edit']" mat-menu-item>
         <mat-icon>edit</mat-icon>
         <span>Edit</span>
-    </button>
-    <button mat-menu-item>
+    </a>
+    <button mat-menu-item (click)="deleteRecipe()">
         <mat-icon color="warn">delete</mat-icon>
         <span>Move to trash</span>
     </button>

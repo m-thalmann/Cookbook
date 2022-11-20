@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
+
+const Logger = new LoggerClass('StorageService');
 
 const PREFIX = 'CB_';
 
@@ -35,7 +38,7 @@ export class StorageService {
       try {
         return JSON.parse(value);
       } catch (e) {
-        console.error('StorageService', `Error parsing value for key '${key}': ${e}`);
+        Logger.error(`Error parsing value for key '${key}': ${e}`);
       }
     }
 
