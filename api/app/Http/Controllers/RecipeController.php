@@ -215,19 +215,19 @@ class RecipeController extends Controller {
         )
     ]
     public function showShared(string $shareUuid) {
-        $recipe = Recipe::query()->with(['user', 'ingredients', 'images']);
+        $recipeQuery = Recipe::query()->with(['user', 'ingredients', 'images']);
 
         if (auth()->check()) {
             // load cookbook if user is part of it
 
-            $recipe->with([
+            $recipeQuery->with([
                 'cookbook' => function ($query) {
                     $query->forUser(authUser())->exists();
                 },
             ]);
         }
 
-        $recipe->where('share_uuid', $shareUuid)->firstOrFail();
+        $recipe = $recipeQuery->where('share_uuid', $shareUuid)->firstOrFail();
 
         $recipe->makeHidden('thumbnail');
 

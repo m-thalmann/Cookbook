@@ -12,7 +12,14 @@ import { ApiService } from 'src/app/core/api/api.service';
 export class RecipeDetailPageComponent {
   recipe$ = this.activatedRoute.params.pipe(
     switchMap((params) => {
-      return this.api.recipes.get(params['id']);
+      if (params['id']) {
+        return this.api.recipes.get(params['id']);
+      }
+      if (params['shareUuid']) {
+        return this.api.recipes.getShared(params['shareUuid']);
+      }
+
+      throw new Error('RecipeDetailComponent: No id defined');
     })
   );
 

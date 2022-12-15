@@ -26,6 +26,7 @@ const routes: Routes = [
     component: LayoutDefaultComponent,
     children: [
       { path: 'home', component: HomePageComponent },
+      { path: 'recipe/shared/:shareUuid', component: RecipeDetailPageComponent, data: { isOverlay: true } },
       { path: 'recipe/:id', component: RecipeDetailPageComponent, data: { isOverlay: true } },
     ],
   },

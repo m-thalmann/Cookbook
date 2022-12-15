@@ -235,6 +235,8 @@ export class ApiService {
       },
 
       get: (id: number) => this.get<{ data: DetailedRecipe }>(`/recipes/${id}`, TokenType.Access),
+      getShared: (shareUuid: string) =>
+        this.get<{ data: DetailedRecipe }>(`/recipes/shared/${shareUuid}`, TokenType.None),
 
       update: (id: number, data: EditRecipeData) =>
         this.put<{ data: DetailedRecipe }>(`/recipes/${id}`, data, TokenType.Access),
