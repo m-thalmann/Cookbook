@@ -10,7 +10,7 @@
             <mat-icon>arrow_left</mat-icon>
         </button>
         <div class="images" #imagesContainer>
-            <img [src]="image" *ngFor="let image of images" />
+            <img [src]="image" loading="lazy" *ngFor="let image of images" />
         </div>
         <button mat-icon-button (click)="nextImage(1)">
             <mat-icon>arrow_right</mat-icon>

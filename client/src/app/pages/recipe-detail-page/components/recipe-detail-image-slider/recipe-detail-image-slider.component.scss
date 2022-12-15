@@ -1,15 +1,19 @@
 @use 'sass:map';
+@use 'mixins';
 @use 'theme';
 @use '../../styles/variables.scss' as *;
 
-.container {
+:host {
   height: $image-height;
   white-space: nowrap;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
+}
 
+.container {
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -51,5 +55,17 @@
         background: rgba(map.get($variables, 'background'), 1);
       }
     }
+  }
+}
+
+@include mixins.desktop() {
+  :host {
+    display: block;
+    position: relative;
+    left: unset;
+    right: unset;
+    top: unset;
+    bottom: unset;
+    overflow: hidden;
   }
 }

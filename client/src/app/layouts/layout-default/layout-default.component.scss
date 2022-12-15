@@ -41,6 +41,10 @@ header {
   }
 }
 
+.is-overlay main {
+  margin-bottom: 0;
+}
+
 main {
   margin-bottom: calc($navbar-height + $main-space-bottom);
 }

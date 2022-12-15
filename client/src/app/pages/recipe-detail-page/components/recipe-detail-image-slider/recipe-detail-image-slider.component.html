@@ -3,7 +3,6 @@
         <mat-icon>arrow_left</mat-icon>
     </button>
     <img [src]="images[currentImageIndex].url" *ngIf="images.length > 0" (click)="openDialog()" />
-    <!-- TODO: click on image opens overlay with images -->
     <button mat-icon-button (click)="nextImage(1)">
         <mat-icon>arrow_right</mat-icon>
     </button>

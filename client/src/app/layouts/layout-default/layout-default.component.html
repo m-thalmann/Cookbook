@@ -1,7 +1,7 @@
 <ng-container *ngIf="{ isAuthenticated: auth.isAuthenticated$ | async, isOverlayRoute: isOverlayRoute$ | async } as vm">
     <div class="desktop-spacer left"></div>
 
-    <div class="container">
+    <div class="container" [class.is-overlay]="vm.isOverlayRoute">
         <div>
             <header [class.hide-mobile]="vm.isOverlayRoute">
                 <img src="/assets/images/cookbook.svg" alt="Cookbook Logo" />

@@ -24,11 +24,11 @@ const routes: Routes = [
   {
     path: '',
     component: LayoutDefaultComponent,
-    children: [{ path: 'home', component: HomePageComponent }],
+    children: [
+      { path: 'home', component: HomePageComponent },
+      { path: 'recipe/:id', component: RecipeDetailPageComponent, data: { isOverlay: true } },
+    ],
   },
-
-  // TODO: add correct layout
-  { path: 'recipe/:id', component: RecipeDetailPageComponent },
 ];
 
 @NgModule({
