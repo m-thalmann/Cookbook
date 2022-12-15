@@ -1,0 +1,20 @@
+<mat-dialog-content>
+    <div class="meta">
+        <span>{{ currentIndex + 1 }}/{{ images.length }}</span>
+
+        <button (click)="dialogRef.close()"><mat-icon>close</mat-icon></button>
+    </div>
+
+    <div class="container" (swipe)="onSwipe($event)">
+        <button mat-icon-button (click)="nextImage(-1)">
+            <mat-icon>arrow_left</mat-icon>
+        </button>
+        <div class="images" #imagesContainer>
+            <img [src]="image" *ngFor="let image of images" />
+        </div>
+        <button mat-icon-button (click)="nextImage(1)">
+            <mat-icon>arrow_right</mat-icon>
+        </button>
+    </div>
+</mat-dialog-content>
+

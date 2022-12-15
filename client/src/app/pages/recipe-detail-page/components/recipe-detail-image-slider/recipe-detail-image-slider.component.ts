@@ -1,4 +1,6 @@
+import { Dialog } from '@angular/cdk/dialog';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ImageSliderDialogComponent } from 'src/app/components/image-slider-dialog/image-slider-dialog.component';
 import { RecipeImage } from 'src/app/core/models/recipe-image';
 
 const SWIPE_LEFT_DIRECTION = 2;
@@ -21,7 +23,7 @@ export class RecipeDetailImageSliderComponent {
 
   currentImageIndex = 0;
 
-  constructor() {}
+  constructor(private dialog: Dialog) {}
 
   get images() {
     return this._images;
@@ -41,10 +43,16 @@ export class RecipeDetailImageSliderComponent {
     const direction = e.direction;
 
     if (direction === SWIPE_LEFT_DIRECTION) {
-      this.nextImage(-1);
-    } else if (direction === SWIPE_RIGHT_DIRECTION) {
       this.nextImage(1);
+    } else if (direction === SWIPE_RIGHT_DIRECTION) {
+      this.nextImage(-1);
     }
+  }
+
+  openDialog() {
+    this.dialog.open(ImageSliderDialogComponent, {
+      data: { images: this.images.map((image) => image.url), startIndex: this.currentImageIndex },
+    });
   }
 }
 

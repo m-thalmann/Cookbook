@@ -25,6 +25,8 @@
     width: 100%;
     height: calc(100% + 2 * $content-border-radius); // since content overlaps on bottom and image is aligned in middle
     object-fit: cover;
+
+    cursor: pointer;
   }
 
   button {

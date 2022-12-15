@@ -32,6 +32,7 @@ import { NumberInputComponent } from './components/number-input/number-input.com
 import { AmountPipe } from './core/pipes/amount.pipe';
 import { ShareMenuComponent } from './components/share-menu/share-menu.component';
 import { RecipePublicShareDialogComponent } from './pages/recipe-detail-page/components/recipe-public-share-dialog/recipe-public-share-dialog.component';
+import { ImageSliderDialogComponent } from './components/image-slider-dialog/image-slider-dialog.component';
 
 function setup(config: ConfigService, auth: AuthService) {
   return async () => {
@@ -63,6 +64,7 @@ function setup(config: ConfigService, auth: AuthService) {
     AmountPipe,
     ShareMenuComponent,
     RecipePublicShareDialogComponent,
+    ImageSliderDialogComponent,
   ],
   imports: [
     BrowserModule,

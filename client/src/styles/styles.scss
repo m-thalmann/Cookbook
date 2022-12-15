@@ -18,6 +18,11 @@ h3 {
   font-weight: normal;
 }
 
+.custom-dialog mat-dialog-container {
+  background: transparent;
+  box-shadow: none;
+}
+
 @include mixins.mobile() {
   .hide-mobile {
     display: none !important;
