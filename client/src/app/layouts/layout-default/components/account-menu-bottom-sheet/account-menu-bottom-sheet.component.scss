@@ -1,17 +1,15 @@
 @use 'sass:map';
 @use 'theme';
 
-mat-list-item[disabled] {
-  background: transparent !important;
-}
-
 mat-divider {
   margin: 1em 0;
   opacity: 0.125;
 }
 
 .logout-button {
-  @include theme.apply() using ($variables) {
-    color: map.get($variables, 'warn');
+  * {
+    @include theme.apply() using ($variables) {
+      color: map.get($variables, 'warn');
+    }
   }
 }

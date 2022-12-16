@@ -4,14 +4,18 @@
             <ul>
                 <li>
                     <a mat-flat-button routerLink="/home" routerLinkActive="current">
-                        <mat-icon>home</mat-icon>
-                        <span>Home</span>
+                        <div class="button-wrapper">
+                            <mat-icon>home</mat-icon>
+                            <span>Home</span>
+                        </div>
                     </a>
                 </li>
                 <li>
                     <a mat-flat-button routerLink="/recipes" routerLinkActive="current">
-                        <mat-icon>restaurant</mat-icon>
-                        <span>Recipes</span>
+                        <div class="button-wrapper">
+                            <mat-icon>restaurant</mat-icon>
+                            <span>Recipes</span>
+                        </div>
                     </a>
                 </li>
                 <li>
@@ -21,14 +25,18 @@
                         routerLinkActive="current"
                         [disabled]="!vm.isAuthenticated"
                     >
-                        <mat-icon>menu_book</mat-icon>
-                        <span>Cookbooks</span>
+                        <div class="button-wrapper">
+                            <mat-icon>menu_book</mat-icon>
+                            <span>Cookbooks</span>
+                        </div>
                     </a>
                 </li>
                 <li>
                     <a mat-flat-button routerLink="/settings" routerLinkActive="current">
-                        <mat-icon>settings</mat-icon>
-                        <span>Settings</span>
+                        <div class="button-wrapper">
+                            <mat-icon>settings</mat-icon>
+                            <span>Settings</span>
+                        </div>
                     </a>
                 </li>
             </ul>

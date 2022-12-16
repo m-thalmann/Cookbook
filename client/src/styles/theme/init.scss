@@ -3,6 +3,7 @@
 @use './variables' as *;
 
 @include mat.core();
+@include mat.all-component-typographies();
 
 // initialize theme
 
@@ -26,6 +27,7 @@
     html {
       @include mat.core-theme($app-theme);
       @include mat.button-theme($app-theme);
+      @include mat.icon-button-theme($app-theme);
       @include mat.bottom-sheet-theme($app-theme);
       @include mat.chips-theme($app-theme);
       @include mat.dialog-theme($app-theme);
@@ -42,7 +44,7 @@
 
       @include -html-styles($variables);
 
-      .mat-snack-bar-container.action-warn .mat-simple-snackbar-action {
+      .mat-mdc-snack-bar-container.action-warn .mat-mdc-snack-bar-action {
         color: mat.get-color-from-palette(map.get($variables, 'warn-palette')) !important;
       }
     }
@@ -50,6 +52,7 @@
     html.theme-#{$theme} {
       @include mat.core-color($app-theme);
       @include mat.button-color($app-theme);
+      @include mat.icon-button-color($app-theme);
       @include mat.bottom-sheet-color($app-theme);
       @include mat.chips-color($app-theme);
       @include mat.dialog-color($app-theme);
@@ -66,7 +69,7 @@
 
       @include -html-styles($variables);
 
-      .mat-snack-bar-container.action-warn .mat-simple-snackbar-action {
+      .mat-mdc-snack-bar-container.action-warn .mat-mdc-snack-bar-action {
         color: mat.get-color-from-palette(map.get($variables, 'warn-palette')) !important;
       }
     }

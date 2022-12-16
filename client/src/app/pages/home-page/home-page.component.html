@@ -12,9 +12,12 @@
 
     <div class="sections">
         <app-home-page-section heading="Categories" [showMy]="!!vm.isAuthenticated" class="categories">
-            <mat-chip-list *ngIf="vm.categories?.body?.data | clampArray: categoriesClampAmount as categories">
+            <div
+                class="categories-container"
+                *ngIf="vm.categories?.body?.data | clampArray: categoriesClampAmount as categories"
+            >
                 <a
-                    mat-chip
+                    class="category-chip"
                     *ngFor="let category of categories.items"
                     routerLink="/recipes"
                     [queryParams]="{ category }"
@@ -22,12 +25,16 @@
                     selected
                     >{{ category }}
                 </a>
-                <button mat-chip *ngIf="categories.overflowAmount > 0" (click)="revealMoreCategories()">
+                <span
+                    class="category-chip disabled"
+                    *ngIf="categories.overflowAmount > 0"
+                    (click)="revealMoreCategories()"
+                >
                     +{{ categories.overflowAmount }}
-                </button>
+                </span>
 
                 <p *ngIf="categories.items.length === 0" class="not-found-item">No categories found ...</p>
-            </mat-chip-list>
+            </div>
         </app-home-page-section>
 
         <app-home-page-section heading="Recipes" seeAllLink="/recipes" [showMy]="!!vm.isAuthenticated" class="recipes">
@@ -44,9 +51,11 @@
                 class="show-more-items"
                 *ngIf="getRemainingItems(vm.recipes?.body?.meta) as remainingItems"
             >
-                <mat-icon>restaurant</mat-icon>
-                Show {{ remainingItems }} more recipes
-                <mat-icon>arrow_forward</mat-icon>
+                <div class="button-wrapper">
+                    <mat-icon>restaurant</mat-icon>
+                    Show {{ remainingItems }} more recipes
+                    <mat-icon>arrow_forward</mat-icon>
+                </div>
             </a>
         </app-home-page-section>
 
@@ -70,11 +79,12 @@
                 class="show-more-items"
                 *ngIf="getRemainingItems(vm.cookbooks?.body?.meta) as remainingItems"
             >
-                <mat-icon>menu_book</mat-icon>
-                Show {{ remainingItems }} more cookbooks
-                <mat-icon>arrow_forward</mat-icon>
+                <div class="button-wrapper">
+                    <mat-icon>menu_book</mat-icon>
+                    Show {{ remainingItems }} more cookbooks
+                    <mat-icon>arrow_forward</mat-icon>
+                </div>
             </a>
         </app-home-page-section>
     </div>
 </ng-container>
-

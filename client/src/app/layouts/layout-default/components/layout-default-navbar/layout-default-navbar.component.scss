@@ -52,13 +52,14 @@ mat-toolbar {
             }
           }
 
-          ::ng-deep .mat-button-wrapper {
+          .button-wrapper {
             height: 100%;
 
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            letter-spacing: normal;
           }
 
           span {

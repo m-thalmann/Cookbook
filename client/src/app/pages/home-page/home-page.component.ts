@@ -55,4 +55,3 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
     return meta.total - meta.count;
   }
 }
-

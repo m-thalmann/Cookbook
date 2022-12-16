@@ -39,21 +39,49 @@
       margin: 2em auto 0 auto;
       width: fit-content;
 
-      ::ng-deep .mat-button-wrapper {
+      .button-wrapper {
         display: flex;
         align-items: center;
         gap: 0.5em;
+        height: 100%;
       }
     }
 
     &.categories {
-      mat-chip-list {
-        overflow: auto;
+      .categories-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5em;
 
-        a[mat-chip],
-        button {
+        .category-chip {
+          padding: 0.5em 0.75em;
+          border-radius: 1.25em;
+
           text-decoration: none;
+          font-weight: 500;
+          font-size: 0.9em;
           cursor: pointer;
+
+          transition: background $transition-time;
+
+          @include theme.apply() using ($variables) {
+            &:not(.disabled) {
+              background: map.get($variables, 'primary');
+              color: map.get($variables, 'primary-text');
+
+              &:hover {
+                background: theme.adjust-color($variables, map.get($variables, 'primary'), -10%);
+              }
+            }
+
+            &.disabled {
+              background: theme.adjust-color($variables, map.get($variables, 'background'), -10%);
+
+              &:hover {
+                background: theme.adjust-color($variables, map.get($variables, 'primary'), -20%);
+              }
+            }
+          }
         }
       }
     }
