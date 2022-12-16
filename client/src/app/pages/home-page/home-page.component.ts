@@ -20,7 +20,7 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
 
   categories$ = this.auth.isAuthenticated$.pipe(switchMap(() => this.api.categories.getList()));
   recipes$ = this.auth.isAuthenticated$.pipe(
-    switchMap(() => this.api.recipes.getList(false, { perPage: AMOUNT_ITEMS }))
+    switchMap(() => this.api.recipes.getList({ pagination: { perPage: AMOUNT_ITEMS } }))
   );
   cookbooks$ = this.auth.isAuthenticated$.pipe(
     filter((authenticated) => authenticated),

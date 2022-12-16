@@ -10,7 +10,7 @@ import {
 import { Injectable } from '@angular/core';
 import { filter, Observable, shareReplay } from 'rxjs';
 import { CookbookWithCounts } from '../models/cookbook';
-import { FilterOptions } from '../models/filter-options';
+import { FilterOption } from '../models/filter-option';
 import { PaginationMeta } from '../models/pagination-meta';
 import { PaginationOptions } from '../models/pagination-options';
 import { DetailedRecipe, EditRecipeData, ListRecipe } from '../models/recipe';
@@ -139,7 +139,7 @@ export class ApiService {
   }
 
   private static generateSortParams(sort?: SortOption[]) {
-    if (!sort) {
+    if (!sort || sort.length === 0) {
       return null;
     }
 
@@ -154,12 +154,26 @@ export class ApiService {
     return new HttpParams().append('sort', sortString);
   }
 
-  private static generateFilterParams(filter?: FilterOptions) {
-    if (!filter) {
+  private static generateFilterParams(filters?: FilterOption[]) {
+    if (!filters || filters.length === 0) {
       return null;
     }
 
-    return null; // TODO:
+    return filters.reduce((params, filterOption) => {
+      let filter = `filter[${filterOption.column}]`;
+
+      if (filterOption.type) {
+        filter += `[${filterOption.type}]`;
+      }
+
+      let value = filterOption.value;
+
+      if (value === null) {
+        value = '\0';
+      }
+
+      return params.append(filter, value.toString());
+    }, new HttpParams());
   }
 
   /*
@@ -215,17 +229,17 @@ export class ApiService {
 
   public get recipes() {
     return {
-      getList: (
-        all?: boolean,
-        pagination?: PaginationOptions,
-        sort?: SortOption[],
-        search?: string,
-        filter?: FilterOptions
-      ) => {
-        const baseParams = ApiService.generateParams({ all: all ? '' : undefined, search });
-        const paginationParams = ApiService.generatePaginationParams(pagination);
-        const sortParams = ApiService.generateSortParams(sort);
-        const filterParams = ApiService.generateFilterParams(filter);
+      getList: (options: {
+        all?: boolean;
+        pagination?: PaginationOptions;
+        sort?: SortOption[];
+        search?: string;
+        filters?: FilterOption[];
+      }) => {
+        const baseParams = ApiService.generateParams({ all: options.all ? '' : undefined, search: options.search });
+        const paginationParams = ApiService.generatePaginationParams(options.pagination);
+        const sortParams = ApiService.generateSortParams(options.sort);
+        const filterParams = ApiService.generateFilterParams(options.filters);
 
         return this.get<{ data: ListRecipe[]; meta: PaginationMeta }>(
           '/recipes',

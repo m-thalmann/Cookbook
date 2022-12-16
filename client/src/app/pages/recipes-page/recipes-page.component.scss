@@ -1,0 +1,23 @@
+@use 'variables' as *;
+
+:host {
+  display: block;
+  padding: 0 $layout-padding;
+}
+
+.filters {
+  margin-bottom: 1em;
+}
+
+.recipes {
+  display: grid;
+
+  gap: 1em;
+
+  @media screen and (min-width: 500px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media screen and (min-width: 800px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

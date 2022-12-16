@@ -7,6 +7,7 @@ import { LoginPageComponent } from './pages/auth/login-page/login-page.component
 import { SignUpPageComponent } from './pages/auth/sign-up-page/sign-up-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { RecipeDetailPageComponent } from './pages/recipe-detail-page/recipe-detail-page.component';
+import { RecipesPageComponent } from './pages/recipes-page/recipes-page.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/home' },
@@ -26,8 +27,9 @@ const routes: Routes = [
     component: LayoutDefaultComponent,
     children: [
       { path: 'home', component: HomePageComponent },
-      { path: 'recipe/shared/:shareUuid', component: RecipeDetailPageComponent, data: { isOverlay: true } },
-      { path: 'recipe/:id', component: RecipeDetailPageComponent, data: { isOverlay: true } },
+      { path: 'recipes', component: RecipesPageComponent },
+      { path: 'recipes/shared/:shareUuid', component: RecipeDetailPageComponent, data: { isOverlay: true } },
+      { path: 'recipes/:id', component: RecipeDetailPageComponent, data: { isOverlay: true } },
     ],
   },
 ];

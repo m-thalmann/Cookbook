@@ -33,6 +33,7 @@ import { AmountPipe } from './core/pipes/amount.pipe';
 import { ShareMenuComponent } from './components/share-menu/share-menu.component';
 import { RecipePublicShareDialogComponent } from './pages/recipe-detail-page/components/recipe-public-share-dialog/recipe-public-share-dialog.component';
 import { ImageSliderDialogComponent } from './components/image-slider-dialog/image-slider-dialog.component';
+import { RecipesPageComponent } from './pages/recipes-page/recipes-page.component';
 
 function setup(config: ConfigService, auth: AuthService) {
   return async () => {
@@ -65,6 +66,7 @@ function setup(config: ConfigService, auth: AuthService) {
     ShareMenuComponent,
     RecipePublicShareDialogComponent,
     ImageSliderDialogComponent,
+    RecipesPageComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,18 @@
+<ng-container *ngIf="{ recipes: recipes$ | async, filters: filters$ | async } as vm">
+    <div class="filters">
+        <app-search-bar
+            [searchOnSubmit]="false"
+            [initialValue]="vm.filters?.search || null"
+            (search)="doSearch($event)"
+        ></app-search-bar>
+        <!-- TODO: add additional filters and sort -->
+    </div>
+
+    <div class="recipes" *ngIf="vm.recipes?.body?.data as recipes">
+        <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe"></app-recipe-card>
+
+        <p *ngIf="recipes.length === 0" class="not-found-item">No recipes found ...</p>
+    </div>
+
+    <!-- TODO: add pagination -->
+</ng-container>

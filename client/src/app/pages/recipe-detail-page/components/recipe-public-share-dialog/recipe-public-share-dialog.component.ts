@@ -41,7 +41,7 @@ export class RecipePublicShareDialogComponent {
       baseUri = baseUri.substring(0, baseUri.length - 1);
     }
 
-    return baseUri + this.router.createUrlTree(['/recipe/shared', this.recipe.share_uuid]).toString();
+    return baseUri + this.router.createUrlTree(['/recipes/shared', this.recipe.share_uuid]).toString();
   }
 
   async enabledChanged(e: MatSlideToggleChange) {

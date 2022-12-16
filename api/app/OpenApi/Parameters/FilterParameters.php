@@ -69,8 +69,8 @@ class FilterParameters extends ParametersFactory {
                 ->example('3,4,6'),
             Schema::string('lt')->example('<less than>'),
             Schema::string('le')->example('<less than or equal>'),
-            Schema::string('ge')->example('<greater than>'),
-            Schema::string('gt')->example('<greater than or equal>')
+            Schema::string('gt')->example('<greater than>'),
+            Schema::string('ge')->example('<greater than or equal>')
         );
     }
 }
