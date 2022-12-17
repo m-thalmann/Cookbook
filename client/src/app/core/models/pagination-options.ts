@@ -1,4 +1,4 @@
 export interface PaginationOptions {
-  page?: number;
+  page: number;
   perPage?: number;
 }

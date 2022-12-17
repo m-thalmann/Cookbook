@@ -131,7 +131,7 @@ export class ApiService {
     }
 
     const paginationParams = {
-      page: pagination.page?.toString(),
+      page: pagination.page.toString(),
       per_page: pagination.perPage?.toString(),
     };
 

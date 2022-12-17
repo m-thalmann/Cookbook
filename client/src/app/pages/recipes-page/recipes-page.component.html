@@ -1,12 +1,21 @@
-<ng-container *ngIf="{ recipes: recipes$ | async, filters: filters$ | async } as vm">
+<ng-container
+    *ngIf="{
+        recipes: recipes$ | async,
+        filters: filters$ | async,
+        paginationOptions: paginationOptions$ | async
+    } as vm"
+>
     <div class="filters">
         <app-search-bar
             [searchOnSubmit]="false"
             [initialValue]="vm.filters?.search || null"
             (search)="doSearch($event)"
         ></app-search-bar>
+
         <!-- TODO: add additional filters and sort -->
     </div>
+
+    <p class="amount-results" *ngIf="vm.recipes?.body?.meta?.total as total">{{ total }} results found</p>
 
     <div class="recipes" *ngIf="vm.recipes?.body?.data as recipes">
         <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe"></app-recipe-card>
@@ -14,5 +23,15 @@
         <p *ngIf="recipes.length === 0" class="not-found-item">No recipes found ...</p>
     </div>
 
-    <!-- TODO: add pagination -->
+    <mat-paginator
+        class="mat-elevation-z1"
+        [length]="vm.recipes?.body?.meta?.total"
+        [pageIndex]="vm.paginationOptions?.page !== null ? vm.paginationOptions!.page - 1 : null"
+        [pageSize]="vm.paginationOptions?.perPage"
+        [pageSizeOptions]="[6, 12, 18, 24, 30]"
+        [showFirstLastButtons]="true"
+        (page)="onPagination($event)"
+        [disabled]="recipesLoading"
+        *ngIf="(vm.recipes?.body?.data?.length || 0) > 0"
+    ></mat-paginator>
 </ng-container>

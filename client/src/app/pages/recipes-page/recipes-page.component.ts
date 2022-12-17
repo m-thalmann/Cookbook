@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, Observable, switchMap } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, map, Observable, scan, switchMap, tap } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
+import { AuthService } from 'src/app/core/auth/auth.service';
 import { FilterOption } from 'src/app/core/models/filter-option';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
 import { SortOption } from 'src/app/core/models/sort-option';
@@ -21,7 +23,14 @@ interface RecipeFilters {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipesPageComponent {
+  recipesLoading = false;
+
+  paginationOptions$ = new BehaviorSubject<PaginationOptions>({ page: 1, perPage: 12 });
+
   filters$: Observable<RecipeFilters> = this.route.queryParams.pipe(
+    tap(() => {
+      this.paginationOptions$.next({ page: 1, perPage: this.paginationOptions$.value.perPage });
+    }),
     map((params) => {
       let all = undefined;
       let sort = undefined;
@@ -38,8 +47,10 @@ export class RecipesPageComponent {
     })
   );
 
-  recipes$ = this.filters$.pipe(
-    switchMap((filters) => {
+  recipes$ = combineLatest([this.filters$, this.paginationOptions$, this.auth.isAuthenticated$]).pipe(
+    debounceTime(5), // to prevent reloading if filter is changed since then pagination is changed as well
+    tap(() => (this.recipesLoading = true)),
+    switchMap(([filters, paginationOptions, _]) => {
       let filtersOptions: FilterOption[] = [];
 
       if (filters.category) {
@@ -51,11 +62,20 @@ export class RecipesPageComponent {
         sort: filters.sort,
         search: filters.search,
         filters: filtersOptions,
+        pagination: paginationOptions,
       });
-    })
+    }),
+    tap(() => (this.recipesLoading = false))
   );
 
-  constructor(private router: Router, private route: ActivatedRoute, private api: ApiService) {}
+  categories$ = this.auth.isAuthenticated$.pipe(switchMap(() => this.api.categories.getList()));
+
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private api: ApiService,
+    private auth: AuthService
+  ) {}
 
   doSearch(search: string) {
     this.router.navigate([], {
@@ -63,5 +83,8 @@ export class RecipesPageComponent {
       queryParamsHandling: 'merge',
     });
   }
-}
 
+  onPagination(page: PageEvent) {
+    this.paginationOptions$.next({ page: page.pageIndex + 1, perPage: page.pageSize });
+  }
+}

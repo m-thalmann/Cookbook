@@ -36,6 +36,7 @@
       @include mat.input-theme($app-theme);
       @include mat.list-theme($app-theme);
       @include mat.menu-theme($app-theme);
+      @include mat.paginator-theme($app-theme);
       @include mat.progress-spinner-theme($app-theme);
       @include mat.slide-toggle-theme($app-theme);
       @include mat.snack-bar-theme($app-theme);
@@ -61,6 +62,7 @@
       @include mat.input-color($app-theme);
       @include mat.list-color($app-theme);
       @include mat.menu-color($app-theme);
+      @include mat.paginator-color($app-theme);
       @include mat.progress-spinner-color($app-theme);
       @include mat.slide-toggle-color($app-theme);
       @include mat.snack-bar-color($app-theme);

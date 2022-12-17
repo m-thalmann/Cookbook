@@ -1,4 +1,5 @@
 @use 'variables' as *;
+@use 'mixins';
 
 :host {
   display: block;
@@ -7,6 +8,14 @@
 
 .filters {
   margin-bottom: 1em;
+}
+
+.amount-results {
+  margin-left: 0.5em;
+  margin-bottom: 1.5em;
+  opacity: 0.5;
+
+  @include mixins.font-handwriting();
 }
 
 .recipes {
@@ -19,5 +28,33 @@
   }
   @media screen and (min-width: 800px) {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .not-found-item {
+    margin: 0;
+    margin-top: 0.5em;
+
+    font-style: italic;
+  }
+}
+
+mat-paginator {
+  margin-top: 2em;
+  margin-left: calc(-1 * $layout-padding);
+  margin-right: calc(-1 * $layout-padding);
+
+  @media screen and (max-width: 600px) {
+    padding: 1em 0;
+  }
+
+  @include mixins.desktop() {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+
+    margin-left: calc(-1 * $layout-padding / 2);
+    margin-right: calc(-1 * $layout-padding / 2);
+
+    border-radius: 1em;
   }
 }

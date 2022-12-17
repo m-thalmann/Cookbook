@@ -20,11 +20,11 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
 
   categories$ = this.auth.isAuthenticated$.pipe(switchMap(() => this.api.categories.getList()));
   recipes$ = this.auth.isAuthenticated$.pipe(
-    switchMap(() => this.api.recipes.getList({ pagination: { perPage: AMOUNT_ITEMS } }))
+    switchMap(() => this.api.recipes.getList({ pagination: { page: 1, perPage: AMOUNT_ITEMS } }))
   );
   cookbooks$ = this.auth.isAuthenticated$.pipe(
     filter((authenticated) => authenticated),
-    switchMap(() => this.api.cookbooks.getList(false, { perPage: AMOUNT_ITEMS }))
+    switchMap(() => this.api.cookbooks.getList(false, { page: 1, perPage: AMOUNT_ITEMS }))
   );
 
   categoriesClampAmount: number = 5;
