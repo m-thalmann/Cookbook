@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { delay, map, Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 
@@ -9,13 +9,21 @@ import { AuthService } from './auth.service';
 export class AuthGuard implements CanActivate {
   constructor(private auth: AuthService, private router: Router) {}
 
-  canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+  canActivate(
+    _: ActivatedRouteSnapshot,
+    routerState: RouterStateSnapshot
+  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     if (this.auth.isAuthenticated) {
       return true;
     }
 
-    // TODO: add link to current route for redirect after login
-    return this.router.createUrlTree(['login']);
+    const redirectUrl = routerState.url;
+
+    return this.router.createUrlTree(['/login'], {
+      queryParams: {
+        redirect_url: redirectUrl,
+      },
+    });
   }
 }
 

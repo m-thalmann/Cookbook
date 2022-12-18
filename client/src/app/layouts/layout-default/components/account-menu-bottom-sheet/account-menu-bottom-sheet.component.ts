@@ -16,7 +16,7 @@ export class AccountMenuBottomSheetComponent {
   }
 
   doLogout() {
-    this.auth.logout();
+    this.auth.logout(true);
 
     // TODO: show success notification
 

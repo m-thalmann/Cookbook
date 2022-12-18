@@ -17,14 +17,12 @@
     <a routerLink="/forgot-password">Don't remember your password?</a>
 
     <button mat-raised-button color="accent" type="submit" [disabled]="isLoading">
-        <ng-container *ngIf="!isLoading; else loginButtonLoading">
-            <mat-icon>login</mat-icon>
-            &nbsp; Login
-        </ng-container>
+        <mat-icon *ngIf="!isLoading">login</mat-icon>
+        <ng-container *ngIf="!isLoading"> Login</ng-container>
 
-        <ng-template #loginButtonLoading>
+        <ng-container *ngIf="isLoading">
             <mat-spinner [diameter]="24" color="accent" class="login-button-loading-spinner"></mat-spinner>
-        </ng-template>
+        </ng-container>
     </button>
 
     <p class="error mat-elevation-z2" *ngIf="error">

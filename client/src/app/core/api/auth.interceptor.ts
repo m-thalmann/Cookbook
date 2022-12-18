@@ -46,7 +46,7 @@ export class AuthInterceptor implements HttpInterceptor {
         if (error instanceof HttpErrorResponse && error.status === 401 && tokenType === TokenType.Access) {
           return this.handleUnauthorized(request, next).pipe(
             catchError(() => {
-              this.auth.logout();
+              this.auth.logout(false);
 
               return throwError(() => error);
             })
@@ -73,7 +73,7 @@ export class AuthInterceptor implements HttpInterceptor {
           first(), // TODO: needs first? probably not
           catchError((error) => {
             this.refreshedToken$.error(error);
-            this.auth.logout();
+            this.auth.logout(false);
 
             return throwError(() => error);
           }),

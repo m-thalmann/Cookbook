@@ -42,7 +42,15 @@ function setup(config: ConfigService, auth: AuthService) {
     AccountMenuBottomSheetComponent,
     HomePageSectionComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, HammerModule, ComponentsModule, CoreModule],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    HttpClientModule,
+    HammerModule,
+    ComponentsModule,
+    CoreModule,
+  ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

@@ -1,11 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, distinctUntilChanged, lastValueFrom, map } from 'rxjs';
 import { ApiService } from '../api/api.service';
 import { Logger as LoggerClass } from '../helpers/logger';
+import RouteHelper from '../helpers/route-helper';
 import { DetailedUser } from '../models/user';
 import { StorageService } from '../services/storage.service';
+import { AuthGuard } from './auth.guard';
 
 const ACCESS_TOKEN_KEY = 'ACCESS_TOKEN';
 const REFRESH_TOKEN_KEY = 'REFRESH_TOKEN';
@@ -29,7 +31,12 @@ export class AuthService {
     distinctUntilChanged()
   );
 
-  constructor(private storage: StorageService, private router: Router, private api: ApiService) {
+  constructor(
+    private storage: StorageService,
+    private router: Router,
+    private api: ApiService,
+    private activatedRoute: ActivatedRoute
+  ) {
     this._accessToken = this.storage.session.get<string>(ACCESS_TOKEN_KEY);
     this._refreshToken = this.storage.local.get(REFRESH_TOKEN_KEY);
 
@@ -53,7 +60,7 @@ export class AuthService {
 
       this.setUser(userResponse.body!.data);
     } catch (e) {
-      this.logout();
+      this.logout(false);
 
       let error = e;
 
@@ -113,24 +120,32 @@ export class AuthService {
     }
   }
 
-  public async login(user: DetailedUser, accessToken: string, refreshToken: string) {
+  public async login(user: DetailedUser, accessToken: string, refreshToken: string, redirectUrl = '/home') {
     this.setUser(user);
 
     this.accessToken = accessToken;
     this.refreshToken = refreshToken;
 
-    this.router.navigate(['/home']);
+    this.router.navigate([redirectUrl]);
   }
 
-  public logout() {
+  public async logout(logoutFromApi: boolean) {
+    if (logoutFromApi) {
+      try {
+        await lastValueFrom(this.api.auth.logout());
+      } catch (e) {}
+    }
+
     this.accessToken = null;
     this.refreshToken = null;
 
     this.setUser(null);
 
-    // TODO: also logout from api
+    const currentRouteConfig = RouteHelper.getRouteLeaf(this.activatedRoute)?.routeConfig;
 
-    this.router.navigate(['/home']);
+    if (currentRouteConfig?.canActivate?.[0] === AuthGuard) {
+      this.router.navigate(['/home']);
+    }
   }
 
   public refreshAccessToken(accessToken: string, refreshToken: string) {

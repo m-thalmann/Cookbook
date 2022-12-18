@@ -1,7 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { lastValueFrom } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { lastValueFrom, map } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
@@ -20,7 +21,12 @@ export class LoginPageComponent {
 
   loginForm: FormGroup;
 
-  constructor(private auth: AuthService, private api: ApiService, private fb: FormBuilder) {
+  constructor(
+    private auth: AuthService,
+    private api: ApiService,
+    private fb: FormBuilder,
+    private activatedRoute: ActivatedRoute
+  ) {
     this.loginForm = this.fb.group({
       email: [''],
       password: [''],
@@ -40,7 +46,9 @@ export class LoginPageComponent {
 
       const loginData = loginResponse.body!.data;
 
-      this.auth.login(loginData.user, loginData.access_token, loginData.refresh_token);
+      const redirectUrl: string | undefined = this.activatedRoute.snapshot.queryParams['redirect_url'];
+
+      this.auth.login(loginData.user, loginData.access_token, loginData.refresh_token, redirectUrl);
     } catch (e) {
       if (e instanceof HttpErrorResponse) {
         this.error = ApiService.getErrorMessage(e);

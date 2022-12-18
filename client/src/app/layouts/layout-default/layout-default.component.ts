@@ -3,6 +3,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, map, Observable, of, startWith, switchMap } from 'rxjs';
 import { AuthService } from 'src/app/core/auth/auth.service';
+import RouteHelper from 'src/app/core/helpers/route-helper';
 import { AccountMenuBottomSheetComponent } from './components/account-menu-bottom-sheet/account-menu-bottom-sheet.component';
 
 @Component({
@@ -16,14 +17,10 @@ export class LayoutDefaultComponent {
     filter((event) => event instanceof NavigationEnd),
     startWith(this.activatedRoute.snapshot.firstChild?.data || {}),
     switchMap(() => {
-      let route = this.activatedRoute;
+      const leafRoute = RouteHelper.getRouteLeaf(this.activatedRoute);
 
-      while (route.firstChild) {
-        route = route.firstChild;
-      }
-
-      if (route) {
-        return route.data;
+      if (leafRoute) {
+        return leafRoute.data;
       }
 
       return of({});
