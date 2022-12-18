@@ -101,7 +101,6 @@ class RecipeController extends Controller {
 
         $data = $request->validate([
             'is_public' => ['boolean'],
-            'language_code' => ['required', 'min:2', 'max:2'],
             'name' => ['required', 'filled', 'max:255'],
             'description' => ['nullable', 'filled', 'max:255'],
             'category' => ['nullable', 'filled', 'max:50'],
@@ -267,7 +266,6 @@ class RecipeController extends Controller {
         $validationRules = [
             'user_id' => ['exists:App\Models\User,id'],
             'is_public' => ['boolean'],
-            'language_code' => ['filled', 'min:2', 'max:2'],
             'name' => ['filled', 'max:255'],
             'description' => ['nullable', 'filled', 'max:255'],
             'category' => ['nullable', 'filled', 'max:50'],

@@ -26,13 +26,6 @@ class UpdateRecipeRequestBody extends RequestBodyFactory {
                         Schema::boolean('is_shared')->description(
                             'Whether the recipe should have a share-uuid to be shared. If changed to true will create a new share-uuid'
                         ),
-                        Schema::string('language_code')
-                            ->minLength(2)
-                            ->maxLength(2)
-                            ->description(
-                                'The recipes\'s language as a two-character code'
-                            )
-                            ->example('en'),
                         Schema::string('description')
                             ->description('The recipe\'s description')
                             ->nullable(),

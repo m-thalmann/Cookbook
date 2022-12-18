@@ -19,7 +19,6 @@ class RecipeFactory extends Factory {
             'user_id' => User::factory(),
             'cookbook_id' => null,
             'is_public' => $this->faker->boolean(),
-            'language_code' => 'en',
             'name' => $this->faker->name(),
             'category' => $this->faker->name(),
             'portions' => rand(1, 8),

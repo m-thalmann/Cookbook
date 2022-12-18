@@ -23,13 +23,6 @@ class CreateRecipeRequestBody extends RequestBodyFactory {
                         Schema::boolean('is_public')->description(
                             'Whether the recipe is publicly visible (for all users)'
                         ),
-                        Schema::string('language_code')
-                            ->minLength(2)
-                            ->maxLength(2)
-                            ->description(
-                                'The recipes\'s language as a two-character code'
-                            )
-                            ->example('en'),
                         Schema::string('description')
                             ->description('The recipe\'s description')
                             ->nullable(),
@@ -90,7 +83,7 @@ class CreateRecipeRequestBody extends RequestBodyFactory {
                                 'The ingredients to add to the recipe'
                             )
                     )
-                    ->required('name', 'language_code')
+                    ->required('name')
             )
         );
     }

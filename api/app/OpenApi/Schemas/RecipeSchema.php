@@ -25,11 +25,6 @@ class RecipeSchema extends ExtendableSchemaFactory {
             Schema::boolean('is_public')->description(
                 'Whether the recipe is publicly visible (for all users)'
             ),
-            Schema::string('language_code')
-                ->minLength(2)
-                ->maxLength(2)
-                ->description('The recipe\'s language as a two-character code')
-                ->example('en'),
             Schema::string('name')
                 ->description('The name of the recipe')
                 ->example('Chocolate Cake'),
@@ -98,7 +93,6 @@ class RecipeSchema extends ExtendableSchemaFactory {
             'user_id',
             'cookbook_id',
             'is_public',
-            'language_code',
             'name',
             'description',
             'category',

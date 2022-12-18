@@ -25,7 +25,6 @@ return new class extends Migration {
                 ->cascadeOnUpdate()
                 ->nullOnDelete();
             $table->boolean('is_public')->default(false);
-            $table->string('language_code', 2);
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('category', 50)->nullable();
