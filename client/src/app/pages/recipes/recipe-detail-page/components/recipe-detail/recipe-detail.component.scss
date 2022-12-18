@@ -1,0 +1,221 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use 'mixins';
+@use 'theme';
+@use 'variables' as *;
+@use '../../styles/variables.scss' as *;
+
+.navigate-back-button {
+  position: fixed;
+  top: 1em;
+  left: 1em;
+  z-index: 1;
+
+  background: rgba(50, 50, 50, 0.25);
+  color: white;
+}
+
+.content-spacer {
+  height: $image-height;
+  position: relative;
+  pointer-events: none;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: -$content-border-radius;
+
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0) 100%);
+  }
+}
+
+app-recipe-detail-header {
+  position: relative;
+  z-index: 2;
+}
+
+app-recipe-detail-section {
+  &:first-of-type::before {
+    content: '';
+    position: absolute;
+    top: calc(-1 * $content-border-radius - 1.5em);
+    left: 0;
+    right: 0;
+    bottom: 100%;
+  }
+
+  &:last-of-type {
+    padding-bottom: $main-space-bottom;
+  }
+
+  &.properties {
+    display: flex;
+
+    > div {
+      flex: 1;
+
+      display: flex;
+      gap: 0.5em;
+      flex-direction: column;
+      align-items: center;
+
+      span {
+        text-align: center;
+      }
+    }
+  }
+
+  &.ingredients {
+    [header] {
+      display: flex;
+      align-items: center;
+
+      span {
+        flex: 1;
+      }
+    }
+
+    [content] {
+      .ingredient-group {
+        &:not(:last-of-type) {
+          padding-bottom: 0.5em;
+          margin-bottom: 1em;
+
+          @include theme.apply() using ($variables) {
+            border-bottom: 1px solid rgba(map.get($variables, 'foreground'), 0.05);
+          }
+        }
+
+        h4 {
+          margin-top: 0;
+          font-weight: 500;
+        }
+
+        .ingredient {
+          display: flex;
+          align-items: center;
+
+          padding: 0.5em 0;
+
+          .name {
+            flex: 1;
+          }
+          .amount {
+            opacity: 0.75;
+          }
+        }
+      }
+    }
+  }
+
+  &.preparation {
+    .preparation-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5em;
+
+      .preparation-times {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+
+        > span {
+          display: flex;
+          align-items: center;
+          gap: 0.5em;
+        }
+      }
+    }
+  }
+
+  &.description,
+  &.preparation {
+    ::ng-deep h3 {
+      margin-bottom: 1em;
+    }
+  }
+}
+
+@include mixins.desktop() {
+  :host {
+    display: grid;
+    padding: 0 $layout-padding;
+    position: relative;
+
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 10em 10em auto;
+    gap: 1em;
+
+    grid-template-areas:
+      'slider header'
+      'slider section-properties'
+      'section-description section-description'
+      'section-ingredients section-preparation';
+  }
+
+  .navigate-back-button {
+    display: none;
+  }
+
+  app-recipe-detail-image-slider {
+    height: 100%;
+    border-radius: 0.5em;
+
+    grid-area: slider;
+
+    @include mat.elevation(4);
+  }
+
+  .content-spacer {
+    display: none;
+  }
+
+  app-recipe-detail-header {
+    grid-area: header;
+  }
+
+  app-recipe-detail-section {
+    &:first-of-type::before {
+      display: none;
+    }
+
+    &.properties {
+      grid-area: section-properties;
+
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      align-self: start;
+      gap: 0.5em;
+
+      > div {
+        flex-direction: row;
+
+        .property-name {
+          @include theme.apply() using ($variables) {
+            color: map.get($variables, 'primary');
+          }
+        }
+      }
+    }
+
+    &.description {
+      grid-area: section-description;
+    }
+
+    &.ingredients {
+      grid-area: section-ingredients;
+
+      position: sticky;
+      top: 1em;
+      align-self: start;
+    }
+
+    &.preparation {
+      grid-area: section-preparation;
+    }
+  }
+}

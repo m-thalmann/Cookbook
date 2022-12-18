@@ -1,12 +1,10 @@
 import { Location } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { DetailedRecipe } from 'src/app/core/models/recipe';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
-import { RecipePublicShareDialogComponent } from '../recipe-public-share-dialog/recipe-public-share-dialog.component';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -23,8 +21,7 @@ export class RecipeDetailComponent {
     private location: Location,
     private router: Router,
     private api: ApiService,
-    private snackbar: SnackbarService,
-    private dialog: MatDialog
+    private snackbar: SnackbarService
   ) {}
 
   get totalTime() {
@@ -71,10 +68,6 @@ export class RecipeDetailComponent {
     } else {
       this.router.navigateByUrl('/');
     }
-  }
-
-  openPublicShareDialog() {
-    this.dialog.open(RecipePublicShareDialogComponent, { data: { recipe: this.recipe } });
   }
 
   async deleteRecipe() {

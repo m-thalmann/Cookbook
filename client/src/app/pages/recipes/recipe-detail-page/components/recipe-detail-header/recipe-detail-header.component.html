@@ -1,0 +1,42 @@
+<div class="title">
+    <div>
+        <h2>
+            <span>{{ recipe.name }}</span>
+            <mat-icon *ngIf="recipe.is_public">public</mat-icon>
+        </h2>
+        <h3>by {{ recipe.user.name }}</h3>
+    </div>
+
+    <app-share-menu color="primary" [text]="'Recipe: ' + recipe.name"></app-share-menu>
+    <button mat-icon-button class="options-button" [matMenuTriggerFor]="menu" *ngIf="recipe.user_can_edit">
+        <mat-icon>more_vert</mat-icon>
+    </button>
+</div>
+
+<div class="tags">
+    <a routerLink="/recipes" [queryParams]="{ category: recipe.category }" class="category" *ngIf="recipe.category">
+        <mat-icon>local_dining</mat-icon>
+        {{ recipe.category }}
+    </a>
+
+    <a [routerLink]="['/cookbooks', cookbook.id]" class="cookbook" *ngIf="recipe.cookbook as cookbook">
+        <mat-icon>menu_book</mat-icon>
+        {{ cookbook.name }}
+    </a>
+</div>
+
+<mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="openPublicShareDialog()">
+        <mat-icon>share</mat-icon>
+        <span>Public share</span>
+    </button>
+    <a [routerLink]="['/recipes', recipe.id, 'edit']" mat-menu-item>
+        <mat-icon>edit</mat-icon>
+        <span>Edit</span>
+    </a>
+    <button mat-menu-item (click)="deleteRecipe.emit()">
+        <mat-icon color="warn">delete</mat-icon>
+        <span>Move to trash</span>
+    </button>
+</mat-menu>
+

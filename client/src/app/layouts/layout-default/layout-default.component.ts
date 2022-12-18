@@ -16,8 +16,14 @@ export class LayoutDefaultComponent {
     filter((event) => event instanceof NavigationEnd),
     startWith(this.activatedRoute.snapshot.firstChild?.data || {}),
     switchMap(() => {
-      if (this.activatedRoute.firstChild) {
-        return this.activatedRoute.firstChild.data;
+      let route = this.activatedRoute;
+
+      while (route.firstChild) {
+        route = route.firstChild;
+      }
+
+      if (route) {
+        return route.data;
       }
 
       return of({});

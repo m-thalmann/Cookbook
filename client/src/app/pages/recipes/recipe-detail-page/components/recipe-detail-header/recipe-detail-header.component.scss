@@ -1,0 +1,101 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use 'theme';
+@use 'mixins';
+@use 'variables' as *;
+@use '../../styles/variables.scss' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+
+  padding: 0 $layout-padding;
+  padding-top: $content-border-radius;
+  padding-bottom: $content-border-radius;
+  margin-bottom: 1.5em;
+
+  border-radius: $content-border-radius;
+
+  @include mat.elevation(4);
+
+  @include theme.apply() using ($variables) {
+    background: theme.adjust-color($variables, map.get($variables, 'background'), 1%);
+  }
+}
+
+.title {
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 0.25em;
+
+  > div {
+    flex: 1;
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+
+      > * {
+        vertical-align: middle;
+      }
+
+      span {
+        margin-right: 0.5em;
+      }
+    }
+
+    h3 {
+      margin: 0;
+
+      font-weight: lighter;
+      font-size: 1em;
+      @include mixins.font-handwriting();
+      opacity: 0.75;
+    }
+  }
+
+  .options-button {
+    margin-left: 0.25em;
+  }
+}
+
+.tags {
+  display: flex;
+  gap: 0.5em;
+
+  > * {
+    all: unset;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+
+    padding: 0.25em 0.75em;
+
+    border-radius: 1em;
+    overflow: hidden;
+
+    transition: background $transition-time, bottom $transition-time;
+
+    @include theme.apply() using ($variables) {
+      background: map.get($variables, 'accent');
+      color: map.get($variables, 'accent-text');
+
+      &:hover {
+        background: rgba(map.get($variables, 'accent'), 0.75);
+      }
+    }
+  }
+}
+
+@include mixins.desktop() {
+  :host {
+    background: transparent !important;
+    box-shadow: none;
+
+    margin: 0;
+  }
+}
