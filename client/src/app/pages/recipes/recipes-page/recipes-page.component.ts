@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, combineLatest, debounceTime, map, Observable, scan, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, map, Observable, switchMap, tap } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { FilterOption } from 'src/app/core/models/filter-option';
@@ -32,15 +32,15 @@ export class RecipesPageComponent {
       this.paginationOptions$.next({ page: 1, perPage: this.paginationOptions$.value.perPage });
     }),
     map((params) => {
-      let all = undefined;
-      let sort = undefined;
+      let all: boolean | undefined = undefined;
+      let sort: SortOption[] | undefined = undefined;
 
       if (typeof params['all'] !== 'undefined') {
         all = ['1', 'true', 'yes'].includes(params['all']);
       }
 
       if (typeof params['sort'] !== 'undefined') {
-        // TODO:
+        sort = [{ column: params['sort'], dir: params['sort_dir'] === 'desc' ? 'desc' : 'asc' }];
       }
 
       return { all: all, search: params['search'], category: params['category'], sort: sort };

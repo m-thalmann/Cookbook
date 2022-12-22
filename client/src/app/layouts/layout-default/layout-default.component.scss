@@ -5,48 +5,54 @@
   display: none;
 }
 
-header {
-  display: flex;
-  align-items: center;
-
-  padding: $layout-padding;
-
-  img {
-    height: 3em;
-    margin-right: 0.5em;
+.container {
+  > div {
+    padding-bottom: 0.1px; // needed for chrome to get margin-bottom working
   }
 
-  h1 {
-    margin: 0;
-    font-size: 2rem;
+  header {
+    display: flex;
+    align-items: center;
 
-    @include mixins.font-handwriting();
-  }
+    padding: $layout-padding;
 
-  .spacer {
-    flex: 1;
-  }
+    img {
+      height: 3em;
+      margin-right: 0.5em;
+    }
 
-  .account-button {
-    all: unset;
-    display: block;
-    padding: 0.5em;
-    cursor: pointer;
+    h1 {
+      margin: 0;
+      font-size: 2rem;
 
-    mat-icon {
-      padding: 0.125em;
-      scale: 1.5;
-      border-radius: 50%;
+      @include mixins.font-handwriting();
+    }
+
+    .spacer {
+      flex: 1;
+    }
+
+    .account-button {
+      all: unset;
+      display: block;
+      padding: 0.5em;
+      cursor: pointer;
+
+      mat-icon {
+        padding: 0.125em;
+        scale: 1.5;
+        border-radius: 50%;
+      }
     }
   }
-}
 
-.is-overlay main {
-  margin-bottom: 0;
-}
+  &.is-overlay main {
+    margin-bottom: 0;
+  }
 
-main {
-  margin-bottom: calc($navbar-height + $main-space-bottom);
+  main {
+    margin-bottom: calc($navbar-height + $main-space-bottom);
+  }
 }
 
 app-layout-default-navbar {
