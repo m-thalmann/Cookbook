@@ -46,12 +46,14 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": ["src/favicon.ico", "src/assets", "src/.htaccess"],
+            "assets": ["src/favicon.ico", "src/assets", "src/.htaccess", "src/manifest.webmanifest"],
             "styles": ["src/styles/styles.scss", "src/styles/variables.scss"],
             "stylePreprocessorOptions": {
               "includePaths": ["src/styles"]
             },
-            "scripts": []
+            "scripts": [],
+            "serviceWorker": true,
+            "ngswConfigPath": "ngsw-config.json"
           },
           "configurations": {
             "production": {
