@@ -3,6 +3,8 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Inject, 
 
 const SWIPE_LEFT_DIRECTION = 2;
 const SWIPE_RIGHT_DIRECTION = 4;
+const SWIPE_UP_DIRECTION = 8;
+const SWIPE_DOWN_DIRECTION = 16;
 
 @Component({
   selector: 'app-image-slider-dialog',
@@ -46,10 +48,17 @@ export class ImageSliderDialogComponent implements AfterViewInit {
   onSwipe(e: any) {
     const direction = e.direction;
 
-    if (direction === SWIPE_LEFT_DIRECTION) {
-      this.nextImage(1);
-    } else if (direction === SWIPE_RIGHT_DIRECTION) {
-      this.nextImage(-1);
+    switch (direction) {
+      case SWIPE_LEFT_DIRECTION:
+        this.nextImage(1);
+        break;
+      case SWIPE_RIGHT_DIRECTION:
+        this.nextImage(-1);
+        break;
+      case SWIPE_UP_DIRECTION:
+      case SWIPE_DOWN_DIRECTION:
+        this.dialogRef.close();
+        break;
     }
   }
 
@@ -61,4 +70,3 @@ export class ImageSliderDialogComponent implements AfterViewInit {
     }
   }
 }
-

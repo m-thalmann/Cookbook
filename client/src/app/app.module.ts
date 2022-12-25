@@ -1,7 +1,7 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule, isDevMode } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HammerModule } from '../../node_modules/@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
@@ -28,6 +28,12 @@ function setup(config: ConfigService, auth: AuthService) {
     await config.load();
 
     auth.initialize();
+  };
+}
+
+class CustomHammerConfig extends HammerGestureConfig {
+  override overrides = {
+    swipe: { direction: 2 | 4 | 8 | 16 }, // all directions
   };
 }
 
@@ -63,6 +69,10 @@ function setup(config: ConfigService, auth: AuthService) {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true,
+    },
+    {
+      provide: HAMMER_GESTURE_CONFIG,
+      useClass: CustomHammerConfig,
     },
     {
       provide: APP_INITIALIZER,
