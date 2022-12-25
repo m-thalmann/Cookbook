@@ -74,11 +74,11 @@ export class RecipeDetailComponent {
     try {
       await lastValueFrom(this.api.recipes.delete(this.recipe.id));
 
-      this.snackbar.info('Recipe moved to trash successfully');
+      this.snackbar.info({ message: 'Recipe moved to trash successfully' });
 
       this.navigateBack();
     } catch (e) {
-      this.snackbar.error('Error moving recipe to trash');
+      this.snackbar.warn({ message: 'Error moving recipe to trash', duration: null });
     }
   }
 }

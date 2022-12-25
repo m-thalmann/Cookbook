@@ -8,6 +8,7 @@ import { NumberInputComponent } from './number-input/number-input.component';
 import { RecipeCardComponent } from './recipe-card/recipe-card.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 import { ShareMenuComponent } from './share-menu/share-menu.component';
+import { IconSnackbarComponent } from './snackbar/icon-snackbar/icon-snackbar.component';
 
 const components = [
   CookbookCardComponent,
@@ -16,6 +17,7 @@ const components = [
   RecipeCardComponent,
   SearchBarComponent,
   ShareMenuComponent,
+  IconSnackbarComponent,
 ];
 
 @NgModule({

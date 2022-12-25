@@ -66,7 +66,6 @@ export class RecipePublicShareDialogComponent {
   }
 
   linkCopied() {
-    this.snackbar.info('Link copied');
+    this.snackbar.info({ message: 'Link copied' });
   }
 }
-

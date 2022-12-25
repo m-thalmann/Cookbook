@@ -11,7 +11,10 @@
   $app-theme: map.get($variables, 'theme');
 
   background: mat.get-color-from-palette(map.get($app-theme, 'background'), 'background');
-  color: mat.get-color-from-palette(map.get($app-theme, 'foreground'), 'text');
+
+  app-root {
+    color: mat.get-color-from-palette(map.get($app-theme, 'foreground'), 'text');
+  }
 
   a {
     color: mat.get-color-from-palette(map.get($variables, 'link-palette'));

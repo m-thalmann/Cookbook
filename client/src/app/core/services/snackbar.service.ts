@@ -1,5 +1,13 @@
+import { ComponentType } from '@angular/cdk/portal';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { take } from 'rxjs';
+
+interface SnackbarOptions {
+  message: string;
+  duration?: number | null;
+  actionName?: string;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -7,33 +15,37 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class SnackbarService {
   constructor(private snackBar: MatSnackBar) {}
 
-  private open({
-    message,
-    duration,
-    warn = false,
-    actionName = 'OK',
-  }: {
-    message: string;
-    duration?: number;
-    warn?: boolean;
-    actionName?: string;
-  }) {
-    this.snackBar.open(message, actionName, {
+  private open(
+    message: string,
+    duration: number | null,
+    { warn = false, actionName = 'OK' }: { warn?: boolean; actionName?: string }
+  ) {
+    const options = {
       panelClass: warn ? 'action-warn' : undefined,
-      duration,
+      duration: duration === null ? undefined : duration,
+    };
+
+    const snackbar = this.snackBar.open(message, actionName, options);
+
+    return {
+      action: (action: () => void) => {
+        snackbar.onAction().pipe(take(1)).subscribe(action);
+      },
+    };
+  }
+
+  openComponent(component: ComponentType<unknown>, data: any, duration: number | null = null) {
+    this.snackBar.openFromComponent(component, {
+      data: data,
+      duration: duration === null ? undefined : duration,
     });
   }
 
-  info(message: string, duration: number | undefined = 5000) {
-    this.open({ message, duration, warn: false });
+  info({ message, duration = 5000, actionName }: SnackbarOptions) {
+    return this.open(message, duration, { actionName, warn: false });
   }
 
-  warn(message: string, duration: number | undefined = 10000) {
-    this.open({ message, duration, warn: true });
-  }
-
-  error(message: string, duration: number | undefined = undefined) {
-    this.open({ message, duration, warn: true });
+  warn({ message, duration = 10000, actionName }: SnackbarOptions) {
+    return this.open(message, duration, { actionName, warn: true });
   }
 }
-

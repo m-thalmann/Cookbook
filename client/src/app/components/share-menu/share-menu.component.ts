@@ -25,7 +25,7 @@ export class ShareMenuComponent {
 
   copyLink() {
     if (this.clipboard.copy(location.href)) {
-      this.snackbar.info('Link copied!');
+      this.snackbar.info({ message: 'Link copied!' });
     }
   }
 
@@ -51,4 +51,3 @@ export class ShareMenuComponent {
     });
   }
 }
-
