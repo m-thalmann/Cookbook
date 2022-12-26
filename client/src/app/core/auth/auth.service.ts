@@ -38,7 +38,7 @@ export class AuthService {
     private activatedRoute: ActivatedRoute,
     private routeHelper: RouteHelperService
   ) {
-    this._accessToken = this.storage.session.get<string>(ACCESS_TOKEN_KEY);
+    this._accessToken = this.storage.local.get<string>(ACCESS_TOKEN_KEY);
     this._refreshToken = this.storage.local.get(REFRESH_TOKEN_KEY);
 
     const user = this.storage.local.get<DetailedUser>(USER_KEY);
@@ -91,9 +91,9 @@ export class AuthService {
     this._accessToken = accessToken;
 
     if (accessToken !== null) {
-      this.storage.session.set(ACCESS_TOKEN_KEY, accessToken);
+      this.storage.local.set(ACCESS_TOKEN_KEY, accessToken);
     } else {
-      this.storage.session.remove(ACCESS_TOKEN_KEY);
+      this.storage.local.remove(ACCESS_TOKEN_KEY);
     }
   }
 

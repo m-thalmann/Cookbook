@@ -1,18 +1,85 @@
 <ng-container
     *ngIf="{
         recipes: recipes$ | async,
+        categories: categories$ | async,
         filters: filters$ | async,
-        paginationOptions: paginationOptions$ | async
+        paginationOptions: paginationOptions$ | async,
+        recipesLoading: recipesLoading$ | async,
+        isAuthenticated: auth.isAuthenticated$ | async
     } as vm"
 >
-    <div class="filters">
-        <app-search-bar
-            [searchOnSubmit]="false"
-            [initialValue]="vm.filters?.search || null"
-            (search)="doSearch($event)"
-        ></app-search-bar>
+    <app-search-bar
+        [searchOnSubmit]="false"
+        [clearable]="true"
+        [initialValue]="vm.filters?.search || null"
+        (search)="doSearch($event)"
+        [disabled]="!!vm.recipesLoading"
+    ></app-search-bar>
 
-        <!-- TODO: add additional filters and sort -->
+    <!-- TODO: use actual selects for inputs -->
+    <div class="filters">
+        <button [matMenuTriggerFor]="sortMenu" class="sort-filter" [disabled]="vm.recipesLoading">
+            <mat-icon>sort</mat-icon>
+            <span>
+                {{ getSortNameForColumn(vm.filters?.sort?.[0]?.column) }}
+            </span>
+            <button
+                (click)="$event.stopPropagation(); toggleSortDir(vm.filters?.sort?.[0]?.dir)"
+                [disabled]="vm.recipesLoading"
+            >
+                <mat-icon inline>
+                    <ng-container *ngIf="vm.filters?.sort?.[0]?.dir === 'asc'">north</ng-container>
+                    <ng-container *ngIf="vm.filters?.sort?.[0]?.dir === 'desc'">south</ng-container>
+                </mat-icon>
+            </button>
+        </button>
+
+        <mat-menu #sortMenu="matMenu">
+            <button
+                mat-menu-item
+                *ngFor="let sortOption of availableSortOptions"
+                (click)="doSort(sortOption.column)"
+                [disabled]="vm.filters?.sort?.[0]?.column === sortOption.column"
+            >
+                <mat-icon>{{ sortOption.icon }}</mat-icon>
+                <span>{{ sortOption.name }}</span>
+            </button>
+        </mat-menu>
+
+        <button [matMenuTriggerFor]="categoryMenu" class="category-filter" [disabled]="vm.recipesLoading">
+            <mat-icon>local_dining</mat-icon>
+
+            <ng-container *ngIf="!vm.filters?.category">
+                <em class="select-category-label">Filter by category...</em>
+            </ng-container>
+
+            <ng-container *ngIf="vm.filters?.category">
+                <span>{{ vm.filters?.category }}</span>
+                <button (click)="$event.stopPropagation(); doFilterByCategory(null)">
+                    <mat-icon inline>clear</mat-icon>
+                </button>
+            </ng-container>
+        </button>
+
+        <mat-menu #categoryMenu="matMenu">
+            <button
+                mat-menu-item
+                *ngFor="let category of vm.categories?.body?.data"
+                (click)="doFilterByCategory(category)"
+                [disabled]="vm.filters?.category === category"
+            >
+                <span>{{ category }}</span>
+            </button>
+        </mat-menu>
+
+        <mat-slide-toggle
+            (change)="onChangeAll(!$event.checked)"
+            [checked]="!vm.filters?.all"
+            [disabled]="vm.recipesLoading"
+            *ngIf="vm.isAuthenticated"
+        >
+            Only my recipes
+        </mat-slide-toggle>
     </div>
 
     <p class="amount-results" *ngIf="vm.recipes?.body?.meta?.total as total">{{ total }} results found</p>
@@ -31,7 +98,7 @@
         [pageSizeOptions]="[6, 12, 18, 24, 30]"
         [showFirstLastButtons]="true"
         (page)="onPagination($event)"
-        [disabled]="recipesLoading"
+        [disabled]="vm.recipesLoading"
         *ngIf="(vm.recipes?.body?.data?.length || 0) > 0"
     ></mat-paginator>
 </ng-container>

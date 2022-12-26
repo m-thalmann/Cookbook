@@ -18,8 +18,6 @@
     padding-right: 0.5em;
     opacity: 0.5;
 
-    transition: opacity 0.2s;
-
     mat-icon {
       vertical-align: middle;
     }
@@ -39,6 +37,28 @@
 
     label {
       opacity: 1;
+    }
+  }
+
+  button.clear-button {
+    all: unset;
+    cursor: pointer;
+    display: flex;
+  }
+
+  label,
+  input,
+  button.clear-button {
+    transition: opacity 0.2s;
+  }
+
+  &.disabled {
+    cursor: default;
+
+    label,
+    input,
+    button.clear-button {
+      opacity: 0.25;
     }
   }
 }

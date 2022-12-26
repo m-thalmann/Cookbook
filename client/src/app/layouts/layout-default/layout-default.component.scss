@@ -83,6 +83,10 @@ app-layout-default-navbar {
       width: 100%;
       max-width: $desktop-content-width;
     }
+
+    header {
+      margin-bottom: 1em;
+    }
   }
 
   app-layout-default-navbar {

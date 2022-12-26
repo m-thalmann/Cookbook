@@ -8,6 +8,7 @@
   z-index: 10;
 
   padding: $layout-padding;
+  padding-top: 0;
 
   @include theme.apply() using ($variables) {
     background: map.get($variables, 'background');

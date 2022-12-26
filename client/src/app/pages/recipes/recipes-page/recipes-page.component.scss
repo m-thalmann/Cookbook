@@ -1,5 +1,8 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
 @use 'variables' as *;
 @use 'mixins';
+@use 'theme';
 
 :host {
   display: block;
@@ -7,7 +10,121 @@
 }
 
 .filters {
-  margin-bottom: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5em;
+
+  margin: 2em 0;
+
+  .sort-filter,
+  .category-filter {
+    all: unset;
+
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+
+    padding: 0.25em 0.75em;
+    border-radius: 2em;
+
+    cursor: pointer;
+
+    transition: background $transition-time;
+
+    @include mat.elevation(2);
+
+    @include theme.apply() using ($variables) {
+      background: theme.adjust-color($variables, map.get($variables, 'background'), 5%);
+
+      &:not(:disabled):hover {
+        background: theme.adjust-color($variables, map.get($variables, 'background'), 2%);
+      }
+    }
+
+    &:disabled {
+      > * {
+        opacity: 0.25;
+        cursor: default;
+      }
+    }
+
+    > * {
+      transition: opacity $transition-time, background $transition-time !important;
+    }
+
+    > button {
+      all: unset;
+      cursor: pointer;
+      display: flex;
+
+      padding: 0.25rem;
+
+      mat-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+
+  .sort-filter {
+    position: relative;
+
+    padding-right: 2.75em;
+
+    @include theme.apply() using ($variables) {
+      > button {
+        background: theme.adjust-color($variables, map.get($variables, 'accent'), -2.5%);
+
+        &:not(:disabled):hover {
+          background: theme.adjust-color($variables, map.get($variables, 'accent'), -15%);
+        }
+      }
+    }
+
+    > button {
+      position: absolute;
+      right: 0;
+      top: 0;
+
+      border-radius: 50%;
+      width: 1.5em;
+      height: 1.5em;
+    }
+  }
+
+  .category-filter {
+    @include theme.apply() using ($variables) {
+      > button {
+        background: theme.adjust-color($variables, map.get($variables, 'background'), -10%);
+
+        &:not(:disabled):hover {
+          background: theme.adjust-color($variables, map.get($variables, 'background'), -20%);
+        }
+      }
+    }
+
+    > em {
+      opacity: 0.75;
+      font-weight: lighter;
+    }
+
+    > button {
+      padding: 0.125em;
+      border-radius: 50%;
+      width: 1em;
+      height: 1em;
+    }
+  }
+
+  @media screen and (min-width: 500px) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+
+    margin: 1em 0;
+  }
 }
 
 .amount-results {

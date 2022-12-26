@@ -42,7 +42,7 @@ mat-toolbar {
 
           transition: background 0.2s;
 
-          &:not([disabled]):hover {
+          &:not(:disabled):hover {
             background: rgba(255, 255, 255, 0.05);
           }
 

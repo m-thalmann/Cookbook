@@ -1,13 +1,22 @@
-<div class="container mat-elevation-z2">
-    <label for="search-bar-input">
+<div class="container mat-elevation-z2" [class.disabled]="disabled">
+    <label [for]="inputId">
         <mat-icon>search</mat-icon>
     </label>
     <input
         (keydown.enter)="doSearch(searchBarInput.value)"
         placeholder="Search recipes..."
         [value]="initialValue"
-        id="search-bar-input"
+        [disabled]="disabled"
+        [id]="inputId"
         #searchBarInput
     />
-</div>
 
+    <button
+        class="clear-button"
+        (click)="doClear()"
+        [disabled]="disabled"
+        *ngIf="clearable && searchBarInput.value.length > 0"
+    >
+        <mat-icon>clear</mat-icon>
+    </button>
+</div>
