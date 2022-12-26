@@ -1,9 +1,8 @@
-import { Location } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { DetailedRecipe } from 'src/app/core/models/recipe';
+import { RouteHelperService } from 'src/app/core/services/route-helper.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
@@ -17,12 +16,7 @@ export class RecipeDetailComponent {
 
   portionsMultiplier: number = 1;
 
-  constructor(
-    private location: Location,
-    private router: Router,
-    private api: ApiService,
-    private snackbar: SnackbarService
-  ) {}
+  constructor(private api: ApiService, private snackbar: SnackbarService, public routeHelper: RouteHelperService) {}
 
   get totalTime() {
     if (
@@ -62,21 +56,13 @@ export class RecipeDetailComponent {
     return step * (direction === 'up' ? 1 : -1);
   }
 
-  navigateBack() {
-    if (document.referrer.indexOf(window.location.host) !== -1) {
-      this.location.back();
-    } else {
-      this.router.navigateByUrl('/');
-    }
-  }
-
   async deleteRecipe() {
     try {
       await lastValueFrom(this.api.recipes.delete(this.recipe.id));
 
       this.snackbar.info({ message: 'Recipe moved to trash successfully' });
 
-      this.navigateBack();
+      this.routeHelper.navigateBack();
     } catch (e) {
       this.snackbar.warn({ message: 'Error moving recipe to trash', duration: null });
     }

@@ -46,7 +46,7 @@ export class LoginPageComponent {
 
       const loginData = loginResponse.body!.data;
 
-      const redirectUrl: string | undefined = this.activatedRoute.snapshot.queryParams['redirect_url'];
+      const redirectUrl: string | undefined = this.activatedRoute.snapshot.queryParams['redirect-url'];
 
       this.auth.login(loginData.user, loginData.access_token, loginData.refresh_token, redirectUrl);
     } catch (e) {
@@ -66,4 +66,3 @@ export class LoginPageComponent {
     }
   }
 }
-

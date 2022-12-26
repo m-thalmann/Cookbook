@@ -35,14 +35,12 @@
     </mat-form-field>
 
     <button mat-raised-button color="accent" type="submit" [disabled]="isLoading || !signUpForm.valid">
-        <ng-container *ngIf="!isLoading; else signUpButtonLoading">
-            <mat-icon>person_add</mat-icon>
-            &nbsp; Sign up
-        </ng-container>
+        <mat-icon *ngIf="!isLoading">person_add</mat-icon>
+        <ng-container *ngIf="!isLoading"> Sign up</ng-container>
 
-        <ng-template #signUpButtonLoading>
+        <ng-container *ngIf="isLoading">
             <mat-spinner [diameter]="24" color="accent" class="sign-up-button-loading-spinner"></mat-spinner>
-        </ng-template>
+        </ng-container>
     </button>
 
     <p class="error mat-elevation-z2" *ngIf="error">
@@ -50,4 +48,3 @@
         <span>{{ error }}</span>
     </p>
 </form>
-

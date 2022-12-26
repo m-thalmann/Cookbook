@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, distinctUntilChanged, lastValueFrom, map } from 'rxjs';
 import { ApiService } from '../api/api.service';
 import { Logger as LoggerClass } from '../helpers/logger';
-import RouteHelper from '../helpers/route-helper';
 import { DetailedUser } from '../models/user';
+import { RouteHelperService } from '../services/route-helper.service';
 import { StorageService } from '../services/storage.service';
 import { AuthGuard } from './auth.guard';
 
@@ -35,7 +35,8 @@ export class AuthService {
     private storage: StorageService,
     private router: Router,
     private api: ApiService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private routeHelper: RouteHelperService
   ) {
     this._accessToken = this.storage.session.get<string>(ACCESS_TOKEN_KEY);
     this._refreshToken = this.storage.local.get(REFRESH_TOKEN_KEY);
@@ -141,7 +142,7 @@ export class AuthService {
 
     this.setUser(null);
 
-    const currentRouteConfig = RouteHelper.getRouteLeaf(this.activatedRoute)?.routeConfig;
+    const currentRouteConfig = this.routeHelper.getRouteLeaf(this.activatedRoute)?.routeConfig;
 
     if (currentRouteConfig?.canActivate?.[0] === AuthGuard) {
       this.router.navigate(['/home']);

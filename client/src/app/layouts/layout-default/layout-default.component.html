@@ -15,9 +15,9 @@
                     </button>
                 </ng-container>
                 <ng-template #loginButton>
-                    <button mat-icon-button routerLink="/login" color="accent">
+                    <a mat-icon-button routerLink="/login" [queryParams]="loginQueryParams" color="accent">
                         <mat-icon>login</mat-icon>
-                    </button>
+                    </a>
                 </ng-template>
             </header>
 

@@ -1,5 +1,5 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { APP_INITIALIZER, NgModule, isDevMode } from '@angular/core';
+import { APP_INITIALIZER, NgModule, isDevMode, Injectable } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { BrowserModule, HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -31,6 +31,9 @@ function setup(config: ConfigService, auth: AuthService) {
   };
 }
 
+@Injectable({
+  providedIn: 'root',
+})
 class CustomHammerConfig extends HammerGestureConfig {
   override overrides = {
     swipe: { direction: 2 | 4 | 8 | 16 }, // all directions

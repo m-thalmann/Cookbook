@@ -3,7 +3,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, map, Observable, of, startWith, switchMap } from 'rxjs';
 import { AuthService } from 'src/app/core/auth/auth.service';
-import RouteHelper from 'src/app/core/helpers/route-helper';
+import { RouteHelperService } from 'src/app/core/services/route-helper.service';
 import { AccountMenuBottomSheetComponent } from './components/account-menu-bottom-sheet/account-menu-bottom-sheet.component';
 
 @Component({
@@ -17,7 +17,7 @@ export class LayoutDefaultComponent {
     filter((event) => event instanceof NavigationEnd),
     startWith(this.activatedRoute.snapshot.firstChild?.data || {}),
     switchMap(() => {
-      const leafRoute = RouteHelper.getRouteLeaf(this.activatedRoute);
+      const leafRoute = this.routeHelper.getRouteLeaf(this.activatedRoute);
 
       if (leafRoute) {
         return leafRoute.data;
@@ -33,8 +33,15 @@ export class LayoutDefaultComponent {
     public auth: AuthService,
     private bottomSheet: MatBottomSheet,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private routeHelper: RouteHelperService
   ) {}
+
+  get loginQueryParams() {
+    return {
+      'redirect-url': this.router.url,
+    };
+  }
 
   openAccountMenu() {
     this.bottomSheet.open(AccountMenuBottomSheetComponent);

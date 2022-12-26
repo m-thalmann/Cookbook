@@ -1,4 +1,6 @@
-<button mat-icon-button (click)="navigateBack()" class="navigate-back-button"><mat-icon>arrow_back</mat-icon></button>
+<button mat-icon-button (click)="routeHelper.navigateBack()" class="navigate-back-button">
+    <mat-icon>arrow_back</mat-icon>
+</button>
 
 <app-recipe-detail-image-slider [images]="recipe.images" class="images-container"> </app-recipe-detail-image-slider>
 

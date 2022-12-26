@@ -6,15 +6,14 @@
     </div>
 
     <div class="container" (swipe)="onSwipe($event)">
-        <button mat-icon-button (click)="nextImage(-1)">
+        <button mat-icon-button (click)="nextImage(-1)" class="hide-mobile">
             <mat-icon>arrow_left</mat-icon>
         </button>
         <div class="images" #imagesContainer>
             <img [src]="image" loading="lazy" *ngFor="let image of images" />
         </div>
-        <button mat-icon-button (click)="nextImage(1)">
+        <button mat-icon-button (click)="nextImage(1)" class="hide-mobile">
             <mat-icon>arrow_right</mat-icon>
         </button>
     </div>
 </mat-dialog-content>
-
