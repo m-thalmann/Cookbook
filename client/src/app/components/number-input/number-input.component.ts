@@ -24,6 +24,8 @@ export class NumberInputComponent implements ControlValueAccessor {
 
   @Input() inputEnabled = true;
 
+  @Input() defaultValue?: number;
+
   value: number = 0;
   isDisabled = false;
 
@@ -37,11 +39,18 @@ export class NumberInputComponent implements ControlValueAccessor {
   }
 
   onInputChange(e: any) {
-    let value = parseFloat(e.target.value);
+    const strValue: string = e.target.value;
+
+    let value = parseFloat(strValue.replace(',', '.'));
 
     if (isNaN(value)) {
-      value = this.min || 0;
-      // TODO: bug on re-change
+      if (typeof this.defaultValue !== 'undefined') {
+        value = this.defaultValue;
+      } else if (typeof this.min !== 'undefined') {
+        value = this.min;
+      } else {
+        value = 0;
+      }
     }
 
     this.setValue(value);
