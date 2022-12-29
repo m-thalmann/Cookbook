@@ -11,7 +11,7 @@ import { AuthService } from 'src/app/core/auth/auth.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeDetailPageComponent {
-  recipe$ = combineLatest([this.activatedRoute.params, this.auth.isAuthenticated$]).pipe(
+  recipe$ = combineLatest([this.activatedRoute.params, this.auth.user$]).pipe(
     switchMap(([params, _]) => {
       if (params['id']) {
         return this.api.recipes.get(params['id']);
@@ -27,4 +27,3 @@ export class RecipeDetailPageComponent {
 
   constructor(private api: ApiService, private activatedRoute: ActivatedRoute, private auth: AuthService) {}
 }
-

@@ -20,9 +20,12 @@
         <mat-icon *ngIf="!isLoading">login</mat-icon>
         <ng-container *ngIf="!isLoading"> Login</ng-container>
 
-        <ng-container *ngIf="isLoading">
-            <mat-spinner [diameter]="24" color="accent" class="login-button-loading-spinner"></mat-spinner>
-        </ng-container>
+        <mat-spinner
+            [diameter]="24"
+            color="accent"
+            class="login-button-loading-spinner"
+            *ngIf="isLoading"
+        ></mat-spinner>
     </button>
 
     <p class="error mat-elevation-z2" *ngIf="error">

@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
@@ -22,7 +23,12 @@ export class SignUpPageComponent {
 
   private hcaptchaToken?: string; // TODO:
 
-  constructor(private auth: AuthService, private api: ApiService, private fb: FormBuilder) {
+  constructor(
+    private auth: AuthService,
+    private api: ApiService,
+    private fb: FormBuilder,
+    private activatedRoute: ActivatedRoute
+  ) {
     this.signUpForm = this.fb.group({
       name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
@@ -66,7 +72,9 @@ export class SignUpPageComponent {
 
       const signUpData = signUpResponse.body!.data;
 
-      this.auth.login(signUpData.user, signUpData.access_token, signUpData.refresh_token);
+      const redirectUrl: string | undefined = this.activatedRoute.snapshot.queryParams['redirect-url'];
+
+      this.auth.login(signUpData.user, signUpData.access_token, signUpData.refresh_token, redirectUrl);
     } catch (e) {
       this.signUpForm.enable();
 

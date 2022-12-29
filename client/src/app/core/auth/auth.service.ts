@@ -127,7 +127,7 @@ export class AuthService {
     this.accessToken = accessToken;
     this.refreshToken = refreshToken;
 
-    this.router.navigate([redirectUrl]);
+    this.router.navigateByUrl(redirectUrl);
   }
 
   public async logout(logoutFromApi: boolean) {

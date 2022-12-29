@@ -1,0 +1,29 @@
+<div
+    class="container"
+    *ngIf="{
+        cookbooks: cookbooks$ | async,
+        paginationData: paginationData$ | async,
+        cookbooksLoading: cookbooksLoading$ | async
+    } as vm"
+>
+    <p class="amount-results" *ngIf="vm.paginationData?.total as total">{{ total }} cookbooks found</p>
+
+    <div class="cookbooks">
+        <app-cookbook-card [cookbook]="cookbook" *ngFor="let cookbook of vm.cookbooks"> </app-cookbook-card>
+    </div>
+
+    <button
+        mat-raised-button
+        color="accent"
+        (click)="nextPage()"
+        [disabled]="!vm.paginationData || vm.cookbooksLoading"
+        *ngIf="!vm.paginationData || vm.paginationData.current_page !== vm.paginationData.last_page"
+    >
+        <div>
+            <mat-spinner *ngIf="vm.cookbooksLoading" [diameter]="20"></mat-spinner>
+            <mat-icon *ngIf="!vm.cookbooksLoading">south</mat-icon>
+
+            Load more
+        </div>
+    </button>
+</div>

@@ -12,7 +12,6 @@
 .filters {
   display: flex;
   flex-direction: column;
-  align-items: start;
   gap: 1.5em;
 
   margin: 2em 0;
@@ -37,7 +36,7 @@
     @include theme.apply() using ($variables) {
       &,
       > select {
-        background: theme.adjust-color($variables, map.get($variables, 'background'), 5%);
+        background: darken(map.get($variables, 'background'), 10%);
       }
 
       &:not(.disabled) {
@@ -45,7 +44,7 @@
         &:focus-within {
           &,
           > select {
-            background: theme.adjust-color($variables, map.get($variables, 'background'), 2%);
+            background: darken(map.get($variables, 'background'), 5%);
           }
         }
       }
@@ -139,10 +138,18 @@
       width: calc(100% - 3.5em);
     }
 
-    &.none-selected > select {
-      opacity: 0.75;
-      font-weight: lighter;
-      width: 8.5em;
+    &.none-selected {
+      &:not(.disabled) {
+        > select {
+          opacity: 0.75;
+        }
+      }
+
+      > select {
+        font-weight: lighter;
+        width: 8.5em;
+        max-width: calc(100% - 2.25em);
+      }
     }
   }
 

@@ -38,9 +38,12 @@
         <mat-icon *ngIf="!isLoading">person_add</mat-icon>
         <ng-container *ngIf="!isLoading"> Sign up</ng-container>
 
-        <ng-container *ngIf="isLoading">
-            <mat-spinner [diameter]="24" color="accent" class="sign-up-button-loading-spinner"></mat-spinner>
-        </ng-container>
+        <mat-spinner
+            [diameter]="24"
+            color="accent"
+            class="sign-up-button-loading-spinner"
+            *ngIf="isLoading"
+        ></mat-spinner>
     </button>
 
     <p class="error mat-elevation-z2" *ngIf="error">

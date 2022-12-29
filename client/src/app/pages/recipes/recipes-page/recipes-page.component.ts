@@ -68,7 +68,7 @@ export class RecipesPageComponent {
     })
   );
 
-  recipes$ = combineLatest([this.filters$, this.paginationOptions$, this.auth.isAuthenticated$]).pipe(
+  recipes$ = combineLatest([this.filters$, this.paginationOptions$, this.auth.user$]).pipe(
     debounceTime(5), // to prevent reloading if filter is changed since then pagination is changed as well
     tap(() => this.recipesLoading$.next(true)),
     switchMap(([filters, paginationOptions, _]) => {
@@ -89,7 +89,7 @@ export class RecipesPageComponent {
     tap(() => this.recipesLoading$.next(false))
   );
 
-  categories$ = this.auth.isAuthenticated$.pipe(switchMap(() => this.api.categories.getList()));
+  categories$ = this.auth.user$.pipe(switchMap(() => this.api.categories.getList()));
 
   constructor(
     private router: Router,
