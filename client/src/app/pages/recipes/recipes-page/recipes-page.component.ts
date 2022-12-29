@@ -16,6 +16,12 @@ interface RecipeFilters {
   pagination?: PaginationOptions;
 }
 
+/**
+ * Variable used to create unique ids for each component instance,
+ * since the id is needed for the labels
+ */
+let nextIdSuffix = 0;
+
 @Component({
   selector: 'app-recipes-page',
   templateUrl: './recipes-page.component.html',
@@ -23,6 +29,8 @@ interface RecipeFilters {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipesPageComponent {
+  idSuffix = nextIdSuffix++;
+
   availableSortOptions = [
     { column: 'name', name: 'Name', icon: 'drive_file_rename_outline' },
     { column: 'difficulty', name: 'Difficulty', icon: 'local_fire_department' },
@@ -30,7 +38,7 @@ export class RecipesPageComponent {
     { column: 'updated_at', name: 'Update date', icon: 'edit_calendar' },
   ];
 
-  recipesLoading$ = new BehaviorSubject<boolean>(false);
+  recipesLoading$ = new BehaviorSubject<boolean>(true);
 
   paginationOptions$ = new BehaviorSubject<PaginationOptions>({ page: 1, perPage: 12 });
 
@@ -47,9 +55,13 @@ export class RecipesPageComponent {
       }
 
       if (typeof params['sort'] !== 'undefined') {
-        sort = { column: params['sort'], dir: params['sort-dir'] === 'desc' ? 'desc' : 'asc' };
+        sort = { column: params['sort'], dir: 'asc' };
       } else {
         sort = { column: 'created_at', dir: 'desc' };
+      }
+
+      if (typeof params['sort-dir'] !== 'undefined') {
+        sort.dir = params['sort-dir'] === 'desc' ? 'desc' : 'asc';
       }
 
       return { all: all, search: params['search'], category: params['category'], sort: [sort] };
@@ -104,12 +116,14 @@ export class RecipesPageComponent {
     this.applyFilterParams({ 'sort-dir': dir });
   }
 
-  doSort(column: string) {
-    this.applyFilterParams({ sort: column });
+  doSort(eventTarget: EventTarget) {
+    this.applyFilterParams({ sort: (eventTarget as HTMLSelectElement).value });
   }
 
-  doFilterByCategory(category: string | null) {
-    this.applyFilterParams({ category: category });
+  doFilterByCategory(eventTarget: EventTarget | null) {
+    const category = (eventTarget as HTMLSelectElement)?.value;
+
+    this.applyFilterParams({ category: !category ? null : category });
   }
 
   onPagination(page: PageEvent) {

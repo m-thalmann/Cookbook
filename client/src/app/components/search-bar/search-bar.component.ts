@@ -21,11 +21,9 @@ export class SearchBarComponent {
 
   @Output() search = new EventEmitter<string>();
 
-  inputId: string;
+  inputId: string = 'search-bar-input-' + nextIdSuffix++;
 
-  constructor(private router: Router) {
-    this.inputId = 'search-bar-input-' + nextIdSuffix++;
-  }
+  constructor(private router: Router) {}
 
   doSearch(search: string) {
     search = search.trim();

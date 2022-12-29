@@ -5,6 +5,11 @@
             <div matListItemTitle>Create new recipe</div>
         </a>
 
+        <a mat-list-item routerLink="/recipes/trash" (click)="close()">
+            <mat-icon matListItemIcon>delete</mat-icon>
+            <div matListItemTitle>View trash</div>
+        </a>
+
         <mat-divider></mat-divider>
 
         <mat-list-item disabled *ngIf="vm.user as user">
@@ -24,4 +29,3 @@
         </a>
     </mat-nav-list>
 </ng-container>
-

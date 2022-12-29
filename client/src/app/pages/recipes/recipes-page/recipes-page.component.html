@@ -16,13 +16,24 @@
         [disabled]="!!vm.recipesLoading"
     ></app-search-bar>
 
-    <!-- TODO: use actual selects for inputs -->
     <div class="filters">
-        <button [matMenuTriggerFor]="sortMenu" class="sort-filter" [disabled]="vm.recipesLoading">
-            <mat-icon>sort</mat-icon>
-            <span>
-                {{ getSortNameForColumn(vm.filters?.sort?.[0]?.column) }}
-            </span>
+        <div class="sort-filter" [class.disabled]="vm.recipesLoading">
+            <label for="sort-filter-select-{{ idSuffix }}" aria-label="Sort">
+                <mat-icon>sort</mat-icon>
+            </label>
+            <select
+                id="sort-filter-select-{{ idSuffix }}"
+                (change)="doSort($event.target!)"
+                [disabled]="vm.recipesLoading"
+            >
+                <option
+                    *ngFor="let sortOption of availableSortOptions"
+                    [value]="sortOption.column"
+                    [selected]="vm.filters?.sort?.[0]?.column === sortOption.column"
+                >
+                    {{ sortOption.name }}
+                </option>
+            </select>
             <button
                 (click)="$event.stopPropagation(); toggleSortDir(vm.filters?.sort?.[0]?.dir)"
                 [disabled]="vm.recipesLoading"
@@ -32,45 +43,44 @@
                     <ng-container *ngIf="vm.filters?.sort?.[0]?.dir === 'desc'">south</ng-container>
                 </mat-icon>
             </button>
-        </button>
+        </div>
 
-        <mat-menu #sortMenu="matMenu">
-            <button
-                mat-menu-item
-                *ngFor="let sortOption of availableSortOptions"
-                (click)="doSort(sortOption.column)"
-                [disabled]="vm.filters?.sort?.[0]?.column === sortOption.column"
+        <div class="category-filter" [class.none-selected]="!vm.filters?.category" [class.disabled]="vm.recipesLoading">
+            <label for="category-filter-select-{{ idSuffix }}" aria-label="Category filter">
+                <mat-icon>local_dining</mat-icon>
+            </label>
+            <select
+                id="category-filter-select-{{ idSuffix }}"
+                (change)="doFilterByCategory($event.target!)"
+                [disabled]="vm.recipesLoading"
             >
-                <mat-icon>{{ sortOption.icon }}</mat-icon>
-                <span>{{ sortOption.name }}</span>
-            </button>
-        </mat-menu>
+                <option value="" [selected]="vm.filters?.category === null">Filter by category...</option>
+                <option
+                    *ngFor="let category of vm.categories?.body?.data"
+                    [value]="category"
+                    [selected]="vm.filters?.category === category"
+                >
+                    {{ category }}
+                </option>
 
-        <button [matMenuTriggerFor]="categoryMenu" class="category-filter" [disabled]="vm.recipesLoading">
-            <mat-icon>local_dining</mat-icon>
-
-            <ng-container *ngIf="!vm.filters?.category">
-                <em class="select-category-label">Filter by category...</em>
-            </ng-container>
-
+                <!-- Will be shown until the categories are loaded or if it is not contained in the list -->
+                <option
+                    [value]="vm.filters?.category"
+                    *ngIf="
+                        vm.filters?.category &&
+                        (!vm.categories?.body?.data || vm.categories!.body!.data.indexOf(vm.filters!.category!) === -1)
+                    "
+                    selected
+                >
+                    {{ vm.filters?.category }}
+                </option>
+            </select>
             <ng-container *ngIf="vm.filters?.category">
-                <span>{{ vm.filters?.category }}</span>
-                <button (click)="$event.stopPropagation(); doFilterByCategory(null)">
+                <button (click)="$event.stopPropagation(); doFilterByCategory(null)" [disabled]="vm.recipesLoading">
                     <mat-icon inline>clear</mat-icon>
                 </button>
             </ng-container>
-        </button>
-
-        <mat-menu #categoryMenu="matMenu">
-            <button
-                mat-menu-item
-                *ngFor="let category of vm.categories?.body?.data"
-                (click)="doFilterByCategory(category)"
-                [disabled]="vm.filters?.category === category"
-            >
-                <span>{{ category }}</span>
-            </button>
-        </mat-menu>
+        </div>
 
         <mat-slide-toggle
             (change)="onChangeAll(!$event.checked)"
