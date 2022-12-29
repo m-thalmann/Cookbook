@@ -11,3 +11,23 @@ export interface DetailedUser extends User {
   created_at: number;
   updated_at: number;
 }
+
+export interface CreateUserData {
+  name: string;
+  email: string;
+  password: string;
+  language_code?: string | null;
+  is_admin?: boolean;
+  is_verified?: boolean;
+}
+
+export interface EditUserData {
+  name?: string;
+  email?: string;
+  password?: string;
+  language_code?: string | null;
+  is_admin?: boolean;
+  is_verified?: boolean;
+  do_logout?: boolean;
+  current_password?: string;
+}

@@ -8,3 +8,22 @@ export interface Ingredient {
   created_at: number;
   updated_at: number;
 }
+
+export interface SimpleIngredient {
+  name: string;
+  unit: string | null;
+}
+
+export interface CreateIngredientData {
+  name: string;
+  amount?: number | null;
+  unit?: string | null;
+  group?: string | null;
+}
+
+export interface EditIngredientData {
+  name: string;
+  amount?: number | null;
+  unit?: string | null;
+  group?: string | null;
+}

@@ -39,6 +39,26 @@ export interface DetailedRecipe extends Recipe {
   cookbook?: Cookbook | null;
 }
 
+export interface CreateRecipeData {
+  name: string;
+  is_public?: boolean;
+  description?: string | null;
+  category?: string | null;
+  portions?: number | null;
+  difficulty?: number | null;
+  preparation?: string | null;
+  preparation_time_minutes?: number | null;
+  resting_time_minutes?: number | null;
+  cooking_time_minutes?: number | null;
+  cookbook_id?: number | null;
+  ingredients?: {
+    name: string;
+    amount?: number | null;
+    unit?: string | null;
+    group?: string | null;
+  }[];
+}
+
 export interface EditRecipeData {
   user_id?: number;
   name?: string;

@@ -9,13 +9,16 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { filter, Observable, shareReplay } from 'rxjs';
-import { CookbookWithCounts } from '../models/cookbook';
+import { AuthToken } from '../models/auth-token';
+import { Cookbook, CookbookUser, CookbookWithCounts } from '../models/cookbook';
 import { FilterOption } from '../models/filter-option';
+import { CreateIngredientData, Ingredient, SimpleIngredient, EditIngredientData } from '../models/ingredient';
 import { PaginationMeta } from '../models/pagination-meta';
 import { PaginationOptions } from '../models/pagination-options';
-import { DetailedRecipe, EditRecipeData, ListRecipe } from '../models/recipe';
+import { CreateRecipeData, DetailedRecipe, EditRecipeData, ListRecipe } from '../models/recipe';
+import { RecipeImage } from '../models/recipe-image';
 import { SortOption } from '../models/sort-option';
-import { DetailedUser } from '../models/user';
+import { CreateUserData, DetailedUser, EditUserData, User } from '../models/user';
 import { ConfigService } from '../services/config.service';
 import { TOKEN_TYPE_HTTP_CONTEXT } from './auth.interceptor';
 
@@ -28,6 +31,13 @@ export enum TokenType {
 export interface SignedRoute {
   signature: string;
   expires: string;
+}
+
+interface ListParamOptions {
+  pagination?: PaginationOptions;
+  sort?: SortOption[];
+  search?: string;
+  filters?: FilterOption[];
 }
 
 @Injectable({
@@ -176,6 +186,15 @@ export class ApiService {
     }, new HttpParams());
   }
 
+  private static generateListParamOptions(options: ListParamOptions) {
+    const baseParams = ApiService.generateParams({ search: options.search });
+    const paginationParams = ApiService.generatePaginationParams(options.pagination);
+    const sortParams = ApiService.generateSortParams(options.sort);
+    const filterParams = ApiService.generateFilterParams(options.filters);
+
+    return this.mergeParams(baseParams, paginationParams, sortParams, filterParams);
+  }
+
   /*
   |---------------|
   |  API Methods  |
@@ -213,6 +232,68 @@ export class ApiService {
 
       refreshToken: () =>
         this.post<{ data: { access_token: string; refresh_token: string } }>('/auth/refresh', {}, TokenType.Refresh),
+
+      verifyEmail: (id: string, hash: string, signature: SignedRoute) =>
+        this.post<void>(
+          `/auth/email-verification/verify/${id}/${hash}`,
+          {},
+          TokenType.Access,
+          ApiService.generateSignedRouteParams(signature)
+        ),
+
+      resendVerificationEmail: () => this.post<void>('/auth/email-verification/resend', {}, TokenType.Access),
+
+      resetPassword: (token: string, email: string, password: string) =>
+        this.post<void>('/auth/reset-password', { token, email, password }, TokenType.None),
+
+      sendResetPasswordEmail: (email: string) =>
+        this.post<void>('/auth/reset-password/send', { email }, TokenType.None),
+
+      tokens: {
+        getList: (pagination?: PaginationOptions) =>
+          this.get<{ data: AuthToken[]; meta: PaginationMeta }>(
+            `/auth/tokens`,
+            TokenType.Access,
+            ApiService.generateListParamOptions({ pagination })
+          ),
+
+        get: (id: number) => this.get<{ data: AuthToken }>(`/auth/tokens/${id}`, TokenType.Access),
+
+        delete: (id: number) => this.delete<void>(`/auth/tokens/${id}`, TokenType.Access),
+
+        deleteAll: () => this.delete<void>('/auth/tokens', TokenType.Access),
+
+        groups: {
+          getList: (groupId: number, pagination?: PaginationOptions) =>
+            this.get<{ data: AuthToken[]; meta: PaginationMeta }>(
+              `/auth/tokens/groups/${groupId}`,
+              TokenType.Access,
+              ApiService.generateListParamOptions({ pagination })
+            ),
+        },
+      },
+    };
+  }
+
+  public get users() {
+    return {
+      getList: (options: ListParamOptions) =>
+        this.get<{ data: DetailedUser[]; meta: PaginationMeta }>(
+          '/users',
+          TokenType.Access,
+          ApiService.generateListParamOptions(options)
+        ),
+
+      get: (id: number) => this.get<{ data: DetailedUser }>(`/users/${id}`, TokenType.Access),
+
+      getByEmail: (email: string) => this.get<{ data: User }>(`/users/search/email/${email}`, TokenType.Access),
+
+      create: (data: CreateUserData) => this.post<{ data: DetailedUser }>('/users', data, TokenType.Access),
+
+      update: (id: number, data: EditUserData) =>
+        this.put<{ data: DetailedUser }>(`/users/${id}`, data, TokenType.Access),
+
+      delete: (id: number) => this.delete<void>(`/users/${id}`, TokenType.Access),
     };
   }
 
@@ -229,22 +310,17 @@ export class ApiService {
 
   public get recipes() {
     return {
-      getList: (options: {
-        all?: boolean;
-        pagination?: PaginationOptions;
-        sort?: SortOption[];
-        search?: string;
-        filters?: FilterOption[];
-      }) => {
-        const baseParams = ApiService.generateParams({ all: options.all ? '' : undefined, search: options.search });
-        const paginationParams = ApiService.generatePaginationParams(options.pagination);
-        const sortParams = ApiService.generateSortParams(options.sort);
-        const filterParams = ApiService.generateFilterParams(options.filters);
+      getList: (
+        options: {
+          all?: boolean;
+        } & ListParamOptions
+      ) => {
+        const baseParams = ApiService.generateParams({ all: options.all ? '' : undefined });
 
         return this.get<{ data: ListRecipe[]; meta: PaginationMeta }>(
           '/recipes',
           TokenType.Access,
-          ApiService.mergeParams(baseParams, paginationParams, sortParams, filterParams)
+          ApiService.mergeParams(baseParams, ApiService.generateListParamOptions(options)!)
         );
       },
 
@@ -252,10 +328,61 @@ export class ApiService {
       getShared: (shareUuid: string) =>
         this.get<{ data: DetailedRecipe }>(`/recipes/shared/${shareUuid}`, TokenType.None),
 
+      create: (data: CreateRecipeData) => this.post<{ data: DetailedRecipe }>('/recipes', data, TokenType.Access),
+
       update: (id: number, data: EditRecipeData) =>
         this.put<{ data: DetailedRecipe }>(`/recipes/${id}`, data, TokenType.Access),
 
       delete: (id: number) => this.delete<void>(`/recipes/${id}`, TokenType.Access),
+
+      trash: {
+        getList: (options: ListParamOptions) =>
+          this.get<{ data: ListRecipe[]; meta: PaginationMeta }>(
+            '/recipes/trash',
+            TokenType.Access,
+            ApiService.generateListParamOptions(options)
+          ),
+
+        restoreRecipe: (recipeId: number) => this.put<void>(`/recipes/trash/${recipeId}`, {}, TokenType.Access),
+
+        deleteRecipe: (recipeId: number) => this.delete<void>(`/recipes/trash/${recipeId}`, TokenType.Access),
+
+        deleteAll: () => this.delete<void>('/recipes/trash', TokenType.Access),
+      },
+
+      images: {
+        getList: (recipeId: number) =>
+          this.get<{ data: RecipeImage[] }>(`/recipes/${recipeId}/images`, TokenType.Access),
+
+        create: (recipeId: number, image: File) => {
+          const fd = new FormData();
+          fd.append('image', image, image.name);
+
+          // IDEA: add progress
+          return this.post<{ data: RecipeImage }>(`/recipes/${recipeId}/images`, fd, TokenType.Access);
+        },
+
+        delete: (imageId: number) => this.delete<void>(`/recipe-images/${imageId}`, TokenType.Access),
+      },
+    };
+  }
+
+  public get ingredients() {
+    return {
+      getList: (search?: string, sort?: SortOption[]) =>
+        this.get<{ data: SimpleIngredient[] }>(
+          '/ingredients',
+          TokenType.Access,
+          ApiService.generateListParamOptions({ search, sort })
+        ),
+
+      create: (recipeId: number, data: CreateIngredientData) =>
+        this.post<{ data: Ingredient }>(`/recipes/${recipeId}/ingredients`, data, TokenType.Access),
+
+      update: (id: number, data: EditIngredientData) =>
+        this.put<{ data: Ingredient }>(`/ingredients/${id}`, data, TokenType.Access),
+
+      delete: (id: number) => this.delete<void>(`/ingredients/${id}`, TokenType.Access),
     };
   }
 
@@ -271,6 +398,49 @@ export class ApiService {
           TokenType.Access,
           ApiService.mergeParams(baseParams, paginationParams, sortParams)
         );
+      },
+
+      getRecipes: (cookbookId: number, options: ListParamOptions) =>
+        this.get<{ data: ListRecipe[]; meta: PaginationMeta }>(
+          `/cookbooks/${cookbookId}/recipes`,
+          TokenType.Access,
+          ApiService.generateListParamOptions(options)
+        ),
+
+      getCategories: (cookbookId: number) =>
+        this.get<{ data: string[] }>(`/cookbooks/${cookbookId}/categories`, TokenType.Access),
+
+      create: (name: string) => this.post<{ data: Cookbook }>('/cookbooks', { name }, TokenType.Access),
+
+      update: (id: number, name: string) =>
+        this.put<{ data: Cookbook }>(`/cookbooks/${id}`, { name }, TokenType.Access),
+
+      delete: (id: number) => this.delete<void>(`/cookbooks/${id}`, TokenType.Access),
+
+      users: {
+        getList: (cookbookId: number, options: ListParamOptions) =>
+          this.get<{ data: CookbookUser[]; meta: PaginationMeta }>(
+            `/cookbooks/${cookbookId}/users`,
+            TokenType.Access,
+            ApiService.generateListParamOptions(options)
+          ),
+
+        create: (cookbookId: number, userId: number, isAdmin: boolean) =>
+          this.post<{ data: CookbookUser }>(
+            `/cookbooks/${cookbookId}/users`,
+            { user_id: userId, is_admin: isAdmin },
+            TokenType.Access
+          ),
+
+        update: (cookbookId: number, userId: number, isAdmin: boolean) =>
+          this.put<{ data: CookbookUser }>(
+            `/cookbooks/${cookbookId}/users/${userId}`,
+            { is_admin: isAdmin },
+            TokenType.Access
+          ),
+
+        delete: (cookbookId: number, userId: number) =>
+          this.delete<void>(`/cookbooks/${cookbookId}/users/${userId}`, TokenType.Access),
       },
     };
   }
