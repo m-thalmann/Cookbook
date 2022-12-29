@@ -10,6 +10,7 @@ use App\OpenApi\RequestBodies\Cookbooks\UpdateCookbookRequestBody;
 use App\OpenApi\Responses\Cookbooks\CookbookCreatedResponse;
 use App\OpenApi\Responses\Cookbooks\CookbookIndexResponse;
 use App\OpenApi\Responses\Cookbooks\CookbookShowResponse;
+use App\OpenApi\Responses\Cookbooks\CookbookShowWithUserResponse;
 use App\OpenApi\Responses\ForbiddenResponse;
 use App\OpenApi\Responses\NoContentResponse;
 use App\OpenApi\Responses\NotFoundResponse;
@@ -110,6 +111,37 @@ class CookbookController extends Controller {
     }
 
     /**
+     * Returns information for the given cookbook including the information for the authenticated user
+     */
+    #[
+        OpenApi\Operation(
+            tags: ['Cookbooks'],
+            security: 'AccessTokenSecurityScheme'
+        )
+    ]
+    #[
+        OpenApi\Response(
+            factory: CookbookShowWithUserResponse::class,
+            statusCode: 200
+        )
+    ]
+    #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
+    #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
+    #[
+        OpenApi\Response(
+            factory: TooManyRequestsResponse::class,
+            statusCode: 429
+        )
+    ]
+    public function show(int $cookbook) {
+        return JsonResource::make(
+            authUser()
+                ->cookbooks()
+                ->findOrFail($cookbook)
+        );
+    }
+
+    /**
      * Updates an existing cookbook
      *
      * @param Cookbook $cookbook The cookbook's id
@@ -176,4 +208,3 @@ class CookbookController extends Controller {
         return response()->noContent();
     }
 }
-

@@ -10,7 +10,7 @@ import {
 import { Injectable } from '@angular/core';
 import { filter, Observable, shareReplay } from 'rxjs';
 import { AuthToken } from '../models/auth-token';
-import { Cookbook, CookbookUser, CookbookWithCounts } from '../models/cookbook';
+import { Cookbook, CookbookUser, CookbookWithCounts, CookbookWithUserMeta } from '../models/cookbook';
 import { FilterOption } from '../models/filter-option';
 import { CreateIngredientData, Ingredient, SimpleIngredient, EditIngredientData } from '../models/ingredient';
 import { PaginationMeta } from '../models/pagination-meta';
@@ -399,6 +399,8 @@ export class ApiService {
           ApiService.mergeParams(baseParams, paginationParams, sortParams)
         );
       },
+
+      get: (id: number) => this.get<{ data: CookbookWithUserMeta }>(`/cookbooks/${id}`, TokenType.Access),
 
       getRecipes: (cookbookId: number, options: ListParamOptions) =>
         this.get<{ data: ListRecipe[]; meta: PaginationMeta }>(

@@ -30,9 +30,11 @@ const routes: Routes = [
       { path: 'recipes', loadChildren: () => import('./pages/recipes/recipes.module').then((m) => m.RecipesModule) },
       {
         path: 'cookbooks',
-        component: CookbooksPageComponent,
         canActivate: [AuthGuard],
         runGuardsAndResolvers: 'always',
+        children: [
+          { path: '', component: CookbooksPageComponent },
+        ],
       },
     ],
   },

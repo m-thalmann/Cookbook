@@ -12,6 +12,14 @@ export interface CookbookWithCounts extends Cookbook {
   users_count: number;
 }
 
+export interface CookbookWithUserMeta extends Cookbook {
+  meta: {
+    is_admin: boolean;
+    created_at: number;
+    updated_at: number;
+  };
+}
+
 export interface CookbookUser extends User {
   meta: {
     is_admin: boolean;

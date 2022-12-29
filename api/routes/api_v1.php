@@ -41,9 +41,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         'destroy',
     ]);
 
-    Route::apiResource('cookbooks', CookbookController::class)->except([
-        'show',
-    ]);
+    Route::apiResource('cookbooks', CookbookController::class);
 
     Route::apiResource(
         'cookbooks.recipes',
