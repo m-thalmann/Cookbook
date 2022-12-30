@@ -146,10 +146,8 @@ export class AuthService {
 
     this.setUser(null);
 
-    const currentRouteConfig = this.routeHelper.getRouteLeaf(this.activatedRoute)?.routeConfig;
-
-    if (currentRouteConfig?.canActivate?.[0] === AuthGuard) {
-      this.router.navigate(['/home']);
+    if (this.routeHelper.routeContainsGuard(this.activatedRoute, AuthGuard)) {
+      await this.router.navigate(['/home']);
     }
   }
 

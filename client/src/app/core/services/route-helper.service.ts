@@ -18,6 +18,18 @@ export class RouteHelperService {
     return leaf;
   }
 
+  routeContainsGuard(route: ActivatedRoute | null, guard: any) {
+    while (route) {
+      if (route.routeConfig?.canActivate?.includes(guard)) {
+        return true;
+      }
+
+      route = route.firstChild;
+    }
+
+    return false;
+  }
+
   navigateBack() {
     if (document.referrer.length === 0 || document.referrer.indexOf(window.location.host) !== -1) {
       this.location.back();
