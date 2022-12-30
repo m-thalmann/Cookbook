@@ -24,6 +24,7 @@ import { TOKEN_TYPE_HTTP_CONTEXT } from './auth.interceptor';
 
 export enum TokenType {
   Access,
+  AccessOptional,
   Refresh,
   None,
 }
@@ -68,7 +69,7 @@ export class ApiService {
       headers: headers,
       context: new HttpContext().set(TOKEN_TYPE_HTTP_CONTEXT, tokenType),
     });
-
+    // TODO: needs first?
     return this.http.request(request).pipe(
       shareReplay(1),
       filter((response) => response instanceof HttpResponse)
@@ -302,7 +303,7 @@ export class ApiService {
       getList: (all = false) =>
         this.get<{ data: string[] }>(
           '/categories',
-          TokenType.Access,
+          TokenType.AccessOptional,
           ApiService.generateParams({ all: all ? '' : undefined })
         ),
     };
@@ -319,14 +320,14 @@ export class ApiService {
 
         return this.get<{ data: ListRecipe[]; meta: PaginationMeta }>(
           '/recipes',
-          TokenType.Access,
+          TokenType.AccessOptional,
           ApiService.mergeParams(baseParams, ApiService.generateListParamOptions(options)!)
         );
       },
 
-      get: (id: number) => this.get<{ data: DetailedRecipe }>(`/recipes/${id}`, TokenType.Access),
+      get: (id: number) => this.get<{ data: DetailedRecipe }>(`/recipes/${id}`, TokenType.AccessOptional),
       getShared: (shareUuid: string) =>
-        this.get<{ data: DetailedRecipe }>(`/recipes/shared/${shareUuid}`, TokenType.None),
+        this.get<{ data: DetailedRecipe }>(`/recipes/shared/${shareUuid}`, TokenType.AccessOptional),
 
       create: (data: CreateRecipeData) => this.post<{ data: DetailedRecipe }>('/recipes', data, TokenType.Access),
 
@@ -352,7 +353,7 @@ export class ApiService {
 
       images: {
         getList: (recipeId: number) =>
-          this.get<{ data: RecipeImage[] }>(`/recipes/${recipeId}/images`, TokenType.Access),
+          this.get<{ data: RecipeImage[] }>(`/recipes/${recipeId}/images`, TokenType.AccessOptional),
 
         create: (recipeId: number, image: File) => {
           const fd = new FormData();

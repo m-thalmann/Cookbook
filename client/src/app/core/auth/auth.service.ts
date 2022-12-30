@@ -38,7 +38,7 @@ export class AuthService {
     private activatedRoute: ActivatedRoute,
     private routeHelper: RouteHelperService
   ) {
-    this._accessToken = this.storage.local.get<string>(ACCESS_TOKEN_KEY);
+    this._accessToken = this.storage.session.get<string>(ACCESS_TOKEN_KEY);
     this._refreshToken = this.storage.local.get(REFRESH_TOKEN_KEY);
 
     const user = this.storage.local.get<DetailedUser>(USER_KEY);
@@ -51,8 +51,10 @@ export class AuthService {
   }
 
   async initialize() {
-    if (this.accessToken === null) {
+    if (this.refreshToken === null) {
+      this.accessToken = null;
       this.setUser(null);
+
       return;
     }
 
@@ -61,7 +63,7 @@ export class AuthService {
 
       this.setUser(userResponse.body!.data);
     } catch (e) {
-      this.logout(false);
+      await this.logout(false);
 
       let error = e;
 
@@ -91,9 +93,9 @@ export class AuthService {
     this._accessToken = accessToken;
 
     if (accessToken !== null) {
-      this.storage.local.set(ACCESS_TOKEN_KEY, accessToken);
+      this.storage.session.set(ACCESS_TOKEN_KEY, accessToken);
     } else {
-      this.storage.local.remove(ACCESS_TOKEN_KEY);
+      this.storage.session.remove(ACCESS_TOKEN_KEY);
     }
   }
 
@@ -112,7 +114,9 @@ export class AuthService {
   }
 
   public setUser(user: DetailedUser | null) {
-    this._user$.next(user);
+    if (JSON.stringify(user) !== JSON.stringify(this._user$.value)) {
+      this._user$.next(user);
+    }
 
     if (user !== null) {
       this.storage.local.set(USER_KEY, user);
