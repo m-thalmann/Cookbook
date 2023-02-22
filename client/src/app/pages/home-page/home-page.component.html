@@ -11,33 +11,14 @@
     </div>
 
     <div class="sections">
-        <app-home-page-section heading="Categories" [showMy]="!!vm.isAuthenticated" class="categories">
-            <div
-                class="categories-container"
-                *ngIf="vm.categories?.body?.data | clampArray: categoriesClampAmount as categories"
-            >
-                <a
-                    class="category-chip"
-                    *ngFor="let category of categories.items"
-                    routerLink="/recipes"
-                    [queryParams]="{ category }"
-                    color="primary"
-                    selected
-                    >{{ category }}
-                </a>
-                <span
-                    class="category-chip disabled"
-                    *ngIf="categories.overflowAmount > 0"
-                    (click)="revealMoreCategories()"
-                >
-                    +{{ categories.overflowAmount }}
-                </span>
+        <app-page-section heading="Categories" [showMy]="!!vm.isAuthenticated" class="categories">
+            <app-category-chip-list
+                [categories]="categories"
+                *ngIf="vm.categories?.body?.data as categories"
+            ></app-category-chip-list>
+        </app-page-section>
 
-                <p *ngIf="categories.items.length === 0" class="not-found-item">No categories found ...</p>
-            </div>
-        </app-home-page-section>
-
-        <app-home-page-section heading="Recipes" seeAllLink="/recipes" [showMy]="!!vm.isAuthenticated" class="recipes">
+        <app-page-section heading="Recipes" seeAllLink="/recipes" [showMy]="!!vm.isAuthenticated" class="recipes">
             <div *ngIf="vm.recipes?.body?.data as recipes">
                 <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe"></app-recipe-card>
 
@@ -57,9 +38,9 @@
                     <mat-icon>arrow_forward</mat-icon>
                 </div>
             </a>
-        </app-home-page-section>
+        </app-page-section>
 
-        <app-home-page-section
+        <app-page-section
             heading="Cookbooks"
             seeAllLink="/cookbooks"
             [showMy]="true"
@@ -85,6 +66,6 @@
                     <mat-icon>arrow_forward</mat-icon>
                 </div>
             </a>
-        </app-home-page-section>
+        </app-page-section>
     </div>
 </ng-container>

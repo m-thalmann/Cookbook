@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-home-page-section',
-  templateUrl: './home-page-section.component.html',
-  styleUrls: ['./home-page-section.component.scss'],
+  selector: 'app-page-section',
+  templateUrl: './page-section.component.html',
+  styleUrls: ['./page-section.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomePageSectionComponent {
+export class PageSectionComponent {
   @Input() heading!: string;
   @Input() showMy = false;
 
@@ -14,4 +14,3 @@ export class HomePageSectionComponent {
 
   constructor() {}
 }
-

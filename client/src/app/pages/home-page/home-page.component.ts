@@ -32,8 +32,6 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
     })
   );
 
-  categoriesClampAmount: number = 5;
-
   constructor(private api: ApiService, public auth: AuthService) {}
 
   ngAfterViewInit() {
@@ -46,10 +44,6 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.subSink.unsubscribe();
-  }
-
-  revealMoreCategories() {
-    this.categoriesClampAmount += 5;
   }
 
   getRemainingItems(meta?: PaginationMeta) {

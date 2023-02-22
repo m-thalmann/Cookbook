@@ -1,0 +1,36 @@
+<ng-container *ngIf="{ cookbook: cookbook$ | async, categories: categories$ | async, recipes: recipes$ | async } as vm">
+    <h2>
+        <mat-icon color="primary">menu_book</mat-icon>
+        {{ vm.cookbook?.body?.data?.name }}
+    </h2>
+
+    <app-page-section heading="Categories" class="categories">
+        <app-category-chip-list
+            [categories]="categories"
+            routerLink="./recipes"
+            *ngIf="vm.categories?.body?.data as categories"
+        ></app-category-chip-list>
+    </app-page-section>
+
+    <app-page-section heading="Recipes" seeAllLink="./recipes" class="recipes">
+        <div *ngIf="vm.recipes?.body?.data as recipes">
+            <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe"></app-recipe-card>
+
+            <p *ngIf="recipes.length === 0" class="not-found-item">No recipes found ...</p>
+        </div>
+
+        <a
+            routerLink="./recipes"
+            mat-raised-button
+            color="primary"
+            class="show-more-items"
+            *ngIf="getRemainingItems(vm.recipes?.body?.meta) as remainingItems"
+        >
+            <div class="button-wrapper">
+                <mat-icon>restaurant</mat-icon>
+                Show {{ remainingItems }} more recipes
+                <mat-icon>arrow_forward</mat-icon>
+            </div>
+        </a>
+    </app-page-section>
+</ng-container>

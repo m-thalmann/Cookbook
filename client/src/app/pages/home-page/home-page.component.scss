@@ -27,7 +27,7 @@
   flex-direction: column;
   gap: 1em;
 
-  app-home-page-section {
+  app-page-section {
     .not-found-item {
       margin: 0;
       margin-top: 0.5em;
@@ -45,46 +45,6 @@
         align-items: center;
         gap: 0.5em;
         height: 100%;
-      }
-    }
-
-    &.categories {
-      .categories-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5em;
-
-        .category-chip {
-          padding: 0.5em 0.75em;
-          border-radius: 1.25em;
-
-          text-decoration: none;
-          font-weight: 500;
-          font-size: 0.9em;
-          cursor: pointer;
-
-          transition: background $transition-time, color $transition-time;
-
-          @include theme.apply() using ($variables) {
-            &:not(.disabled) {
-              background: map.get($variables, 'primary');
-              color: map.get($variables, 'primary-text');
-
-              &:hover {
-                background: theme.adjust-color($variables, map.get($variables, 'primary'), -10%);
-              }
-            }
-
-            &.disabled {
-              background: theme.adjust-color($variables, map.get($variables, 'background'), -20%);
-
-              &:hover {
-                background: theme.adjust-color($variables, map.get($variables, 'primary'), -20%);
-                color: map.get($variables, 'primary-text');
-              }
-            }
-          }
-        }
       }
     }
 

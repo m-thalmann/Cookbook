@@ -6,6 +6,7 @@ import { LayoutAuthComponent } from './layouts/layout-auth/layout-auth.component
 import { LayoutDefaultComponent } from './layouts/layout-default/layout-default.component';
 import { LoginPageComponent } from './pages/auth/login-page/login-page.component';
 import { SignUpPageComponent } from './pages/auth/sign-up-page/sign-up-page.component';
+import { CookbookDetailPageComponent } from './pages/cookbooks/cookbook-detail-page/cookbook-detail-page.component';
 import { CookbooksPageComponent } from './pages/cookbooks/cookbooks-page/cookbooks-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 
@@ -34,6 +35,7 @@ const routes: Routes = [
         runGuardsAndResolvers: 'always',
         children: [
           { path: '', component: CookbooksPageComponent },
+          { path: ':id', component: CookbookDetailPageComponent },
         ],
       },
     ],

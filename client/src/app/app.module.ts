@@ -20,9 +20,9 @@ import { LayoutDefaultNavbarComponent } from './layouts/layout-default/component
 import { LayoutDefaultComponent } from './layouts/layout-default/layout-default.component';
 import { LoginPageComponent } from './pages/auth/login-page/login-page.component';
 import { SignUpPageComponent } from './pages/auth/sign-up-page/sign-up-page.component';
-import { HomePageSectionComponent } from './pages/home-page/components/home-page-section/home-page-section.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { CookbooksPageComponent } from './pages/cookbooks/cookbooks-page/cookbooks-page.component';
+import { CookbookDetailPageComponent } from './pages/cookbooks/cookbook-detail-page/cookbook-detail-page.component';
 
 function setup(config: ConfigService, auth: AuthService) {
   return async () => {
@@ -51,8 +51,8 @@ class CustomHammerConfig extends HammerGestureConfig {
     SignUpPageComponent,
     LayoutDefaultNavbarComponent,
     AccountMenuBottomSheetComponent,
-    HomePageSectionComponent,
     CookbooksPageComponent,
+    CookbookDetailPageComponent,
   ],
   imports: [
     BrowserModule,
