@@ -7,6 +7,7 @@ import { LayoutDefaultComponent } from './layouts/layout-default/layout-default.
 import { LoginPageComponent } from './pages/auth/login-page/login-page.component';
 import { SignUpPageComponent } from './pages/auth/sign-up-page/sign-up-page.component';
 import { CookbookDetailPageComponent } from './pages/cookbooks/cookbook-detail-page/cookbook-detail-page.component';
+import { CookbookRecipesPageComponent } from './pages/cookbooks/cookbook-recipes-page/cookbook-recipes-page.component';
 import { CookbooksPageComponent } from './pages/cookbooks/cookbooks-page/cookbooks-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 
@@ -35,7 +36,13 @@ const routes: Routes = [
         runGuardsAndResolvers: 'always',
         children: [
           { path: '', component: CookbooksPageComponent },
-          { path: ':id', component: CookbookDetailPageComponent },
+          {
+            path: ':id',
+            children: [
+              { path: '', component: CookbookDetailPageComponent },
+              { path: 'recipes', component: CookbookRecipesPageComponent },
+            ],
+          },
         ],
       },
     ],

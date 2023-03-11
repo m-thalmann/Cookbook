@@ -1,8 +1,5 @@
 <ng-container *ngIf="{ cookbook: cookbook$ | async, categories: categories$ | async, recipes: recipes$ | async } as vm">
-    <h2>
-        <mat-icon color="primary">menu_book</mat-icon>
-        {{ vm.cookbook?.body?.data?.name }}
-    </h2>
+    <app-cookbook-header [cookbook]="vm.cookbook?.body?.data || null" [showEditButton]="true"></app-cookbook-header>
 
     <app-page-section heading="Categories" class="categories">
         <app-category-chip-list

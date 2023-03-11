@@ -1,0 +1,11 @@
+<h2>
+    <!-- TODO: add button to go back -->
+
+    <mat-icon color="primary">menu_book</mat-icon>
+    {{ cookbook?.name }}
+
+    <a [routerLink]="['/cookbooks', cookbook?.id, 'edit']" mat-icon-button *ngIf="showEditButton && isAdmin">
+        <mat-icon>edit</mat-icon>
+    </a>
+</h2>
+

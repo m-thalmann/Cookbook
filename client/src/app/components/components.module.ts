@@ -8,6 +8,7 @@ import { ImageSliderDialogComponent } from './image-slider-dialog/image-slider-d
 import { NumberInputComponent } from './number-input/number-input.component';
 import { PageSectionComponent } from './page-section/page-section.component';
 import { RecipeCardComponent } from './recipe-card/recipe-card.component';
+import { RecipeSearchComponent } from './recipe-search/recipe-search.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 import { ShareMenuComponent } from './share-menu/share-menu.component';
 import { IconSnackbarComponent } from './snackbar/icon-snackbar/icon-snackbar.component';
@@ -22,6 +23,7 @@ const components = [
   IconSnackbarComponent,
   PageSectionComponent,
   CategoryChipListComponent,
+  RecipeSearchComponent,
 ];
 
 @NgModule({

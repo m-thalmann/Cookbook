@@ -1,6 +1,7 @@
 import { Cookbook } from './cookbook';
 import { Ingredient } from './ingredient';
 import { RecipeImage } from './recipe-image';
+import { SortOption } from './sort-option';
 import { User } from './user';
 
 export interface Recipe {
@@ -73,4 +74,11 @@ export interface EditRecipeData {
   resting_time_minutes?: number | null;
   cooking_time_minutes?: number | null;
   cookbook_id?: number | null;
+}
+
+export interface RecipeFilters {
+  all?: boolean;
+  search?: string;
+  category?: string;
+  sort?: SortOption[];
 }

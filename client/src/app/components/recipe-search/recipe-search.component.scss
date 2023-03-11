@@ -1,0 +1,219 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use 'variables' as *;
+@use 'mixins';
+@use 'theme';
+
+:host {
+  display: block;
+  padding: 0 $layout-padding;
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+
+  margin: 2em 0;
+
+  .sort-filter,
+  .category-filter {
+    all: unset;
+
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+
+    padding: 0 0.75em;
+    border-radius: 2em;
+
+    cursor: pointer;
+
+    &,
+    > label > select {
+      transition: background $transition-time, box-shadow $transition-time;
+    }
+
+    @include mat.elevation(2);
+
+    @include theme.apply() using ($variables) {
+      &,
+      > label > select {
+        background: darken(map.get($variables, 'background'), 10%);
+      }
+
+      &:not(.disabled) {
+        &:hover,
+        &:focus-within {
+          &,
+          > label > select {
+            background: darken(map.get($variables, 'background'), 5%);
+          }
+        }
+      }
+    }
+
+    &.disabled {
+      cursor: default;
+
+      > * {
+        opacity: 0.25;
+        cursor: default;
+      }
+    }
+
+    > * {
+      transition: opacity $transition-time, background $transition-time !important;
+    }
+
+    &:focus-within {
+      @include mat.elevation(4);
+    }
+
+    > label {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      cursor: pointer;
+    }
+
+    select {
+      all: unset;
+
+      padding: 0.25em 0;
+      line-height: 1.5;
+    }
+
+    > button {
+      all: unset;
+      cursor: pointer;
+      display: flex;
+
+      padding: 0.25rem;
+
+      mat-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+
+  .sort-filter {
+    padding-right: 0;
+
+    @include theme.apply() using ($variables) {
+      > button {
+        background: theme.adjust-color($variables, map.get($variables, 'accent'), -2.5%);
+
+        &:not(:disabled):hover {
+          background: theme.adjust-color($variables, map.get($variables, 'accent'), -15%);
+        }
+      }
+    }
+
+    > label > select {
+      width: calc(100% - 2em);
+    }
+
+    > button {
+      border-radius: 50%;
+      width: 1.5em;
+      height: 1.5em;
+    }
+  }
+
+  .category-filter {
+    @include theme.apply() using ($variables) {
+      > button {
+        background: theme.adjust-color($variables, map.get($variables, 'background'), -10%);
+
+        &:not(:disabled):hover {
+          background: theme.adjust-color($variables, map.get($variables, 'background'), -20%);
+        }
+      }
+    }
+
+    > button {
+      padding: 0.125em;
+      border-radius: 50%;
+      width: 1em;
+      height: 1em;
+    }
+
+    &:not(.none-selected) > select {
+      width: calc(100% - 3.5em);
+    }
+
+    &.none-selected {
+      &:not(.disabled) {
+        > label > select {
+          opacity: 0.75;
+        }
+      }
+
+      > label > select {
+        font-weight: lighter;
+        width: 8.5em;
+        max-width: calc(100% - 2.25em);
+      }
+    }
+  }
+
+  @media screen and (min-width: 500px) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+
+    margin: 1em 0;
+  }
+}
+
+.amount-results {
+  margin-left: 0.5em;
+  margin-bottom: 1.5em;
+  opacity: 0.5;
+
+  @include mixins.font-handwriting();
+}
+
+.recipes {
+  display: grid;
+
+  gap: 1em;
+
+  @media screen and (min-width: 500px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media screen and (min-width: 800px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .not-found-item {
+    margin: 0;
+    margin-top: 0.5em;
+
+    font-style: italic;
+  }
+}
+
+mat-paginator {
+  margin-top: 2em;
+  margin-left: calc(-1 * $layout-padding);
+  margin-right: calc(-1 * $layout-padding);
+
+  @media screen and (max-width: 600px) {
+    padding: 1em 0;
+  }
+
+  @include mixins.desktop() {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+
+    margin-left: calc(-1 * $layout-padding / 2);
+    margin-right: calc(-1 * $layout-padding / 2);
+
+    border-radius: 1em;
+  }
+}

@@ -1,0 +1,10 @@
+<ng-container *ngIf="{ cookbook: cookbook$ | async } as vm">
+    <app-cookbook-header [cookbook]="vm.cookbook?.body?.data || null" [showBackButton]="true"></app-cookbook-header>
+
+    <app-recipe-search
+        [fetchRecipesFn]="fetchRecipesFn"
+        [fetchCategoriesFn]="fetchCategoriesFn"
+        [showAllFilter]="false"
+    ></app-recipe-search>
+</ng-container>
+
