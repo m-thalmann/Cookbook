@@ -10,11 +10,14 @@ export class GuestGuard implements CanActivate {
   constructor(private auth: AuthService, private router: Router) {}
 
   canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (!this.auth.isAuthenticated) {
-      return true;
-    }
+    return this.auth.isAuthenticated$.pipe(
+      map((isAuthenticated) => {
+        if (!isAuthenticated) {
+          return true;
+        }
 
-    return this.router.createUrlTree(['']);
+        return this.router.createUrlTree(['']);
+      })
+    );
   }
 }
-

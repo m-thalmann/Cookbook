@@ -7,7 +7,19 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, finalize, first, from, map, Observable, of, shareReplay, switchMap, throwError } from 'rxjs';
+import {
+  catchError,
+  combineLatest,
+  finalize,
+  first,
+  from,
+  map,
+  Observable,
+  of,
+  shareReplay,
+  switchMap,
+  throwError,
+} from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { ApiService, TokenType } from './api.service';
 
@@ -19,65 +31,87 @@ export class AuthInterceptor implements HttpInterceptor {
   private isRefreshing = false;
   private refreshedToken$?: Observable<string | null>;
 
+  private authTokens$ = combineLatest([this.auth.accessToken$, this.auth.refreshToken$]).pipe(
+    map(([accessToken, refreshToken]) => ({ accessToken, refreshToken }))
+  );
+
   constructor(private api: ApiService, private auth: AuthService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    const tokenType: TokenType | undefined = request.context.get(TOKEN_TYPE_HTTP_CONTEXT);
-    const token = this.getTokenForRequest(tokenType);
-
-    if (token === null && this.isAccessTokenType(tokenType) && this.auth.refreshToken !== null) {
-      request.context.set(REQUEST_REFRESH_TRIED_CONTEXT, true);
-      return this.refreshToken().pipe(
-        catchError(() => of()),
-        switchMap(() => this.intercept(request, next))
-      );
+    if (!request.url.startsWith(this.api.url)) {
+      return next.handle(request);
     }
 
-    request = this.appendTokenToRequest(request, token);
+    const tokenType: TokenType | undefined = request.context.get(TOKEN_TYPE_HTTP_CONTEXT);
 
-    return next.handle(request).pipe(
-      catchError((error) => {
-        if (
-          !this.isUnauthorizedError(error) ||
-          !this.isAccessTokenType(tokenType) ||
-          request.context.get(REQUEST_REFRESH_TRIED_CONTEXT)
-        ) {
-          return throwError(() => error);
+    // TODO: improve code + check if refresh is currently ongoing
+    return this.authTokens$.pipe(
+      first(),
+      switchMap(({ accessToken, refreshToken }) => {
+        const token = this.getTokenForRequest(tokenType, { accessToken, refreshToken });
+
+        if (token === null && this.isAccessTokenType(tokenType) && refreshToken !== null) {
+          request.context.set(REQUEST_REFRESH_TRIED_CONTEXT, true);
+          return this.refreshToken().pipe(
+            catchError(() => of()),
+            switchMap(() => this.intercept(request, next))
+          );
         }
 
-        // retry the request if the token has changed in the time since the request
-        if (token && this.getTokenForRequest(tokenType) !== token) {
-          return this.intercept(request, next);
+        if (token === null && tokenType === TokenType.Refresh) {
+          return this.logoutAndThrowError(new Error('No refresh token set'));
         }
 
-        request.context.set(REQUEST_REFRESH_TRIED_CONTEXT, true);
+        request = this.appendTokenToRequest(request, token);
 
-        return this.refreshToken().pipe(
-          catchError(() => {
-            if (tokenType === TokenType.AccessOptional) {
-              request.context.set(TOKEN_TYPE_HTTP_CONTEXT, TokenType.None);
+        return next.handle(request).pipe(
+          catchError((error) => {
+            if (
+              !this.isUnauthorizedError(error) ||
+              !this.isAccessTokenType(tokenType) ||
+              request.context.get(REQUEST_REFRESH_TRIED_CONTEXT)
+            ) {
+              return throwError(() => error);
+            }
 
+            // retry the request if the token has changed in the time since the request
+            if (token && this.getTokenForRequest(tokenType, { accessToken, refreshToken }) !== token) {
               return this.intercept(request, next);
             }
 
-            return throwError(() => error);
-          }),
-          switchMap(() => this.intercept(request, next))
+            request.context.set(REQUEST_REFRESH_TRIED_CONTEXT, true);
+
+            return this.refreshToken().pipe(
+              catchError(() => {
+                if (tokenType === TokenType.AccessOptional) {
+                  request.context.set(TOKEN_TYPE_HTTP_CONTEXT, TokenType.None);
+
+                  return this.intercept(request, next);
+                }
+
+                return throwError(() => error);
+              }),
+              switchMap(() => this.intercept(request, next))
+            );
+          })
         );
       })
     );
   }
 
   private isAccessTokenType(tokenType?: TokenType) {
-    return !!tokenType && [TokenType.Access, TokenType.AccessOptional].includes(tokenType);
+    return tokenType !== undefined && [TokenType.Access, TokenType.AccessOptional].includes(tokenType);
   }
 
-  private getTokenForRequest(tokenType: TokenType | undefined) {
+  private getTokenForRequest(
+    tokenType: TokenType | undefined,
+    tokens: { accessToken: string | null; refreshToken: string | null }
+  ) {
     if (tokenType !== undefined) {
-      if (tokenType === TokenType.Access || tokenType === TokenType.AccessOptional) {
-        return this.auth.accessToken;
+      if (this.isAccessTokenType(tokenType)) {
+        return tokens.accessToken;
       } else if (tokenType === TokenType.Refresh) {
-        return this.auth.refreshToken;
+        return tokens.refreshToken;
       }
     }
 
@@ -97,10 +131,6 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   private refreshToken(): Observable<void> {
-    if (this.auth.refreshToken === null) {
-      return this.logoutAndThrowError(new Error('No refresh token set'));
-    }
-
     if (!this.isRefreshing) {
       this.isRefreshing = true;
       this.refreshedToken$ = this.api.auth.refreshToken().pipe(

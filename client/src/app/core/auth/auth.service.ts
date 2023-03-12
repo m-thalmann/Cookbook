@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, distinctUntilChanged, lastValueFrom, map } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, lastValueFrom, map, Observable, Subscription } from 'rxjs';
 import { ApiService } from '../api/api.service';
 import { Logger as LoggerClass } from '../helpers/logger';
 import { DetailedUser } from '../models/user';
@@ -18,18 +18,21 @@ const Logger = new LoggerClass('AuthService');
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService {
+export class AuthService implements OnDestroy {
+  private subSink = new Subscription();
+
   private _isInitialized$ = new BehaviorSubject<boolean>(false);
+  isInitialized$ = this._isInitialized$.asObservable();
 
-  private _accessToken: string | null;
-  private _refreshToken: string | null;
+  private _accessToken$: BehaviorSubject<string | null>;
+  private _refreshToken$: BehaviorSubject<string | null>;
+  accessToken$: Observable<string | null>;
+  refreshToken$: Observable<string | null>;
 
-  private _user$ = new BehaviorSubject<DetailedUser | null>(null);
+  private _user$: BehaviorSubject<DetailedUser | null>;
+  user$: Observable<DetailedUser | null>;
 
-  isAuthenticated$ = this._user$.pipe(
-    map((user) => user !== null),
-    distinctUntilChanged()
-  );
+  isAuthenticated$: Observable<boolean>;
 
   constructor(
     private storage: StorageService,
@@ -38,22 +41,61 @@ export class AuthService {
     private activatedRoute: ActivatedRoute,
     private routeHelper: RouteHelperService
   ) {
-    this._accessToken = this.storage.session.get<string>(ACCESS_TOKEN_KEY);
-    this._refreshToken = this.storage.local.get(REFRESH_TOKEN_KEY);
+    this._accessToken$ = new BehaviorSubject(this.storage.session.get<string>(ACCESS_TOKEN_KEY));
+    this._refreshToken$ = new BehaviorSubject(this.storage.local.get(REFRESH_TOKEN_KEY));
 
-    const user = this.storage.local.get<DetailedUser>(USER_KEY);
+    this.accessToken$ = this._accessToken$.asObservable().pipe(distinctUntilChanged());
+    this.refreshToken$ = this._refreshToken$.asObservable().pipe(distinctUntilChanged());
 
-    this._user$.next(user);
+    this.subSink.add(
+      this.accessToken$.subscribe((accessToken) => {
+        if (accessToken !== null) {
+          this.storage.session.set(ACCESS_TOKEN_KEY, accessToken);
+        } else {
+          this.storage.session.remove(ACCESS_TOKEN_KEY);
+        }
+      })
+    );
+
+    this.subSink.add(
+      this.refreshToken$.subscribe((refreshToken) => {
+        if (refreshToken !== null) {
+          this.storage.local.set(REFRESH_TOKEN_KEY, refreshToken);
+        } else {
+          this.storage.local.remove(REFRESH_TOKEN_KEY);
+        }
+      })
+    );
+
+    this._user$ = new BehaviorSubject<DetailedUser | null>(this.storage.local.get<DetailedUser>(USER_KEY));
+    this.user$ = this._user$
+      .asObservable()
+      .pipe(distinctUntilChanged((previous, current) => JSON.stringify(previous) === JSON.stringify(current)));
+
+    this.subSink.add(
+      this.user$.subscribe((user) => {
+        if (user !== null) {
+          this.storage.local.set(USER_KEY, user);
+        } else {
+          this.storage.local.remove(USER_KEY);
+        }
+      })
+    );
+
+    this.isAuthenticated$ = this._user$.pipe(
+      map((user) => user !== null),
+      distinctUntilChanged()
+    );
   }
 
-  get isInitialized$() {
-    return this._isInitialized$.asObservable();
+  ngOnDestroy() {
+    this.subSink.unsubscribe();
   }
 
   async initialize() {
-    if (this.refreshToken === null) {
-      this.accessToken = null;
-      this.setUser(null);
+    if (this._refreshToken$.value === null) {
+      this._accessToken$.next(null);
+      this._user$.next(null);
 
       return;
     }
@@ -61,7 +103,7 @@ export class AuthService {
     try {
       const userResponse = await lastValueFrom(this.api.auth.getAuthenticatedUser());
 
-      this.setUser(userResponse.body!.data);
+      this._user$.next(userResponse.body!.data);
     } catch (e) {
       await this.logout(false);
 
@@ -77,59 +119,11 @@ export class AuthService {
     this._isInitialized$.next(true);
   }
 
-  get user$() {
-    return this._user$.asObservable();
-  }
-
-  get isAuthenticated() {
-    return this._user$.getValue() !== null;
-  }
-
-  get accessToken() {
-    return this._accessToken;
-  }
-
-  private set accessToken(accessToken: string | null) {
-    this._accessToken = accessToken;
-
-    if (accessToken !== null) {
-      this.storage.session.set(ACCESS_TOKEN_KEY, accessToken);
-    } else {
-      this.storage.session.remove(ACCESS_TOKEN_KEY);
-    }
-  }
-
-  get refreshToken() {
-    return this._refreshToken;
-  }
-
-  private set refreshToken(refreshToken: string | null) {
-    this._refreshToken = refreshToken;
-
-    if (refreshToken !== null) {
-      this.storage.local.set(REFRESH_TOKEN_KEY, refreshToken);
-    } else {
-      this.storage.local.remove(REFRESH_TOKEN_KEY);
-    }
-  }
-
-  public setUser(user: DetailedUser | null) {
-    if (JSON.stringify(user) !== JSON.stringify(this._user$.value)) {
-      this._user$.next(user);
-    }
-
-    if (user !== null) {
-      this.storage.local.set(USER_KEY, user);
-    } else {
-      this.storage.local.remove(USER_KEY);
-    }
-  }
-
   public async login(user: DetailedUser, accessToken: string, refreshToken: string, redirectUrl = '/home') {
-    this.setUser(user);
+    this._user$.next(user);
 
-    this.accessToken = accessToken;
-    this.refreshToken = refreshToken;
+    this._accessToken$.next(accessToken);
+    this._refreshToken$.next(refreshToken);
 
     this.router.navigateByUrl(redirectUrl);
   }
@@ -141,10 +135,10 @@ export class AuthService {
       } catch (e) {}
     }
 
-    this.accessToken = null;
-    this.refreshToken = null;
+    this._accessToken$.next(null);
+    this._refreshToken$.next(null);
 
-    this.setUser(null);
+    this._user$.next(null);
 
     if (this.routeHelper.routeContainsGuard(this.activatedRoute, AuthGuard)) {
       await this.router.navigate(['/home']);
@@ -152,7 +146,7 @@ export class AuthService {
   }
 
   public refreshAccessToken(accessToken: string, refreshToken: string) {
-    this.accessToken = accessToken;
-    this.refreshToken = refreshToken;
+    this._accessToken$.next(accessToken);
+    this._refreshToken$.next(refreshToken);
   }
 }
