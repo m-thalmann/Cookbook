@@ -1,11 +1,11 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { APP_INITIALIZER, NgModule, isDevMode, Injectable } from '@angular/core';
+import { APP_INITIALIZER, Injectable, isDevMode, NgModule } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { BrowserModule, HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ServiceWorkerModule } from '@angular/service-worker';
 import { HammerModule } from '../../node_modules/@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
-import { ServiceWorkerModule } from '@angular/service-worker';
 
 import { AuthInterceptor } from './core/api/auth.interceptor';
 import { AuthService } from './core/auth/auth.service';
@@ -21,10 +21,6 @@ import { LayoutDefaultComponent } from './layouts/layout-default/layout-default.
 import { LoginPageComponent } from './pages/auth/login-page/login-page.component';
 import { SignUpPageComponent } from './pages/auth/sign-up-page/sign-up-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
-import { CookbooksPageComponent } from './pages/cookbooks/cookbooks-page/cookbooks-page.component';
-import { CookbookDetailPageComponent } from './pages/cookbooks/cookbook-detail-page/cookbook-detail-page.component';
-import { CookbookRecipesPageComponent } from './pages/cookbooks/cookbook-recipes-page/cookbook-recipes-page.component';
-import { CookbookHeaderComponent } from './pages/cookbooks/components/cookbook-header/cookbook-header.component';
 
 function setup(config: ConfigService, auth: AuthService) {
   return async () => {
@@ -53,10 +49,6 @@ class CustomHammerConfig extends HammerGestureConfig {
     SignUpPageComponent,
     LayoutDefaultNavbarComponent,
     AccountMenuBottomSheetComponent,
-    CookbooksPageComponent,
-    CookbookDetailPageComponent,
-    CookbookRecipesPageComponent,
-    CookbookHeaderComponent,
   ],
   imports: [
     BrowserModule,

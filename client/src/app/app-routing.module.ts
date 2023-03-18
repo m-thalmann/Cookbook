@@ -34,16 +34,7 @@ const routes: Routes = [
         path: 'cookbooks',
         canActivate: [AuthGuard],
         runGuardsAndResolvers: 'always',
-        children: [
-          { path: '', component: CookbooksPageComponent },
-          {
-            path: ':id',
-            children: [
-              { path: '', component: CookbookDetailPageComponent },
-              { path: 'recipes', component: CookbookRecipesPageComponent },
-            ],
-          },
-        ],
+        loadChildren: () => import('./pages/cookbooks/cookbooks.module').then((m) => m.CookbooksModule),
       },
     ],
   },
