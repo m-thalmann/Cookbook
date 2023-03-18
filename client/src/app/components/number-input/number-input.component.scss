@@ -30,7 +30,7 @@
 
   button,
   input {
-    transition: background 0.2s;
+    transition: background $transition-time;
 
     &:disabled {
       opacity: 0.5;

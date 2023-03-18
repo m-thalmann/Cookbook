@@ -1,8 +1,14 @@
-<a [routerLink]="['/cookbooks', cookbook.id]" class="container">
-    <mat-icon color="primary">menu_book</mat-icon>
+<div class="container">
+    <a [routerLink]="['/cookbooks', cookbook.id]" class="cookbook-link">
+        <mat-icon color="primary">menu_book</mat-icon>
 
-    <h3>{{ cookbook.name }}</h3>
+        <h3>{{ cookbook.name }}</h3>
+    </a>
 
-    <small>{{ cookbook.recipes_count }}</small>
-</a>
+    <div class="divider"></div>
 
+    <a [routerLink]="['/cookbooks', cookbook.id, 'recipes']" class="recipes-link">
+        <mat-icon [inline]="true">restaurant</mat-icon>
+        <small>{{ cookbook.recipes_count }}</small>
+    </a>
+</div>

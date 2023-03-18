@@ -40,7 +40,7 @@ mat-toolbar {
           background: transparent;
           border-radius: 0;
 
-          transition: background 0.2s;
+          transition: background $transition-time;
 
           &:not(:disabled):hover {
             background: rgba(255, 255, 255, 0.05);
@@ -69,7 +69,7 @@ mat-toolbar {
 
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.2s;
+            transition: max-height $transition-time;
 
             @include mixins.font-handwriting();
           }

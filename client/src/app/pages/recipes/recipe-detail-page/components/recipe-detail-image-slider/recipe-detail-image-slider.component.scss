@@ -1,10 +1,11 @@
 @use 'sass:map';
 @use 'mixins';
 @use 'theme';
-@use '../../styles/variables.scss' as *;
+@use 'variables' as *;
+@use '../../styles/variables' as slider;
 
 :host {
-  height: $image-height;
+  height: slider.$image-height;
   white-space: nowrap;
   position: fixed;
   top: 0;
@@ -27,7 +28,9 @@
   img {
     display: block;
     width: 100%;
-    height: calc(100% + 2 * $content-border-radius); // since content overlaps on bottom and image is aligned in middle
+    height: calc(
+      100% + 2 * slider.$content-border-radius
+    ); // since content overlaps on bottom and image is aligned in middle
     object-fit: cover;
 
     cursor: pointer;
@@ -35,7 +38,7 @@
 
   button {
     opacity: 0;
-    transition: opacity 0.2s, background 0.2s;
+    transition: opacity $transition-time, background $transition-time;
 
     position: absolute;
     top: 50%;

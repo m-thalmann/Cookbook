@@ -54,7 +54,7 @@ mat-dialog-content {
       object-fit: contain;
       flex-shrink: 0;
 
-      transition: margin 0.2s;
+      transition: margin $transition-time;
     }
   }
 

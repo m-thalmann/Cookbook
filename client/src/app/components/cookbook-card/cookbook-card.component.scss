@@ -1,47 +1,83 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
+@use 'variables' as *;
 @use 'theme';
 
 .container {
-  display: block;
-  position: relative;
-
-  color: inherit;
-  text-decoration: none;
-
   display: flex;
-  align-items: center;
-  gap: 0.75em;
+  align-items: stretch;
 
-  padding: 1.25em 1em;
-
+  overflow: hidden;
   border-radius: 0.5em;
 
-  transition: background 0.2s;
+  transition: box-shadow $transition-time;
 
   @include mat.elevation(2);
-
-  @include theme.apply() using ($variables) {
-    background: darken(map.get($variables, 'background'), 5%);
-
-    &:hover {
-      background: darken(map.get($variables, 'background'), 2%);
-    }
-  }
 
   &:hover {
     @include mat.elevation(4);
   }
 
-  h3 {
-    flex: 1;
-    margin: 0;
+  @include theme.apply() using ($variables) {
+    a,
+    .divider {
+      background: darken(map.get($variables, 'background'), 5%);
+    }
 
-    font-size: 1.25rem;
+    a:hover {
+      background: darken(map.get($variables, 'background'), 2%);
+
+      &.recipes-link {
+        color: map.get($variables, 'primary');
+      }
+    }
+
+    .divider::before {
+      background: theme.adjust-color($variables, map.get($variables, 'foreground'), 70%);
+    }
   }
 
-  small {
-    font-size: 1rem;
-    opacity: 0.5;
+  a {
+    display: block;
+    padding: 1.25rem 1rem;
+
+    color: inherit;
+    text-decoration: none;
+
+    display: flex;
+    align-items: center;
+
+    transition: background $transition-time, color $transition-time;
+
+    &.cookbook-link {
+      flex: 1;
+      gap: 0.75em;
+
+      h3 {
+        margin: 0;
+
+        font-size: 1.25rem;
+      }
+    }
+
+    &.recipes-link {
+      gap: 0.5em;
+
+      small {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 70%;
+    }
   }
 }
