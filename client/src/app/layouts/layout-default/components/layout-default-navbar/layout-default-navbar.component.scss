@@ -40,12 +40,6 @@ mat-toolbar {
           background: transparent;
           border-radius: 0;
 
-          transition: background $transition-time;
-
-          &:not(:disabled):hover {
-            background: rgba(255, 255, 255, 0.05);
-          }
-
           &.current {
             @include theme.apply() using ($variables) {
               color: map.get($variables, 'accent');

@@ -7,19 +7,7 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  catchError,
-  combineLatest,
-  finalize,
-  first,
-  from,
-  map,
-  Observable,
-  of,
-  shareReplay,
-  switchMap,
-  throwError,
-} from 'rxjs';
+import { catchError, combineLatest, first, from, map, Observable, of, shareReplay, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { ApiService, TokenType } from './api.service';
 
@@ -44,18 +32,17 @@ export class AuthInterceptor implements HttpInterceptor {
 
     const tokenType: TokenType | undefined = request.context.get(TOKEN_TYPE_HTTP_CONTEXT);
 
-    // TODO: improve code + check if refresh is currently ongoing
+    if (this.isRefreshing && this.refreshedToken$ && tokenType !== TokenType.Refresh) {
+      return this.interceptAfterRefresh(this.refreshedToken$, request, next);
+    }
+
     return this.authTokens$.pipe(
       first(),
       switchMap(({ accessToken, refreshToken }) => {
         const token = this.getTokenForRequest(tokenType, { accessToken, refreshToken });
 
         if (token === null && this.isAccessTokenType(tokenType) && refreshToken !== null) {
-          request.context.set(REQUEST_REFRESH_TRIED_CONTEXT, true);
-          return this.refreshToken().pipe(
-            catchError(() => of()),
-            switchMap(() => this.intercept(request, next))
-          );
+          return this.interceptAfterRefresh(this.refreshToken(), request, next);
         }
 
         if (token === null && tokenType === TokenType.Refresh) {
@@ -135,19 +122,21 @@ export class AuthInterceptor implements HttpInterceptor {
       this.isRefreshing = true;
       this.refreshedToken$ = this.api.auth.refreshToken().pipe(
         catchError((error) => {
+          this.isRefreshing = false;
+
           if (this.isUnauthorizedError(error)) {
             return this.logoutAndThrowError(error);
           }
 
           return throwError(() => error);
         }),
-        finalize(() => {
-          this.isRefreshing = false;
-        }),
         map((response) => {
           const refreshResponse = response.body!.data;
 
           this.auth.refreshAccessToken(refreshResponse.access_token, refreshResponse.refresh_token);
+
+          this.isRefreshing = false;
+
           return refreshResponse.access_token;
         }),
         shareReplay(1)
@@ -162,6 +151,16 @@ export class AuthInterceptor implements HttpInterceptor {
     return this.refreshedToken$.pipe(
       first(),
       map(() => undefined)
+    );
+  }
+
+  private interceptAfterRefresh(refresh: Observable<any>, request: HttpRequest<unknown>, next: HttpHandler) {
+    request.context.set(REQUEST_REFRESH_TRIED_CONTEXT, true);
+
+    return refresh.pipe(
+      first(),
+      catchError(() => of()),
+      switchMap(() => this.intercept(request, next))
     );
   }
 

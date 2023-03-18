@@ -10,7 +10,9 @@
             <mat-icon>arrow_left</mat-icon>
         </button>
         <div class="images" #imagesContainer>
-            <img [src]="image" loading="lazy" *ngFor="let image of images" />
+            <div class="image" *ngFor="let image of images">
+                <img [src]="image" loading="lazy" />
+            </div>
         </div>
         <button mat-icon-button (click)="nextImage(1)" class="hide-mobile">
             <mat-icon>arrow_right</mat-icon>

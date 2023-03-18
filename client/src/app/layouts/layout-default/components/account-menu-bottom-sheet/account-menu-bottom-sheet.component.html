@@ -1,6 +1,6 @@
 <ng-container *ngIf="{ user: auth.user$ | async } as vm">
     <mat-nav-list>
-        <a mat-list-item routerLink="/create-recipe" (click)="close()">
+        <a mat-list-item routerLink="/recipes/create" (click)="close()">
             <mat-icon matListItemIcon>add</mat-icon>
             <div matListItemTitle>Create new recipe</div>
         </a>

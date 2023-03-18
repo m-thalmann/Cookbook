@@ -5,3 +5,5 @@ export interface RecipeImage {
   updated_at: number;
   url: string;
 }
+
+export const PLACEHOLDER_RECIPE_IMAGE_URL = '/assets/images/placeholder.jpeg';

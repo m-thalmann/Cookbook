@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ListRecipe } from 'src/app/core/models/recipe';
+import { PLACEHOLDER_RECIPE_IMAGE_URL } from 'src/app/core/models/recipe-image';
 
 @Component({
   selector: 'app-recipe-card',
@@ -13,9 +14,8 @@ export class RecipeCardComponent {
   constructor() {}
 
   get thumbnailImageCSS() {
-    const url = this.recipe.thumbnail?.url || '/assets/images/placeholder.jpeg';
+    const url = this.recipe.thumbnail?.url || PLACEHOLDER_RECIPE_IMAGE_URL;
 
     return `background-image: url(${url})`;
   }
 }
-
