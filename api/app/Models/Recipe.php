@@ -138,7 +138,11 @@ class Recipe extends BaseModel {
 
         static::deleting(function (Recipe $recipe) {
             if ($recipe->isForceDeleting()) {
-                Recipe::deleteImageFiles($recipe->query());
+                Recipe::deleteImageFiles(
+                    Recipe::query()
+                        ->where('id', $recipe->id)
+                        ->withTrashed()
+                );
             }
         });
     }
@@ -146,19 +150,37 @@ class Recipe extends BaseModel {
     /**
      * Deletes all image files (not the entries in the database) for the recipes
      * found in the given query.
-     * The query is **not** cloned before usage.
      *
      * @param \Illuminate\Database\Eloquent\Builder $recipesQuery
      * @return void
      */
     public static function deleteImageFiles($recipesQuery) {
-        $imagePaths = $recipesQuery
-            ->images()
+        $recipeIds = $recipesQuery
+            ->clone()
+            ->get('id')
+            ->pluck('id')
+            ->toArray();
+
+        clock('recipeIds', $recipeIds);
+
+        if (count($recipeIds) === 0) {
+            return;
+        }
+
+        $imagePaths = RecipeImage::query()
+            ->whereHas('recipe', function ($query) use ($recipeIds) {
+                $query->whereIn('id', $recipeIds)->withTrashed();
+            })
             ->get('image_path')
             ->pluck('image_path')
             ->toArray();
 
+        clock('imagePaths', $imagePaths);
+
+        if (count($imagePaths) === 0) {
+            return;
+        }
+
         Storage::disk('public')->delete($imagePaths);
     }
 }
-

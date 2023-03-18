@@ -402,7 +402,7 @@ class RecipeController extends Controller {
             ->recipes()
             ->onlyTrashed();
 
-        Recipe::deleteImageFiles($query->clone());
+        Recipe::deleteImageFiles($query);
 
         $query->forceDelete();
 
@@ -465,4 +465,3 @@ class RecipeController extends Controller {
         return response()->noContent();
     }
 }
-
