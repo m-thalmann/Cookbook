@@ -11,6 +11,7 @@ import { RecipePublicShareDialogComponent } from '../recipe-public-share-dialog/
 })
 export class RecipeDetailHeaderComponent {
   @Input() recipe!: DetailedRecipe;
+  @Input() disabled = false;
 
   @Output() deleteRecipe = new EventEmitter<void>();
 
@@ -20,4 +21,3 @@ export class RecipeDetailHeaderComponent {
     this.dialog.open(RecipePublicShareDialogComponent, { data: { recipe: this.recipe } });
   }
 }
-

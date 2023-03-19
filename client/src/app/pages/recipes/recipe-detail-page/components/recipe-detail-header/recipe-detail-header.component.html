@@ -7,19 +7,36 @@
         <h3>by {{ recipe.user.name }}</h3>
     </div>
 
-    <app-share-menu color="primary" [text]="'Recipe: ' + recipe.name"></app-share-menu>
-    <button mat-icon-button class="options-button" [matMenuTriggerFor]="menu" *ngIf="recipe.user_can_edit">
+    <app-share-menu color="primary" [disabled]="disabled" [text]="'Recipe: ' + recipe.name"></app-share-menu>
+    <button
+        mat-icon-button
+        class="options-button"
+        [matMenuTriggerFor]="menu"
+        [disabled]="disabled"
+        *ngIf="recipe.user_can_edit"
+    >
         <mat-icon>more_vert</mat-icon>
     </button>
 </div>
 
 <div class="tags">
-    <a routerLink="/recipes" [queryParams]="{ category: recipe.category }" class="category" *ngIf="recipe.category">
+    <a
+        routerLink="/recipes"
+        [queryParams]="{ category: recipe.category }"
+        class="category"
+        [attr.disabled]="disabled ? '' : null"
+        *ngIf="recipe.category"
+    >
         <mat-icon>local_dining</mat-icon>
         {{ recipe.category }}
     </a>
 
-    <a [routerLink]="['/cookbooks', cookbook.id]" class="cookbook" *ngIf="recipe.cookbook as cookbook">
+    <a
+        [routerLink]="['/cookbooks', cookbook.id]"
+        class="cookbook"
+        [attr.disabled]="disabled ? '' : null"
+        *ngIf="recipe.cookbook as cookbook"
+    >
         <mat-icon>menu_book</mat-icon>
         {{ cookbook.name }}
     </a>
@@ -39,4 +56,3 @@
         <span>Move to trash</span>
     </button>
 </mat-menu>
-

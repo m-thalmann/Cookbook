@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { lastValueFrom } from 'rxjs';
+import { BehaviorSubject, lastValueFrom } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { DetailedRecipe } from 'src/app/core/models/recipe';
 import { RouteHelperService } from 'src/app/core/services/route-helper.service';
@@ -13,6 +13,8 @@ import { SnackbarService } from 'src/app/core/services/snackbar.service';
 })
 export class RecipeDetailComponent {
   @Input() recipe!: DetailedRecipe;
+
+  isLoading$ = new BehaviorSubject<boolean>(false);
 
   portionsMultiplier: number = 1;
 
@@ -57,6 +59,8 @@ export class RecipeDetailComponent {
   }
 
   async deleteRecipe() {
+    this.isLoading$.next(true);
+
     try {
       await lastValueFrom(this.api.recipes.delete(this.recipe.id));
 
@@ -65,6 +69,8 @@ export class RecipeDetailComponent {
       this.routeHelper.navigateBack();
     } catch (e) {
       this.snackbar.warn({ message: 'Error moving recipe to trash', duration: null });
+    } finally {
+      this.isLoading$.next(false);
     }
   }
 }

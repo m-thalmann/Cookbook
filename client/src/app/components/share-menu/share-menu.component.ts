@@ -13,6 +13,8 @@ export class ShareMenuComponent {
   @Input() url: string = location.href;
   @Input() text?: string;
 
+  @Input() disabled = false;
+
   constructor(private clipboard: Clipboard, private snackbar: SnackbarService) {}
 
   get hasShareApi() {

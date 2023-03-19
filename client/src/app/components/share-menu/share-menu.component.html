@@ -1,7 +1,7 @@
-<button mat-icon-button [matMenuTriggerFor]="shareMenu" [color]="color" *ngIf="!hasShareApi">
+<button mat-icon-button [matMenuTriggerFor]="shareMenu" [color]="color" [disabled]="disabled" *ngIf="!hasShareApi">
     <mat-icon>share</mat-icon>
 </button>
-<button mat-icon-button (click)="doShare()" [color]="color" *ngIf="hasShareApi">
+<button mat-icon-button (click)="doShare()" [color]="color" [disabled]="disabled" *ngIf="hasShareApi">
     <mat-icon>share</mat-icon>
 </button>
 
@@ -15,4 +15,3 @@
         <mat-icon svgIcon="telegram" class="fg-telegram"></mat-icon> Telegram
     </a>
 </mat-menu>
-

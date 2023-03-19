@@ -19,6 +19,8 @@ export class RecipeDetailImageSliderComponent {
     this.currentImageIndex = 0;
   }
 
+  @Input() disabled = false;
+
   private _images!: RecipeImage[];
 
   currentImageIndex = 0;

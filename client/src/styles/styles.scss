@@ -23,6 +23,10 @@ h3 {
   box-shadow: none;
 }
 
+a[disabled] {
+  pointer-events: none !important;
+}
+
 @include mixins.mobile() {
   .hide-mobile {
     display: none !important;

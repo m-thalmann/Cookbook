@@ -65,8 +65,8 @@
   display: flex;
   gap: 0.5em;
 
-  > * {
-    all: unset;
+  > a {
+    text-decoration: none;
     cursor: pointer;
 
     display: flex;
@@ -87,6 +87,14 @@
       &:hover {
         background: rgba(map.get($variables, 'accent'), 0.75);
       }
+
+      &[disabled] {
+        background: theme.adjust-color($variables, map.get($variables, 'background'), -10%);
+      }
+    }
+
+    &[disabled] {
+      opacity: 0.5;
     }
   }
 }
