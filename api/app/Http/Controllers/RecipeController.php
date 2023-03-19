@@ -371,7 +371,9 @@ class RecipeController extends Controller {
                 },
             ])
             ->onlyTrashed()
-            ->organized($request);
+            ->filter($request)
+            ->search($request)
+            ->sort($request, ['deleted_at']);
 
         return response()->pagination(
             fn($perPage) => RecipeResource::collection(

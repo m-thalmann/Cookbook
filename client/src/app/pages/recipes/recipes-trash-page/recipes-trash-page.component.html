@@ -1,0 +1,99 @@
+<div
+    class="container"
+    *ngIf="{
+        trashedRecipes: trashedRecipes$ | async,
+        loading: loading$ | async,
+        actionLoading: actionLoading$ | async
+    } as vm"
+>
+    <h2>
+        <mat-icon>delete</mat-icon>
+        Trash
+        <small *ngIf="vm.trashedRecipes as trashedRecipes">({{ trashedRecipes.totalRecipes }})</small>
+    </h2>
+
+    <div class="actions">
+        <button
+            color="warn"
+            mat-raised-button
+            (click)="clearTrash()"
+            [disabled]="vm.loading || vm.actionLoading || vm.trashedRecipes?.totalRecipes === 0"
+        >
+            <mat-icon>delete_sweep</mat-icon> Clear trash
+        </button>
+    </div>
+
+    <div class="trash-list">
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Deleted at</th>
+                    <th class="center">Restore</th>
+                    <th class="center">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let recipe of vm.trashedRecipes?.recipes">
+                    <td>
+                        <img [src]="getThumbnailUrl(recipe)" />
+                    </td>
+                    <td>
+                        {{ recipe.name }}
+                    </td>
+                    <td>
+                        {{ recipe.deleted_at! * 1000 | date: 'dd.MM.y HH:mm:ss' }}
+                    </td>
+                    <td class="center">
+                        <button
+                            mat-icon-button
+                            color="primary"
+                            (click)="restoreRecipe(recipe)"
+                            [disabled]="vm.loading || vm.actionLoading"
+                        >
+                            <mat-icon>restore_from_trash</mat-icon>
+                        </button>
+                    </td>
+                    <td class="center">
+                        <button
+                            mat-icon-button
+                            color="warn"
+                            (click)="permanentlyDeleteRecipe(recipe)"
+                            [disabled]="vm.loading || vm.actionLoading"
+                        >
+                            <mat-icon>delete_forever</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+
+                <tr *ngIf="vm.loading && !vm.trashedRecipes?.recipes?.length">
+                    <td colspan="5">
+                        <mat-spinner [diameter]="36"></mat-spinner>
+                    </td>
+                </tr>
+
+                <tr *ngIf="!vm.loading && vm.trashedRecipes?.recipes?.length === 0">
+                    <td colspan="5">No items in trash</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button
+        mat-raised-button
+        class="load-more-button"
+        color="accent"
+        (click)="nextPage()"
+        [disabled]="vm.loading || vm.actionLoading"
+        *ngIf="vm.trashedRecipes?.hasMoreItems"
+    >
+        <div>
+            <mat-spinner *ngIf="vm.loading" [diameter]="20"></mat-spinner>
+            <mat-icon *ngIf="!vm.loading">south</mat-icon>
+
+            Load more
+        </div>
+    </button>
+</div>
+

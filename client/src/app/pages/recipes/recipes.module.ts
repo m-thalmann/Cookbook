@@ -12,6 +12,7 @@ import { RecipeDetailPreparationContentComponent } from './recipe-detail-page/co
 import { RecipeDetailHeaderComponent } from './recipe-detail-page/components/recipe-detail-header/recipe-detail-header.component';
 import { CoreModule } from 'src/app/core/core.module';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { RecipesTrashPageComponent } from './recipes-trash-page/recipes-trash-page.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { ComponentsModule } from 'src/app/components/components.module';
     RecipeDetailSectionComponent,
     RecipeDetailPreparationContentComponent,
     RecipeDetailHeaderComponent,
+    RecipesTrashPageComponent,
   ],
   imports: [CommonModule, RecipesRoutingModule, CoreModule, ComponentsModule],
 })
