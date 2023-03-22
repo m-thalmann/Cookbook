@@ -21,12 +21,19 @@ import { LoginPageComponent } from './pages/auth/login-page/login-page.component
 import { SignUpPageComponent } from './pages/auth/sign-up-page/sign-up-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { LayoutAddActionFabComponent } from './layouts/layout-default/components/layout-add-action-fab/layout-add-action-fab.component';
+import { ThemeService } from './core/services/theme.service';
 
 function setup(config: ConfigService, auth: AuthService) {
   return async () => {
     await config.load();
 
     auth.initialize();
+  };
+}
+
+function loadTheme(theme: ThemeService) {
+  return () => {
+    theme.load();
   };
 }
 
@@ -79,6 +86,12 @@ class CustomHammerConfig extends HammerGestureConfig {
       provide: APP_INITIALIZER,
       useFactory: setup,
       deps: [ConfigService, AuthService],
+      multi: true,
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: loadTheme,
+      deps: [ThemeService],
       multi: true,
     },
   ],
