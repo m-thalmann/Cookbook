@@ -6,9 +6,6 @@ import { LayoutAuthComponent } from './layouts/layout-auth/layout-auth.component
 import { LayoutDefaultComponent } from './layouts/layout-default/layout-default.component';
 import { LoginPageComponent } from './pages/auth/login-page/login-page.component';
 import { SignUpPageComponent } from './pages/auth/sign-up-page/sign-up-page.component';
-import { CookbookDetailPageComponent } from './pages/cookbooks/cookbook-detail-page/cookbook-detail-page.component';
-import { CookbookRecipesPageComponent } from './pages/cookbooks/cookbook-recipes-page/cookbook-recipes-page.component';
-import { CookbooksPageComponent } from './pages/cookbooks/cookbooks-page/cookbooks-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 
 const routes: Routes = [
@@ -28,7 +25,7 @@ const routes: Routes = [
     path: '',
     component: LayoutDefaultComponent,
     children: [
-      { path: 'home', component: HomePageComponent },
+      { path: 'home', component: HomePageComponent, data: { showAddButton: true } },
       { path: 'recipes', loadChildren: () => import('./pages/recipes/recipes.module').then((m) => m.RecipesModule) },
       {
         path: 'cookbooks',

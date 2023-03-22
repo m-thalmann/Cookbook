@@ -15,12 +15,12 @@ import { AppComponent } from './app.component';
 import { ComponentsModule } from './components/components.module';
 import { CoreModule } from './core/core.module';
 import { LayoutAuthComponent } from './layouts/layout-auth/layout-auth.component';
-import { AccountMenuBottomSheetComponent } from './layouts/layout-default/components/account-menu-bottom-sheet/account-menu-bottom-sheet.component';
 import { LayoutDefaultNavbarComponent } from './layouts/layout-default/components/layout-default-navbar/layout-default-navbar.component';
 import { LayoutDefaultComponent } from './layouts/layout-default/layout-default.component';
 import { LoginPageComponent } from './pages/auth/login-page/login-page.component';
 import { SignUpPageComponent } from './pages/auth/sign-up-page/sign-up-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
+import { LayoutAddActionFabComponent } from './layouts/layout-default/components/layout-add-action-fab/layout-add-action-fab.component';
 
 function setup(config: ConfigService, auth: AuthService) {
   return async () => {
@@ -48,7 +48,7 @@ class CustomHammerConfig extends HammerGestureConfig {
     LayoutAuthComponent,
     SignUpPageComponent,
     LayoutDefaultNavbarComponent,
-    AccountMenuBottomSheetComponent,
+    LayoutAddActionFabComponent,
   ],
   imports: [
     BrowserModule,

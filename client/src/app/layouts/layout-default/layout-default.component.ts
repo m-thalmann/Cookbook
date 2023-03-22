@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { filter, map, Observable, of, startWith, switchMap } from 'rxjs';
+import { combineLatest, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { RouteHelperService } from 'src/app/core/services/route-helper.service';
-import { AccountMenuBottomSheetComponent } from './components/account-menu-bottom-sheet/account-menu-bottom-sheet.component';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
   selector: 'app-layout-default',
@@ -27,14 +26,18 @@ export class LayoutDefaultComponent {
     })
   );
 
-  isOverlayRoute$ = this.routeData$.pipe(map((data) => data['isOverlay'] || false)) as Observable<boolean>;
+  isOverlayRoute$: Observable<boolean> = this.routeData$.pipe(map((data) => data['isOverlay'] || false));
+  showAddButton$: Observable<boolean> = combineLatest([
+    this.routeData$.pipe(map((data) => data['showAddButton'] || false)),
+    this.auth.isAuthenticated$,
+  ]).pipe(map(([showAddButton, isAuthenticated]) => showAddButton && isAuthenticated));
 
   constructor(
     public auth: AuthService,
-    private bottomSheet: MatBottomSheet,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private routeHelper: RouteHelperService
+    private routeHelper: RouteHelperService,
+    private snackbar: SnackbarService
   ) {}
 
   get loginQueryParams() {
@@ -43,7 +46,9 @@ export class LayoutDefaultComponent {
     };
   }
 
-  openAccountMenu() {
-    this.bottomSheet.open(AccountMenuBottomSheetComponent);
+  async doLogout() {
+    await this.auth.logout(true);
+
+    this.snackbar.info({ message: 'Successfully logged out.' });
   }
 }

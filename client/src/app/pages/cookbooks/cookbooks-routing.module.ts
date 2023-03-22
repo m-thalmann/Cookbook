@@ -5,7 +5,7 @@ import { CookbookRecipesPageComponent } from './cookbook-recipes-page/cookbook-r
 import { CookbooksPageComponent } from './cookbooks-page/cookbooks-page.component';
 
 const routes: Routes = [
-  { path: '', component: CookbooksPageComponent },
+  { path: '', component: CookbooksPageComponent, data: { showAddButton: true } },
   {
     path: ':id',
     children: [

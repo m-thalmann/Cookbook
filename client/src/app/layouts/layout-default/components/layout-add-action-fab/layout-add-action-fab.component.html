@@ -1,0 +1,15 @@
+<div class="add-action-fab" [class.opened]="isOpen" (click)="isOpen = !isOpen">
+    <div class="options">
+        <a routerLink="/recipes/create" mat-mini-fab data-description="Recipe">
+            <mat-icon>restaurant</mat-icon>
+        </a>
+        <a routerLink="/cookbooks/create" mat-mini-fab data-description="Cookbook">
+            <mat-icon>menu_book</mat-icon>
+        </a>
+    </div>
+
+    <button mat-fab color="primary">
+        <mat-icon>add</mat-icon>
+    </button>
+</div>
+

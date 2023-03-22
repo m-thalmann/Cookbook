@@ -1,6 +1,5 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { NgModule } from '@angular/core';
-import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatRippleModule } from '@angular/material/core';
@@ -21,7 +20,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   declarations: [],
   exports: [
     ClipboardModule,
-    MatBottomSheetModule,
     MatButtonModule,
     MatChipsModule,
     MatDialogModule,

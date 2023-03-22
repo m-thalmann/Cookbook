@@ -1,0 +1,52 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use 'variables' as *;
+@use 'theme';
+
+.add-action-fab {
+  position: relative;
+  height: fit-content;
+
+  > button {
+    transition: transform $transition-time;
+  }
+
+  .options {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+
+    transition: all $transition-time;
+
+    > a {
+      margin: -1.25em 0;
+      transition: all $transition-time;
+
+      @include theme.apply() using ($variables) {
+        color: mat.get-color-from-palette(map.get($variables, 'primary-palette'), 'A700-contrast');
+        background: mat.get-color-from-palette(map.get($variables, 'primary-palette'), 'A700');
+      }
+    }
+  }
+
+  &.opened {
+    > button {
+      transform: rotate(45deg);
+    }
+
+    .options {
+      bottom: calc(100% + 1em);
+      transform: translate(-50%, 0);
+      gap: 0.5em;
+
+      > a {
+        margin: 0;
+      }
+    }
+  }
+}

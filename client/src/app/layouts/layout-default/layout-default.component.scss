@@ -1,5 +1,10 @@
+@use 'sass:map';
 @use 'variables' as *;
 @use 'mixins';
+@use 'theme';
+
+$add-button-height-mobile: 5em;
+$add-button-height-desktop: 4em;
 
 .desktop-spacer {
   display: none;
@@ -31,19 +36,6 @@
     .spacer {
       flex: 1;
     }
-
-    .account-button {
-      all: unset;
-      display: block;
-      padding: 0.5em;
-      cursor: pointer;
-
-      mat-icon {
-        padding: 0.125em;
-        scale: 1.5;
-        border-radius: 50%;
-      }
-    }
   }
 
   &.is-overlay main {
@@ -52,7 +44,18 @@
 
   main {
     margin-bottom: calc($navbar-height + $main-space-bottom);
+
+    &.has-add-button {
+      margin-bottom: calc($navbar-height + $main-space-bottom + $add-button-height-mobile);
+    }
   }
+}
+
+app-layout-add-action-fab {
+  position: fixed;
+  bottom: $add-button-height-mobile;
+  right: 2em;
+  z-index: 100;
 }
 
 app-layout-default-navbar {
@@ -89,6 +92,11 @@ app-layout-default-navbar {
     }
   }
 
+  app-layout-add-action-fab {
+    bottom: $add-button-height-desktop;
+    right: 4em;
+  }
+
   app-layout-default-navbar {
     top: 0;
     right: unset;
@@ -99,4 +107,9 @@ app-layout-default-navbar {
   .desktop-spacer.right {
     display: none;
   }
+}
+
+[mat-menu-item][disabled] {
+  margin-bottom: 1em;
+  opacity: 1;
 }

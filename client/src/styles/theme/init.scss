@@ -19,6 +19,16 @@
   a {
     color: mat.get-color-from-palette(map.get($variables, 'link-palette'));
   }
+
+  .fg-primary {
+    color: mat.get-color-from-palette(map.get($variables, 'primary-palette'));
+  }
+  .fg-accent {
+    color: mat.get-color-from-palette(map.get($variables, 'accent-palette'));
+  }
+  .fg-warn {
+    color: mat.get-color-from-palette(map.get($variables, 'warn-palette'));
+  }
 }
 
 // used mixins can be found here: https://github.com/angular/components/blob/main/src/material/core/theming/_all-theme.scss
@@ -31,9 +41,9 @@
       @include mat.core-theme($app-theme);
       @include mat.button-theme($app-theme);
       @include mat.icon-button-theme($app-theme);
-      @include mat.bottom-sheet-theme($app-theme);
       @include mat.chips-theme($app-theme);
       @include mat.dialog-theme($app-theme);
+      @include mat.fab-theme($app-theme);
       @include mat.form-field-theme($app-theme);
       @include mat.icon-theme($app-theme);
       @include mat.input-theme($app-theme);
@@ -57,9 +67,9 @@
       @include mat.core-color($app-theme);
       @include mat.button-color($app-theme);
       @include mat.icon-button-color($app-theme);
-      @include mat.bottom-sheet-color($app-theme);
       @include mat.chips-color($app-theme);
       @include mat.dialog-color($app-theme);
+      @include mat.fab-color($app-theme);
       @include mat.form-field-color($app-theme);
       @include mat.icon-color($app-theme);
       @include mat.input-color($app-theme);
