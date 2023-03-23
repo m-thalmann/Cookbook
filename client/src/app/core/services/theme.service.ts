@@ -1,5 +1,15 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, distinctUntilChanged } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import {
+  BehaviorSubject,
+  combineLatest,
+  distinctUntilChanged,
+  from,
+  fromEvent,
+  map,
+  Observable,
+  startWith,
+  Subscription,
+} from 'rxjs';
 import { StorageService } from './storage.service';
 
 const THEME_KEY = 'THEME';
@@ -8,26 +18,47 @@ const THEMES = ['dark', 'light'] as const;
 
 type Theme = typeof THEMES[number] | null;
 
+const DARK_SCHEME_MEDIA_QUERY = '(prefers-color-scheme: dark)';
+
 @Injectable({
   providedIn: 'root',
 })
-export class ThemeService {
+export class ThemeService implements OnDestroy {
+  private subSink = new Subscription();
+
   private _selectedTheme$ = new BehaviorSubject<Theme>(null);
   selectedTheme$ = this._selectedTheme$.pipe(distinctUntilChanged());
 
-  constructor(private storage: StorageService) {}
+  private navigatorTheme$ = fromEvent<MediaQueryList>(window.matchMedia(DARK_SCHEME_MEDIA_QUERY), 'change').pipe(
+    map((event) => event.matches),
+    startWith(window.matchMedia(DARK_SCHEME_MEDIA_QUERY).matches),
+    map((isDark) => (isDark ? 'dark' : 'light') as Theme)
+  );
+
+  theme$ = combineLatest([this.selectedTheme$, this.navigatorTheme$]).pipe(
+    map(([selectedTheme, navigatorTheme]) => selectedTheme ?? navigatorTheme),
+    distinctUntilChanged()
+  );
+
+  constructor(private storage: StorageService) {
+    this.subSink.add(
+      this.theme$.subscribe((theme) => {
+        document.documentElement.classList.remove(...THEMES.map((theme) => this.getThemeClass(theme)));
+
+        if (theme !== null) {
+          document.documentElement.classList.add(this.getThemeClass(theme));
+        }
+      })
+    );
+  }
 
   setTheme(theme: Theme) {
     this._selectedTheme$.next(theme);
-
-    document.documentElement.classList.remove(...THEMES.map((theme) => this.getThemeClass(theme)));
 
     if (theme === null) {
       this.storage.local.remove(THEME_KEY);
     } else {
       this.storage.local.set(THEME_KEY, theme);
-
-      document.documentElement.classList.add(this.getThemeClass(theme));
     }
   }
 
@@ -64,6 +95,10 @@ export class ThemeService {
     }
 
     return `theme-${theme}`;
+  }
+
+  ngOnDestroy() {
+    this.subSink.unsubscribe();
   }
 }
 

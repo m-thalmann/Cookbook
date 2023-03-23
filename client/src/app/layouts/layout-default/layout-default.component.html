@@ -46,7 +46,7 @@
 
     <app-layout-default-navbar [class.hide-mobile]="vm.isOverlayRoute"></app-layout-default-navbar>
 
-    <mat-menu #addMenu="matMenu">
+    <mat-menu #addMenu="matMenu" xPosition="before">
         <a routerLink="/recipes/create" mat-menu-item>
             <mat-icon>restaurant</mat-icon>
             <div matListItemTitle>Create recipe</div>

@@ -16,4 +16,3 @@ export class CategoryChipListComponent {
     this.clampAmount += 5;
   }
 }
-
