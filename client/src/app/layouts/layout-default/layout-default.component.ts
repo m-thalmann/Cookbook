@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { combineLatest, filter, map, Observable, of, startWith, switchMap } from 'rxjs';
 import { AuthService } from 'src/app/core/auth/auth.service';
+import { User } from 'src/app/core/models/user';
 import { RouteHelperService } from 'src/app/core/services/route-helper.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
@@ -44,6 +45,16 @@ export class LayoutDefaultComponent {
     return {
       'redirect-url': this.router.url,
     };
+  }
+
+  getUserInitials(user: User) {
+    const initials = user.name.split(' ').map((word) => word[0]);
+
+    if (initials.length > 1) {
+      return initials[0] + initials[initials.length - 1];
+    }
+
+    return initials[0];
   }
 
   async doLogout() {

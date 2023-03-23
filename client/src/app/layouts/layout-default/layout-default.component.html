@@ -16,16 +16,22 @@
 
                 <div class="spacer"></div>
 
-                <ng-container *ngIf="vm.isAuthenticated; else loginButton">
-                    <button mat-icon-button [matMenuTriggerFor]="accountMenue" color="primary">
-                        <mat-icon>manage_accounts</mat-icon>
-                    </button>
-                </ng-container>
-                <ng-template #loginButton>
-                    <a mat-icon-button routerLink="/login" [queryParams]="loginQueryParams" color="primary">
-                        <mat-icon>login</mat-icon>
-                    </a>
-                </ng-template>
+                <div class="header-buttons">
+                    <ng-container *ngIf="vm.isAuthenticated; else loginButton">
+                        <button class="hide-mobile" mat-icon-button [matMenuTriggerFor]="addMenu" color="primary">
+                            <mat-icon>add</mat-icon>
+                        </button>
+
+                        <button class="user-account-button" mat-icon-button [matMenuTriggerFor]="accountMenu">
+                            {{ getUserInitials(vm.user!) }}
+                        </button>
+                    </ng-container>
+                    <ng-template #loginButton>
+                        <a mat-icon-button routerLink="/login" [queryParams]="loginQueryParams" color="primary">
+                            <mat-icon>login</mat-icon>
+                        </a>
+                    </ng-template>
+                </div>
             </header>
 
             <main [class.has-add-button]="vm.showAddButton">
@@ -36,11 +42,22 @@
 
     <div class="desktop-spacer right"></div>
 
-    <app-layout-add-action-fab *ngIf="vm.showAddButton"></app-layout-add-action-fab>
+    <app-layout-add-action-fab class="hide-desktop" *ngIf="vm.showAddButton"></app-layout-add-action-fab>
 
     <app-layout-default-navbar [class.hide-mobile]="vm.isOverlayRoute"></app-layout-default-navbar>
 
-    <mat-menu #accountMenue="matMenu" xPosition="before">
+    <mat-menu #addMenu="matMenu">
+        <a routerLink="/recipes/create" mat-menu-item>
+            <mat-icon>restaurant</mat-icon>
+            <div matListItemTitle>Create recipe</div>
+        </a>
+        <a routerLink="/cookbooks/create" mat-menu-item>
+            <mat-icon>menu_book</mat-icon>
+            <div matListItemTitle>Create cookbook</div>
+        </a>
+    </mat-menu>
+
+    <mat-menu #accountMenu="matMenu" xPosition="before">
         <div mat-menu-item disabled>
             <mat-icon>account_circle</mat-icon>
             <div matListItemTitle>{{ vm.user?.name }}</div>

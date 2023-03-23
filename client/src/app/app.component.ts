@@ -4,6 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { SwUpdate } from '@angular/service-worker';
 import { IconSnackbarComponent } from './components/snackbar/icon-snackbar/icon-snackbar.component';
 import { SnackbarService } from './core/services/snackbar.service';
+import { ThemeService } from './core/services/theme.service';
 
 @Component({
   selector: 'app-root',

@@ -1,10 +1,10 @@
 @use 'sass:map';
+@use '@angular/material' as mat;
 @use 'variables' as *;
 @use 'mixins';
 @use 'theme';
 
 $add-button-height-mobile: 5em;
-$add-button-height-desktop: 4em;
 
 .desktop-spacer {
   display: none;
@@ -36,6 +36,21 @@ $add-button-height-desktop: 4em;
     .spacer {
       flex: 1;
     }
+
+    .header-buttons {
+      display: flex;
+      gap: 1em;
+
+      .user-account-button {
+        font-size: 1.25em;
+        font-family: Helvetica, Arial, sans-serif;
+
+        @include theme.apply() using ($variables) {
+          background: mat.get-color-from-palette(map.get($variables, 'primary-palette'), 800);
+          color: mat.get-color-from-palette(map.get($variables, 'primary-palette'), '800-contrast');
+        }
+      }
+    }
   }
 
   &.is-overlay main {
@@ -44,10 +59,6 @@ $add-button-height-desktop: 4em;
 
   main {
     margin-bottom: calc($navbar-height + $main-space-bottom);
-
-    &.has-add-button {
-      margin-bottom: calc($navbar-height + $main-space-bottom + $add-button-height-mobile);
-    }
   }
 }
 
@@ -65,6 +76,12 @@ app-layout-default-navbar {
   right: 0;
 
   z-index: 10;
+}
+
+@include mixins.mobile() {
+  .container main.has-add-button {
+    margin-bottom: calc($navbar-height + $main-space-bottom + $add-button-height-mobile);
+  }
 }
 
 @include mixins.desktop() {
@@ -90,11 +107,6 @@ app-layout-default-navbar {
     header {
       margin-bottom: 1em;
     }
-  }
-
-  app-layout-add-action-fab {
-    bottom: $add-button-height-desktop;
-    right: 4em;
   }
 
   app-layout-default-navbar {

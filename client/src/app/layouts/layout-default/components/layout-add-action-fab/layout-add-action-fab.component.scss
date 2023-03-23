@@ -27,9 +27,30 @@
       margin: -1.25em 0;
       transition: all $transition-time;
 
+      &::after {
+        visibility: hidden;
+
+        position: absolute;
+        right: calc(100% + 1em);
+
+        content: attr(data-description);
+        padding: 0.5em 0.75em;
+        border-radius: 0.5em;
+
+        opacity: 0;
+
+        transition: opacity $transition-time;
+
+        @include mat.elevation(6);
+      }
+
       @include theme.apply() using ($variables) {
         color: mat.get-color-from-palette(map.get($variables, 'primary-palette'), 'A700-contrast');
         background: mat.get-color-from-palette(map.get($variables, 'primary-palette'), 'A700');
+
+        &::after {
+          background: map.get($variables, 'background');
+        }
       }
     }
   }
@@ -45,7 +66,13 @@
       gap: 0.5em;
 
       > a {
+        position: relative;
         margin: 0;
+
+        &::after {
+          visibility: visible;
+          opacity: 1;
+        }
       }
     }
   }
