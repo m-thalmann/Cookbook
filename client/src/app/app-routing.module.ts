@@ -33,6 +33,10 @@ const routes: Routes = [
         runGuardsAndResolvers: 'always',
         loadChildren: () => import('./pages/cookbooks/cookbooks.module').then((m) => m.CookbooksModule),
       },
+      {
+        path: 'settings',
+        loadChildren: () => import('./pages/settings/settings.module').then((m) => m.SettingsModule),
+      },
     ],
   },
 ];

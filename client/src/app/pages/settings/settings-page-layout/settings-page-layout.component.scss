@@ -1,0 +1,72 @@
+@use 'sass:map';
+@use 'theme';
+@use 'variables' as *;
+@use '@angular/material' as mat;
+
+:host {
+  display: block;
+  padding: 0 $layout-padding;
+}
+
+h2 {
+  margin-top: 0;
+  padding-left: 0.25em;
+
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.settings-nav {
+  margin: 0 (-$layout-padding) 2em;
+
+  mat-nav-list {
+    padding: 0;
+
+    [mat-list-item] {
+      border-radius: 0.25em;
+
+      &.current {
+        @include mat.elevation(2);
+
+        @include theme.apply() using ($variables) {
+          background: rgba(map.get($variables, 'primary'), 20%);
+
+          mat-icon {
+            color: map.get($variables, 'primary');
+          }
+        }
+      }
+    }
+  }
+}
+
+.settings {
+  flex: 1;
+}
+
+@media screen and (min-width: 800px) {
+  .container {
+    flex-direction: row;
+    gap: 2em;
+  }
+
+  .settings-nav {
+    position: sticky;
+    top: 1em;
+    height: fit-content;
+
+    margin: 0;
+    width: 15em;
+
+    mat-nav-list {
+      border-radius: 0.25em;
+    }
+  }
+}

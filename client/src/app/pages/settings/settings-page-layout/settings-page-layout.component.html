@@ -1,0 +1,27 @@
+<ng-container *ngIf="{ isAuthenticated: auth.isAuthenticated$ | async } as vm">
+    <h2><mat-icon>settings</mat-icon> Settings</h2>
+
+    <div class="container">
+        <div class="settings-nav">
+            <mat-nav-list>
+                <a mat-list-item routerLink="./general" routerLinkActive="current">
+                    <mat-icon matListItemIcon>tune</mat-icon>
+                    <span>General</span>
+                </a>
+                <a mat-list-item routerLink="./account" routerLinkActive="current" [disabled]="!vm.isAuthenticated">
+                    <mat-icon matListItemIcon>manage_accounts</mat-icon>
+                    <span>Account</span>
+                </a>
+                <a mat-list-item routerLink="./security" routerLinkActive="current" [disabled]="!vm.isAuthenticated">
+                    <mat-icon matListItemIcon>security</mat-icon>
+                    <span>Security</span>
+                </a>
+            </mat-nav-list>
+        </div>
+
+        <div class="settings">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</ng-container>
+

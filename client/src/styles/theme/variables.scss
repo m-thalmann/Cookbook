@@ -18,6 +18,20 @@ $themes: (
     'link-palette': mat.define-palette(mat.$orange-palette, A700),
     'type': 'light',
   ),
+  'dark-light-yellow-lime': (
+    'primary-palette': mat.define-palette(mat.$light-green-palette, A700),
+    'accent-palette': mat.define-palette(mat.$lime-palette, A200),
+    'warn-palette': mat.define-palette(mat.$red-palette, 700),
+    'link-palette': mat.define-palette(mat.$light-green-palette, A700),
+    'type': 'dark',
+  ),
+  'light-purple-pink': (
+    'primary-palette': mat.define-palette(mat.$purple-palette, 700),
+    'accent-palette': mat.define-palette(mat.$pink-palette, A100),
+    'warn-palette': mat.define-palette(mat.$red-palette, 700),
+    'link-palette': mat.define-palette(mat.$purple-palette, A700),
+    'type': 'light',
+  ),
 );
 
 $default-theme: 'dark';
