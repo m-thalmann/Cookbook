@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>{{ data.title }}</h1>
+
+<div mat-dialog-content>
+    <mat-form-field appearance="outline" style="width: 100%">
+        <mat-label *ngIf="data.label">
+            {{ data.label }}
+        </mat-label>
+        <input matInput [type]="data.type || 'text'" [(ngModel)]="value" (keyup.enter)="confirm()" />
+    </mat-form-field>
+</div>
+
+<div mat-dialog-actions align="end">
+    <button mat-button [mat-dialog-close]="null">
+        {{ btnDecline }}
+    </button>
+
+    <button mat-button [mat-dialog-close]="value" color="primary">
+        {{ btnConfirm }}
+    </button>
+</div>
+

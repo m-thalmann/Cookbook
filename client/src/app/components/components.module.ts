@@ -4,6 +4,8 @@ import { RouterModule } from '@angular/router';
 import { CoreModule } from '../core/core.module';
 import { CategoryChipListComponent } from './category-chip-list/category-chip-list.component';
 import { CookbookCardComponent } from './cookbook-card/cookbook-card.component';
+import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
+import { PromptDialogComponent } from './dialogs/prompt-dialog/prompt-dialog.component';
 import { ImageSliderDialogComponent } from './image-slider-dialog/image-slider-dialog.component';
 import { NumberInputComponent } from './number-input/number-input.component';
 import { PageSectionComponent } from './page-section/page-section.component';
@@ -24,6 +26,8 @@ const components = [
   PageSectionComponent,
   CategoryChipListComponent,
   RecipeSearchComponent,
+  ConfirmDialogComponent,
+  PromptDialogComponent,
 ];
 
 @NgModule({
