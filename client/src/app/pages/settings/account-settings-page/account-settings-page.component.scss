@@ -1,0 +1,26 @@
+@use 'mixins';
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 4em;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+@include mixins.desktop() {
+  form {
+    mat-form-field {
+      width: 15em;
+      max-width: 100%;
+    }
+
+    button {
+      width: fit-content;
+    }
+  }
+}

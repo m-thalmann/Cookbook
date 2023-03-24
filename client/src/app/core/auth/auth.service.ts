@@ -149,4 +149,8 @@ export class AuthService implements OnDestroy {
     this._accessToken$.next(accessToken);
     this._refreshToken$.next(refreshToken);
   }
+
+  public updateUser(user: DetailedUser) {
+    this._user$.next(user);
+  }
 }

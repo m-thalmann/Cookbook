@@ -49,7 +49,7 @@ export class ThemeService implements OnDestroy {
       key: 'light-purple-pink',
       scheme: 'light',
       primaryColor: '#7B1FA2',
-      accentColor: '#C2185B',
+      accentColor: '#FF80AB',
     },
   ];
 

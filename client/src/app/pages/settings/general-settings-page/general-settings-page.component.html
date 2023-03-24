@@ -1,19 +1,9 @@
 <ng-container *ngIf="{ selectedTheme: themeService.selectedTheme$ | async } as vm">
-    <section>
-        <h3>
-            <mat-icon>public</mat-icon>
-            Language
-        </h3>
-
+    <app-settings-section icon="public" title="Language">
         <em>Coming soon...</em>
-    </section>
+    </app-settings-section>
 
-    <section>
-        <h3>
-            <mat-icon>brush</mat-icon>
-            Color theme
-        </h3>
-
+    <app-settings-section icon="brush" title="Color theme">
         <div class="themes">
             <div
                 class="theme mat-elevation-z1 auto"
@@ -21,6 +11,7 @@
                 (click)="themeService.setTheme(null)"
             >
                 <mat-icon>auto_awesome</mat-icon>
+                Auto
             </div>
 
             <div
@@ -35,6 +26,6 @@
                 </div>
             </div>
         </div>
-    </section>
+    </app-settings-section>
 </ng-container>
 
