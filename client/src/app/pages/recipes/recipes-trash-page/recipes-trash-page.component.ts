@@ -1,5 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import {
   BehaviorSubject,
   lastValueFrom,
@@ -11,7 +12,9 @@ import {
   scan,
   switchScan,
   map,
+  take,
 } from 'rxjs';
+import { ConfirmDialogComponent } from 'src/app/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
@@ -61,7 +64,12 @@ export class RecipesTrashPageComponent {
 
   actionLoading$ = new BehaviorSubject<boolean>(false);
 
-  constructor(private api: ApiService, private auth: AuthService, private snackbar: SnackbarService) {}
+  constructor(
+    private api: ApiService,
+    private auth: AuthService,
+    private snackbar: SnackbarService,
+    private dialog: MatDialog
+  ) {}
 
   getThumbnailUrl(recipe: ListRecipe) {
     if (!recipe.thumbnail) {
@@ -75,9 +83,26 @@ export class RecipesTrashPageComponent {
     this.paginationOptions$.next({ ...this.paginationOptions$.value, page: this.paginationOptions$.value.page + 1 });
   }
 
-  // TODO: add confirmation dialogs
-
   async clearTrash() {
+    const confirmed = await lastValueFrom(
+      this.dialog
+        .open(ConfirmDialogComponent, {
+          data: {
+            title: 'Are you sure?',
+            content: 'This action cannot be undone.',
+            btnConfirm: 'Confirm',
+            btnDecline: 'Abort',
+            warn: true,
+          },
+        })
+        .afterClosed()
+        .pipe(take(1))
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
     this.actionLoading$.next(true);
 
     try {
@@ -110,6 +135,25 @@ export class RecipesTrashPageComponent {
   }
 
   async permanentlyDeleteRecipe(recipe: ListRecipe) {
+    const confirmed = await lastValueFrom(
+      this.dialog
+        .open(ConfirmDialogComponent, {
+          data: {
+            title: 'Are you sure?',
+            content: 'This action cannot be undone.',
+            btnConfirm: 'Delete',
+            btnDecline: 'Abort',
+            warn: true,
+          },
+        })
+        .afterClosed()
+        .pipe(take(1))
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
     this.actionLoading$.next(true);
 
     try {

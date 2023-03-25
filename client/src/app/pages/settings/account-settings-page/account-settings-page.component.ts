@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { lastValueFrom, take } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, lastValueFrom, Subscription, take } from 'rxjs';
 import { ConfirmDialogComponent } from 'src/app/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { PromptDialogComponent } from 'src/app/components/dialogs/prompt-dialog/prompt-dialog.component';
 import { ApiService } from 'src/app/core/api/api.service';
@@ -14,7 +14,9 @@ import { CustomValidators } from 'src/app/core/forms/CustomValidators';
   styleUrls: ['./account-settings-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AccountSettingsPageComponent {
+export class AccountSettingsPageComponent implements OnDestroy {
+  private subSink = new Subscription();
+
   profileForm = this.fb.group({
     name: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
     email: new FormControl<string>('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
@@ -29,10 +31,24 @@ export class AccountSettingsPageComponent {
     { validators: CustomValidators.checkPasswords('newPassword', 'confirmedPassword') }
   );
 
-  // TODO: loading information + error handling
+  isLoading$ = new BehaviorSubject<boolean>(false);
+
+  // TODO: error handling
 
   constructor(private auth: AuthService, private api: ApiService, private fb: FormBuilder, private dialog: MatDialog) {
     this.loadFormData();
+
+    this.subSink.add(
+      this.isLoading$.pipe(distinctUntilChanged()).subscribe((isLoading) => {
+        if (isLoading) {
+          this.profileForm.disable();
+          this.passwordForm.disable();
+        } else {
+          this.profileForm.enable();
+          this.passwordForm.enable();
+        }
+      })
+    );
   }
 
   async loadFormData() {
@@ -45,6 +61,8 @@ export class AccountSettingsPageComponent {
   }
 
   async updateProfile() {
+    if (this.isLoading$.value) return;
+
     const user = await this.getUser();
 
     const hasChangedEmail = this.profileForm.value.email !== user.email;
@@ -76,29 +94,51 @@ export class AccountSettingsPageComponent {
       updateData['current_password'] = confirmedPassword;
     }
 
-    await lastValueFrom(this.api.users.update(user.id, updateData).pipe(take(1)));
-    // TODO: success notification
+    this.isLoading$.next(true);
 
-    await this.auth.initialize();
+    try {
+      await lastValueFrom(this.api.users.update(user.id, updateData).pipe(take(1)));
+      // TODO: success notification
+
+      await this.auth.initialize();
+
+      this.isLoading$.next(false);
+    } catch (e) {
+      this.isLoading$.next(false);
+      throw e;
+    }
   }
 
   async updatePassword() {
+    if (this.isLoading$.value) return;
+
     const user = await this.getUser();
 
-    await lastValueFrom(
-      this.api.users
-        .update(user.id, {
-          password: this.passwordForm.value.newPassword,
-          current_password: this.passwordForm.value.oldPassword,
-        })
-        .pipe(take(1))
-    );
-    // TODO: success notification
+    this.isLoading$.next(true);
 
-    await this.auth.initialize();
+    try {
+      await lastValueFrom(
+        this.api.users
+          .update(user.id, {
+            password: this.passwordForm.value.newPassword,
+            current_password: this.passwordForm.value.oldPassword,
+          })
+          .pipe(take(1))
+      );
+      // TODO: success notification
+
+      await this.auth.initialize();
+
+      this.isLoading$.next(false);
+    } catch (e) {
+      this.isLoading$.next(false);
+      throw e;
+    }
   }
 
   async deleteAccount() {
+    if (this.isLoading$.value) return;
+
     const user = await this.getUser();
 
     const confirmed = await lastValueFrom(
@@ -120,14 +160,27 @@ export class AccountSettingsPageComponent {
       return;
     }
 
-    await lastValueFrom(this.api.users.delete(user.id).pipe(take(1)));
-    // TODO: success notification
+    this.isLoading$.next(true);
 
-    await this.auth.initialize();
+    try {
+      await lastValueFrom(this.api.users.delete(user.id).pipe(take(1)));
+      // TODO: success notification
+
+      await this.auth.initialize();
+
+      this.isLoading$.next(false);
+    } catch (e) {
+      this.isLoading$.next(false);
+      throw e;
+    }
   }
 
   private async getUser() {
     return (await lastValueFrom(this.auth.user$.pipe(take(1))))!;
+  }
+
+  ngOnDestroy() {
+    this.subSink.unsubscribe();
   }
 }
 

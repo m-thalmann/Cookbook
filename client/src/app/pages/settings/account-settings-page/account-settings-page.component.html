@@ -1,41 +1,49 @@
-<app-settings-section icon="badge" title="Profile">
-    <form [formGroup]="profileForm" (submit)="updateProfile()">
-        <mat-form-field appearance="outline">
-            <mat-label>Name</mat-label>
-            <input matInput placeholder="John Doe" formControlName="name" />
-        </mat-form-field>
+<ng-container *ngIf="{ isLoading: isLoading$ | async } as vm">
+    <app-settings-section icon="badge" title="Profile">
+        <form [formGroup]="profileForm" (submit)="updateProfile()">
+            <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input matInput placeholder="John Doe" formControlName="name" />
+            </mat-form-field>
 
-        <mat-form-field appearance="outline">
-            <mat-label>Email</mat-label>
-            <input matInput type="email" placeholder="john.doe@example.com" formControlName="email" />
-        </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" placeholder="john.doe@example.com" formControlName="email" />
+            </mat-form-field>
 
-        <button mat-raised-button color="primary" [disabled]="profileForm.invalid">Update profile</button>
-    </form>
-</app-settings-section>
+            <button mat-raised-button color="primary" [disabled]="profileForm.invalid || profileForm.disabled">
+                Update profile
+            </button>
+        </form>
+    </app-settings-section>
 
-<app-settings-section icon="password" title="Password">
-    <form [formGroup]="passwordForm" (submit)="updatePassword()">
-        <mat-form-field appearance="outline">
-            <mat-label>Old password</mat-label>
-            <input matInput type="password" placeholder="password" formControlName="oldPassword" />
-        </mat-form-field>
+    <app-settings-section icon="password" title="Password">
+        <form [formGroup]="passwordForm" (submit)="updatePassword()">
+            <mat-form-field appearance="outline">
+                <mat-label>Old password</mat-label>
+                <input matInput type="password" placeholder="password" formControlName="oldPassword" />
+            </mat-form-field>
 
-        <mat-form-field appearance="outline">
-            <mat-label>New password</mat-label>
-            <input matInput type="password" placeholder="new_password" formControlName="newPassword" />
-        </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>New password</mat-label>
+                <input matInput type="password" placeholder="new_password" formControlName="newPassword" />
+            </mat-form-field>
 
-        <mat-form-field appearance="outline">
-            <mat-label>Confirm new password</mat-label>
-            <input matInput type="password" placeholder="new_password" formControlName="confirmedPassword" />
-        </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Confirm new password</mat-label>
+                <input matInput type="password" placeholder="new_password" formControlName="confirmedPassword" />
+            </mat-form-field>
 
-        <button mat-raised-button color="primary" [disabled]="passwordForm.invalid">Update password</button>
-    </form>
-</app-settings-section>
+            <button mat-raised-button color="primary" [disabled]="passwordForm.invalid || passwordForm.disabled">
+                Update password
+            </button>
+        </form>
+    </app-settings-section>
 
-<app-settings-section icon="dangerous" title="Danger zone" titleColor="warn">
-    <button mat-raised-button color="warn" (click)="deleteAccount()">Delete account</button>
-</app-settings-section>
+    <app-settings-section icon="dangerous" title="Danger zone" titleColor="warn">
+        <button mat-raised-button color="warn" (click)="deleteAccount()" [disabled]="vm.isLoading">
+            Delete account
+        </button>
+    </app-settings-section>
+</ng-container>
 
