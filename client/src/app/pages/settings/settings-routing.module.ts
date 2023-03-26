@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'src/app/core/auth/auth.guard';
 import { AccountSettingsPageComponent } from './account-settings-page/account-settings-page.component';
 import { GeneralSettingsPageComponent } from './general-settings-page/general-settings-page.component';
+import { SecuritySettingsPageComponent } from './security-settings-page/security-settings-page.component';
 import { SettingsPageLayoutComponent } from './settings-page-layout/settings-page-layout.component';
 
 const routes: Routes = [
@@ -17,6 +18,12 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         runGuardsAndResolvers: 'always',
         component: AccountSettingsPageComponent,
+      },
+      {
+        path: 'security',
+        canActivate: [AuthGuard],
+        runGuardsAndResolvers: 'always',
+        component: SecuritySettingsPageComponent,
       },
     ],
   },

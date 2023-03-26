@@ -7,6 +7,7 @@ import { GeneralSettingsPageComponent } from './general-settings-page/general-se
 import { SettingsRoutingModule } from './settings-routing.module';
 import { AccountSettingsPageComponent } from './account-settings-page/account-settings-page.component';
 import { SettingsPageLayoutComponent } from './settings-page-layout/settings-page-layout.component';
+import { SecuritySettingsPageComponent } from './security-settings-page/security-settings-page.component';
 import { SettingsSectionComponent } from './components/settings-section/settings-section.component';
 
 @NgModule({
@@ -14,6 +15,7 @@ import { SettingsSectionComponent } from './components/settings-section/settings
     GeneralSettingsPageComponent,
     AccountSettingsPageComponent,
     SettingsPageLayoutComponent,
+    SecuritySettingsPageComponent,
     SettingsSectionComponent,
   ],
   imports: [CommonModule, SettingsRoutingModule, CoreModule, ComponentsModule],

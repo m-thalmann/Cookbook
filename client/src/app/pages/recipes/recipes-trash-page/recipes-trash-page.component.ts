@@ -1,19 +1,6 @@
-import { HttpResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import {
-  BehaviorSubject,
-  lastValueFrom,
-  merge,
-  shareReplay,
-  switchMap,
-  tap,
-  startWith,
-  scan,
-  switchScan,
-  map,
-  take,
-} from 'rxjs';
+import { BehaviorSubject, lastValueFrom, map, merge, shareReplay, switchMap, switchScan, take, tap } from 'rxjs';
 import { ConfirmDialogComponent } from 'src/app/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
