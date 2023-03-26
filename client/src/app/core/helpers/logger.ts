@@ -21,6 +21,10 @@ const LoggerModulesConfig = {
     background: '#fc9d03',
     foreground: 'white',
   },
+  Settings: {
+    background: '#9d03fc',
+    foreground: 'white',
+  },
 };
 
 export class Logger {

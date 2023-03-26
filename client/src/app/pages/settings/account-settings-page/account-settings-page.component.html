@@ -1,4 +1,10 @@
-<ng-container *ngIf="{ isLoading: isLoading$ | async } as vm">
+<ng-container
+    *ngIf="{
+        isLoading: isLoading$ | async,
+        profileUpdateError: profileUpdateError$ | async,
+        passwordUpdateError: passwordUpdateError$ | async
+    } as vm"
+>
     <app-settings-section icon="badge" title="Profile">
         <form [formGroup]="profileForm" (submit)="updateProfile()">
             <mat-form-field appearance="outline">
@@ -10,6 +16,8 @@
                 <mat-label>Email</mat-label>
                 <input matInput type="email" placeholder="john.doe@example.com" formControlName="email" />
             </mat-form-field>
+
+            <p class="error" *ngIf="vm.profileUpdateError">An error occurred: {{ vm.profileUpdateError }}</p>
 
             <button mat-raised-button color="primary" [disabled]="profileForm.invalid || profileForm.disabled">
                 Update profile
@@ -33,6 +41,8 @@
                 <mat-label>Confirm new password</mat-label>
                 <input matInput type="password" placeholder="new_password" formControlName="confirmedPassword" />
             </mat-form-field>
+
+            <p class="error" *ngIf="vm.passwordUpdateError">An error occurred: {{ vm.passwordUpdateError }}</p>
 
             <button mat-raised-button color="primary" [disabled]="passwordForm.invalid || passwordForm.disabled">
                 Update password

@@ -7,6 +7,10 @@ import { PromptDialogComponent } from 'src/app/components/dialogs/prompt-dialog/
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { CustomValidators } from 'src/app/core/forms/CustomValidators';
+import { Logger as LoggerClass } from '../../../core/helpers/logger';
+import { SnackbarService } from '../../../core/services/snackbar.service';
+
+const Logger = new LoggerClass('Settings');
 
 @Component({
   selector: 'app-account-settings-page',
@@ -22,6 +26,8 @@ export class AccountSettingsPageComponent implements OnDestroy {
     email: new FormControl<string>('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
   });
 
+  profileUpdateError$ = new BehaviorSubject<string | null>(null);
+
   passwordForm = this.fb.group(
     {
       oldPassword: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
@@ -31,11 +37,17 @@ export class AccountSettingsPageComponent implements OnDestroy {
     { validators: CustomValidators.checkPasswords('newPassword', 'confirmedPassword') }
   );
 
+  passwordUpdateError$ = new BehaviorSubject<string | null>(null);
+
   isLoading$ = new BehaviorSubject<boolean>(false);
 
-  // TODO: error handling
-
-  constructor(private auth: AuthService, private api: ApiService, private fb: FormBuilder, private dialog: MatDialog) {
+  constructor(
+    private auth: AuthService,
+    private api: ApiService,
+    private fb: FormBuilder,
+    private dialog: MatDialog,
+    private snackbar: SnackbarService
+  ) {
     this.loadFormData();
 
     this.subSink.add(
@@ -62,6 +74,8 @@ export class AccountSettingsPageComponent implements OnDestroy {
 
   async updateProfile() {
     if (this.isLoading$.value) return;
+
+    this.profileUpdateError$.next(null);
 
     const user = await this.getUser();
 
@@ -98,19 +112,25 @@ export class AccountSettingsPageComponent implements OnDestroy {
 
     try {
       await lastValueFrom(this.api.users.update(user.id, updateData).pipe(take(1)));
-      // TODO: success notification
 
       await this.auth.initialize();
 
+      this.snackbar.info({ message: 'Profile updated successfully' });
+
       this.isLoading$.next(false);
     } catch (e) {
+      const errorMessage = ApiService.getErrorMessage(e);
+
+      this.profileUpdateError$.next(errorMessage);
       this.isLoading$.next(false);
-      throw e;
+      Logger.error('Error updating profile:', errorMessage, e);
     }
   }
 
   async updatePassword() {
     if (this.isLoading$.value) return;
+
+    this.passwordUpdateError$.next(null);
 
     const user = await this.getUser();
 
@@ -125,14 +145,18 @@ export class AccountSettingsPageComponent implements OnDestroy {
           })
           .pipe(take(1))
       );
-      // TODO: success notification
 
       await this.auth.initialize();
 
+      this.snackbar.info({ message: 'Password updated successfully' });
+
       this.isLoading$.next(false);
     } catch (e) {
+      const errorMessage = ApiService.getErrorMessage(e);
+
+      this.passwordUpdateError$.next(errorMessage);
       this.isLoading$.next(false);
-      throw e;
+      Logger.error('Error updating password:', errorMessage, e);
     }
   }
 
@@ -164,14 +188,18 @@ export class AccountSettingsPageComponent implements OnDestroy {
 
     try {
       await lastValueFrom(this.api.users.delete(user.id).pipe(take(1)));
-      // TODO: success notification
 
       await this.auth.initialize();
 
+      this.snackbar.info({ message: 'Account deleted successfully' });
+
       this.isLoading$.next(false);
     } catch (e) {
+      const errorMessage = ApiService.getErrorMessage(e);
+
+      this.snackbar.warn({ message: 'Error deleting account' });
       this.isLoading$.next(false);
-      throw e;
+      Logger.error('Error deleting account:', errorMessage);
     }
   }
 
