@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
+import { ServerValidationHelper } from 'src/app/core/forms/ServerValidationHelper';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
 
 const Logger = new LoggerClass('Authentication');
@@ -81,18 +82,8 @@ export class SignUpPageComponent {
       if (e instanceof HttpErrorResponse) {
         if (e.status !== 422) {
           this.error = e.error.message;
-        } else {
-          const validationErrors = e.error.errors;
-
-          Object.keys(validationErrors).forEach((controlName) => {
-            const formControl = this.signUpForm.get(controlName);
-
-            if (formControl) {
-              formControl.setErrors({
-                serverError: validationErrors[controlName][0],
-              });
-            }
-          });
+        } else if (!ServerValidationHelper.setValidationErrors(e, this.signUpForm)) {
+          this.error = ApiService.getErrorMessage(e);
         }
       } else {
         this.error = 'An error occurred.';

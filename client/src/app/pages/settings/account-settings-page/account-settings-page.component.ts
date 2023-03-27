@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -7,6 +8,7 @@ import { PromptDialogComponent } from 'src/app/components/dialogs/prompt-dialog/
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { CustomValidators } from 'src/app/core/forms/CustomValidators';
+import { ServerValidationHelper } from 'src/app/core/forms/ServerValidationHelper';
 import { Logger as LoggerClass } from '../../../core/helpers/logger';
 import { SnackbarService } from '../../../core/services/snackbar.service';
 
@@ -119,10 +121,26 @@ export class AccountSettingsPageComponent implements OnDestroy {
 
       this.isLoading$.next(false);
     } catch (e) {
-      const errorMessage = ApiService.getErrorMessage(e);
-
-      this.profileUpdateError$.next(errorMessage);
       this.isLoading$.next(false);
+
+      let errorMessage: string | null = 'An error occurred.';
+
+      if (e instanceof HttpErrorResponse) {
+        if (e.status !== 422) {
+          errorMessage = e.error.message;
+        } else {
+          if (ServerValidationHelper.setValidationErrors(e, this.profileForm)) {
+            errorMessage = null;
+          } else {
+            errorMessage = ApiService.getErrorMessage(e);
+          }
+        }
+      }
+
+      if (errorMessage) {
+        this.profileUpdateError$.next(errorMessage);
+      }
+
       Logger.error('Error updating profile:', errorMessage, e);
     }
   }
@@ -152,10 +170,31 @@ export class AccountSettingsPageComponent implements OnDestroy {
 
       this.isLoading$.next(false);
     } catch (e) {
-      const errorMessage = ApiService.getErrorMessage(e);
-
-      this.passwordUpdateError$.next(errorMessage);
       this.isLoading$.next(false);
+
+      let errorMessage: string | null = 'An error occurred.';
+
+      if (e instanceof HttpErrorResponse) {
+        if (e.status !== 422) {
+          errorMessage = e.error.message;
+        } else {
+          if (
+            ServerValidationHelper.setValidationErrors(e, this.passwordForm, {
+              current_password: 'oldPassword',
+              password: 'newPassword',
+            })
+          ) {
+            errorMessage = null;
+          } else {
+            errorMessage = ApiService.getErrorMessage(e);
+          }
+        }
+      }
+
+      if (errorMessage) {
+        this.passwordUpdateError$.next(errorMessage);
+      }
+
       Logger.error('Error updating password:', errorMessage, e);
     }
   }

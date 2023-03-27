@@ -25,7 +25,7 @@ form {
 @include mixins.desktop() {
   form {
     mat-form-field {
-      width: 17em;
+      width: 20em;
       max-width: 100%;
     }
 

@@ -10,11 +10,17 @@
             <mat-form-field appearance="outline">
                 <mat-label>Name</mat-label>
                 <input matInput placeholder="John Doe" formControlName="name" />
+                <mat-error *ngIf="profileForm.get('name')?.getError('serverError') as serverError">
+                    {{ serverError }}
+                </mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
                 <mat-label>Email</mat-label>
                 <input matInput type="email" placeholder="john.doe@example.com" formControlName="email" />
+                <mat-error *ngIf="profileForm.get('email')?.getError('serverError') as serverError">
+                    {{ serverError }}
+                </mat-error>
             </mat-form-field>
 
             <p class="error" *ngIf="vm.profileUpdateError">An error occurred: {{ vm.profileUpdateError }}</p>
@@ -30,11 +36,17 @@
             <mat-form-field appearance="outline">
                 <mat-label>Old password</mat-label>
                 <input matInput type="password" placeholder="password" formControlName="oldPassword" />
+                <mat-error *ngIf="passwordForm.get('oldPassword')?.getError('serverError') as serverError">
+                    {{ serverError }}
+                </mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
                 <mat-label>New password</mat-label>
                 <input matInput type="password" placeholder="new_password" formControlName="newPassword" />
+                <mat-error *ngIf="passwordForm.get('newPassword')?.getError('serverError') as serverError">
+                    {{ serverError }}
+                </mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
