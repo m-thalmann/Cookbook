@@ -4,7 +4,6 @@ import { combineLatest, filter, map, Observable, of, startWith, switchMap } from
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { User } from 'src/app/core/models/user';
 import { RouteHelperService } from 'src/app/core/services/route-helper.service';
-import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
   selector: 'app-layout-default',
@@ -37,8 +36,7 @@ export class LayoutDefaultComponent {
     public auth: AuthService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private routeHelper: RouteHelperService,
-    private snackbar: SnackbarService
+    private routeHelper: RouteHelperService
   ) {}
 
   get loginQueryParams() {
@@ -57,9 +55,7 @@ export class LayoutDefaultComponent {
     return initials[0];
   }
 
-  async doLogout() {
-    await this.auth.logout(true);
-
-    this.snackbar.info({ message: 'Successfully logged out.' });
+  doLogout() {
+    this.auth.logout(true);
   }
 }

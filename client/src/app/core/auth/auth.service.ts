@@ -6,6 +6,7 @@ import { ApiService } from '../api/api.service';
 import { Logger as LoggerClass } from '../helpers/logger';
 import { DetailedUser } from '../models/user';
 import { RouteHelperService } from '../services/route-helper.service';
+import { SnackbarService } from '../services/snackbar.service';
 import { StorageService } from '../services/storage.service';
 import { AuthGuard } from './auth.guard';
 
@@ -39,7 +40,8 @@ export class AuthService implements OnDestroy {
     private router: Router,
     private api: ApiService,
     private activatedRoute: ActivatedRoute,
-    private routeHelper: RouteHelperService
+    private routeHelper: RouteHelperService,
+    private snackbar: SnackbarService
   ) {
     this._accessToken$ = new BehaviorSubject(this.storage.session.get<string>(ACCESS_TOKEN_KEY));
     this._refreshToken$ = new BehaviorSubject(this.storage.local.get(REFRESH_TOKEN_KEY));
@@ -128,7 +130,7 @@ export class AuthService implements OnDestroy {
     this.router.navigateByUrl(redirectUrl);
   }
 
-  public async logout(logoutFromApi: boolean) {
+  public async logout(logoutFromApi: boolean, message: string = 'You have been logged out.') {
     if (logoutFromApi) {
       try {
         await lastValueFrom(this.api.auth.logout());
@@ -143,6 +145,8 @@ export class AuthService implements OnDestroy {
     if (this.routeHelper.routeContainsGuard(this.activatedRoute, AuthGuard)) {
       await this.router.navigate(['/home']);
     }
+
+    this.snackbar.info({ message });
   }
 
   public refreshAccessToken(accessToken: string, refreshToken: string) {
