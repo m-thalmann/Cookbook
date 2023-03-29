@@ -126,14 +126,10 @@ export class AccountSettingsPageComponent implements OnDestroy {
       let errorMessage: string | null = 'An error occurred.';
 
       if (e instanceof HttpErrorResponse) {
-        if (e.status !== 422) {
-          errorMessage = e.error.message;
+        if (ServerValidationHelper.setValidationErrors(e, this.profileForm)) {
+          errorMessage = null;
         } else {
-          if (ServerValidationHelper.setValidationErrors(e, this.profileForm)) {
-            errorMessage = null;
-          } else {
-            errorMessage = ApiService.getErrorMessage(e);
-          }
+          errorMessage = ApiService.getErrorMessage(e);
         }
       }
 
@@ -175,19 +171,15 @@ export class AccountSettingsPageComponent implements OnDestroy {
       let errorMessage: string | null = 'An error occurred.';
 
       if (e instanceof HttpErrorResponse) {
-        if (e.status !== 422) {
-          errorMessage = e.error.message;
+        if (
+          ServerValidationHelper.setValidationErrors(e, this.passwordForm, {
+            current_password: 'oldPassword',
+            password: 'newPassword',
+          })
+        ) {
+          errorMessage = null;
         } else {
-          if (
-            ServerValidationHelper.setValidationErrors(e, this.passwordForm, {
-              current_password: 'oldPassword',
-              password: 'newPassword',
-            })
-          ) {
-            errorMessage = null;
-          } else {
-            errorMessage = ApiService.getErrorMessage(e);
-          }
+          errorMessage = ApiService.getErrorMessage(e);
         }
       }
 

@@ -1,35 +1,43 @@
-<form [formGroup]="loginForm" (submit)="doLogin()">
-    <img src="/assets/images/cookbook.svg" alt="Cookbook Logo" />
-    <h1>Cookbook</h1>
+<ng-container *ngIf="{ isLoading: isLoading$ | async, error: error$ | async } as vm">
+    <form [formGroup]="loginForm" (submit)="doLogin()">
+        <img src="/assets/images/cookbook.svg" alt="Cookbook Logo" />
+        <h1>Cookbook</h1>
 
-    <mat-form-field appearance="outline" color="accent">
-        <mat-icon matPrefix>email</mat-icon>
-        <mat-label>Email</mat-label>
-        <input matInput type="email" formControlName="email" autofocus />
-    </mat-form-field>
+        <mat-form-field appearance="outline" color="accent">
+            <mat-icon matPrefix>email</mat-icon>
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" autofocus />
+            <mat-error *ngIf="loginForm.get('email')?.getError('serverError') as serverError">
+                {{ serverError }}
+            </mat-error>
+        </mat-form-field>
 
-    <mat-form-field appearance="outline" color="accent">
-        <mat-icon matPrefix>key</mat-icon>
-        <mat-label>Password</mat-label>
-        <input matInput type="password" formControlName="password" />
-    </mat-form-field>
+        <mat-form-field appearance="outline" color="accent">
+            <mat-icon matPrefix>key</mat-icon>
+            <mat-label>Password</mat-label>
+            <input matInput type="password" formControlName="password" />
+            <mat-error *ngIf="loginForm.get('password')?.getError('serverError') as serverError">
+                {{ serverError }}
+            </mat-error>
+        </mat-form-field>
 
-    <a routerLink="/forgot-password">Don't remember your password?</a>
+        <a routerLink="/forgot-password">Don't remember your password?</a>
 
-    <button mat-raised-button color="accent" type="submit" [disabled]="isLoading">
-        <mat-icon *ngIf="!isLoading">login</mat-icon>
-        <ng-container *ngIf="!isLoading"> Login</ng-container>
+        <button mat-raised-button color="accent" type="submit" [disabled]="vm.isLoading">
+            <mat-icon *ngIf="!vm.isLoading">login</mat-icon>
+            <ng-container *ngIf="!vm.isLoading"> Login</ng-container>
 
-        <mat-spinner
-            [diameter]="24"
-            color="accent"
-            class="login-button-loading-spinner"
-            *ngIf="isLoading"
-        ></mat-spinner>
-    </button>
+            <mat-spinner
+                [diameter]="24"
+                color="accent"
+                class="login-button-loading-spinner"
+                *ngIf="vm.isLoading"
+            ></mat-spinner>
+        </button>
 
-    <p class="error mat-elevation-z2" *ngIf="error">
-        <mat-icon>error</mat-icon>
-        <span>{{ error }}</span>
-    </p>
-</form>
+        <p class="error mat-elevation-z1" *ngIf="vm.error">
+            <mat-icon>error</mat-icon>
+            <span>{{ vm.error }}</span>
+        </p>
+    </form>
+</ng-container>

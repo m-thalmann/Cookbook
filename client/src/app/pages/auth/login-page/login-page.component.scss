@@ -21,10 +21,6 @@ form {
   mat-form-field {
     width: 100%;
 
-    &:first-of-type {
-      margin-bottom: -0.5em;
-    }
-
     [matPrefix] {
       margin-right: 0.5em;
     }
@@ -32,11 +28,13 @@ form {
 
   a {
     text-decoration: none;
+    margin-top: 1em;
     margin-bottom: 2em;
   }
 
   button {
     width: 100%;
+    padding: 1.5em 0;
 
     .login-button-loading-spinner {
       margin: 0.5em auto;

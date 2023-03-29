@@ -26,13 +26,11 @@ form {
     }
   }
 
-  a {
-    text-decoration: none;
-    margin-bottom: 2em;
-  }
-
   button {
+    margin-top: 1em;
+
     width: 100%;
+    padding: 1.5em 0;
 
     .sign-up-button-loading-spinner {
       margin: 0.5em auto;

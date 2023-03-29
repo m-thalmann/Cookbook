@@ -1,10 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { lastValueFrom, map } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, lastValueFrom, Subscription } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
+import { ServerValidationHelper } from 'src/app/core/forms/ServerValidationHelper';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
 
 const Logger = new LoggerClass('Authentication');
@@ -15,9 +16,11 @@ const Logger = new LoggerClass('Authentication');
   styleUrls: ['./login-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginPageComponent {
-  isLoading = false;
-  error: string | null = null;
+export class LoginPageComponent implements OnDestroy {
+  private subSink = new Subscription();
+
+  error$ = new BehaviorSubject<string | null>(null);
+  isLoading$ = new BehaviorSubject<boolean>(false);
 
   loginForm: FormGroup;
 
@@ -31,13 +34,21 @@ export class LoginPageComponent {
       email: [''],
       password: [''],
     });
+
+    this.subSink.add(
+      this.isLoading$.pipe(distinctUntilChanged()).subscribe((isLoading) => {
+        if (isLoading) {
+          this.loginForm.disable();
+        } else {
+          this.loginForm.enable();
+        }
+      })
+    );
   }
 
   async doLogin() {
-    this.isLoading = true;
-    this.error = null;
-
-    this.loginForm.disable();
+    this.isLoading$.next(true);
+    this.error$.next(null);
 
     try {
       const loginResponse = await lastValueFrom(
@@ -50,19 +61,29 @@ export class LoginPageComponent {
 
       this.auth.login(loginData.user, loginData.access_token, loginData.refresh_token, redirectUrl);
     } catch (e) {
+      this.isLoading$.next(false);
+
+      let errorMessage: string | null = 'An error occurred.';
+
       if (e instanceof HttpErrorResponse) {
-        this.error = ApiService.getErrorMessage(e);
+        this.loginForm.get('password')?.setValue('');
 
-        this.loginForm.get('password')?.reset();
+        if (ServerValidationHelper.setValidationErrors(e, this.loginForm)) {
+          errorMessage = null;
+        } else {
+          errorMessage = ApiService.getErrorMessage(e);
+        }
       } else {
-        this.error = 'An error occurred.';
-
         Logger.error('Error on login:', e);
       }
 
-      this.isLoading = false;
-
-      this.loginForm.enable();
+      if (errorMessage) {
+        this.error$.next(errorMessage);
+      }
     }
+  }
+
+  ngOnDestroy() {
+    this.subSink.unsubscribe();
   }
 }

@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { lastValueFrom } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, lastValueFrom, Subscription } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { ServerValidationHelper } from 'src/app/core/forms/ServerValidationHelper';
@@ -17,8 +17,10 @@ const Logger = new LoggerClass('Authentication');
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignUpPageComponent {
-  isLoading = false;
-  error: string | null = null;
+  private subSink = new Subscription();
+
+  error$ = new BehaviorSubject<string | null>(null);
+  isLoading$ = new BehaviorSubject<boolean>(false);
 
   signUpForm: FormGroup;
 
@@ -47,6 +49,16 @@ export class SignUpPageComponent {
         ],
       ],
     });
+
+    this.subSink.add(
+      this.isLoading$.pipe(distinctUntilChanged()).subscribe((isLoading) => {
+        if (isLoading) {
+          this.signUpForm.disable();
+        } else {
+          this.signUpForm.enable();
+        }
+      })
+    );
   }
 
   get name() {
@@ -63,10 +75,8 @@ export class SignUpPageComponent {
   }
 
   async doSignUp() {
-    this.isLoading = true;
-    this.error = null;
-
-    this.signUpForm.disable();
+    this.isLoading$.next(true);
+    this.error$.next(null);
 
     try {
       const signUpResponse = await lastValueFrom(this.api.auth.signUp(this.signUpForm.value));
@@ -77,21 +87,23 @@ export class SignUpPageComponent {
 
       this.auth.login(signUpData.user, signUpData.access_token, signUpData.refresh_token, redirectUrl);
     } catch (e) {
-      this.signUpForm.enable();
+      this.isLoading$.next(false);
+
+      let errorMessage: string | null = 'An error occurred.';
 
       if (e instanceof HttpErrorResponse) {
-        if (e.status !== 422) {
-          this.error = e.error.message;
-        } else if (!ServerValidationHelper.setValidationErrors(e, this.signUpForm)) {
-          this.error = ApiService.getErrorMessage(e);
+        if (ServerValidationHelper.setValidationErrors(e, this.signUpForm)) {
+          errorMessage = null;
+        } else {
+          errorMessage = ApiService.getErrorMessage(e);
         }
       } else {
-        this.error = 'An error occurred.';
-
         Logger.error('Error on sign up:', e);
       }
 
-      this.isLoading = false;
+      if (errorMessage) {
+        this.error$.next(errorMessage);
+      }
     }
   }
 }
