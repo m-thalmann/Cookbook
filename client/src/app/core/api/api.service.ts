@@ -48,7 +48,7 @@ export class ApiService {
   constructor(private http: HttpClient, private config: ConfigService) {}
 
   public get url() {
-    return this.config.get('API_URL');
+    return this.config.get('apiUrl');
   }
 
   private get httpHeaders() {

@@ -6,6 +6,7 @@ import { CategoryChipListComponent } from './category-chip-list/category-chip-li
 import { CookbookCardComponent } from './cookbook-card/cookbook-card.component';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog/confirm-dialog.component';
 import { PromptDialogComponent } from './dialogs/prompt-dialog/prompt-dialog.component';
+import { HcaptchaComponent } from './hcaptcha/hcaptcha.component';
 import { ImageSliderDialogComponent } from './image-slider-dialog/image-slider-dialog.component';
 import { NumberInputComponent } from './number-input/number-input.component';
 import { PageSectionComponent } from './page-section/page-section.component';
@@ -28,6 +29,7 @@ const components = [
   RecipeSearchComponent,
   ConfirmDialogComponent,
   PromptDialogComponent,
+  HcaptchaComponent,
 ];
 
 @NgModule({
