@@ -1,10 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, distinctUntilChanged, lastValueFrom, Observable, of, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, distinctUntilChanged, lastValueFrom, map, startWith } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
+import { CustomValidators } from 'src/app/core/forms/CustomValidators';
 import { ServerValidationHelper } from 'src/app/core/forms/ServerValidationHelper';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
 import { ConfigService } from 'src/app/core/services/config.service';
@@ -23,36 +24,33 @@ export class SignUpPageComponent {
   error$ = new BehaviorSubject<string | null>(null);
   isLoading$ = new BehaviorSubject<boolean>(false);
 
-  showHCaptcha$: Observable<boolean>;
-
   signUpForm: FormGroup;
 
-  private hcaptchaToken?: string;
+  formValid$: Observable<boolean>;
 
   constructor(
     private auth: AuthService,
     private config: ConfigService,
     private api: ApiService,
     private fb: FormBuilder,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private changeDetector: ChangeDetectorRef
   ) {
-    this.signUpForm = this.fb.group({
-      name: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]],
-      password_confirmation: [
-        '',
-        [
-          Validators.required,
-          (_: AbstractControl) => {
-            if (this.password?.value != this.passwordConfirmation?.value) {
-              return { passwordsMismatch: true };
-            }
-            return null;
-          },
-        ],
-      ],
-    });
+    this.signUpForm = this.fb.group(
+      {
+        name: ['', [Validators.required]],
+        email: ['', [Validators.required, Validators.email]],
+        password: ['', [Validators.required]],
+        password_confirmation: ['', [Validators.required]],
+      },
+      { validators: CustomValidators.checkPasswords('password', 'password_confirmation') }
+    );
+
+    this.formValid$ = this.signUpForm.statusChanges.pipe(
+      map((status) => status === 'VALID'),
+      startWith(this.signUpForm.valid),
+      distinctUntilChanged()
+    );
 
     this.subSink.add(
       this.isLoading$.pipe(distinctUntilChanged()).subscribe((isLoading) => {
@@ -64,7 +62,9 @@ export class SignUpPageComponent {
       })
     );
 
-    this.showHCaptcha$ = of(this.config.get('hcaptcha.enabled', false));
+    if (this.config.get('hcaptcha.enabled', false)) {
+      this.signUpForm.addControl('hcaptcha_token', this.fb.control('', [Validators.required]));
+    }
   }
 
   get name() {
@@ -80,8 +80,14 @@ export class SignUpPageComponent {
     return this.signUpForm?.get('password_confirmation');
   }
 
+  get hcaptchaEnabled() {
+    return this.signUpForm.get('hcaptcha_token') !== null;
+  }
+
   onCaptchaVerified(token: string) {
-    this.hcaptchaToken = token;
+    this.signUpForm.get('hcaptcha_token')?.setValue(token);
+    // the formValid$ observable somehow does not trigger change detection
+    this.changeDetector.detectChanges();
   }
 
   async doSignUp() {
@@ -89,7 +95,7 @@ export class SignUpPageComponent {
     this.error$.next(null);
 
     try {
-      const signUpResponse = await lastValueFrom(this.api.auth.signUp(this.signUpForm.value, this.hcaptchaToken));
+      const signUpResponse = await lastValueFrom(this.api.auth.signUp(this.signUpForm.value));
 
       const signUpData = signUpResponse.body!.data;
 

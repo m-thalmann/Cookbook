@@ -213,18 +213,16 @@ export class ApiService {
           TokenType.None
         ),
 
-      signUp: (
-        data: { name: string; email: string; password: string; language_code?: string },
-        hcaptchaToken?: string
-      ) => {
-        const signUpData = {
-          ...data,
-          hcaptcha_token: hcaptchaToken,
-        };
-
+      signUp: (data: {
+        name: string;
+        email: string;
+        password: string;
+        language_code?: string;
+        hcaptcha_token?: string;
+      }) => {
         return this.post<{ data: { user: DetailedUser; access_token: string; refresh_token: string } }>(
           '/auth/sign-up',
-          signUpData,
+          data,
           TokenType.None
         );
       },

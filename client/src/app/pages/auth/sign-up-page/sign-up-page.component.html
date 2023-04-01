@@ -1,6 +1,4 @@
-<ng-container
-    *ngIf="{ isLoading: isLoading$ | async, error: error$ | async, showHCaptcha: showHCaptcha$ | async } as vm"
->
+<ng-container *ngIf="{ isLoading: isLoading$ | async, error: error$ | async, valid: formValid$ | async } as vm">
     <form [formGroup]="signUpForm" (submit)="doSignUp()">
         <img src="/assets/images/cookbook.svg" alt="Cookbook Logo" />
         <h1>Cookbook</h1>
@@ -37,9 +35,9 @@
             <input matInput type="password" formControlName="password_confirmation" />
         </mat-form-field>
 
-        <app-hcaptcha *ngIf="vm.showHCaptcha" (verified)="onCaptchaVerified($event)"></app-hcaptcha>
+        <app-hcaptcha *ngIf="hcaptchaEnabled" (verified)="onCaptchaVerified($event)"></app-hcaptcha>
 
-        <button mat-raised-button color="accent" type="submit" [disabled]="vm.isLoading || !signUpForm.valid">
+        <button mat-raised-button color="accent" type="submit" [disabled]="vm.isLoading || !vm.valid">
             <mat-icon *ngIf="!vm.isLoading">person_add</mat-icon>
             <ng-container *ngIf="!vm.isLoading"> Sign up</ng-container>
 
