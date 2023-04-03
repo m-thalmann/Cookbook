@@ -5,9 +5,6 @@ namespace App\Services;
 class HCaptchaService {
     private const VERIFY_URL = 'https://hcaptcha.com/siteverify';
 
-    const VALID_TEST_TOKEN = '10000000-aaaa-bbbb-cccc-000000000001';
-    const INVALID_TEST_TOKEN = '40000000-aaaa-bbbb-cccc-000000000004';
-
     /**
      * The hCaptcha server secret
      *

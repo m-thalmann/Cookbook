@@ -10,10 +10,26 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Notification;
+use Mockery;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use Mockery\Mock;
 use Tests\TestCase;
 
 class SignUpTest extends TestCase {
-    use WithFaker;
+    use WithFaker, MockeryPHPUnitIntegration;
+
+    /**
+     * @var HcaptchaService|Mock
+     */
+    private $hcaptchaService;
+
+    public function setUp(): void {
+        parent::setUp();
+
+        $this->hcaptchaService = Mockery::mock(HCaptchaService::class);
+
+        $this->app->instance(HCaptchaService::class, $this->hcaptchaService);
+    }
 
     public function testUserSignUpSucceeds() {
         Notification::fake();
@@ -56,13 +72,21 @@ class SignUpTest extends TestCase {
     public function testUserSignUpSucceedsWithValidHCaptchaToken() {
         Config::set('services.hcaptcha.enabled', true);
 
+        $validToken = 'my-test-token';
+
         Notification::fake();
+
+        $this->hcaptchaService
+            ->shouldReceive('verify')
+            ->once()
+            ->with($validToken)
+            ->andReturn(true);
 
         $userData = [
             'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'password' => self::DEFAULT_USER_PASSWORD,
-            'hcaptcha_token' => HCaptchaService::VALID_TEST_TOKEN,
+            'hcaptcha_token' => $validToken,
         ];
 
         $response = $this->postJson('/v1/auth/sign-up', $userData);
@@ -114,13 +138,21 @@ class SignUpTest extends TestCase {
     public function testUserSignUpFailsWithInvalidHCaptchaToken() {
         Config::set('services.hcaptcha.enabled', true);
 
+        $invalidToken = 'my-invalid-token';
+
         Notification::fake();
+
+        $this->hcaptchaService
+            ->shouldReceive('verify')
+            ->once()
+            ->with($invalidToken)
+            ->andReturn(false);
 
         $userData = [
             'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'password' => self::DEFAULT_USER_PASSWORD,
-            'hcaptcha_token' => HCaptchaService::INVALID_TEST_TOKEN,
+            'hcaptcha_token' => $invalidToken,
         ];
 
         $response = $this->postJson('/v1/auth/sign-up', $userData);
@@ -148,4 +180,3 @@ class SignUpTest extends TestCase {
         Notification::assertNothingSent();
     }
 }
-

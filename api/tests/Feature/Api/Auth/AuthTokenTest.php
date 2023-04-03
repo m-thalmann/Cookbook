@@ -105,7 +105,7 @@ class AuthTokenTest extends TestCase {
 
         $createdTokens = 10;
 
-        $groupId = TokenAuth::getNextTokenGroupId($user->id);
+        $groupId = TokenAuth::getNextTokenGroupId($user);
 
         for ($i = 0; $i < $createdTokens; $i++) {
             $user->createToken(
