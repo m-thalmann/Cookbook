@@ -45,10 +45,12 @@ interface ListParamOptions {
   providedIn: 'root',
 })
 export class ApiService {
+  static readonly API_VERSION = 1;
+
   constructor(private http: HttpClient, private config: ConfigService) {}
 
   public get url() {
-    return this.config.get('apiUrl');
+    return `${this.config.get('apiUrl')}/v${ApiService.API_VERSION}`;
   }
 
   private get httpHeaders() {
