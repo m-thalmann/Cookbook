@@ -1,4 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 
 /**
@@ -11,6 +13,8 @@ let nextIdSuffix = 0;
   selector: 'app-search-bar',
   templateUrl: './search-bar.component.html',
   styleUrls: ['./search-bar.component.scss'],
+  standalone: true,
+  imports: [CommonModule, MatIconModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchBarComponent {

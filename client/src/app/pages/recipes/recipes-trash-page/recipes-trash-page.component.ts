@@ -1,5 +1,9 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BehaviorSubject, lastValueFrom, map, merge, shareReplay, switchMap, switchScan, take, tap } from 'rxjs';
 import { ConfirmDialogComponent } from 'src/app/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { ApiService } from 'src/app/core/api/api.service';
@@ -13,6 +17,8 @@ import { SnackbarService } from 'src/app/core/services/snackbar.service';
   selector: 'app-recipes-trash-page',
   templateUrl: './recipes-trash-page.component.html',
   styleUrls: ['./recipes-trash-page.component.scss'],
+  standalone: true,
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipesTrashPageComponent {
@@ -156,4 +162,3 @@ export class RecipesTrashPageComponent {
     }
   }
 }
-

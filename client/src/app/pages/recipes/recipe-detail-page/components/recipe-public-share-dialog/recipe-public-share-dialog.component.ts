@@ -1,6 +1,11 @@
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSlideToggleChange, MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
@@ -14,6 +19,16 @@ const Logger = new LoggerClass('Recipes');
   selector: 'app-recipe-public-share-dialog',
   templateUrl: './recipe-public-share-dialog.component.html',
   styleUrls: ['./recipe-public-share-dialog.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatSlideToggleModule,
+    MatDialogModule,
+    MatProgressSpinnerModule,
+    ClipboardModule,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipePublicShareDialogComponent {

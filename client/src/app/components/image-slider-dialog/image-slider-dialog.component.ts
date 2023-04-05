@@ -1,5 +1,9 @@
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
+import { CommonModule } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Inject, ViewChild } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 
 const SWIPE_LEFT_DIRECTION = 2;
 const SWIPE_RIGHT_DIRECTION = 4;
@@ -10,6 +14,8 @@ const SWIPE_DOWN_DIRECTION = 16;
   selector: 'app-image-slider-dialog',
   templateUrl: './image-slider-dialog.component.html',
   styleUrls: ['./image-slider-dialog.component.scss'],
+  standalone: true,
+  imports: [CommonModule, MatDialogModule, MatIconModule, MatButtonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ImageSliderDialogComponent implements AfterViewInit {

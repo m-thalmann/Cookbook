@@ -1,14 +1,32 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { combineLatest, map, Observable, switchMap } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { PaginationMeta } from 'src/app/core/models/pagination-meta';
+import { CookbookHeaderComponent } from '../components/cookbook-header/cookbook-header.component';
+import { PageSectionComponent } from 'src/app/components/page-section/page-section.component';
+import { CategoryChipListComponent } from 'src/app/components/category-chip-list/category-chip-list.component';
+import { RecipeCardComponent } from 'src/app/components/recipe-card/recipe-card.component';
 
 @Component({
   selector: 'app-cookbook-detail-page',
   templateUrl: './cookbook-detail-page.component.html',
   styleUrls: ['./cookbook-detail-page.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterLink,
+    MatButtonModule,
+    MatIconModule,
+    CookbookHeaderComponent,
+    PageSectionComponent,
+    CategoryChipListComponent,
+    RecipeCardComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CookbookDetailPageComponent {

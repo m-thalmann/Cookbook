@@ -1,11 +1,17 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-share-menu',
   templateUrl: './share-menu.component.html',
   styleUrls: ['./share-menu.component.scss'],
+  standalone: true,
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatMenuModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShareMenuComponent {

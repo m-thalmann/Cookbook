@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'clampArray',
+  standalone: true,
 })
 export class ClampArrayPipe implements PipeTransform {
   transform(array: any[] | undefined | null, limitAmount: number | null) {
@@ -21,4 +22,3 @@ export class ClampArrayPipe implements PipeTransform {
     };
   }
 }
-

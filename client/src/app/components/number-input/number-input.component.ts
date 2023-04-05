@@ -1,10 +1,14 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { AmountPipe } from 'src/app/core/pipes/amount.pipe';
 
 @Component({
   selector: 'app-number-input',
   templateUrl: './number-input.component.html',
   styleUrls: ['./number-input.component.scss'],
+  standalone: true,
+  imports: [MatIconModule, FormsModule, AmountPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {

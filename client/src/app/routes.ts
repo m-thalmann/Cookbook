@@ -1,5 +1,4 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { AuthGuard } from './core/auth/auth.guard';
 import { GuestGuard } from './core/auth/guest.guard';
 import { LayoutAuthComponent } from './layouts/layout-auth/layout-auth.component';
@@ -8,7 +7,7 @@ import { LoginPageComponent } from './pages/auth/login-page/login-page.component
 import { SignUpPageComponent } from './pages/auth/sign-up-page/sign-up-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 
-const routes: Routes = [
+export default [
   { path: '', pathMatch: 'full', redirectTo: '/home' },
 
   {
@@ -26,23 +25,17 @@ const routes: Routes = [
     component: LayoutDefaultComponent,
     children: [
       { path: 'home', component: HomePageComponent, data: { showAddButton: true } },
-      { path: 'recipes', loadChildren: () => import('./pages/recipes/recipes.module').then((m) => m.RecipesModule) },
+      { path: 'recipes', loadChildren: () => import('./pages/recipes/routes') },
       {
         path: 'cookbooks',
         canActivate: [AuthGuard],
         runGuardsAndResolvers: 'always',
-        loadChildren: () => import('./pages/cookbooks/cookbooks.module').then((m) => m.CookbooksModule),
+        loadChildren: () => import('./pages/cookbooks/routes'),
       },
       {
         path: 'settings',
-        loadChildren: () => import('./pages/settings/settings.module').then((m) => m.SettingsModule),
+        loadChildren: () => import('./pages/settings/routes'),
       },
     ],
   },
-];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
-})
-export class AppRoutingModule {}
+] as Routes;

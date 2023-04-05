@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, distinctUntilChanged, lastValueFrom, Subscription, take } from 'rxjs';
 import { ConfirmDialogComponent } from 'src/app/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -11,6 +11,11 @@ import { CustomValidators } from 'src/app/core/forms/CustomValidators';
 import { ServerValidationHelper } from 'src/app/core/forms/ServerValidationHelper';
 import { Logger as LoggerClass } from '../../../core/helpers/logger';
 import { SnackbarService } from '../../../core/services/snackbar.service';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { SettingsSectionComponent } from '../components/settings-section/settings-section.component';
 
 const Logger = new LoggerClass('Settings');
 
@@ -18,6 +23,15 @@ const Logger = new LoggerClass('Settings');
   selector: 'app-account-settings-page',
   templateUrl: './account-settings-page.component.html',
   styleUrls: ['./account-settings-page.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    SettingsSectionComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountSettingsPageComponent implements OnDestroy {
@@ -242,4 +256,3 @@ export class AccountSettingsPageComponent implements OnDestroy {
     this.subSink.unsubscribe();
   }
 }
-

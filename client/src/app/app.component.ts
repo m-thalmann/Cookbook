@@ -4,12 +4,14 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { SwUpdate } from '@angular/service-worker';
 import { IconSnackbarComponent } from './components/snackbar/icon-snackbar/icon-snackbar.component';
 import { SnackbarService } from './core/services/snackbar.service';
-import { ThemeService } from './core/services/theme.service';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   template: `<router-outlet></router-outlet>`,
   styles: [],
+  standalone: true,
+  imports: [RouterOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnDestroy {
@@ -48,6 +50,8 @@ export class AppComponent implements OnDestroy {
   }
 
   private registerIcons() {
+    this.matIconRegistry.setDefaultFontSetClass('material-icons-round');
+
     this.matIconRegistry.addSvgIcon(
       'whatsapp',
       this.domSanitizer.bypassSecurityTrustResourceUrl('assets/images/icons/whatsapp.svg')

@@ -1,6 +1,8 @@
+import { CommonModule } from '@angular/common';
 import { HttpResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   BehaviorSubject,
@@ -17,11 +19,23 @@ import { PaginationMeta } from 'src/app/core/models/pagination-meta';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
 import { ListRecipe, RecipeFilters } from 'src/app/core/models/recipe';
 import { SortOption } from 'src/app/core/models/sort-option';
+import { SearchBarComponent } from '../search-bar/search-bar.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
 
 @Component({
   selector: 'app-recipe-search',
   templateUrl: './recipe-search.component.html',
   styleUrls: ['./recipe-search.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatIconModule,
+    MatSlideToggleModule,
+    MatPaginatorModule,
+    SearchBarComponent,
+    RecipeCardComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeSearchComponent {
@@ -137,4 +151,3 @@ export class RecipeSearchComponent {
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
 }
-

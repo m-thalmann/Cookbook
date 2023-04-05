@@ -3,6 +3,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({
   name: 'amount',
   pure: true,
+  standalone: true,
 })
 export class AmountPipe implements PipeTransform {
   transform(value: string | number | null): string {
@@ -38,4 +39,3 @@ export class AmountPipe implements PipeTransform {
     return (Math.round(value * 100) / 100).toString();
   }
 }
-

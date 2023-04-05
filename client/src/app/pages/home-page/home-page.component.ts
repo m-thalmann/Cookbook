@@ -1,5 +1,14 @@
+import { CommonModule } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 import { of, Subscription, switchMap } from 'rxjs';
+import { CategoryChipListComponent } from 'src/app/components/category-chip-list/category-chip-list.component';
+import { CookbookCardComponent } from 'src/app/components/cookbook-card/cookbook-card.component';
+import { PageSectionComponent } from 'src/app/components/page-section/page-section.component';
+import { RecipeCardComponent } from 'src/app/components/recipe-card/recipe-card.component';
+import { SearchBarComponent } from 'src/app/components/search-bar/search-bar.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { createIntersectionObserver } from 'src/app/core/helpers/intersection-observer';
@@ -11,6 +20,18 @@ const AMOUNT_ITEMS = 12;
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterLink,
+    MatButtonModule,
+    MatIconModule,
+    SearchBarComponent,
+    PageSectionComponent,
+    CategoryChipListComponent,
+    RecipeCardComponent,
+    CookbookCardComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomePageComponent implements AfterViewInit, OnDestroy {

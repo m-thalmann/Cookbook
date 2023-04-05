@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RecipeSearchComponent } from 'src/app/components/recipe-search/recipe-search.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { FilterOption } from 'src/app/core/models/filter-option';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
@@ -8,6 +9,8 @@ import { RecipeFilters } from 'src/app/core/models/recipe';
   selector: 'app-recipes-page',
   templateUrl: './recipes-page.component.html',
   styleUrls: ['./recipes-page.component.scss'],
+  standalone: true,
+  imports: [RecipeSearchComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipesPageComponent {

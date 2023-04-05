@@ -1,5 +1,7 @@
 import { Dialog } from '@angular/cdk/dialog';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { ImageSliderDialogComponent } from 'src/app/components/image-slider-dialog/image-slider-dialog.component';
 import { PLACEHOLDER_RECIPE_IMAGE_URL, RecipeImage } from 'src/app/core/models/recipe-image';
 
@@ -10,6 +12,8 @@ const SWIPE_RIGHT_DIRECTION = 4;
   selector: 'app-recipe-detail-image-slider',
   templateUrl: './recipe-detail-image-slider.component.html',
   styleUrls: ['./recipe-detail-image-slider.component.scss'],
+  standalone: true,
+  imports: [MatButtonModule, MatIconModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeDetailImageSliderComponent {

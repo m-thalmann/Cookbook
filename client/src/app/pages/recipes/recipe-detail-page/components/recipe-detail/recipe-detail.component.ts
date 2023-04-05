@@ -1,14 +1,37 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { BehaviorSubject, lastValueFrom } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { DetailedRecipe } from 'src/app/core/models/recipe';
 import { RouteHelperService } from 'src/app/core/services/route-helper.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { RecipeDetailImageSliderComponent } from '../recipe-detail-image-slider/recipe-detail-image-slider.component';
+import { RecipeDetailHeaderComponent } from '../recipe-detail-header/recipe-detail-header.component';
+import { RecipeDetailSectionComponent } from '../recipe-detail-section/recipe-detail-section.component';
+import { NumberInputComponent } from 'src/app/components/number-input/number-input.component';
+import { FormsModule } from '@angular/forms';
+import { AmountPipe } from 'src/app/core/pipes/amount.pipe';
+import { RecipeDetailPreparationContentComponent } from '../recipe-detail-preparation-content/recipe-detail-preparation-content.component';
 
 @Component({
   selector: 'app-recipe-detail',
   templateUrl: './recipe-detail.component.html',
   styleUrls: ['./recipe-detail.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatButtonModule,
+    MatIconModule,
+    RecipeDetailImageSliderComponent,
+    RecipeDetailHeaderComponent,
+    RecipeDetailSectionComponent,
+    RecipeDetailPreparationContentComponent,
+    NumberInputComponent,
+    AmountPipe,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeDetailComponent {

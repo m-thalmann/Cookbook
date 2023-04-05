@@ -6,6 +6,8 @@ const HCAPTCHA_API = 'https://js.hcaptcha.com/1/api.js?render=explicit&onload=_h
 @Component({
   selector: 'app-hcaptcha',
   template: `<div #hcaptcha></div>`,
+  standalone: true,
+  imports: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HcaptchaComponent {
@@ -50,4 +52,3 @@ export class HcaptchaComponent {
     });
   }
 }
-

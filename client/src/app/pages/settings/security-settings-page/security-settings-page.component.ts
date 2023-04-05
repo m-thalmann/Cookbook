@@ -5,6 +5,12 @@ import { AuthService } from 'src/app/core/auth/auth.service';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
 import { Logger as LoggerClass } from '../../../core/helpers/logger';
 import { SnackbarService } from '../../../core/services/snackbar.service';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { SettingsSectionComponent } from '../components/settings-section/settings-section.component';
 
 const Logger = new LoggerClass('Settings');
 
@@ -12,6 +18,15 @@ const Logger = new LoggerClass('Settings');
   selector: 'app-security-settings-page',
   templateUrl: './security-settings-page.component.html',
   styleUrls: ['./security-settings-page.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+    MatProgressSpinnerModule,
+    SettingsSectionComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SecuritySettingsPageComponent {
@@ -87,4 +102,3 @@ export class SecuritySettingsPageComponent {
     this.isUpdating$.next(false);
   }
 }
-

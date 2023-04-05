@@ -1,8 +1,15 @@
+import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription, distinctUntilChanged, lastValueFrom, map, startWith } from 'rxjs';
+import { HcaptchaComponent } from 'src/app/components/hcaptcha/hcaptcha.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { CustomValidators } from 'src/app/core/forms/CustomValidators';
@@ -16,6 +23,17 @@ const Logger = new LoggerClass('Authentication');
   selector: 'app-sign-up-page',
   templateUrl: './sign-up-page.component.html',
   styleUrls: ['./sign-up-page.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    HcaptchaComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignUpPageComponent {

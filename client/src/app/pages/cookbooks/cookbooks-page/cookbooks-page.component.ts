@@ -1,5 +1,10 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BehaviorSubject, Subscription, switchMap, tap } from 'rxjs';
+import { CookbookCardComponent } from 'src/app/components/cookbook-card/cookbook-card.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { CookbookWithCounts } from 'src/app/core/models/cookbook';
@@ -11,6 +16,8 @@ const AMOUNT_ITEMS = 18;
   selector: 'app-cookbooks-page',
   templateUrl: './cookbooks-page.component.html',
   styleUrls: ['./cookbooks-page.component.scss'],
+  standalone: true,
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule, CookbookCardComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CookbooksPageComponent implements OnInit, OnDestroy {
