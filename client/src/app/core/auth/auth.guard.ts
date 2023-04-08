@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { map, Observable } from 'rxjs';
+import { combineLatest, map, Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -13,9 +13,9 @@ export class AuthGuard implements CanActivate {
     _: ActivatedRouteSnapshot,
     routerState: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return this.auth.isAuthenticated$.pipe(
-      map((isAuthenticated) => {
-        if (isAuthenticated) {
+    return combineLatest([this.auth.isAuthenticated$, this.auth.isInitialized$]).pipe(
+      map(([isAuthenticated, isInitialized]) => {
+        if (isAuthenticated && isInitialized) {
           return true;
         }
 

@@ -2,6 +2,7 @@
     *ngIf="{
         user: auth.user$ | async,
         isAuthenticated: auth.isAuthenticated$ | async,
+        isAuthInitialized: (auth.isInitialized$ | async) ?? true,
         isOverlayRoute: isOverlayRoute$ | async,
         showAddButton: showAddButton$ | async
     } as vm"
@@ -18,11 +19,22 @@
 
                 <div class="header-buttons">
                     <ng-container *ngIf="vm.isAuthenticated; else loginButton">
-                        <button class="hide-mobile" mat-icon-button [matMenuTriggerFor]="addMenu" color="primary">
+                        <button
+                            class="hide-mobile"
+                            mat-icon-button
+                            [matMenuTriggerFor]="addMenu"
+                            color="primary"
+                            [disabled]="!vm.isAuthInitialized"
+                        >
                             <mat-icon>add</mat-icon>
                         </button>
 
-                        <button class="user-account-button" mat-icon-button [matMenuTriggerFor]="accountMenu">
+                        <button
+                            class="user-account-button"
+                            mat-icon-button
+                            [matMenuTriggerFor]="accountMenu"
+                            [disabled]="!vm.isAuthInitialized"
+                        >
                             {{ getUserInitials(vm.user!) }}
                         </button>
                     </ng-container>
@@ -42,7 +54,11 @@
 
     <div class="desktop-spacer right"></div>
 
-    <app-layout-add-action-fab class="hide-desktop" *ngIf="vm.showAddButton"></app-layout-add-action-fab>
+    <app-layout-add-action-fab
+        class="hide-desktop"
+        *ngIf="vm.showAddButton"
+        [disabled]="!vm.isAuthInitialized"
+    ></app-layout-add-action-fab>
 
     <app-layout-default-navbar [class.hide-mobile]="vm.isOverlayRoute"></app-layout-default-navbar>
 

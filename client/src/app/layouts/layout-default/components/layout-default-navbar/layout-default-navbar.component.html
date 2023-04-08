@@ -1,4 +1,9 @@
-<ng-container *ngIf="{ isAuthenticated: auth.isAuthenticated$ | async } as vm">
+<ng-container
+    *ngIf="{
+        isAuthenticated: auth.isAuthenticated$ | async,
+        isAuthInitialized: (auth.isInitialized$ | async) ?? true
+    } as vm"
+>
     <mat-toolbar class="mat-elevation-z4">
         <nav>
             <ul>
@@ -23,7 +28,7 @@
                         mat-flat-button
                         routerLink="/cookbooks"
                         routerLinkActive="current"
-                        [disabled]="!vm.isAuthenticated"
+                        [disabled]="!vm.isAuthenticated || !vm.isAuthInitialized"
                     >
                         <div class="button-wrapper">
                             <mat-icon>menu_book</mat-icon>

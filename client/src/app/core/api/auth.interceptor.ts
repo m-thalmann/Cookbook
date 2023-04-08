@@ -159,7 +159,6 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return refresh.pipe(
       first(),
-      catchError(() => of(undefined)),
       switchMap(() => this.intercept(request, next))
     );
   }

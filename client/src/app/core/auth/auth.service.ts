@@ -1,7 +1,15 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, distinctUntilChanged, lastValueFrom, map, Observable, Subscription } from 'rxjs';
+import {
+  BehaviorSubject,
+  distinctUntilChanged,
+  lastValueFrom,
+  map,
+  Observable,
+  ReplaySubject,
+  Subscription,
+} from 'rxjs';
 import { ApiService } from '../api/api.service';
 import { Logger as LoggerClass } from '../helpers/logger';
 import { DetailedUser } from '../models/user';
@@ -22,7 +30,7 @@ const Logger = new LoggerClass('AuthService');
 export class AuthService implements OnDestroy {
   private subSink = new Subscription();
 
-  private _isInitialized$ = new BehaviorSubject<boolean>(false);
+  private _isInitialized$ = new ReplaySubject<boolean>(1);
   isInitialized$ = this._isInitialized$.asObservable();
 
   private _accessToken$: BehaviorSubject<string | null>;
@@ -98,6 +106,7 @@ export class AuthService implements OnDestroy {
     if (this._refreshToken$.value === null) {
       this._accessToken$.next(null);
       this._user$.next(null);
+      this._isInitialized$.next(true);
 
       return;
     }
@@ -107,13 +116,18 @@ export class AuthService implements OnDestroy {
 
       this._user$.next(userResponse.body!.data);
     } catch (e) {
+      if (!(e instanceof HttpErrorResponse) || e.status !== 401) {
+        this.snackbar.warn({ message: 'Error loading user information' });
+        Logger.error('Error while initializing the user:', e);
+
+        this._isInitialized$.next(false);
+
+        return;
+      }
+
       await this.logout(false);
 
-      let error = e;
-
-      if (e instanceof HttpErrorResponse) {
-        error = e.error.message;
-      }
+      let error = ApiService.getErrorMessage(e);
 
       Logger.info('User logged out due to the following error:', error);
     }

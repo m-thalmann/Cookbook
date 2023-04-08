@@ -49,6 +49,10 @@ $add-button-height-mobile: 5em;
           background: mat.get-color-from-palette(map.get($variables, 'primary-palette'), 800);
           color: mat.get-color-from-palette(map.get($variables, 'primary-palette'), '800-contrast');
         }
+
+        &:disabled {
+          filter: grayscale(100%);
+        }
       }
     }
   }

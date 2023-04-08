@@ -3,8 +3,6 @@ import { AuthGuard } from './core/auth/auth.guard';
 import { GuestGuard } from './core/auth/guest.guard';
 import { LayoutAuthComponent } from './layouts/layout-auth/layout-auth.component';
 import { LayoutDefaultComponent } from './layouts/layout-default/layout-default.component';
-import { LoginPageComponent } from './pages/auth/login-page/login-page.component';
-import { SignUpPageComponent } from './pages/auth/sign-up-page/sign-up-page.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 
 export default [
@@ -15,8 +13,16 @@ export default [
     component: LayoutAuthComponent,
     canActivate: [GuestGuard],
     children: [
-      { path: 'login', component: LoginPageComponent },
-      { path: 'sign-up', component: SignUpPageComponent },
+      {
+        path: 'login',
+        loadComponent: () =>
+          import('./pages/auth/login-page/login-page.component').then((comp) => comp.LoginPageComponent),
+      },
+      {
+        path: 'sign-up',
+        loadComponent: () =>
+          import('./pages/auth/sign-up-page/sign-up-page.component').then((comp) => comp.SignUpPageComponent),
+      },
     ],
   },
 

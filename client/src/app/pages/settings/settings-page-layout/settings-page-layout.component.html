@@ -1,4 +1,9 @@
-<ng-container *ngIf="{ isAuthenticated: auth.isAuthenticated$ | async } as vm">
+<ng-container
+    *ngIf="{
+        isAuthenticated: auth.isAuthenticated$ | async,
+        isAuthInitialized: (auth.isInitialized$ | async) ?? true
+    } as vm"
+>
     <h2><mat-icon>settings</mat-icon> Settings</h2>
 
     <div class="container">
@@ -8,11 +13,21 @@
                     <mat-icon matListItemIcon>tune</mat-icon>
                     <span>General</span>
                 </a>
-                <a mat-list-item routerLink="./account" routerLinkActive="current" [disabled]="!vm.isAuthenticated">
+                <a
+                    mat-list-item
+                    routerLink="./account"
+                    routerLinkActive="current"
+                    [disabled]="!vm.isAuthenticated || !vm.isAuthInitialized"
+                >
                     <mat-icon matListItemIcon>manage_accounts</mat-icon>
                     <span>Account</span>
                 </a>
-                <a mat-list-item routerLink="./security" routerLinkActive="current" [disabled]="!vm.isAuthenticated">
+                <a
+                    mat-list-item
+                    routerLink="./security"
+                    routerLinkActive="current"
+                    [disabled]="!vm.isAuthenticated || !vm.isAuthInitialized"
+                >
                     <mat-icon matListItemIcon>security</mat-icon>
                     <span>Security</span>
                 </a>
@@ -24,4 +39,3 @@
         </div>
     </div>
 </ng-container>
-
