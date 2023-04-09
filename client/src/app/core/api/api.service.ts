@@ -8,11 +8,12 @@ import {
   HttpResponse,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { filter, Observable, shareReplay } from 'rxjs';
+import { EMPTY, Observable, catchError, filter, first, of, shareReplay, switchMap } from 'rxjs';
 import { AuthToken } from '../models/auth-token';
 import { Cookbook, CookbookUser, CookbookWithCounts, CookbookWithUserMeta } from '../models/cookbook';
 import { FilterOption } from '../models/filter-option';
-import { CreateIngredientData, Ingredient, SimpleIngredient, EditIngredientData } from '../models/ingredient';
+import { CreateIngredientData, EditIngredientData, Ingredient, SimpleIngredient } from '../models/ingredient';
+import { LoadingError } from '../models/loading-error';
 import { PaginationMeta } from '../models/pagination-meta';
 import { PaginationOptions } from '../models/pagination-options';
 import { CreateRecipeData, DetailedRecipe, EditRecipeData, ListRecipe } from '../models/recipe';
@@ -71,10 +72,11 @@ export class ApiService {
       headers: headers,
       context: new HttpContext().set(TOKEN_TYPE_HTTP_CONTEXT, tokenType),
     });
-    // TODO: needs first?
+
     return this.http.request(request).pipe(
       shareReplay(1),
-      filter((response) => response instanceof HttpResponse)
+      filter((response) => response instanceof HttpResponse),
+      first()
     ) as Observable<HttpResponse<T>>;
   }
 
@@ -104,6 +106,34 @@ export class ApiService {
     }
 
     return error;
+  }
+
+  public static handleRequestError(request: Observable<unknown>, errorCallback?: (error: unknown) => void) {
+    return request.pipe(
+      switchMap(() => EMPTY),
+      catchError((error) => {
+        if (errorCallback) {
+          errorCallback(error);
+        }
+
+        if (error instanceof HttpErrorResponse) {
+          return of({
+            type: 'HTTP_ERROR',
+            error,
+            httpError: {
+              status: error.status,
+              data: error.error,
+              message: ApiService.getErrorMessage(error) || 'Unknown error',
+            },
+          } as LoadingError);
+        }
+
+        return of({
+          type: 'UNKNOWN_ERROR',
+          error,
+        } as LoadingError);
+      })
+    );
   }
 
   private static generateParams(params: { [key: string]: string | undefined }) {

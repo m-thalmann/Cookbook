@@ -1,19 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { BehaviorSubject, lastValueFrom } from 'rxjs';
+import { NumberInputComponent } from 'src/app/components/number-input/number-input.component';
 import { ApiService } from 'src/app/core/api/api.service';
+import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
 import { DetailedRecipe } from 'src/app/core/models/recipe';
+import { AmountPipe } from 'src/app/core/pipes/amount.pipe';
 import { RouteHelperService } from 'src/app/core/services/route-helper.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
-import { RecipeDetailImageSliderComponent } from '../recipe-detail-image-slider/recipe-detail-image-slider.component';
 import { RecipeDetailHeaderComponent } from '../recipe-detail-header/recipe-detail-header.component';
-import { RecipeDetailSectionComponent } from '../recipe-detail-section/recipe-detail-section.component';
-import { NumberInputComponent } from 'src/app/components/number-input/number-input.component';
-import { FormsModule } from '@angular/forms';
-import { AmountPipe } from 'src/app/core/pipes/amount.pipe';
+import { RecipeDetailImageSliderComponent } from '../recipe-detail-image-slider/recipe-detail-image-slider.component';
 import { RecipeDetailPreparationContentComponent } from '../recipe-detail-preparation-content/recipe-detail-preparation-content.component';
+import { RecipeDetailSectionComponent } from '../recipe-detail-section/recipe-detail-section.component';
+
+const Logger = new LoggerClass('Recipes');
 
 @Component({
   selector: 'app-recipe-detail',
@@ -92,6 +95,7 @@ export class RecipeDetailComponent {
       this.routeHelper.navigateBack();
     } catch (e) {
       this.snackbar.warn({ message: 'Error moving recipe to trash', duration: null });
+      Logger.error('Error moving recipe to trash:', e);
     } finally {
       this.isLoading$.next(false);
     }
