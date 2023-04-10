@@ -3,9 +3,10 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnDestro
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
-import { of, Subscription, switchMap } from 'rxjs';
+import { of, shareReplay, Subscription, switchMap } from 'rxjs';
 import { CategoryChipListComponent } from 'src/app/components/category-chip-list/category-chip-list.component';
 import { CookbookCardComponent } from 'src/app/components/cookbook-card/cookbook-card.component';
+import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 import { PageSectionComponent } from 'src/app/components/page-section/page-section.component';
 import { RecipeCardComponent } from 'src/app/components/recipe-card/recipe-card.component';
 import { SearchBarComponent } from 'src/app/components/search-bar/search-bar.component';
@@ -31,6 +32,7 @@ const AMOUNT_ITEMS = 12;
     CategoryChipListComponent,
     RecipeCardComponent,
     CookbookCardComponent,
+    ErrorDisplayComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -39,9 +41,13 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
 
   @ViewChild('searchBarContainer', { read: ElementRef }) searchBarContainer!: ElementRef;
 
-  categories$ = this.auth.user$.pipe(switchMap(() => this.api.categories.getList()));
+  categories$ = this.auth.user$.pipe(
+    switchMap(() => this.api.categories.getList()),
+    shareReplay(1)
+  );
   recipes$ = this.auth.user$.pipe(
-    switchMap(() => this.api.recipes.getList({ pagination: { page: 1, perPage: AMOUNT_ITEMS } }))
+    switchMap(() => this.api.recipes.getList({ pagination: { page: 1, perPage: AMOUNT_ITEMS } })),
+    shareReplay(1)
   );
   cookbooks$ = this.auth.user$.pipe(
     switchMap((user) => {
@@ -50,8 +56,13 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
       }
 
       return this.api.cookbooks.getList(false, { page: 1, perPage: AMOUNT_ITEMS });
-    })
+    }),
+    shareReplay(1)
   );
+
+  categoriesError$ = ApiService.handleRequestError(this.categories$);
+  recipesError$ = ApiService.handleRequestError(this.recipes$);
+  cookbooksError$ = ApiService.handleRequestError(this.cookbooks$);
 
   constructor(private api: ApiService, public auth: AuthService) {}
 

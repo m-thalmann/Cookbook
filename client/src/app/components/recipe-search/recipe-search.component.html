@@ -5,7 +5,10 @@
         filters: filters$ | async,
         paginationOptions: paginationOptions$ | async,
         recipesLoading: recipesLoading$ | async,
-        isAuthenticated: auth.isAuthenticated$ | async
+        isAuthenticated: auth.isAuthenticated$ | async,
+
+        recipesError: recipesError$ | async,
+        categoriesError: categoriesError$ | async
     } as vm"
 >
     <app-search-bar
@@ -41,10 +44,18 @@
             </button>
         </div>
 
-        <div class="category-filter" [class.none-selected]="!vm.filters?.category" [class.disabled]="vm.recipesLoading">
+        <div
+            class="category-filter"
+            [class.none-selected]="!vm.filters?.category"
+            [class.disabled]="vm.recipesLoading"
+            [class.error]="vm.categoriesError"
+        >
             <label aria-label="Category filter">
                 <mat-icon>local_dining</mat-icon>
-                <select (change)="doFilterByCategory($event.target!)" [disabled]="vm.recipesLoading">
+                <select
+                    (change)="doFilterByCategory($event.target!)"
+                    [disabled]="vm.recipesLoading || vm.categoriesError"
+                >
                     <option value="" [selected]="vm.filters?.category === null">Filter by category...</option>
                     <option
                         *ngFor="let category of vm.categories?.body?.data"
@@ -73,6 +84,10 @@
                     <mat-icon inline>clear</mat-icon>
                 </button>
             </ng-container>
+
+            <mat-icon color="warn" matTooltip="Error loading categories" *ngIf="vm.categoriesError"
+                >error_outline</mat-icon
+            >
         </div>
 
         <mat-slide-toggle
@@ -92,6 +107,10 @@
 
         <p *ngIf="recipes.length === 0" class="not-found-item">No recipes found ...</p>
     </div>
+
+    <app-error-display [error]="vm.recipesError">
+        <ng-container otherErrorMessage> Recipes could not be loaded. </ng-container>
+    </app-error-display>
 
     <mat-paginator
         class="mat-elevation-z1"

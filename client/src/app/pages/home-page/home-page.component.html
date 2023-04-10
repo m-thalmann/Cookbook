@@ -3,7 +3,11 @@
         isAuthenticated: auth.isAuthenticated$ | async,
         categories: categories$ | async,
         recipes: recipes$ | async,
-        cookbooks: cookbooks$ | async
+        cookbooks: cookbooks$ | async,
+
+        categoriesError: categoriesError$ | async,
+        recipesError: recipesError$ | async,
+        cookbooksError: cookbooksError$ | async
     } as vm"
 >
     <div class="search-bar-container" #searchBarContainer>
@@ -16,6 +20,10 @@
                 [categories]="categories"
                 *ngIf="vm.categories?.body?.data as categories"
             ></app-category-chip-list>
+
+            <app-error-display [error]="vm.categoriesError">
+                <ng-container otherErrorMessage> Categories could not be loaded. </ng-container>
+            </app-error-display>
         </app-page-section>
 
         <app-page-section heading="Recipes" seeAllLink="/recipes" [showMy]="!!vm.isAuthenticated" class="recipes">
@@ -24,6 +32,10 @@
 
                 <p *ngIf="recipes.length === 0" class="not-found-item">No recipes found ...</p>
             </div>
+
+            <app-error-display [error]="vm.recipesError">
+                <ng-container otherErrorMessage> Recipes could not be loaded. </ng-container>
+            </app-error-display>
 
             <a
                 routerLink="/recipes"
@@ -52,6 +64,10 @@
 
                 <p *ngIf="cookbooks.length === 0" class="not-found-item">No cookbooks found ...</p>
             </div>
+
+            <app-error-display [error]="vm.cookbooksError">
+                <ng-container otherErrorMessage> Cookbooks could not be loaded. </ng-container>
+            </app-error-display>
 
             <a
                 routerLink="/cookbooks"

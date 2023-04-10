@@ -42,7 +42,7 @@
         background: darken(map.get($variables, 'background'), 10%);
       }
 
-      &:not(.disabled) {
+      &:not(.disabled):not(.error) {
         &:hover,
         &:focus-within {
           &,
@@ -53,13 +53,17 @@
       }
     }
 
-    &.disabled {
-      cursor: default;
-
+    &.disabled,
+    &.error {
+      &,
       > * {
-        opacity: 0.25;
         cursor: default;
       }
+    }
+
+    &.disabled > *,
+    &.error label {
+      opacity: 0.25;
     }
 
     > * {
@@ -199,6 +203,10 @@
 
     font-style: italic;
   }
+}
+
+app-error-display {
+  margin-top: 2em;
 }
 
 mat-paginator {

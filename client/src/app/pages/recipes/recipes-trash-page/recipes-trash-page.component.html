@@ -3,7 +3,8 @@
     *ngIf="{
         trashedRecipes: trashedRecipes$ | async,
         loading: loading$ | async,
-        actionLoading: actionLoading$ | async
+        actionLoading: actionLoading$ | async,
+        error: error$ | async
     } as vm"
 >
     <h2>
@@ -23,7 +24,11 @@
         </button>
     </div>
 
-    <div class="trash-list">
+    <app-error-display [error]="vm.error">
+        <ng-container otherErrorMessage> Trashed recipes could not be loaded. </ng-container>
+    </app-error-display>
+
+    <div class="trash-list" *ngIf="!vm.error">
         <table>
             <thead>
                 <tr>
@@ -96,4 +101,3 @@
         </div>
     </button>
 </div>
-

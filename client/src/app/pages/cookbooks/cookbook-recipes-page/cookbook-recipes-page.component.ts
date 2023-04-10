@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, switchMap, take } from 'rxjs';
+import { map, shareReplay, switchMap, take } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { FilterOption } from 'src/app/core/models/filter-option';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
@@ -24,7 +24,8 @@ export class CookbookRecipesPageComponent {
   cookbook$ = this.cookbookId$.pipe(
     switchMap((id) => {
       return this.api.cookbooks.get(id);
-    })
+    }),
+    shareReplay(1)
   );
 
   error$ = ApiService.handleRequestError(this.cookbook$);

@@ -11,6 +11,7 @@ import {
   distinctUntilChanged,
   map,
   Observable,
+  shareReplay,
   switchMap,
   tap,
 } from 'rxjs';
@@ -22,6 +23,9 @@ import { SortOption } from 'src/app/core/models/sort-option';
 import { SearchBarComponent } from '../search-bar/search-bar.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
+import { ApiService } from 'src/app/core/api/api.service';
+import { ErrorDisplayComponent } from '../error-display/error-display.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-recipe-search',
@@ -33,8 +37,10 @@ import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
     MatIconModule,
     MatSlideToggleModule,
     MatPaginatorModule,
+    MatTooltipModule,
     SearchBarComponent,
     RecipeCardComponent,
+    ErrorDisplayComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -102,7 +108,8 @@ export class RecipeSearchComponent {
     debounceTime(5), // to prevent reloading if filter is changed since then pagination is changed as well
     tap(() => this.recipesLoading$.next(true)),
     switchMap(([filters, paginationOptions, authUser]) => this.fetchRecipesFn(filters, paginationOptions, !!authUser)),
-    tap(() => this.recipesLoading$.next(false))
+    tap(() => this.recipesLoading$.next(false)),
+    shareReplay(1)
   );
 
   categories$ = combineLatest([
@@ -111,7 +118,13 @@ export class RecipeSearchComponent {
       distinctUntilChanged()
     ),
     this.auth.user$,
-  ]).pipe(switchMap(([allCategories, authUser]) => this.fetchCategoriesFn(!!allCategories, !!authUser)));
+  ]).pipe(
+    switchMap(([allCategories, authUser]) => this.fetchCategoriesFn(!!allCategories, !!authUser)),
+    shareReplay(1)
+  );
+
+  recipesError$ = ApiService.handleRequestError(this.recipes$);
+  categoriesError$ = ApiService.handleRequestError(this.categories$);
 
   constructor(private router: Router, private route: ActivatedRoute, public auth: AuthService) {}
 

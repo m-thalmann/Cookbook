@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { combineLatest, map, Observable, switchMap } from 'rxjs';
+import { combineLatest, map, Observable, shareReplay, switchMap } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { PaginationMeta } from 'src/app/core/models/pagination-meta';
@@ -36,9 +36,18 @@ export class CookbookDetailPageComponent {
     map(([params, _]) => parseInt(params['id']))
   );
 
-  cookbook$ = this.reload$.pipe(switchMap((id) => this.api.cookbooks.get(id)));
-  categories$ = this.reload$.pipe(switchMap((id) => this.api.cookbooks.getCategories(id)));
-  recipes$ = this.reload$.pipe(switchMap((id) => this.api.cookbooks.getRecipes(id, {})));
+  cookbook$ = this.reload$.pipe(
+    switchMap((id) => this.api.cookbooks.get(id)),
+    shareReplay(1)
+  );
+  categories$ = this.reload$.pipe(
+    switchMap((id) => this.api.cookbooks.getCategories(id)),
+    shareReplay(1)
+  );
+  recipes$ = this.reload$.pipe(
+    switchMap((id) => this.api.cookbooks.getRecipes(id, {})),
+    shareReplay(1)
+  );
 
   cookbookError$ = ApiService.handleRequestError(this.cookbook$);
   categoriesError$ = ApiService.handleRequestError(this.categories$);

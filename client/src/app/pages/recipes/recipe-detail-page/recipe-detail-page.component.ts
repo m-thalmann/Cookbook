@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EMPTY, combineLatest, switchMap } from 'rxjs';
+import { EMPTY, combineLatest, shareReplay, switchMap } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
@@ -34,7 +34,8 @@ export class RecipeDetailPageComponent {
       this.router.navigate(['/']);
 
       return EMPTY;
-    })
+    }),
+    shareReplay(1)
   );
 
   error$ = ApiService.handleRequestError(this.recipe$, (error) =>

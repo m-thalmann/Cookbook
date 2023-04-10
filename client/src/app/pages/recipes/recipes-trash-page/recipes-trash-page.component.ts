@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BehaviorSubject, lastValueFrom, map, merge, shareReplay, switchMap, switchScan, take, tap } from 'rxjs';
 import { ConfirmDialogComponent } from 'src/app/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
@@ -18,7 +19,7 @@ import { SnackbarService } from 'src/app/core/services/snackbar.service';
   templateUrl: './recipes-trash-page.component.html',
   styleUrls: ['./recipes-trash-page.component.scss'],
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule],
+  imports: [CommonModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule, ErrorDisplayComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipesTrashPageComponent {
@@ -56,6 +57,8 @@ export class RecipesTrashPageComponent {
   loading$ = new BehaviorSubject<boolean>(false);
 
   actionLoading$ = new BehaviorSubject<boolean>(false);
+
+  error$ = ApiService.handleRequestError(this.trashedRecipes$);
 
   constructor(
     private api: ApiService,
