@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { BehaviorSubject, Subscription, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, map, merge, shareReplay, switchMap, switchScan, tap } from 'rxjs';
 import { CookbookCardComponent } from 'src/app/components/cookbook-card/cookbook-card.component';
+import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
-import { CookbookWithCounts } from 'src/app/core/models/cookbook';
-import { PaginationMeta } from 'src/app/core/models/pagination-meta';
+import { PaginationOptions } from 'src/app/core/models/pagination-options';
 
 const AMOUNT_ITEMS = 18;
 
@@ -17,51 +17,50 @@ const AMOUNT_ITEMS = 18;
   templateUrl: './cookbooks-page.component.html',
   styleUrls: ['./cookbooks-page.component.scss'],
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule, CookbookCardComponent],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    CookbookCardComponent,
+    ErrorDisplayComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CookbooksPageComponent implements OnInit, OnDestroy {
-  private subSink = new Subscription();
-
-  private page$ = new BehaviorSubject<number>(1);
-
+export class CookbooksPageComponent {
   cookbooksLoading$ = new BehaviorSubject<boolean>(true);
+  paginationOptions$ = new BehaviorSubject<PaginationOptions>({ page: 1, perPage: AMOUNT_ITEMS });
 
-  cookbooks$ = new BehaviorSubject<CookbookWithCounts[]>([]);
-  paginationData$ = new BehaviorSubject<PaginationMeta | undefined>(undefined);
+  cookbooks$ = merge(this.auth.user$).pipe(
+    switchMap(() => {
+      this.paginationOptions$.next({ ...this.paginationOptions$.value, page: 1 });
+
+      return this.paginationOptions$.pipe(
+        tap(() => this.cookbooksLoading$.next(true)),
+        switchScan(
+          (acc, paginationOptions) => {
+            return this.api.cookbooks.getList(false, paginationOptions, [{ column: 'name', dir: 'asc' }]).pipe(
+              map((response) => ({
+                totalCookbooks: response.body!.meta.total,
+                hasMoreItems: response.body!.meta.current_page < response.body!.meta.last_page,
+                cookbooks: [...acc.cookbooks, ...response.body!.data],
+              }))
+            );
+          },
+          { totalCookbooks: 0, hasMoreItems: true, cookbooks: [] }
+        ),
+        tap(() => this.cookbooksLoading$.next(false))
+      );
+    }),
+
+    shareReplay(1)
+  );
+
+  error$ = ApiService.handleRequestError(this.cookbooks$);
 
   constructor(private auth: AuthService, private api: ApiService) {}
 
-  ngOnInit() {
-    this.subSink.add(
-      this.auth.user$.pipe().subscribe(() => {
-        this.cookbooks$.next([]);
-        this.paginationData$.next(undefined);
-        this.page$.next(1);
-      })
-    );
-
-    this.subSink.add(
-      this.page$
-        .pipe(
-          tap(() => this.cookbooksLoading$.next(true)),
-          switchMap((page) =>
-            this.api.cookbooks.getList(false, { page: page, perPage: AMOUNT_ITEMS }, [{ column: 'name', dir: 'asc' }])
-          ),
-          tap(() => this.cookbooksLoading$.next(false))
-        )
-        .subscribe((response) => {
-          this.cookbooks$.next(this.cookbooks$.value.concat(response.body!.data));
-          this.paginationData$.next(response.body?.meta);
-        })
-    );
-  }
-
-  ngOnDestroy() {
-    this.subSink.unsubscribe();
-  }
-
   nextPage() {
-    this.page$.next(this.page$.value + 1);
+    this.paginationOptions$.next({ ...this.paginationOptions$.value, page: this.paginationOptions$.value.page + 1 });
   }
 }

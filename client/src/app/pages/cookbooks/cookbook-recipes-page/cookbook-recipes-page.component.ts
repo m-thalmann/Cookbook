@@ -8,13 +8,14 @@ import { PaginationOptions } from 'src/app/core/models/pagination-options';
 import { RecipeFilters } from 'src/app/core/models/recipe';
 import { CookbookHeaderComponent } from '../components/cookbook-header/cookbook-header.component';
 import { RecipeSearchComponent } from 'src/app/components/recipe-search/recipe-search.component';
+import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 
 @Component({
   selector: 'app-cookbook-recipes-page',
   templateUrl: './cookbook-recipes-page.component.html',
   styleUrls: ['./cookbook-recipes-page.component.scss'],
   standalone: true,
-  imports: [CommonModule, CookbookHeaderComponent, RecipeSearchComponent],
+  imports: [CommonModule, CookbookHeaderComponent, RecipeSearchComponent, ErrorDisplayComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CookbookRecipesPageComponent {
@@ -25,6 +26,8 @@ export class CookbookRecipesPageComponent {
       return this.api.cookbooks.get(id);
     })
   );
+
+  error$ = ApiService.handleRequestError(this.cookbook$);
 
   constructor(private route: ActivatedRoute, private api: ApiService) {}
 

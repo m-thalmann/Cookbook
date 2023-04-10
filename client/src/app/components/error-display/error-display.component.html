@@ -1,0 +1,16 @@
+<div class="loading-error" *ngIf="error">
+    <ng-container *ngIf="error.type === 'HTTP_ERROR' && error.httpError.status === 404; else otherError">
+        <mat-icon color="warn">help_outline</mat-icon>
+        <div class="error-details"><ng-content select="[notFoundMessage]"></ng-content></div>
+    </ng-container>
+    <ng-template #otherError>
+        <mat-icon color="warn">error_outline</mat-icon>
+        <div class="error-details">
+            <ng-content select="[otherErrorMessage]"></ng-content>
+            <small>
+                {{ error.type === 'HTTP_ERROR' ? error.httpError.message : (error.error | json) }}
+            </small>
+        </div>
+    </ng-template>
+</div>
+

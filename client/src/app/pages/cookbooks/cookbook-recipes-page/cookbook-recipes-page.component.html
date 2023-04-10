@@ -1,5 +1,14 @@
-<ng-container *ngIf="{ cookbook: cookbook$ | async } as vm">
-    <app-cookbook-header [cookbook]="vm.cookbook?.body?.data || null" [showBackButton]="true"></app-cookbook-header>
+<ng-container *ngIf="{ cookbook: cookbook$ | async, error: error$ | async } as vm">
+    <app-cookbook-header
+        [cookbook]="vm.cookbook?.body?.data || null"
+        [showBackButton]="true"
+        *ngIf="!vm.error"
+    ></app-cookbook-header>
+
+    <app-error-display [error]="vm.error">
+        <ng-container notFoundMessage> Cookbook could not be found. </ng-container>
+        <ng-container otherErrorMessage> Cookbook could not be loaded. </ng-container>
+    </app-error-display>
 
     <app-recipe-search
         [fetchRecipesFn]="fetchRecipesFn"
@@ -7,4 +16,3 @@
         [showAllFilter]="false"
     ></app-recipe-search>
 </ng-container>
-

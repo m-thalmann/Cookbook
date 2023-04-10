@@ -1,17 +1,6 @@
 <app-recipe-detail *ngIf="(recipe$ | async)?.body?.data as recipe" [recipe]="recipe"> </app-recipe-detail>
 
-<div class="loading-error" *ngIf="error$ | async as error">
-    <ng-container *ngIf="error.type === 'HTTP_ERROR' && error.httpError.status === 404; else otherError">
-        <mat-icon color="warn">help_outline</mat-icon>
-        <div class="error-details">Recipe could not be found.</div>
-    </ng-container>
-    <ng-template #otherError>
-        <mat-icon color="warn">error_outline</mat-icon>
-        <div class="error-details">
-            Recipe could not be loaded
-            <small>
-                {{ error.type === 'HTTP_ERROR' ? error.httpError.message : (error.error | json) }}
-            </small>
-        </div>
-    </ng-template>
-</div>
+<app-error-display [error]="error$ | async">
+    <ng-container notFoundMessage> Recipe could not be found. </ng-container>
+    <ng-container otherErrorMessage> Recipe could not be loaded. </ng-container>
+</app-error-display>

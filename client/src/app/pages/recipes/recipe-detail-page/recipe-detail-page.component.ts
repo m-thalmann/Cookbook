@@ -7,6 +7,7 @@ import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
 import { RecipeDetailComponent } from './components/recipe-detail/recipe-detail.component';
+import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 
 const Logger = new LoggerClass('Recipes');
 
@@ -15,7 +16,7 @@ const Logger = new LoggerClass('Recipes');
   templateUrl: './recipe-detail-page.component.html',
   styleUrls: ['./recipe-detail-page.component.scss'],
   standalone: true,
-  imports: [CommonModule, MatIconModule, RecipeDetailComponent],
+  imports: [CommonModule, MatIconModule, RecipeDetailComponent, ErrorDisplayComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeDetailPageComponent {
