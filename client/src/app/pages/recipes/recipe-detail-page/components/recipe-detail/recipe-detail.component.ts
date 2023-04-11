@@ -15,6 +15,7 @@ import { RecipeDetailHeaderComponent } from '../recipe-detail-header/recipe-deta
 import { RecipeDetailImageSliderComponent } from '../recipe-detail-image-slider/recipe-detail-image-slider.component';
 import { RecipeDetailPreparationContentComponent } from '../recipe-detail-preparation-content/recipe-detail-preparation-content.component';
 import { RecipeDetailSectionComponent } from '../recipe-detail-section/recipe-detail-section.component';
+import { RecipeDetailIngredientsComponent } from '../recipe-detail-ingredients/recipe-detail-ingredients.component';
 
 const Logger = new LoggerClass('Recipes');
 
@@ -31,6 +32,7 @@ const Logger = new LoggerClass('Recipes');
     RecipeDetailImageSliderComponent,
     RecipeDetailHeaderComponent,
     RecipeDetailSectionComponent,
+    RecipeDetailIngredientsComponent,
     RecipeDetailPreparationContentComponent,
     NumberInputComponent,
     AmountPipe,
@@ -60,16 +62,6 @@ export class RecipeDetailComponent {
       (this.recipe.resting_time_minutes || 0) +
       (this.recipe.cooking_time_minutes || 0)
     );
-  }
-
-  getIngredientAmount(amount: number | null) {
-    if (amount === null) {
-      return null;
-    }
-
-    amount *= this.portionsMultiplier;
-
-    return Math.round(amount * 100) / 100;
   }
 
   portionsMultiplierStepFunction(currentValue: number, direction: 'up' | 'down') {

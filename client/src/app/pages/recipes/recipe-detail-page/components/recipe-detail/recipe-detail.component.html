@@ -59,20 +59,11 @@
             ></app-number-input>
         </span>
 
-        <div content>
-            <div class="ingredient-group" *ngFor="let groupData of recipe.ingredients">
-                <h4 *ngIf="groupData.group">{{ groupData.group }}</h4>
-
-                <div class="ingredient" *ngFor="let ingredient of groupData.items">
-                    <div class="name">{{ ingredient.name }}</div>
-                    <div class="amount">
-                        {{ getIngredientAmount(ingredient.amount) | amount }}
-
-                        {{ ingredient.unit }}
-                    </div>
-                </div>
-            </div>
-        </div>
+        <app-recipe-detail-ingredients
+            content
+            [ingredients]="recipe.ingredients"
+            [portionsMultiplier]="portionsMultiplier"
+        ></app-recipe-detail-ingredients>
     </app-recipe-detail-section>
 
     <app-recipe-detail-section class="preparation" *ngIf="recipe.preparation">

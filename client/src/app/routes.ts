@@ -3,7 +3,6 @@ import { AuthGuard } from './core/auth/auth.guard';
 import { GuestGuard } from './core/auth/guest.guard';
 import { LayoutAuthComponent } from './layouts/layout-auth/layout-auth.component';
 import { LayoutDefaultComponent } from './layouts/layout-default/layout-default.component';
-import { HomePageComponent } from './pages/home-page/home-page.component';
 
 export default [
   { path: '', pathMatch: 'full', redirectTo: '/home' },
@@ -30,7 +29,11 @@ export default [
     path: '',
     component: LayoutDefaultComponent,
     children: [
-      { path: 'home', component: HomePageComponent, data: { showAddButton: true } },
+      {
+        path: 'home',
+        loadComponent: () => import('./pages/home-page/home-page.component').then((comp) => comp.HomePageComponent),
+        data: { showAddButton: true },
+      },
       { path: 'recipes', loadChildren: () => import('./pages/recipes/routes') },
       {
         path: 'cookbooks',

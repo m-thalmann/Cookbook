@@ -77,38 +77,6 @@ app-recipe-detail-section {
         flex: 1;
       }
     }
-
-    [content] {
-      .ingredient-group {
-        &:not(:last-of-type) {
-          padding-bottom: 0.5em;
-          margin-bottom: 1em;
-
-          @include theme.apply() using ($variables) {
-            border-bottom: 1px solid rgba(map.get($variables, 'foreground'), 0.05);
-          }
-        }
-
-        h4 {
-          margin-top: 0;
-          font-weight: 500;
-        }
-
-        .ingredient {
-          display: flex;
-          align-items: center;
-
-          padding: 0.5em 0;
-
-          .name {
-            flex: 1;
-          }
-          .amount {
-            opacity: 0.75;
-          }
-        }
-      }
-    }
   }
 
   &.preparation {
