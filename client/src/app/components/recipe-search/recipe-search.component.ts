@@ -26,6 +26,7 @@ import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { ErrorDisplayComponent } from '../error-display/error-display.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { RecipeSearchFilterComponent } from './components/recipe-search-filter/recipe-search-filter.component';
 
 @Component({
   selector: 'app-recipe-search',
@@ -39,6 +40,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatPaginatorModule,
     MatTooltipModule,
     SearchBarComponent,
+    RecipeSearchFilterComponent,
     RecipeCardComponent,
     ErrorDisplayComponent,
   ],

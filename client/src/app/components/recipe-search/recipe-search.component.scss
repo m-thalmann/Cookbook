@@ -1,5 +1,4 @@
 @use 'sass:map';
-@use '@angular/material' as mat;
 @use 'variables' as *;
 @use 'mixins';
 @use 'theme';
@@ -18,86 +17,18 @@
 
   .sort-filter,
   .category-filter {
-    all: unset;
-
-    display: flex;
-    align-items: center;
-    gap: 0.5em;
-
-    padding: 0 0.75em;
-    border-radius: 2em;
-
-    cursor: pointer;
-
-    &,
-    > label > select {
-      transition: background $transition-time, box-shadow $transition-time;
-    }
-
-    @include mat.elevation(2);
-
-    @include theme.apply() using ($variables) {
-      &,
-      > label > select {
-        background: darken(map.get($variables, 'background'), 10%);
-      }
-
-      &:not(.disabled):not(.error) {
-        &:hover,
-        &:focus-within {
-          &,
-          > label > select {
-            background: darken(map.get($variables, 'background'), 5%);
-          }
-        }
-      }
-    }
-
-    &.disabled,
-    &.error {
-      &,
-      > * {
-        cursor: default;
-      }
-    }
-
-    &.disabled > *,
-    &.error label {
-      opacity: 0.25;
-    }
-
-    > * {
-      transition: opacity $transition-time, background $transition-time !important;
-    }
-
-    &:focus-within {
-      @include mat.elevation(4);
-    }
-
-    > label {
-      flex: 1;
-
+    button {
       display: flex;
-      align-items: center;
-      gap: 0.5em;
-      cursor: pointer;
-    }
+      border-radius: 50%;
 
-    select {
-      all: unset;
+      border: none;
+      color: inherit;
+      box-sizing: inherit;
+      font: inherit;
 
-      flex: 1;
-
-      padding: 0.25em 0;
-      line-height: 1.5;
-    }
-
-    > button {
-      all: unset;
-      cursor: pointer;
-      display: flex;
-
-      padding: 0.25rem;
+      &:not(:disabled) {
+        cursor: pointer;
+      }
 
       mat-icon {
         display: flex;
@@ -111,7 +42,7 @@
     padding-right: 0;
 
     @include theme.apply() using ($variables) {
-      > button {
+      button {
         background: theme.adjust-color($variables, map.get($variables, 'accent'), -2.5%);
 
         &:not(:disabled):hover {
@@ -120,12 +51,12 @@
       }
     }
 
-    > label > select {
+    ::ng-deep > label > select {
       width: calc(100% - 2em);
     }
 
-    > button {
-      border-radius: 50%;
+    button {
+      padding: 0.25rem;
       width: 1.5em;
       height: 1.5em;
     }
@@ -133,7 +64,7 @@
 
   .category-filter {
     @include theme.apply() using ($variables) {
-      > button {
+      button {
         background: theme.adjust-color($variables, map.get($variables, 'background'), -10%);
 
         &:not(:disabled):hover {
@@ -142,25 +73,24 @@
       }
     }
 
-    > button {
+    button {
       padding: 0.125em;
-      border-radius: 50%;
       width: 1em;
       height: 1em;
     }
 
-    &:not(.none-selected) > select {
+    &:not(.none-selected) ::ng-deep > select {
       width: calc(100% - 3.5em);
     }
 
     &.none-selected {
       &:not(.disabled) {
-        > label > select {
+        ::ng-deep > label > select {
           opacity: 0.75;
         }
       }
 
-      > label > select {
+      ::ng-deep > label > select {
         font-weight: lighter;
         width: 8.5em;
         max-width: calc(100% - 2.25em);

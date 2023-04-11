@@ -1,0 +1,13 @@
+<label [attr.aria-label]="labelText">
+    <mat-icon>{{ labelIcon }}</mat-icon>
+    <select (change)="change.emit($event)" [disabled]="disabled || error">
+        <ng-content></ng-content>
+    </select>
+</label>
+
+<div class="extra">
+    <ng-content select="[extra]" class="test"> </ng-content>
+</div>
+
+<mat-icon color="warn" [matTooltip]="error" *ngIf="error"> error_outline </mat-icon>
+
