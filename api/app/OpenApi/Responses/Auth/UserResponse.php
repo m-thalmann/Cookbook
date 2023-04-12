@@ -3,6 +3,7 @@
 namespace App\OpenApi\Responses\Auth;
 
 use App\OpenApi\Schemas\DetailedUserSchema;
+use GoldSpecDigital\ObjectOrientedOAS\Objects\Header;
 use GoldSpecDigital\ObjectOrientedOAS\Objects\MediaType;
 use GoldSpecDigital\ObjectOrientedOAS\Objects\Response;
 use GoldSpecDigital\ObjectOrientedOAS\Objects\Schema;
@@ -18,7 +19,13 @@ class UserResponse extends ResponseFactory {
                         ->properties(DetailedUserSchema::ref('data'))
                         ->required('data')
                 )
+            )
+            ->headers(
+                Header::create('X-Unverified')
+                    ->required(false)
+                    ->description(
+                        'If the user is unverified, this header will be set to true'
+                    )
             );
     }
 }
-

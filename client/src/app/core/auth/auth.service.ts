@@ -3,12 +3,12 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   BehaviorSubject,
-  distinctUntilChanged,
-  lastValueFrom,
-  map,
   Observable,
   ReplaySubject,
   Subscription,
+  distinctUntilChanged,
+  lastValueFrom,
+  map,
 } from 'rxjs';
 import { ApiService } from '../api/api.service';
 import { Logger as LoggerClass } from '../helpers/logger';
@@ -42,6 +42,9 @@ export class AuthService implements OnDestroy {
   user$: Observable<DetailedUser | null>;
 
   isAuthenticated$: Observable<boolean>;
+
+  private _isUnverified$ = new BehaviorSubject(false);
+  isUnverified$ = this._isUnverified$.asObservable();
 
   constructor(
     private storage: StorageService,
@@ -115,6 +118,10 @@ export class AuthService implements OnDestroy {
       const userResponse = await lastValueFrom(this.api.auth.getAuthenticatedUser());
 
       this._user$.next(userResponse.body!.data);
+
+      if (userResponse.headers.has('X-Unverified') && userResponse.headers.get('X-Unverified') === 'true') {
+        this._isUnverified$.next(true);
+      }
     } catch (e) {
       if (!(e instanceof HttpErrorResponse) || e.status !== 401) {
         this.snackbar.warn({ message: 'Error loading user information' });

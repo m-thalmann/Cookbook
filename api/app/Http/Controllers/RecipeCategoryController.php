@@ -48,4 +48,3 @@ class RecipeCategoryController extends Controller {
         return JsonResource::make($categories);
     }
 }
-

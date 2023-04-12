@@ -27,6 +27,27 @@ foreach ($routeFiles as $name) {
         ->group(base_path("routes/api/v1/$name.php"));
 }
 
+Route::middleware('auth')->group(function () {
+    Route::apiResource('cookbooks', CookbookController::class)->only([
+        'index',
+        'show',
+    ]);
+
+    Route::apiResource(
+        'cookbooks.recipes',
+        CookbookRecipeController::class
+    )->only(['index']);
+
+    Route::apiResource('cookbooks.users', CookbookUserController::class)
+        ->only(['index'])
+        ->scoped(['user' => 'id']);
+
+    Route::apiResource(
+        'cookbooks.categories',
+        CookbookCategoryController::class
+    )->only(['index']);
+});
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::apiResource('users', UserController::class);
 
@@ -41,21 +62,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         'destroy',
     ]);
 
-    Route::apiResource('cookbooks', CookbookController::class);
-
-    Route::apiResource(
-        'cookbooks.recipes',
-        CookbookRecipeController::class
-    )->only(['index']);
+    Route::apiResource('cookbooks', CookbookController::class)->except([
+        'index',
+        'show',
+    ]);
 
     Route::apiResource('cookbooks.users', CookbookUserController::class)
-        ->except(['show'])
+        ->except(['index', 'show'])
         ->scoped(['user' => 'id']);
-
-    Route::apiResource(
-        'cookbooks.categories',
-        CookbookCategoryController::class
-    )->only(['index']);
 });
 
 Route::apiResource('categories', RecipeCategoryController::class)

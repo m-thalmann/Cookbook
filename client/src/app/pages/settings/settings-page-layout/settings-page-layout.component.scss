@@ -38,10 +38,16 @@ h2 {
         @include theme.apply() using ($variables) {
           background: rgba(map.get($variables, 'primary'), 20%);
 
-          mat-icon {
+          > mat-icon {
             color: map.get($variables, 'primary');
           }
         }
+      }
+
+      span {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
       }
     }
   }

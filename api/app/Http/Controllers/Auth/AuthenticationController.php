@@ -216,6 +216,14 @@ class AuthenticationController extends Controller {
         )
     ]
     public function viewAuthUser() {
-        return UserResource::make(authUser());
+        $user = authUser();
+
+        $response = UserResource::make($user)->response();
+
+        if (!$user->hasVerifiedEmail()) {
+            $response->header('X-Unverified', 'true');
+        }
+
+        return $response;
     }
 }

@@ -3,6 +3,7 @@
         user: auth.user$ | async,
         isAuthenticated: auth.isAuthenticated$ | async,
         isAuthInitialized: (auth.isInitialized$ | async) ?? true,
+        isUnverified: auth.isUnverified$ | async,
         isOverlayRoute: isOverlayRoute$ | async,
         showAddButton: showAddButton$ | async
     } as vm"
@@ -36,6 +37,10 @@
                             [disabled]="!vm.isAuthInitialized"
                         >
                             {{ getUserInitials(vm.user!) }}
+
+                            <span class="account-action-required" *ngIf="vm.isUnverified">
+                                <mat-icon> warning </mat-icon>
+                            </span>
                         </button>
                     </ng-container>
                     <ng-template #loginButton>
@@ -82,7 +87,10 @@
 
         <a mat-menu-item routerLink="/settings/account">
             <mat-icon>settings</mat-icon>
-            <div matListItemTitle>Account settings</div>
+            <div matListItemTitle>
+                Account settings
+                <mat-icon color="warn" *ngIf="vm.isUnverified">warning</mat-icon>
+            </div>
         </a>
 
         <a mat-menu-item routerLink="/admin" *ngIf="vm.user?.is_admin">

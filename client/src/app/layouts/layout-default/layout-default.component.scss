@@ -42,16 +42,44 @@ $add-button-height-mobile: 5em;
       gap: 1em;
 
       .user-account-button {
+        position: relative;
         font-size: 1.25em;
         font-family: Helvetica, Arial, sans-serif;
 
         @include theme.apply() using ($variables) {
           background: mat.get-color-from-palette(map.get($variables, 'primary-palette'), 800);
           color: mat.get-color-from-palette(map.get($variables, 'primary-palette'), '800-contrast');
+
+          .account-action-required {
+            background: map.get($variables, 'warn');
+            border: 0.125em solid map.get($variables, 'background');
+          }
         }
 
         &:disabled {
           filter: grayscale(100%);
+        }
+
+        .account-action-required {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          transform: translate(30%, 30%);
+
+          border-radius: 50%;
+
+          width: 1.125em;
+          height: 1.125em;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          mat-icon {
+            font-size: 0.75em;
+            height: 0.75em;
+            line-height: 0.7;
+          }
         }
       }
     }
@@ -80,6 +108,19 @@ app-layout-default-navbar {
   right: 0;
 
   z-index: 10;
+}
+
+[mat-menu-item] {
+  &[disabled] {
+    margin-bottom: 1em;
+    opacity: 1;
+  }
+
+  [matListItemTitle] {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+  }
 }
 
 @include mixins.mobile() {
@@ -123,9 +164,4 @@ app-layout-default-navbar {
   .desktop-spacer.right {
     display: none;
   }
-}
-
-[mat-menu-item][disabled] {
-  margin-bottom: 1em;
-  opacity: 1;
 }

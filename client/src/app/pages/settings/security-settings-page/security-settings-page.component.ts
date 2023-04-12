@@ -68,6 +68,8 @@ export class SecuritySettingsPageComponent {
 
   error$ = ApiService.handleRequestError(this.activeTokens$);
 
+  // TODO: add settings for account verification
+
   constructor(private api: ApiService, private auth: AuthService, private snackbar: SnackbarService) {}
 
   nextPage() {
