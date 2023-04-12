@@ -2,7 +2,8 @@
     *ngIf="{
         activeTokens: activeTokens$ | async,
         isLoading: isLoading$ | async,
-        isUpdating: isUpdating$ | async
+        isUpdating: isUpdating$ | async,
+        error: error$ | async
     } as vm"
 >
     <app-settings-section
@@ -18,6 +19,8 @@
         >
             <mat-icon>power_settings_new</mat-icon> Logout from all
         </button>
+
+        <app-error-display [error]="vm.error"></app-error-display>
 
         <div class="active-sessions-container">
             <div class="active-session" *ngFor="let session of vm.activeTokens?.items">
@@ -61,4 +64,3 @@
         </button>
     </app-settings-section>
 </ng-container>
-

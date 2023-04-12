@@ -7,7 +7,7 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, combineLatest, first, from, map, Observable, of, shareReplay, switchMap, throwError } from 'rxjs';
+import { Observable, catchError, combineLatest, first, from, map, shareReplay, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { ApiService, TokenType } from './api.service';
 
@@ -55,6 +55,7 @@ export class AuthInterceptor implements HttpInterceptor {
           catchError((error) => {
             if (
               !this.isUnauthorizedError(error) ||
+              this.isUnverifiedError(error) ||
               !this.isAccessTokenType(tokenType) ||
               request.context.get(REQUEST_REFRESH_TRIED_CONTEXT)
             ) {
@@ -167,7 +168,18 @@ export class AuthInterceptor implements HttpInterceptor {
     return error instanceof HttpErrorResponse && error.status === 401;
   }
 
+  private isUnverifiedError(error: any) {
+    return error instanceof HttpErrorResponse && error.status === 401 && error.error.reason === 'unverified';
+  }
+
+  /**
+   * __Info:__ This will not logout when the error is an "unverified error" from the api.
+   */
   private logoutAndThrowError(error: any) {
+    if (this.isUnverifiedError(error)) {
+      return throwError(() => error);
+    }
+
     return from(this.auth.logout(false)).pipe(switchMap(() => throwError(() => error)));
   }
 }

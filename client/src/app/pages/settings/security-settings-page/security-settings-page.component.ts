@@ -1,15 +1,17 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { BehaviorSubject, lastValueFrom, map, merge, shareReplay, switchMap, switchScan, take, tap } from 'rxjs';
+import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
+import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 import { Logger as LoggerClass } from '../../../core/helpers/logger';
 import { SnackbarService } from '../../../core/services/snackbar.service';
-import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { SettingsSectionComponent } from '../components/settings-section/settings-section.component';
 
 const Logger = new LoggerClass('Settings');
@@ -26,6 +28,7 @@ const Logger = new LoggerClass('Settings');
     MatTooltipModule,
     MatProgressSpinnerModule,
     SettingsSectionComponent,
+    ErrorDisplayComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -59,8 +62,11 @@ export class SecuritySettingsPageComponent {
       );
     }),
 
+    handledErrorInterceptor(),
     shareReplay(1)
   );
+
+  error$ = ApiService.handleRequestError(this.activeTokens$);
 
   constructor(private api: ApiService, private auth: AuthService, private snackbar: SnackbarService) {}
 

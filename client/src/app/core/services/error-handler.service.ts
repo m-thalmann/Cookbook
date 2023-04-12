@@ -1,7 +1,7 @@
-import { ErrorHandler, Injectable } from '@angular/core';
+import { ErrorHandler, Injectable, NgZone } from '@angular/core';
+import { HandledError } from '../helpers/handled-error';
 import { Logger as LoggerClass } from '../helpers/logger';
 import { SnackbarService } from './snackbar.service';
-import { HandledError } from '../helpers/handled-error';
 
 const Logger = new LoggerClass('ErrorHandlerService');
 
@@ -9,7 +9,7 @@ const Logger = new LoggerClass('ErrorHandlerService');
   providedIn: 'root',
 })
 export class ErrorHandlerService implements ErrorHandler {
-  constructor(private snackbar: SnackbarService) {}
+  constructor(private snackbar: SnackbarService, private zone: NgZone) {}
 
   handleError(error: any) {
     if (error instanceof HandledError) {
@@ -18,7 +18,9 @@ export class ErrorHandlerService implements ErrorHandler {
 
     Logger.error('An error occurred:', error);
 
-    this.snackbar.warn({ message: 'An unexpected error occurred!', duration: null });
+    this.zone.run(() => {
+      this.snackbar.warn({ message: 'An unexpected error occurred!', duration: null });
+    });
   }
 }
 
