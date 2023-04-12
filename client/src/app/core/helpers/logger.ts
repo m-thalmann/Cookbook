@@ -13,6 +13,10 @@ const LoggerModulesConfig = {
     background: '#037ffc',
     foreground: 'white',
   },
+  ErrorHandlerService: {
+    background: '#fc0303',
+    foreground: 'white',
+  },
   Authentication: {
     background: '#030bfc',
     foreground: 'white',

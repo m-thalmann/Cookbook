@@ -1,4 +1,11 @@
-import { APP_INITIALIZER, Injectable, enableProdMode, importProvidersFrom, isDevMode } from '@angular/core';
+import {
+  APP_INITIALIZER,
+  ErrorHandler,
+  Injectable,
+  enableProdMode,
+  importProvidersFrom,
+  isDevMode,
+} from '@angular/core';
 
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {
@@ -22,6 +29,7 @@ import routes from './app/routes';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ErrorHandlerService } from './app/core/services/error-handler.service';
 
 if (environment.production) {
   enableProdMode();
@@ -76,6 +84,7 @@ bootstrapApplication(AppComponent, {
       provide: HAMMER_GESTURE_CONFIG,
       useClass: CustomHammerConfig,
     },
+    { provide: ErrorHandler, useClass: ErrorHandlerService },
     {
       provide: APP_INITIALIZER,
       useFactory: setup,

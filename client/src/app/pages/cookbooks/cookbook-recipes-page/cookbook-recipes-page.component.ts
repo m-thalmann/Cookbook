@@ -9,6 +9,7 @@ import { RecipeFilters } from 'src/app/core/models/recipe';
 import { CookbookHeaderComponent } from '../components/cookbook-header/cookbook-header.component';
 import { RecipeSearchComponent } from 'src/app/components/recipe-search/recipe-search.component';
 import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
+import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 
 @Component({
   selector: 'app-cookbook-recipes-page',
@@ -25,6 +26,7 @@ export class CookbookRecipesPageComponent {
     switchMap((id) => {
       return this.api.cookbooks.get(id);
     }),
+    handledErrorInterceptor(),
     shareReplay(1)
   );
 

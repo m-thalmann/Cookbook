@@ -12,6 +12,7 @@ import { PageSectionComponent } from 'src/app/components/page-section/page-secti
 import { CategoryChipListComponent } from 'src/app/components/category-chip-list/category-chip-list.component';
 import { RecipeCardComponent } from 'src/app/components/recipe-card/recipe-card.component';
 import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
+import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 
 @Component({
   selector: 'app-cookbook-detail-page',
@@ -38,14 +39,17 @@ export class CookbookDetailPageComponent {
 
   cookbook$ = this.reload$.pipe(
     switchMap((id) => this.api.cookbooks.get(id)),
+    handledErrorInterceptor(),
     shareReplay(1)
   );
   categories$ = this.reload$.pipe(
     switchMap((id) => this.api.cookbooks.getCategories(id)),
+    handledErrorInterceptor(),
     shareReplay(1)
   );
   recipes$ = this.reload$.pipe(
     switchMap((id) => this.api.cookbooks.getRecipes(id, {})),
+    handledErrorInterceptor(),
     shareReplay(1)
   );
 

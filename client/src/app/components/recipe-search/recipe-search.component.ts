@@ -27,6 +27,7 @@ import { ApiService } from 'src/app/core/api/api.service';
 import { ErrorDisplayComponent } from '../error-display/error-display.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RecipeSearchFilterComponent } from './components/recipe-search-filter/recipe-search-filter.component';
+import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 
 @Component({
   selector: 'app-recipe-search',
@@ -111,6 +112,7 @@ export class RecipeSearchComponent {
     tap(() => this.recipesLoading$.next(true)),
     switchMap(([filters, paginationOptions, authUser]) => this.fetchRecipesFn(filters, paginationOptions, !!authUser)),
     tap(() => this.recipesLoading$.next(false)),
+    handledErrorInterceptor(),
     shareReplay(1)
   );
 
@@ -122,6 +124,7 @@ export class RecipeSearchComponent {
     this.auth.user$,
   ]).pipe(
     switchMap(([allCategories, authUser]) => this.fetchCategoriesFn(!!allCategories, !!authUser)),
+    handledErrorInterceptor(),
     shareReplay(1)
   );
 

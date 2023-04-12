@@ -14,6 +14,7 @@ import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { createIntersectionObserver } from 'src/app/core/helpers/intersection-observer';
 import { PaginationMeta } from 'src/app/core/models/pagination-meta';
+import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 
 const AMOUNT_ITEMS = 12;
 
@@ -43,10 +44,12 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
 
   categories$ = this.auth.user$.pipe(
     switchMap(() => this.api.categories.getList()),
+    handledErrorInterceptor(),
     shareReplay(1)
   );
   recipes$ = this.auth.user$.pipe(
     switchMap(() => this.api.recipes.getList({ pagination: { page: 1, perPage: AMOUNT_ITEMS } })),
+    handledErrorInterceptor(),
     shareReplay(1)
   );
   cookbooks$ = this.auth.user$.pipe(
@@ -57,6 +60,7 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
 
       return this.api.cookbooks.getList(false, { page: 1, perPage: AMOUNT_ITEMS });
     }),
+    handledErrorInterceptor(),
     shareReplay(1)
   );
 

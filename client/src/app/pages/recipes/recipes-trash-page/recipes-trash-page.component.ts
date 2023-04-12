@@ -12,6 +12,7 @@ import { AuthService } from 'src/app/core/auth/auth.service';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
 import { ListRecipe } from 'src/app/core/models/recipe';
 import { PLACEHOLDER_RECIPE_IMAGE_URL } from 'src/app/core/models/recipe-image';
+import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
@@ -51,6 +52,7 @@ export class RecipesTrashPageComponent {
       );
     }),
 
+    handledErrorInterceptor(),
     shareReplay(1)
   );
 

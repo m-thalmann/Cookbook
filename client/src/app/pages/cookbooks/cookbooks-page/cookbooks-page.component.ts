@@ -9,6 +9,7 @@ import { ErrorDisplayComponent } from 'src/app/components/error-display/error-di
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
+import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 
 const AMOUNT_ITEMS = 18;
 
@@ -53,6 +54,7 @@ export class CookbooksPageComponent {
       );
     }),
 
+    handledErrorInterceptor(),
     shareReplay(1)
   );
 

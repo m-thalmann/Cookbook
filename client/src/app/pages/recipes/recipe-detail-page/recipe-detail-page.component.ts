@@ -3,11 +3,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, combineLatest, shareReplay, switchMap } from 'rxjs';
+import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
+import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 import { RecipeDetailComponent } from './components/recipe-detail/recipe-detail.component';
-import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 
 const Logger = new LoggerClass('Recipes');
 
@@ -35,6 +36,7 @@ export class RecipeDetailPageComponent {
 
       return EMPTY;
     }),
+    handledErrorInterceptor(),
     shareReplay(1)
   );
 

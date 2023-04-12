@@ -22,6 +22,7 @@ import { SortOption } from '../models/sort-option';
 import { CreateUserData, DetailedUser, EditUserData, User } from '../models/user';
 import { ConfigService } from '../services/config.service';
 import { TOKEN_TYPE_HTTP_CONTEXT } from './auth.interceptor';
+import { HandledError } from '../helpers/handled-error';
 
 export enum TokenType {
   Access,
@@ -112,6 +113,10 @@ export class ApiService {
     return request.pipe(
       switchMap(() => EMPTY),
       catchError((error) => {
+        if (error instanceof HandledError) {
+          error = error.error;
+        }
+
         if (errorCallback) {
           errorCallback(error);
         }
