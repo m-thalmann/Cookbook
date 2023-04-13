@@ -1,0 +1,30 @@
+<ng-container
+    *ngIf="{
+        updateError: updateError$ | async
+    } as vm"
+>
+    <app-settings-section icon="badge" title="Profile">
+        <form [formGroup]="form" (submit)="updateProfile()">
+            <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input matInput placeholder="John Doe" formControlName="name" />
+                <mat-error *ngIf="form.get('name')?.getError('serverError') as serverError">
+                    {{ serverError }}
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" placeholder="john.doe@example.com" formControlName="email" />
+                <mat-error *ngIf="form.get('email')?.getError('serverError') as serverError">
+                    {{ serverError }}
+                </mat-error>
+            </mat-form-field>
+
+            <p class="error" *ngIf="vm.updateError">An error occurred: {{ vm.updateError }}</p>
+
+            <button mat-raised-button color="primary" [disabled]="form.invalid || form.disabled">Update profile</button>
+        </form>
+    </app-settings-section>
+</ng-container>
+

@@ -111,9 +111,9 @@ app-layout-default-navbar {
 }
 
 [mat-menu-item] {
-  &[disabled] {
+  &.account-menu-item {
     margin-bottom: 1em;
-    opacity: 1;
+    pointer-events: none;
   }
 
   [matListItemTitle] {

@@ -1,0 +1,67 @@
+<ng-container
+    *ngIf="{
+        activeTokens: activeTokens$ | async,
+        isLoading: isLoading$ | async,
+        isUpdating: isUpdating$ | async,
+        error: error$ | async
+    } as vm"
+>
+    <app-settings-section
+        class="active-sessions-section"
+        icon="devices"
+        [title]="'Active sessions' + (vm.activeTokens ? ' (' + vm.activeTokens.totalItems + ')' : '')"
+    >
+        <button
+            mat-raised-button
+            color="warn"
+            [disabled]="vm.isLoading || vm.isUpdating"
+            (click)="logoutFromAllSessions()"
+        >
+            <mat-icon>power_settings_new</mat-icon> Logout from all
+        </button>
+
+        <app-error-display [error]="vm.error"></app-error-display>
+
+        <div class="active-sessions-container">
+            <div class="active-session" *ngFor="let session of vm.activeTokens?.items">
+                <span
+                    class="current-indicator"
+                    [class.is-current]="session.is_current"
+                    matTooltip="Current session"
+                    [matTooltipDisabled]="!session.is_current"
+                ></span>
+
+                <span class="created-at">
+                    <label>Created</label>{{ session.created_at * 1000 | date: 'dd.MM.y HH:mm:ss' }}
+                </span>
+
+                <button
+                    mat-icon-button
+                    color="warn"
+                    matTooltip="Logout from that session"
+                    [disabled]="vm.isLoading || vm.isUpdating"
+                    (click)="logoutFromSession(session.id)"
+                >
+                    <mat-icon>power_settings_new</mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <button
+            mat-raised-button
+            class="load-more-button"
+            color="accent"
+            (click)="nextPage()"
+            [disabled]="vm.isLoading || vm.isUpdating"
+            *ngIf="vm.activeTokens?.hasMoreItems"
+        >
+            <div>
+                <mat-spinner *ngIf="vm.isLoading" [diameter]="20"></mat-spinner>
+                <mat-icon *ngIf="!vm.isLoading">south</mat-icon>
+
+                Load more
+            </div>
+        </button>
+    </app-settings-section>
+</ng-container>
+

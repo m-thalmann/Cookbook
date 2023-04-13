@@ -1,36 +1,5 @@
-@use 'sass:map';
-@use 'mixins';
-@use 'theme';
-
 :host {
   display: flex;
   flex-direction: column;
   gap: 4em;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-
-  .error {
-    margin-top: 0;
-
-    @include theme.apply() using ($variables) {
-      color: map.get($variables, 'warn');
-    }
-  }
-}
-
-@include mixins.desktop() {
-  form {
-    mat-form-field {
-      width: 20em;
-      max-width: 100%;
-    }
-
-    button {
-      width: fit-content;
-    }
-  }
 }
