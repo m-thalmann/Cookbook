@@ -2,6 +2,7 @@
 
 namespace App\OpenApi\Responses\Auth;
 
+use App\Http\Controllers\Auth\AuthenticationController;
 use App\OpenApi\Schemas\DetailedUserSchema;
 use GoldSpecDigital\ObjectOrientedOAS\Objects\Header;
 use GoldSpecDigital\ObjectOrientedOAS\Objects\MediaType;
@@ -21,7 +22,9 @@ class UserResponse extends ResponseFactory {
                 )
             )
             ->headers(
-                Header::create('X-Unverified')
+                Header::create(
+                    AuthenticationController::EMAIL_UNVERIFIED_HEADER
+                )
                     ->required(false)
                     ->description(
                         'If the user is unverified, this header will be set to true'

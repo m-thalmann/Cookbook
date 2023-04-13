@@ -76,6 +76,8 @@ export class LoginPageComponent implements OnDestroy {
       const redirectUrl: string | undefined = this.activatedRoute.snapshot.queryParams['redirect-url'];
 
       this.auth.login(loginData.user, loginData.access_token, loginData.refresh_token, redirectUrl);
+
+      this.auth.setEmailVerified(loginResponse);
     } catch (e) {
       this.isLoading$.next(false);
 

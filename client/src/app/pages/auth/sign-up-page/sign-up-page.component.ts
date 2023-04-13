@@ -120,6 +120,8 @@ export class SignUpPageComponent {
       const redirectUrl: string | undefined = this.activatedRoute.snapshot.queryParams['redirect-url'];
 
       this.auth.login(signUpData.user, signUpData.access_token, signUpData.refresh_token, redirectUrl);
+
+      this.auth.setEmailVerified(signUpResponse);
     } catch (e) {
       this.isLoading$.next(false);
 

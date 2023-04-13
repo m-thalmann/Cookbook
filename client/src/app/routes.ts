@@ -8,6 +8,14 @@ export default [
   { path: '', pathMatch: 'full', redirectTo: '/home' },
 
   {
+    path: 'verify-email/:userId/:token',
+    loadComponent: () =>
+      import('./pages/auth/verify-email-page/verify-email-page.component').then(
+        (comp) => comp.VerifyEmailPageComponent
+      ),
+  },
+
+  {
     path: '',
     component: LayoutAuthComponent,
     canActivate: [GuestGuard],

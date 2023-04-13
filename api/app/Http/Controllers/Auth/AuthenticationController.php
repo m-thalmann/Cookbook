@@ -23,7 +23,6 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use TokenAuth\TokenAuth;
@@ -31,6 +30,8 @@ use Vyuldashev\LaravelOpenApi\Attributes as OpenApi;
 
 #[OpenApi\PathItem]
 class AuthenticationController extends Controller {
+    const EMAIL_UNVERIFIED_HEADER = 'X-Unverified';
+
     /**
      * Performs a login for the user
      *
@@ -73,11 +74,17 @@ class AuthenticationController extends Controller {
             config('auth.token_names.access')
         );
 
-        return JsonResource::make([
+        $response = JsonResource::make([
             'user' => UserResource::make($user),
             'access_token' => $accessToken->plainTextToken,
             'refresh_token' => $refreshToken->plainTextToken,
-        ]);
+        ])->response();
+
+        if (!$user->hasVerifiedEmail()) {
+            $response->header(self::EMAIL_UNVERIFIED_HEADER, 'true');
+        }
+
+        return $response;
     }
 
     /**
@@ -145,13 +152,19 @@ class AuthenticationController extends Controller {
             config('auth.token_names.access')
         );
 
-        return JsonResource::make([
+        $response = JsonResource::make([
             'user' => UserResource::make($user),
             'access_token' => $accessToken->plainTextToken,
             'refresh_token' => $refreshToken->plainTextToken,
         ])
             ->response()
             ->setStatusCode(201);
+
+        if (!$user->hasVerifiedEmail()) {
+            $response->header(self::EMAIL_UNVERIFIED_HEADER, 'true');
+        }
+
+        return $response;
     }
 
     /**
@@ -221,7 +234,7 @@ class AuthenticationController extends Controller {
         $response = UserResource::make($user)->response();
 
         if (!$user->hasVerifiedEmail()) {
-            $response->header('X-Unverified', 'true');
+            $response->header(self::EMAIL_UNVERIFIED_HEADER, 'true');
         }
 
         return $response;

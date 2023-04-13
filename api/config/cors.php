@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticationController;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -24,7 +26,7 @@ return [
 
     'allowed_headers' => ['*'],
 
-    'exposed_headers' => ['X-Unverified'],
+    'exposed_headers' => [AuthenticationController::EMAIL_UNVERIFIED_HEADER],
 
     'max_age' => 0,
 

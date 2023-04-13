@@ -42,6 +42,10 @@ $add-button-height-mobile: 5em;
       gap: 1em;
 
       .user-account-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
         position: relative;
         font-size: 1.25em;
         font-family: Helvetica, Arial, sans-serif;
@@ -114,6 +118,16 @@ app-layout-default-navbar {
   &.account-menu-item {
     margin-bottom: 1em;
     pointer-events: none;
+
+    [matListItemTitle],
+    [matListItemLine] {
+      display: inherit;
+
+      max-width: 12em;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
   }
 
   [matListItemTitle] {

@@ -1,4 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -119,9 +119,7 @@ export class AuthService implements OnDestroy {
 
       this._user$.next(userResponse.body!.data);
 
-      if (userResponse.headers.has('X-Unverified') && userResponse.headers.get('X-Unverified') === 'true') {
-        this._isUnverified$.next(true);
-      }
+      this.setEmailVerified(userResponse);
     } catch (e) {
       if (!(e instanceof HttpErrorResponse) || e.status !== 401) {
         this.snackbar.warn({ message: 'Error loading user information' });
@@ -177,5 +175,19 @@ export class AuthService implements OnDestroy {
 
   public updateUser(user: DetailedUser) {
     this._user$.next(user);
+  }
+
+  public setEmailVerified(verifiedOrApiResponse: boolean | HttpResponse<unknown>) {
+    let unverified: boolean;
+
+    if (typeof verifiedOrApiResponse === 'boolean') {
+      unverified = !verifiedOrApiResponse;
+    } else {
+      unverified =
+        verifiedOrApiResponse.headers.has('X-Unverified') &&
+        verifiedOrApiResponse.headers.get('X-Unverified') === 'true';
+    }
+
+    this._isUnverified$.next(unverified);
   }
 }
