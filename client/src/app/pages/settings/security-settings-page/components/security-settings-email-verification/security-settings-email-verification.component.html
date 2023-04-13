@@ -1,0 +1,24 @@
+<ng-container
+    *ngIf="{
+        isUnverified: auth.isUnverified$ | async,
+        isLoading: isLoading$ | async
+    } as vm"
+>
+    <app-settings-section class="email-verification" icon="verified" title="Email verification">
+        <ng-container *ngIf="vm.isUnverified">
+            <p>Your email address is not verified. Please check your inbox and click on the verification link.</p>
+            <p>If you did not receive an email, please check your spam folder.</p>
+
+            <div class="action">
+                <button mat-raised-button color="accent" (click)="resendVerificationEmail()" [disabled]="vm.isLoading">
+                    <mat-icon>email</mat-icon> Resend verification email
+                </button>
+
+                <mat-spinner *ngIf="vm.isLoading" [diameter]="20"></mat-spinner>
+            </div>
+        </ng-container>
+
+        <em *ngIf="!vm.isUnverified">No action required.</em>
+    </app-settings-section>
+</ng-container>
+
