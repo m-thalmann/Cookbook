@@ -4,7 +4,12 @@
         isLoading: isLoading$ | async
     } as vm"
 >
-    <app-settings-section class="email-verification" icon="verified" title="Email verification">
+    <app-settings-section
+        class="email-verification"
+        icon="verified"
+        title="Email verification"
+        [warn]="vm.isUnverified ?? false"
+    >
         <ng-container *ngIf="vm.isUnverified">
             <p>Your email address is not verified. Please check your inbox and click on the verification link.</p>
             <p>If you did not receive an email, please check your spam folder.</p>

@@ -30,6 +30,13 @@ export default [
         loadComponent: () =>
           import('./pages/auth/sign-up-page/sign-up-page.component').then((comp) => comp.SignUpPageComponent),
       },
+      {
+        path: 'password-reset/:email/:token',
+        loadComponent: () =>
+          import('./pages/auth/password-reset-page/password-reset-page.component').then(
+            (comp) => comp.PasswordResetPageComponent
+          ),
+      },
     ],
   },
 

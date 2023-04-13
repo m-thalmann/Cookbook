@@ -1,7 +1,7 @@
 <h3 [class]="titleColor ? 'fg-' + titleColor : null">
     <mat-icon>{{ icon }}</mat-icon>
     {{ title }}
+    <mat-icon color="warn" *ngIf="warn">warning</mat-icon>
 </h3>
 
 <ng-content></ng-content>
-

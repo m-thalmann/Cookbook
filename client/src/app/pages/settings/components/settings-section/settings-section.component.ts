@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -6,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './settings-section.component.html',
   styleUrls: ['./settings-section.component.scss'],
   standalone: true,
-  imports: [MatIconModule],
+  imports: [CommonModule, MatIconModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsSectionComponent {
@@ -14,4 +15,6 @@ export class SettingsSectionComponent {
   @Input() title!: string;
 
   @Input() titleColor: 'primary' | 'accent' | 'warn' | null = null;
+
+  @Input() warn = false;
 }

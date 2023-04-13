@@ -21,7 +21,9 @@
             </mat-error>
         </mat-form-field>
 
-        <a routerLink="/forgot-password">Don't remember your password?</a>
+        <a (click)="openResetPasswordDialog()" [attr.disabled]="vm.isLoading ? 'true' : null">
+            Don't remember your password?
+        </a>
 
         <button mat-raised-button color="accent" type="submit" [disabled]="vm.isLoading">
             <mat-icon *ngIf="!vm.isLoading">login</mat-icon>

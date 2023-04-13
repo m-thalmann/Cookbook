@@ -3,16 +3,19 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, Subscription, distinctUntilChanged, lastValueFrom } from 'rxjs';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { BehaviorSubject, Subscription, distinctUntilChanged, lastValueFrom, take } from 'rxjs';
+import { PromptDialogComponent } from 'src/app/components/dialogs/prompt-dialog/prompt-dialog.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { ServerValidationHelper } from 'src/app/core/forms/ServerValidationHelper';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 const Logger = new LoggerClass('Authentication');
 
@@ -23,6 +26,7 @@ const Logger = new LoggerClass('Authentication');
   standalone: true,
   imports: [
     CommonModule,
+    RouterLink,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatButtonModule,
@@ -44,7 +48,9 @@ export class LoginPageComponent implements OnDestroy {
     private auth: AuthService,
     private api: ApiService,
     private fb: FormBuilder,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private dialog: MatDialog,
+    private snackbar: SnackbarService
   ) {
     this.loginForm = this.fb.group({
       email: [''],
@@ -98,6 +104,46 @@ export class LoginPageComponent implements OnDestroy {
       if (errorMessage) {
         this.error$.next(errorMessage);
       }
+    }
+  }
+
+  async openResetPasswordDialog() {
+    const email: string | null = await lastValueFrom(
+      this.dialog
+        .open(PromptDialogComponent, {
+          width: '400px',
+          data: {
+            title: 'Send reset email',
+            label: 'Your email',
+            type: 'email',
+            btnConfirm: 'Send',
+            btnDecline: 'Cancel',
+          },
+        })
+        .afterClosed()
+        .pipe(take(1))
+    );
+
+    if (!email) {
+      return;
+    }
+
+    this.isLoading$.next(true);
+
+    try {
+      await lastValueFrom(this.api.auth.sendResetPasswordEmail(email));
+
+      this.snackbar.info({ message: 'Reset email sent. Please check your inbox for further instructions.' });
+    } catch (e) {
+      const errorMessage = ApiService.getErrorMessage(e);
+
+      this.snackbar.warn({
+        message:
+          'Error sending reset email' + (typeof errorMessage === 'string' && errorMessage ? ': ' + errorMessage : ''),
+      });
+      Logger.error('Error sending reset email:', errorMessage);
+    } finally {
+      this.isLoading$.next(false);
     }
   }
 

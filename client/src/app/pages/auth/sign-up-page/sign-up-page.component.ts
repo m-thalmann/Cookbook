@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -36,7 +36,7 @@ const Logger = new LoggerClass('Authentication');
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SignUpPageComponent {
+export class SignUpPageComponent implements OnDestroy {
   private subSink = new Subscription();
 
   error$ = new BehaviorSubject<string | null>(null);
@@ -141,5 +141,9 @@ export class SignUpPageComponent {
         this.error$.next(errorMessage);
       }
     }
+  }
+
+  ngOnDestroy() {
+    this.subSink.unsubscribe();
   }
 }
