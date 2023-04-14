@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use TokenAuth\TokenAuth;
 
 class AuthTokenResource extends JsonResource {
     /**
@@ -12,10 +13,12 @@ class AuthTokenResource extends JsonResource {
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request) {
-        return [
-            ...parent::toArray($request),
-            'is_current' => $request->user()->currentToken()->id === $this->id,
-        ];
+        $isCurrent = match ($this->type === TokenAuth::TYPE_ACCESS) {
+            true => $request->user()->currentToken()->id === $this->id,
+            default => $request->user()->currentToken()->group_id ===
+                $this->group_id,
+        };
+
+        return [...parent::toArray($request), 'is_current' => $isCurrent];
     }
 }
-

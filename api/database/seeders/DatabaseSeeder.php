@@ -38,6 +38,7 @@ class DatabaseSeeder extends Seeder {
         $user = User::factory()->create([
             'name' => 'John Doe',
             'email' => 'john.doe@example.com',
+            'is_admin' => true,
         ]);
 
         $recipes = Recipe::factory(self::RECIPE_AMOUNT)->create([
@@ -52,9 +53,13 @@ class DatabaseSeeder extends Seeder {
                 'recipe_id' => $recipe,
             ]);
 
-            RecipeImage::factory(rand(0, 3))->create([
-                'recipe_id' => $recipe,
-            ]);
+            try {
+                RecipeImage::factory(rand(0, 3))->create([
+                    'recipe_id' => $recipe,
+                ]);
+            } catch (\Exception $e) {
+                echo 'Error fetching random image' . PHP_EOL;
+            }
 
             if (Arr::random([true, false])) {
                 $recipe->update(['cookbook_id' => $cookbook->id]);

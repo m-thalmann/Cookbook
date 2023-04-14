@@ -25,7 +25,7 @@ class AuthToken extends BaseAuthToken {
         $this->scopeNotRevoked($query);
     }
 
-    public function scopeAccessTokens($query) {
-        $query->where('type', TokenAuth::TYPE_ACCESS);
+    public function scopeRefreshTokens($query) {
+        $query->where('type', TokenAuth::TYPE_REFRESH);
     }
 }

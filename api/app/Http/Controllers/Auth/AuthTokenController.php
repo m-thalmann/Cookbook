@@ -17,7 +17,7 @@ use Vyuldashev\LaravelOpenApi\Attributes as OpenApi;
 #[OpenApi\PathItem]
 class AuthTokenController extends Controller {
     /**
-     * Returns the active access tokens for the user (only access tokens)
+     * Returns the active refresh tokens for the user (only refresh tokens)
      */
     #[
         OpenApi\Operation(
@@ -40,7 +40,7 @@ class AuthTokenController extends Controller {
                 authUser()
                     ->tokens()
                     ->active()
-                    ->accessTokens()
+                    ->refreshTokens()
                     ->paginate($perPage)
             )
         );

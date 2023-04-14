@@ -54,8 +54,8 @@ export class AuthService implements OnDestroy {
     private routeHelper: RouteHelperService,
     private snackbar: SnackbarService
   ) {
-    this._accessToken$ = new BehaviorSubject(this.storage.session.get<string>(ACCESS_TOKEN_KEY));
-    this._refreshToken$ = new BehaviorSubject(this.storage.local.get(REFRESH_TOKEN_KEY));
+    this._accessToken$ = new BehaviorSubject(this.storage.get<string>(ACCESS_TOKEN_KEY));
+    this._refreshToken$ = new BehaviorSubject(this.storage.get(REFRESH_TOKEN_KEY));
 
     this.accessToken$ = this._accessToken$.asObservable().pipe(distinctUntilChanged());
     this.refreshToken$ = this._refreshToken$.asObservable().pipe(distinctUntilChanged());
@@ -63,9 +63,9 @@ export class AuthService implements OnDestroy {
     this.subSink.add(
       this.accessToken$.subscribe((accessToken) => {
         if (accessToken !== null) {
-          this.storage.session.set(ACCESS_TOKEN_KEY, accessToken);
+          this.storage.set(ACCESS_TOKEN_KEY, accessToken);
         } else {
-          this.storage.session.remove(ACCESS_TOKEN_KEY);
+          this.storage.remove(ACCESS_TOKEN_KEY);
         }
       })
     );
@@ -73,14 +73,23 @@ export class AuthService implements OnDestroy {
     this.subSink.add(
       this.refreshToken$.subscribe((refreshToken) => {
         if (refreshToken !== null) {
-          this.storage.local.set(REFRESH_TOKEN_KEY, refreshToken);
+          this.storage.set(REFRESH_TOKEN_KEY, refreshToken);
         } else {
-          this.storage.local.remove(REFRESH_TOKEN_KEY);
+          this.storage.remove(REFRESH_TOKEN_KEY);
         }
       })
     );
 
-    this._user$ = new BehaviorSubject<DetailedUser | null>(this.storage.local.get<DetailedUser>(USER_KEY));
+    this.subSink.add(
+      this.storage.observe<string>(ACCESS_TOKEN_KEY).subscribe((accessToken) => this._accessToken$.next(accessToken))
+    );
+    this.subSink.add(
+      this.storage
+        .observe<string>(REFRESH_TOKEN_KEY)
+        .subscribe((refreshToken) => this._refreshToken$.next(refreshToken))
+    );
+
+    this._user$ = new BehaviorSubject<DetailedUser | null>(this.storage.get<DetailedUser>(USER_KEY));
     this.user$ = this._user$
       .asObservable()
       .pipe(distinctUntilChanged((previous, current) => JSON.stringify(previous) === JSON.stringify(current)));
@@ -88,9 +97,9 @@ export class AuthService implements OnDestroy {
     this.subSink.add(
       this.user$.subscribe((user) => {
         if (user !== null) {
-          this.storage.local.set(USER_KEY, user);
+          this.storage.set(USER_KEY, user);
         } else {
-          this.storage.local.remove(USER_KEY);
+          this.storage.remove(USER_KEY);
         }
       })
     );

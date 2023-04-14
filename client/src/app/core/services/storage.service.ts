@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Observable, filter, fromEvent, map, shareReplay } from 'rxjs';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
 
 const Logger = new LoggerClass('StorageService');
@@ -11,28 +12,8 @@ const PREFIX = 'CB_';
 export class StorageService {
   constructor() {}
 
-  public get local() {
-    return this.operations(localStorage);
-  }
-
-  public get session() {
-    return this.operations(sessionStorage);
-  }
-
-  private operations(storage: Storage) {
-    return {
-      get: <T>(key: string, defaultValue: T | null = null) => this.get<T>(storage, key, defaultValue),
-      set: (key: string, value: any) => this.set(storage, key, value),
-      remove: (key: string) => this.remove(storage, key),
-    };
-  }
-
-  private generateKey(key: string) {
-    return PREFIX + key;
-  }
-
-  private get<T>(storage: Storage, key: string, defaultValue: T | null = null): T | null {
-    const value = storage.getItem(this.generateKey(key));
+  get<T>(key: string, defaultValue: T | null = null): T | null {
+    const value = localStorage.getItem(this.generateKey(key));
 
     if (value !== null) {
       try {
@@ -45,12 +26,42 @@ export class StorageService {
     return defaultValue;
   }
 
-  private set(storage: Storage, key: string, value: any) {
-    storage.setItem(this.generateKey(key), JSON.stringify(value));
+  /**
+   * Observes the value change of a key in localStorage.
+   *
+   * __Important:__ The value is only observed if the value is changed in another tab.
+   */
+  observe<T>(key: string, defaultValue: T | null = null): Observable<T | null> {
+    const generatedKey = this.generateKey(key);
+
+    return fromEvent<StorageEvent>(window, 'storage').pipe(
+      filter((event) => event.key === generatedKey),
+      map((event) => this.parseValue<T>(generatedKey, event.newValue, defaultValue)),
+      shareReplay(1)
+    );
   }
 
-  private remove(storage: Storage, key: string) {
-    storage.removeItem(this.generateKey(key));
+  set(key: string, value: any) {
+    localStorage.setItem(this.generateKey(key), JSON.stringify(value));
+  }
+
+  remove(key: string) {
+    localStorage.removeItem(this.generateKey(key));
+  }
+
+  private generateKey(key: string) {
+    return PREFIX + key;
+  }
+
+  private parseValue<T>(key: string, value: string | null, defaultValue: T | null = null): T | null {
+    if (value !== null) {
+      try {
+        return JSON.parse(value);
+      } catch (e) {
+        Logger.error(`Error parsing value for key '${key}': ${e}`);
+      }
+    }
+
+    return defaultValue;
   }
 }
-

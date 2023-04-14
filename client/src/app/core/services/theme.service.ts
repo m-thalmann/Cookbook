@@ -1,13 +1,13 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import {
   BehaviorSubject,
+  Subscription,
   combineLatest,
   distinctUntilChanged,
   fromEvent,
   map,
   shareReplay,
   startWith,
-  Subscription,
 } from 'rxjs';
 import { StorageService } from './storage.service';
 
@@ -89,14 +89,14 @@ export class ThemeService implements OnDestroy {
     this._selectedTheme$.next(theme);
 
     if (theme === null) {
-      this.storage.local.remove(THEME_KEY);
+      this.storage.remove(THEME_KEY);
     } else {
-      this.storage.local.set(THEME_KEY, theme.key);
+      this.storage.set(THEME_KEY, theme.key);
     }
   }
 
   private getThemeFromStorage() {
-    return ThemeService.themes.find((theme) => theme.key === this.storage.local.get(THEME_KEY)) ?? null;
+    return ThemeService.themes.find((theme) => theme.key === this.storage.get(THEME_KEY)) ?? null;
   }
 
   load() {
@@ -118,4 +118,3 @@ export class ThemeService implements OnDestroy {
     this.subSink.unsubscribe();
   }
 }
-
