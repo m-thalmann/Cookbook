@@ -60,6 +60,17 @@ export default [
         path: 'settings',
         loadChildren: () => import('./pages/settings/routes'),
       },
+
+      {
+        path: 'not-found',
+        loadComponent: () =>
+          import('./pages/not-found-page/not-found-page.component').then((comp) => comp.NotFoundPageComponent),
+      },
     ],
+  },
+
+  {
+    path: '**',
+    redirectTo: '/not-found',
   },
 ] as Routes;

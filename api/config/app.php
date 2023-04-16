@@ -107,7 +107,7 @@ return [
     |
     */
 
-    'locale' => env('APP_LANGUAGE', 'en'),
+    'locale' => env('APP_DEFAULT_LANGUAGE', 'en'),
 
     /*
     |--------------------------------------------------------------------------

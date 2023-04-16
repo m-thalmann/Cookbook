@@ -1,0 +1,26 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 2.5em;
+
+  padding: 2em;
+}
+
+h2,
+h3 {
+  margin: 0;
+  line-height: 1;
+  text-align: center;
+}
+
+h2 {
+  font-size: 5rem;
+}
+
+h3 {
+  font-size: 3rem;
+  font-weight: lighter;
+}
