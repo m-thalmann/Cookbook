@@ -7,9 +7,14 @@
     } as vm"
 >
     <p class="amount-results" *ngIf="vm.cookbooks?.totalCookbooks as total">{{ total }} cookbooks found</p>
+    <app-skeleton class="amount-results" *ngIf="vm.cookbooksLoading" width="10em"></app-skeleton>
 
     <div class="cookbooks">
         <app-cookbook-card [cookbook]="cookbook" *ngFor="let cookbook of vm.cookbooks?.cookbooks"> </app-cookbook-card>
+
+        <ng-container *ngIf="vm.cookbooksLoading">
+            <app-cookbook-card [cookbook]="null" *appRepeat="6"> </app-cookbook-card>
+        </ng-container>
     </div>
 
     <app-error-display [error]="vm.error">

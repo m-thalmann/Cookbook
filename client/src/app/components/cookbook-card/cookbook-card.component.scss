@@ -3,12 +3,16 @@
 @use 'variables' as *;
 @use 'theme';
 
+.container,
+app-skeleton {
+  border-radius: 0.5em;
+}
+
 .container {
   display: flex;
   align-items: stretch;
 
   overflow: hidden;
-  border-radius: 0.5em;
 
   transition: box-shadow $transition-time;
 
@@ -80,4 +84,9 @@
       height: 70%;
     }
   }
+}
+
+app-skeleton {
+  height: 4rem;
+  margin: 0;
 }

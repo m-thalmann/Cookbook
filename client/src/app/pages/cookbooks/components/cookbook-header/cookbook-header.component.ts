@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+import { SkeletonComponent } from 'src/app/components/skeleton/skeleton.component';
 import { Cookbook, CookbookWithUserMeta } from 'src/app/core/models/cookbook';
 
 @Component({
@@ -10,7 +11,7 @@ import { Cookbook, CookbookWithUserMeta } from 'src/app/core/models/cookbook';
   templateUrl: './cookbook-header.component.html',
   styleUrls: ['./cookbook-header.component.scss'],
   standalone: true,
-  imports: [CommonModule, RouterLink, MatButtonModule, MatIconModule],
+  imports: [CommonModule, RouterLink, MatButtonModule, MatIconModule, SkeletonComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CookbookHeaderComponent {

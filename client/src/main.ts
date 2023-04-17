@@ -17,19 +17,20 @@ import {
 } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
-import { AppComponent } from './app/app.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from './environments/environment';
 
 import { AuthInterceptor } from './app/core/api/auth.interceptor';
 import { AuthService } from './app/core/auth/auth.service';
 import { ConfigService } from './app/core/services/config.service';
+import { ErrorHandlerService } from './app/core/services/error-handler.service';
 import { ThemeService } from './app/core/services/theme.service';
 
-import routes from './app/routes';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
-import { ErrorHandlerService } from './app/core/services/error-handler.service';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
+import { AppComponent } from './app/app.component';
+import routes from './app/routes';
 
 if (environment.production) {
   enableProdMode();
