@@ -3,7 +3,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnDestro
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
-import { of, shareReplay, Subscription, switchMap } from 'rxjs';
+import { Subscription, of, shareReplay, switchMap } from 'rxjs';
 import { CategoryChipListComponent } from 'src/app/components/category-chip-list/category-chip-list.component';
 import { CookbookCardComponent } from 'src/app/components/cookbook-card/cookbook-card.component';
 import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
@@ -12,11 +12,10 @@ import { RecipeCardComponent } from 'src/app/components/recipe-card/recipe-card.
 import { SearchBarComponent } from 'src/app/components/search-bar/search-bar.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
+import { RepeatDirective } from 'src/app/core/directives/repeat.directive';
 import { createIntersectionObserver } from 'src/app/core/helpers/intersection-observer';
 import { PaginationMeta } from 'src/app/core/models/pagination-meta';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
-
-const AMOUNT_ITEMS = 12;
 
 @Component({
   selector: 'app-home-page',
@@ -34,10 +33,13 @@ const AMOUNT_ITEMS = 12;
     RecipeCardComponent,
     CookbookCardComponent,
     ErrorDisplayComponent,
+    RepeatDirective,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomePageComponent implements AfterViewInit, OnDestroy {
+  readonly amountItems = 6;
+
   subSink: Subscription = new Subscription();
 
   @ViewChild('searchBarContainer', { read: ElementRef }) searchBarContainer!: ElementRef;
@@ -48,7 +50,7 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
     shareReplay(1)
   );
   recipes$ = this.auth.user$.pipe(
-    switchMap(() => this.api.recipes.getList({ pagination: { page: 1, perPage: AMOUNT_ITEMS } })),
+    switchMap(() => this.api.recipes.getList({ pagination: { page: 1, perPage: this.amountItems } })),
     handledErrorInterceptor(),
     shareReplay(1)
   );
@@ -58,7 +60,7 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
         return of(null);
       }
 
-      return this.api.cookbooks.getList(false, { page: 1, perPage: AMOUNT_ITEMS });
+      return this.api.cookbooks.getList(false, { page: 1, perPage: this.amountItems });
     }),
     handledErrorInterceptor(),
     shareReplay(1)

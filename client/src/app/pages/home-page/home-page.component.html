@@ -16,10 +16,7 @@
 
     <div class="sections">
         <app-page-section heading="Categories" [showMy]="!!vm.isAuthenticated" class="categories">
-            <app-category-chip-list
-                [categories]="categories"
-                *ngIf="vm.categories?.body?.data as categories"
-            ></app-category-chip-list>
+            <app-category-chip-list [categories]="vm.categories?.body?.data ?? null"></app-category-chip-list>
 
             <app-error-display [error]="vm.categoriesError">
                 <ng-container otherErrorMessage> Categories could not be loaded. </ng-container>
@@ -27,10 +24,16 @@
         </app-page-section>
 
         <app-page-section heading="Recipes" seeAllLink="/recipes" [showMy]="!!vm.isAuthenticated" class="recipes">
-            <div *ngIf="vm.recipes?.body?.data as recipes">
-                <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe"></app-recipe-card>
+            <div>
+                <ng-container *ngIf="vm.recipes?.body?.data as recipes; else recipesLoading">
+                    <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe"></app-recipe-card>
 
-                <p *ngIf="recipes.length === 0" class="not-found-item">No recipes found ...</p>
+                    <p *ngIf="recipes.length === 0" class="not-found-item">No recipes found ...</p>
+                </ng-container>
+
+                <ng-template #recipesLoading>
+                    <app-recipe-card [recipe]="null" *appRepeat="amountItems"></app-recipe-card>
+                </ng-template>
             </div>
 
             <app-error-display [error]="vm.recipesError">
@@ -59,10 +62,16 @@
             class="cookbooks"
             *ngIf="vm.isAuthenticated"
         >
-            <div *ngIf="vm.cookbooks?.body?.data as cookbooks">
-                <app-cookbook-card *ngFor="let cookbook of cookbooks" [cookbook]="cookbook"></app-cookbook-card>
+            <div>
+                <ng-container *ngIf="vm.cookbooks?.body?.data as cookbooks; else cookbooksLoading">
+                    <app-cookbook-card *ngFor="let cookbook of cookbooks" [cookbook]="cookbook"></app-cookbook-card>
 
-                <p *ngIf="cookbooks.length === 0" class="not-found-item">No cookbooks found ...</p>
+                    <p *ngIf="cookbooks.length === 0" class="not-found-item">No cookbooks found ...</p>
+                </ng-container>
+
+                <ng-template #cookbooksLoading>
+                    <app-cookbook-card [cookbook]="null" *appRepeat="amountItems"></app-cookbook-card>
+                </ng-template>
             </div>
 
             <app-error-display [error]="vm.cookbooksError">

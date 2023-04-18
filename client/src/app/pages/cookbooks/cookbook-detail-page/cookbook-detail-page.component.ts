@@ -3,16 +3,17 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { combineLatest, map, Observable, shareReplay, switchMap } from 'rxjs';
+import { Observable, combineLatest, map, shareReplay, switchMap } from 'rxjs';
+import { CategoryChipListComponent } from 'src/app/components/category-chip-list/category-chip-list.component';
+import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
+import { PageSectionComponent } from 'src/app/components/page-section/page-section.component';
+import { RecipeCardComponent } from 'src/app/components/recipe-card/recipe-card.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
+import { RepeatDirective } from 'src/app/core/directives/repeat.directive';
 import { PaginationMeta } from 'src/app/core/models/pagination-meta';
-import { CookbookHeaderComponent } from '../components/cookbook-header/cookbook-header.component';
-import { PageSectionComponent } from 'src/app/components/page-section/page-section.component';
-import { CategoryChipListComponent } from 'src/app/components/category-chip-list/category-chip-list.component';
-import { RecipeCardComponent } from 'src/app/components/recipe-card/recipe-card.component';
-import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
+import { CookbookHeaderComponent } from '../components/cookbook-header/cookbook-header.component';
 
 @Component({
   selector: 'app-cookbook-detail-page',
@@ -29,6 +30,7 @@ import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interce
     CategoryChipListComponent,
     RecipeCardComponent,
     ErrorDisplayComponent,
+    RepeatDirective,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

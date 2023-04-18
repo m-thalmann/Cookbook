@@ -3,31 +3,33 @@ import { HttpResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   BehaviorSubject,
+  Observable,
   combineLatest,
   debounceTime,
   distinctUntilChanged,
   map,
-  Observable,
   shareReplay,
   switchMap,
   tap,
 } from 'rxjs';
+import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
+import { RepeatDirective } from 'src/app/core/directives/repeat.directive';
 import { PaginationMeta } from 'src/app/core/models/pagination-meta';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
 import { ListRecipe, RecipeFilters } from 'src/app/core/models/recipe';
 import { SortOption } from 'src/app/core/models/sort-option';
-import { SearchBarComponent } from '../search-bar/search-bar.component';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
-import { ApiService } from 'src/app/core/api/api.service';
-import { ErrorDisplayComponent } from '../error-display/error-display.component';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { RecipeSearchFilterComponent } from './components/recipe-search-filter/recipe-search-filter.component';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
+import { ErrorDisplayComponent } from '../error-display/error-display.component';
+import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
+import { SearchBarComponent } from '../search-bar/search-bar.component';
+import { SkeletonComponent } from '../skeleton/skeleton.component';
+import { RecipeSearchFilterComponent } from './components/recipe-search-filter/recipe-search-filter.component';
 
 @Component({
   selector: 'app-recipe-search',
@@ -44,6 +46,8 @@ import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interce
     RecipeSearchFilterComponent,
     RecipeCardComponent,
     ErrorDisplayComponent,
+    SkeletonComponent,
+    RepeatDirective,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

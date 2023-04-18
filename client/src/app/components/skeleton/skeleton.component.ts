@@ -17,9 +17,5 @@ export class SkeletonComponent {
   @HostBinding('style.height')
   @Input()
   height?: string;
-
-  @HostBinding('style.margin')
-  @Input()
-  margin?: string;
 }
 

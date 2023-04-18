@@ -95,12 +95,23 @@
         </mat-slide-toggle>
     </div>
 
-    <p class="amount-results" *ngIf="vm.recipes?.body?.meta?.total as total">{{ total }} results found</p>
+    <p class="amount-results" *ngIf="vm.recipes?.body?.meta?.total as total; else resultsLoading">
+        {{ total }} results found
+    </p>
+    <ng-template #resultsLoading>
+        <app-skeleton class="amount-results inline" height="1em" width="10em"></app-skeleton>
+    </ng-template>
 
-    <div class="recipes" *ngIf="vm.recipes?.body?.data as recipes">
-        <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe"></app-recipe-card>
+    <div class="recipes">
+        <ng-container *ngIf="vm.recipes?.body?.data as recipes; else recipesLoading">
+            <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe"></app-recipe-card>
 
-        <p *ngIf="recipes.length === 0" class="not-found-item">No recipes found ...</p>
+            <p *ngIf="recipes.length === 0" class="not-found-item">No recipes found ...</p>
+        </ng-container>
+
+        <ng-template #recipesLoading>
+            <app-recipe-card [recipe]="null" *appRepeat="6"></app-recipe-card>
+        </ng-template>
     </div>
 
     <app-error-display [error]="vm.recipesError">

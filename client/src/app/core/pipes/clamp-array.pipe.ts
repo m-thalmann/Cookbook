@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   standalone: true,
 })
 export class ClampArrayPipe implements PipeTransform {
-  transform(array: any[] | undefined | null, limitAmount: number | null) {
+  transform<T>(array: T[] | undefined | null, limitAmount: number | null) {
     if (typeof array === 'undefined' || array === null) {
       return array;
     }

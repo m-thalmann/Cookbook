@@ -10,7 +10,6 @@ h2 {
 
   margin: 0 $layout-padding;
   margin-bottom: 1em;
-  padding: 0.5em 0;
 
   font-size: 1.7em;
 
@@ -18,5 +17,18 @@ h2 {
     border: 1px dashed rgba(map.get($variables, 'foreground'), 0.25);
     border-left: none;
     border-right: none;
+  }
+
+  > span,
+  app-skeleton {
+    margin: 0.5em 0;
+  }
+
+  > span {
+    line-height: 1;
+  }
+
+  app-skeleton {
+    height: 1em;
   }
 }

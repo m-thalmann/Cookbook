@@ -25,9 +25,8 @@
 
         <app-page-section heading="Categories" class="categories">
             <app-category-chip-list
-                [categories]="categories"
+                [categories]="vm.categories?.body?.data ?? null"
                 routerLink="./recipes"
-                *ngIf="vm.categories?.body?.data as categories"
             ></app-category-chip-list>
 
             <app-error-display [error]="vm.categoriesError">
@@ -36,10 +35,16 @@
         </app-page-section>
 
         <app-page-section heading="Recipes" seeAllLink="./recipes" class="recipes">
-            <div *ngIf="vm.recipes?.body?.data as recipes">
-                <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe"></app-recipe-card>
+            <div>
+                <ng-container *ngIf="vm.recipes?.body?.data as recipes; else recipesLoading">
+                    <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe"></app-recipe-card>
 
-                <p *ngIf="recipes.length === 0" class="not-found-item">No recipes found ...</p>
+                    <p *ngIf="recipes.length === 0" class="not-found-item">No recipes found ...</p>
+                </ng-container>
+
+                <ng-template #recipesLoading>
+                    <app-recipe-card [recipe]="null" *appRepeat="6"></app-recipe-card>
+                </ng-template>
             </div>
 
             <app-error-display [error]="vm.recipesError">

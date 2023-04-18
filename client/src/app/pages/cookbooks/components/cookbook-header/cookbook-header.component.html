@@ -1,9 +1,15 @@
 <h2>
     <mat-icon color="primary">menu_book</mat-icon>
-    {{ cookbook?.name }}
+
+    <span *ngIf="cookbook; else loading">
+        {{ cookbook.name }}
+    </span>
+
+    <ng-template #loading>
+        <app-skeleton width="10em"></app-skeleton>
+    </ng-template>
 
     <a [routerLink]="['/cookbooks', cookbook?.id, 'edit']" mat-icon-button *ngIf="showEditButton && isAdmin">
         <mat-icon>edit</mat-icon>
     </a>
 </h2>
-

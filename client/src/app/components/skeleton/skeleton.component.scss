@@ -2,10 +2,8 @@
 @use 'theme';
 
 :host {
-  display: block;
   width: 100%;
   height: 1.25em;
-  margin-bottom: 1rem;
 
   border-radius: 0.25rem;
 
@@ -15,6 +13,15 @@
 
   transform: translate3d(0, 0, 0);
   will-change: transform;
+
+  &:not(.inline) {
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  &.inline {
+    display: inline-block;
+  }
 
   &.chip {
     border-radius: 16px;
