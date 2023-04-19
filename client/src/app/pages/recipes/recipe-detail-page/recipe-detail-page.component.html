@@ -1,4 +1,4 @@
-<app-recipe-detail *ngIf="(recipe$ | async)?.body?.data as recipe" [recipe]="recipe"> </app-recipe-detail>
+<app-recipe-detail [recipe]="(recipe$ | async)?.body?.data ?? null"> </app-recipe-detail>
 
 <app-error-display [error]="error$ | async">
     <ng-container notFoundMessage> Recipe could not be found. </ng-container>

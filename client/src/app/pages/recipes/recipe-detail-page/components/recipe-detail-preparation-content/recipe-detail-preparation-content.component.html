@@ -1,2 +1,6 @@
-<div class="container" [innerHTML]="contentHtml"></div>
+<div class="container" [innerHTML]="contentHtml" *ngIf="contentHtml !== null; else loading"></div>
 
+<ng-template #loading>
+    <app-skeleton class="text" *appRepeat="5"></app-skeleton>
+    <app-skeleton class="text" width="75%"></app-skeleton>
+</ng-template>

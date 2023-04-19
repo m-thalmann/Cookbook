@@ -13,8 +13,12 @@
   right: 0;
 }
 
-.container {
+.container,
+app-skeleton {
   height: 100%;
+}
+
+.container {
   display: flex;
   align-items: center;
   justify-content: center;

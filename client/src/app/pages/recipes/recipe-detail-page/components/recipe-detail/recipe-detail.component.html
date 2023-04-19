@@ -3,7 +3,11 @@
         <mat-icon>arrow_back</mat-icon>
     </button>
 
-    <app-recipe-detail-image-slider [images]="recipe.images" [disabled]="vm.isLoading" class="images-container">
+    <app-recipe-detail-image-slider
+        [images]="recipe?.images ?? null"
+        [disabled]="vm.isLoading"
+        class="images-container"
+    >
     </app-recipe-detail-image-slider>
 
     <div class="content-spacer"></div>
@@ -16,27 +20,35 @@
 
     <app-recipe-detail-section [hideHeader]="true" class="properties">
         <ng-container content>
-            <div class="property-total-time" *ngIf="totalTime">
-                <mat-icon color="primary" matTooltip="Total time">timer</mat-icon>
-                <span class="hide-mobile property-name">Total time:</span>
-                <span> ~ {{ totalTime }}<small>m</small> </span>
-            </div>
+            <ng-container *ngIf="recipe; else propertiesLoading">
+                <div class="property-total-time" *ngIf="totalTime">
+                    <mat-icon color="primary" matTooltip="Total time">timer</mat-icon>
+                    <span class="hide-mobile property-name">Total time:</span>
+                    <span> ~ {{ totalTime }}<small>m</small> </span>
+                </div>
 
-            <div class="property-difficulty" *ngIf="recipe.difficulty !== null">
-                <mat-icon color="primary" matTooltip="Difficulty">local_fire_department</mat-icon>
-                <span class="hide-mobile property-name">Difficulty:</span>
-                <span> {{ recipe.difficulty }} / 5 </span>
-            </div>
+                <div class="property-difficulty" *ngIf="recipe.difficulty !== null">
+                    <mat-icon color="primary" matTooltip="Difficulty">local_fire_department</mat-icon>
+                    <span class="hide-mobile property-name">Difficulty:</span>
+                    <span> {{ recipe.difficulty }} / 5 </span>
+                </div>
 
-            <div class="property-portions" *ngIf="recipe.portions !== null">
-                <mat-icon color="primary" matTooltip="Portions">flatware</mat-icon>
-                <span class="hide-mobile property-name">Portions:</span>
-                <span> {{ recipe.portions * portionsMultiplier | amount }} </span>
-            </div>
+                <div class="property-portions" *ngIf="recipe.portions !== null">
+                    <mat-icon color="primary" matTooltip="Portions">flatware</mat-icon>
+                    <span class="hide-mobile property-name">Portions:</span>
+                    <span> {{ recipe.portions * portionsMultiplier | amount }} </span>
+                </div>
+            </ng-container>
+
+            <ng-template #propertiesLoading>
+                <div *appRepeat="3">
+                    <app-skeleton></app-skeleton>
+                </div>
+            </ng-template>
         </ng-container>
     </app-recipe-detail-section>
 
-    <app-recipe-detail-section class="description" *ngIf="recipe.description">
+    <app-recipe-detail-section class="description" *ngIf="recipe && recipe.description">
         <ng-container header>
             <span>Description</span>
         </ng-container>
@@ -55,39 +67,47 @@
                 [step]="0.25"
                 [stepFunction]="portionsMultiplierStepFunction"
                 [defaultValue]="1"
-                [disabled]="vm.isLoading"
+                [disabled]="vm.isLoading || !recipe"
             ></app-number-input>
         </span>
 
         <app-recipe-detail-ingredients
             content
-            [ingredients]="recipe.ingredients"
+            [ingredients]="recipe?.ingredients ?? null"
             [portionsMultiplier]="portionsMultiplier"
         ></app-recipe-detail-ingredients>
     </app-recipe-detail-section>
 
-    <app-recipe-detail-section class="preparation" *ngIf="recipe.preparation">
+    <app-recipe-detail-section class="preparation" *ngIf="!recipe || recipe.preparation">
         <ng-container header>
             <span>Preparation</span>
         </ng-container>
 
         <div content class="preparation-content">
-            <div class="preparation-times">
-                <span *ngIf="recipe.preparation_time_minutes">
+            <div
+                class="preparation-times"
+                *ngIf="
+                    recipe &&
+                    (recipe.preparation_time_minutes !== null ||
+                        recipe.resting_time_minutes !== null ||
+                        recipe.cooking_time_minutes !== null)
+                "
+            >
+                <span *ngIf="recipe.preparation_time_minutes !== null">
                     <mat-icon>timer</mat-icon>
                     <span>
                         Preparation time ~
                         {{ recipe.preparation_time_minutes }}<small>m</small>
                     </span>
                 </span>
-                <span *ngIf="recipe.resting_time_minutes">
+                <span *ngIf="recipe.resting_time_minutes !== null">
                     <mat-icon>timer</mat-icon>
                     <span>
                         Resting time ~
                         {{ recipe.resting_time_minutes }}<small>m</small>
                     </span>
                 </span>
-                <span *ngIf="recipe.cooking_time_minutes">
+                <span *ngIf="recipe.cooking_time_minutes !== null">
                     <mat-icon>timer</mat-icon>
                     <span>
                         Cooking-/Baking time ~
@@ -97,7 +117,7 @@
             </div>
 
             <app-recipe-detail-preparation-content
-                [contentHtml]="recipe.preparation"
+                [contentHtml]="recipe?.preparation ?? null"
             ></app-recipe-detail-preparation-content>
         </div>
     </app-recipe-detail-section>

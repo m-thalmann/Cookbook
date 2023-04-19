@@ -14,13 +14,22 @@
   transform: translate3d(0, 0, 0);
   will-change: transform;
 
+  &.circle {
+    border-radius: 50%;
+    height: 3em;
+    width: 3em;
+  }
+
   &:not(.inline) {
     display: block;
-    margin-bottom: 1rem;
   }
 
   &.inline {
     display: inline-block;
+  }
+
+  &.text {
+    margin-bottom: 1rem;
   }
 
   &.chip {

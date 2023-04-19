@@ -64,6 +64,7 @@ app-recipe-detail-section {
 
       span {
         text-align: center;
+        line-height: 1;
       }
     }
   }
@@ -104,6 +105,15 @@ app-recipe-detail-section {
     ::ng-deep h3 {
       margin-bottom: 1em;
     }
+  }
+}
+
+@include mixins.mobile() {
+  app-recipe-detail-section.properties > div app-skeleton {
+    height: 3em;
+    width: 3em;
+
+    border-radius: 50%;
   }
 }
 
@@ -166,6 +176,11 @@ app-recipe-detail-section {
           @include theme.apply() using ($variables) {
             color: map.get($variables, 'primary');
           }
+        }
+
+        app-skeleton {
+          width: 15em;
+          height: 1.5em;
         }
       }
     }

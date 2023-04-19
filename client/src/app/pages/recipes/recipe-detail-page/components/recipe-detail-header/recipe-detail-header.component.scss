@@ -53,6 +53,10 @@
       font-size: 1em;
       @include mixins.font-handwriting();
       opacity: 0.75;
+
+      app-skeleton {
+        margin-bottom: 0.125em;
+      }
     }
   }
 

@@ -1,45 +1,70 @@
 <div class="title">
     <div>
         <h2>
-            <span>{{ recipe.name }}</span>
-            <mat-icon *ngIf="recipe.is_public">public</mat-icon>
+            <ng-container *ngIf="recipe; else titleLoading">
+                <span>{{ recipe.name }}</span>
+                <mat-icon *ngIf="recipe.is_public">public</mat-icon>
+            </ng-container>
+
+            <ng-template #titleLoading>
+                <app-skeleton width="10em"></app-skeleton>
+            </ng-template>
         </h2>
-        <h3>by {{ recipe.user.name }}</h3>
+        <h3>
+            <ng-container *ngIf="recipe; else authorLoading"> by {{ recipe.user.name }} </ng-container>
+
+            <ng-template #authorLoading>
+                <app-skeleton width="5em"></app-skeleton>
+            </ng-template>
+        </h3>
     </div>
 
-    <app-share-menu color="primary" [disabled]="disabled" [text]="'Recipe: ' + recipe.name"></app-share-menu>
-    <button
-        mat-icon-button
-        class="options-button"
-        [matMenuTriggerFor]="menu"
-        [disabled]="disabled"
-        *ngIf="recipe.user_can_edit"
-    >
-        <mat-icon>more_vert</mat-icon>
-    </button>
+    <ng-container *ngIf="recipe; else optionsLoading">
+        <app-share-menu color="primary" [disabled]="disabled" [text]="'Recipe: ' + recipe.name"></app-share-menu>
+        <button
+            mat-icon-button
+            class="options-button"
+            [matMenuTriggerFor]="menu"
+            [disabled]="disabled"
+            *ngIf="recipe.user_can_edit"
+        >
+            <mat-icon>more_vert</mat-icon>
+        </button>
+    </ng-container>
+
+    <ng-template #optionsLoading>
+        <app-skeleton class="circle"></app-skeleton>
+    </ng-template>
 </div>
 
 <div class="tags">
-    <a
-        routerLink="/recipes"
-        [queryParams]="{ category: recipe.category }"
-        class="category"
-        [attr.disabled]="disabled ? '' : null"
-        *ngIf="recipe.category"
-    >
-        <mat-icon>local_dining</mat-icon>
-        {{ recipe.category }}
-    </a>
+    <ng-container *ngIf="recipe; else tagsLoading">
+        <a
+            routerLink="/recipes"
+            [queryParams]="{ category: recipe.category }"
+            class="category"
+            [attr.disabled]="disabled ? '' : null"
+            *ngIf="recipe.category"
+        >
+            <mat-icon>local_dining</mat-icon>
+            {{ recipe.category }}
+        </a>
 
-    <a
-        [routerLink]="['/cookbooks', cookbook.id]"
-        class="cookbook"
-        [attr.disabled]="disabled ? '' : null"
-        *ngIf="recipe.cookbook as cookbook"
-    >
-        <mat-icon>menu_book</mat-icon>
-        {{ cookbook.name }}
-    </a>
+        <a
+            [routerLink]="['/cookbooks', cookbook.id]"
+            class="cookbook"
+            [attr.disabled]="disabled ? '' : null"
+            *ngIf="recipe.cookbook as cookbook"
+        >
+            <mat-icon>menu_book</mat-icon>
+            {{ cookbook.name }}
+        </a>
+    </ng-container>
+
+    <ng-template #tagsLoading>
+        <app-skeleton class="chip" width="12em"></app-skeleton>
+        <app-skeleton class="chip" width="10em"></app-skeleton>
+    </ng-template>
 </div>
 
 <mat-menu #menu="matMenu">
@@ -47,7 +72,7 @@
         <mat-icon>share</mat-icon>
         <span>Public share</span>
     </button>
-    <a [routerLink]="['/recipes', recipe.id, 'edit']" mat-menu-item>
+    <a [routerLink]="['/recipes', recipe?.id, 'edit']" mat-menu-item>
         <mat-icon>edit</mat-icon>
         <span>Edit</span>
     </a>

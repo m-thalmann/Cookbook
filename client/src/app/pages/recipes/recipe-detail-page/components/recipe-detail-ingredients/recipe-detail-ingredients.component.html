@@ -10,3 +10,10 @@
         </div>
     </div>
 </div>
+
+<div class="ingredient-group" *ngIf="!ingredients">
+    <div class="ingredient" *appRepeat="7">
+        <app-skeleton></app-skeleton>
+    </div>
+</div>
+

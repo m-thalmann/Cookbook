@@ -5,7 +5,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { BehaviorSubject, lastValueFrom } from 'rxjs';
 import { NumberInputComponent } from 'src/app/components/number-input/number-input.component';
+import { SkeletonComponent } from 'src/app/components/skeleton/skeleton.component';
 import { ApiService } from 'src/app/core/api/api.service';
+import { RepeatDirective } from 'src/app/core/directives/repeat.directive';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
 import { DetailedRecipe } from 'src/app/core/models/recipe';
 import { AmountPipe } from 'src/app/core/pipes/amount.pipe';
@@ -13,9 +15,9 @@ import { RouteHelperService } from 'src/app/core/services/route-helper.service';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { RecipeDetailHeaderComponent } from '../recipe-detail-header/recipe-detail-header.component';
 import { RecipeDetailImageSliderComponent } from '../recipe-detail-image-slider/recipe-detail-image-slider.component';
+import { RecipeDetailIngredientsComponent } from '../recipe-detail-ingredients/recipe-detail-ingredients.component';
 import { RecipeDetailPreparationContentComponent } from '../recipe-detail-preparation-content/recipe-detail-preparation-content.component';
 import { RecipeDetailSectionComponent } from '../recipe-detail-section/recipe-detail-section.component';
-import { RecipeDetailIngredientsComponent } from '../recipe-detail-ingredients/recipe-detail-ingredients.component';
 
 const Logger = new LoggerClass('Recipes');
 
@@ -35,12 +37,14 @@ const Logger = new LoggerClass('Recipes');
     RecipeDetailIngredientsComponent,
     RecipeDetailPreparationContentComponent,
     NumberInputComponent,
+    SkeletonComponent,
     AmountPipe,
+    RepeatDirective,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeDetailComponent {
-  @Input() recipe!: DetailedRecipe;
+  @Input() recipe!: DetailedRecipe | null;
 
   isLoading$ = new BehaviorSubject<boolean>(false);
 
@@ -50,9 +54,10 @@ export class RecipeDetailComponent {
 
   get totalTime() {
     if (
-      this.recipe.preparation_time_minutes === null &&
-      this.recipe.resting_time_minutes === null &&
-      this.recipe.cooking_time_minutes === null
+      !this.recipe ||
+      (this.recipe.preparation_time_minutes === null &&
+        this.recipe.resting_time_minutes === null &&
+        this.recipe.cooking_time_minutes === null)
     ) {
       return null;
     }
@@ -80,7 +85,7 @@ export class RecipeDetailComponent {
     this.isLoading$.next(true);
 
     try {
-      await lastValueFrom(this.api.recipes.delete(this.recipe.id));
+      await lastValueFrom(this.api.recipes.delete(this.recipe!.id));
 
       this.snackbar.info({ message: 'Recipe moved to trash successfully' });
 
