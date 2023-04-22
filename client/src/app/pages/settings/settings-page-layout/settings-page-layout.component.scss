@@ -1,5 +1,6 @@
 @use 'sass:map';
 @use 'theme';
+@use 'mixins';
 @use 'variables' as *;
 @use '@angular/material' as mat;
 
@@ -57,7 +58,7 @@ h2 {
   flex: 1;
 }
 
-@media screen and (min-width: 800px) {
+@include mixins.desktop() {
   .container {
     flex-direction: row;
     gap: 2em;

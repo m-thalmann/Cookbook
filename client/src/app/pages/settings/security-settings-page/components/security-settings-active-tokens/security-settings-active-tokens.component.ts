@@ -13,6 +13,7 @@ import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interce
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { Logger as LoggerClass } from '../../../../../core/helpers/logger';
 import { SettingsSectionComponent } from '../../../components/settings-section/settings-section.component';
+import { SecuritySettingsActiveTokenComponent } from '../security-settings-active-token/security-settings-active-token.component';
 
 const Logger = new LoggerClass('Settings');
 
@@ -28,6 +29,7 @@ const Logger = new LoggerClass('Settings');
     MatTooltipModule,
     MatProgressSpinnerModule,
     SettingsSectionComponent,
+    SecuritySettingsActiveTokenComponent,
     ErrorDisplayComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,

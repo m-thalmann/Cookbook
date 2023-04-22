@@ -71,8 +71,12 @@ class AuthenticationController extends Controller {
         [$refreshToken, $accessToken] = TokenAuth::createTokenPairForUser(
             $user,
             config('auth.token_names.refresh'),
-            config('auth.token_names.access')
+            config('auth.token_names.access'),
+            save: false
         );
+
+        $refreshToken->token->setRequestAttributes($request)->save();
+        $accessToken->token->save();
 
         $response = JsonResource::make([
             'user' => UserResource::make($user),
@@ -149,8 +153,12 @@ class AuthenticationController extends Controller {
         [$refreshToken, $accessToken] = TokenAuth::createTokenPairForUser(
             $user,
             config('auth.token_names.refresh'),
-            config('auth.token_names.access')
+            config('auth.token_names.access'),
+            save: false
         );
+
+        $refreshToken->token->setRequestAttributes($request)->save();
+        $accessToken->token->save();
 
         $response = JsonResource::make([
             'user' => UserResource::make($user),
@@ -181,10 +189,19 @@ class AuthenticationController extends Controller {
             statusCode: 429
         )
     ]
-    public function refresh() {
+    public function refresh(Request $request) {
         [$refreshToken, $accessToken] = TokenAuth::rotateRefreshToken(
-            config('auth.token_names.access')
+            config('auth.token_names.access'),
+            save: false
         );
+
+        $refreshToken->token->setRequestAttributes($request)->save();
+        $accessToken->token->save();
+
+        // since is not saved in "rotateRefreshToken" function
+        authUser()
+            ->currentToken()
+            ->save();
 
         return JsonResource::make([
             'access_token' => $accessToken->plainTextToken,

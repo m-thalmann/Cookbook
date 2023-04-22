@@ -13,9 +13,11 @@ use Illuminate\Support\Str;
  */
 class RecipeImageFactory extends Factory {
     const RANDOM_IMAGE_URLS = [
-        'https://api.lorem.space/image/pizza?w=640&h=480',
-        'https://api.lorem.space/image/burger?w=640&h=480',
-        'https://api.lorem.space/image/drink?w=640&h=480',
+        'https://loremflickr.com/640/480/drinks',
+        'https://loremflickr.com/640/480/fastfood',
+        'https://loremflickr.com/640/480/food',
+        'https://loremflickr.com/640/480/dessert',
+        'https://loremflickr.com/640/480/cake',
     ];
 
     /**
@@ -38,4 +40,3 @@ class RecipeImageFactory extends Factory {
         ];
     }
 }
-

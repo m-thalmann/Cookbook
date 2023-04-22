@@ -1,62 +1,14 @@
-@use 'sass:map';
-@use '@angular/material' as mat;
-@use 'theme';
-
 .active-sessions-section {
   > button {
     margin-bottom: 2em;
   }
 
   .active-sessions-container {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr;
     gap: 1em;
 
     margin-bottom: 2em;
-
-    .active-session {
-      flex: 1;
-
-      display: flex;
-      align-items: center;
-      gap: 0.75em;
-
-      padding: 0.25em 0.75em;
-      border-radius: 0.5em;
-
-      @include mat.elevation(4);
-
-      .current-indicator {
-        width: 0.5em;
-        height: 0.5em;
-        border-radius: 50%;
-
-        @include mat.elevation(2);
-      }
-
-      .created-at {
-        flex: 1;
-
-        label {
-          display: block;
-          font-size: 0.75em;
-          opacity: 0.5;
-        }
-      }
-
-      @include theme.apply() using ($variables) {
-        .current-indicator {
-          background: rgba(map.get($variables, 'foreground'), 0.2);
-
-          &.is-current {
-            box-shadow: 0 0 0 0.25em rgba(map.get($variables, 'primary'), 0.2);
-
-            background: map.get($variables, 'primary');
-          }
-        }
-      }
-    }
   }
 
   .load-more-button {
@@ -75,5 +27,11 @@
     mat-icon {
       margin-right: 0.25em;
     }
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .active-sessions-section .active-sessions-container {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

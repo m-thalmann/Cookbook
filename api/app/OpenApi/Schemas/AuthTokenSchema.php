@@ -40,6 +40,38 @@ class AuthTokenSchema extends SchemaFactory implements Reusable {
                             ->example('*')
                     )
                     ->description('The abilities this token possesses'),
+                Schema::string('ip_address')
+                    ->nullable()
+                    ->description(
+                        'The ip-address from which the token was created'
+                    ),
+                Schema::string('ip_host')
+                    ->nullable()
+                    ->description(
+                        'The ip-host from which the token was created'
+                    ),
+                Schema::string('user_agent')
+                    ->nullable()
+                    ->description(
+                        'The user-agent from which the token was created'
+                    ),
+                Schema::object('user_agent_details')
+                    ->nullable()
+                    ->properties(
+                        Schema::string('name')->description(
+                            'The name of the browser'
+                        ),
+                        Schema::string('name_key')->description(
+                            'The browser\'s name key'
+                        ),
+                        Schema::string('os')->description(
+                            'The operating system'
+                        ),
+                        Schema::string('version')->description(
+                            'The version of the browser'
+                        )
+                    )
+                    ->required('name', 'name_key', 'os', 'version'),
                 Schema::integer('revoked_at')
                     ->nullable()
                     ->description('Unix-timestamp when the token was revoked')
@@ -68,6 +100,9 @@ class AuthTokenSchema extends SchemaFactory implements Reusable {
                 'group_id',
                 'name',
                 'abilities',
+                'ip_address',
+                'ip_host',
+                'user_agent',
                 'revoked_at',
                 'expires_at',
                 'created_at',
@@ -76,4 +111,3 @@ class AuthTokenSchema extends SchemaFactory implements Reusable {
             );
     }
 }
-

@@ -23,28 +23,12 @@
         <app-error-display [error]="vm.error"></app-error-display>
 
         <div class="active-sessions-container">
-            <div class="active-session" *ngFor="let session of vm.activeTokens?.items">
-                <span
-                    class="current-indicator"
-                    [class.is-current]="session.is_current"
-                    matTooltip="Current session"
-                    [matTooltipDisabled]="!session.is_current"
-                ></span>
-
-                <span class="created-at">
-                    <label>Created</label>{{ session.created_at * 1000 | date: 'dd.MM.y HH:mm:ss' }}
-                </span>
-
-                <button
-                    mat-icon-button
-                    color="warn"
-                    matTooltip="Logout from that session"
-                    [disabled]="vm.isLoading || vm.isUpdating"
-                    (click)="logoutFromSession(session.id)"
-                >
-                    <mat-icon>power_settings_new</mat-icon>
-                </button>
-            </div>
+            <app-security-settings-active-token
+                [token]="session"
+                [disabled]="!!vm.isLoading || !!vm.isUpdating"
+                (logout)="logoutFromSession(session.id)"
+                *ngFor="let session of vm.activeTokens?.items"
+            ></app-security-settings-active-token>
         </div>
 
         <button
