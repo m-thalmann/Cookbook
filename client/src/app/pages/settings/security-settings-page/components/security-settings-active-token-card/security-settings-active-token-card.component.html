@@ -1,0 +1,68 @@
+<div class="container" *ngIf="token; else loading">
+    <div class="summary">
+        <span
+            class="current-indicator"
+            [class.is-current]="token.is_current"
+            matTooltip="Current session"
+            [matTooltipDisabled]="!token.is_current"
+        ></span>
+
+        <mat-icon>
+            {{ token.user_agent_details?.name_key === 'androidChrome' ? 'smartphone' : 'laptop' }}
+        </mat-icon>
+
+        <span class="updated-at">
+            <label>Last updated</label>{{ token.created_at * 1000 | date: 'dd.MM.y HH:mm:ss' }}
+        </span>
+
+        <button mat-icon-button (click)="expanded = !expanded">
+            <mat-icon>
+                {{ expanded ? 'expand_less' : 'expand_more' }}
+            </mat-icon>
+        </button>
+
+        <button
+            mat-icon-button
+            color="warn"
+            matTooltip="Logout from that session"
+            [disabled]="disabled"
+            (click)="logout.emit()"
+        >
+            <mat-icon>power_settings_new</mat-icon>
+        </button>
+    </div>
+
+    <div class="details" *ngIf="expanded">
+        <table>
+            <tbody>
+                <tr>
+                    <td>IP Address:</td>
+                    <td>{{ token.ip_address || '-' }}</td>
+                </tr>
+                <tr>
+                    <td>Hostname:</td>
+                    <td>{{ token.ip_host || '-' }}</td>
+                </tr>
+                <tr>
+                    <td>Operating System:</td>
+                    <td>{{ token.user_agent_details?.os || '-' }}</td>
+                </tr>
+                <tr>
+                    <td>Browser:</td>
+                    <td>
+                        {{
+                            token.user_agent_details
+                                ? token.user_agent_details.name + ' ' + token.user_agent_details.version
+                                : '-'
+                        }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<ng-template #loading>
+    <app-skeleton></app-skeleton>
+</ng-template>
+

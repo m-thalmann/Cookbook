@@ -23,12 +23,19 @@
         <app-error-display [error]="vm.error"></app-error-display>
 
         <div class="active-sessions-container">
-            <app-security-settings-active-token
+            <app-security-settings-active-token-card
                 [token]="session"
                 [disabled]="!!vm.isLoading || !!vm.isUpdating"
                 (logout)="logoutFromSession(session.id)"
                 *ngFor="let session of vm.activeTokens?.items"
-            ></app-security-settings-active-token>
+            ></app-security-settings-active-token-card>
+
+            <ng-container *ngIf="vm.activeTokens === null">
+                <app-security-settings-active-token-card
+                    [token]="null"
+                    *appRepeat="6"
+                ></app-security-settings-active-token-card>
+            </ng-container>
         </div>
 
         <button

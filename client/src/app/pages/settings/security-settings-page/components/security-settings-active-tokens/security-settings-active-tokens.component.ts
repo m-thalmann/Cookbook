@@ -8,12 +8,13 @@ import { BehaviorSubject, lastValueFrom, map, merge, shareReplay, switchMap, swi
 import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
+import { RepeatDirective } from 'src/app/core/directives/repeat.directive';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { Logger as LoggerClass } from '../../../../../core/helpers/logger';
 import { SettingsSectionComponent } from '../../../components/settings-section/settings-section.component';
-import { SecuritySettingsActiveTokenComponent } from '../security-settings-active-token/security-settings-active-token.component';
+import { SecuritySettingsActiveTokenCardComponent } from '../security-settings-active-token-card/security-settings-active-token-card.component';
 
 const Logger = new LoggerClass('Settings');
 
@@ -29,8 +30,9 @@ const Logger = new LoggerClass('Settings');
     MatTooltipModule,
     MatProgressSpinnerModule,
     SettingsSectionComponent,
-    SecuritySettingsActiveTokenComponent,
+    SecuritySettingsActiveTokenCardComponent,
     ErrorDisplayComponent,
+    RepeatDirective,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -40,7 +42,7 @@ export class SecuritySettingsActiveTokensComponent {
 
   private refresh$ = new EventEmitter<void>();
 
-  paginationOptions$ = new BehaviorSubject<PaginationOptions>({ page: 1 });
+  paginationOptions$ = new BehaviorSubject<PaginationOptions>({ page: 1, perPage: 6 });
 
   activeTokens$ = merge(this.auth.user$, this.refresh$).pipe(
     switchMap(() => {
