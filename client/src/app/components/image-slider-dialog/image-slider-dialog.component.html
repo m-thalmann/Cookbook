@@ -11,7 +11,7 @@
         </button>
         <div class="images" #imagesContainer>
             <div class="image" *ngFor="let image of images">
-                <img [src]="image" loading="lazy" />
+                <img [src]="image" loading="lazy" fadeIn />
             </div>
         </div>
         <button mat-icon-button (click)="nextImage(1)" class="hide-mobile">

@@ -2,7 +2,7 @@
     <div class="container" [class.has-category]="!!recipe.category">
         <a [routerLink]="['/recipes', recipe.id]" class="recipe">
             <div class="image-container">
-                <div class="image" [style]="thumbnailImageCSS"></div>
+                <div class="image" fadeIn [style]="thumbnailImageCSS"></div>
             </div>
 
             <div class="title">

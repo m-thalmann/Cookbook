@@ -42,7 +42,7 @@
             <tbody>
                 <tr *ngFor="let recipe of vm.trashedRecipes?.recipes">
                     <td>
-                        <img [src]="getThumbnailUrl(recipe)" />
+                        <img [src]="getThumbnailUrl(recipe)" fadeIn />
                     </td>
                     <td>
                         {{ recipe.name }}

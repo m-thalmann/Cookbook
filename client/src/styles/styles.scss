@@ -27,6 +27,10 @@ a[disabled] {
   pointer-events: none !important;
 }
 
+[fadeIn] {
+  animation: fadeInAnimation ease 1s;
+}
+
 @include mixins.mobile() {
   .hide-mobile {
     display: none !important;
@@ -36,5 +40,14 @@ a[disabled] {
 @include mixins.desktop() {
   .hide-desktop {
     display: none !important;
+  }
+}
+
+@keyframes fadeInAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }

@@ -2,7 +2,7 @@
     <button mat-icon-button (click)="nextImage(-1)" class="hide-mobile" [disabled]="images.length < 2 || disabled">
         <mat-icon>arrow_left</mat-icon>
     </button>
-    <img [src]="currentImageUrl" (click)="disabled ? null : openDialog()" />
+    <img [src]="currentImageUrl" (click)="disabled ? null : openDialog()" fadeIn />
     <button mat-icon-button (click)="nextImage(1)" class="hide-mobile" [disabled]="images.length < 2 || disabled">
         <mat-icon>arrow_right</mat-icon>
     </button>
