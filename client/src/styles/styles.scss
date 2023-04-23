@@ -43,6 +43,16 @@ a[disabled] {
   }
 }
 
+@media print {
+  html {
+    background: transparent !important;
+  }
+
+  app-root {
+    color: black !important;
+  }
+}
+
 @keyframes fadeInAnimation {
   0% {
     opacity: 0;

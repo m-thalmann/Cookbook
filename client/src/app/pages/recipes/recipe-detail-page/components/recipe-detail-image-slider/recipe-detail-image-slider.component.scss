@@ -80,3 +80,24 @@ app-skeleton {
     overflow: hidden;
   }
 }
+
+@media print {
+  :host {
+    display: block;
+    position: relative;
+    height: auto;
+  }
+
+  .container {
+    align-items: start;
+
+    img {
+      height: auto;
+      border-radius: 0.5em;
+    }
+
+    button {
+      display: none;
+    }
+  }
+}

@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Data, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { Observable, combineLatest, filter, map, of, startWith, switchMap } from 'rxjs';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { User } from 'src/app/core/models/user';
@@ -29,7 +29,7 @@ import { LayoutDefaultNavbarComponent } from './components/layout-default-navbar
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LayoutDefaultComponent {
-  private routeData$ = this.router.events.pipe(
+  private routeData$: Observable<Data> = this.router.events.pipe(
     filter((event) => event instanceof NavigationEnd),
     startWith(this.activatedRoute.snapshot.firstChild?.data || {}),
     switchMap(() => {

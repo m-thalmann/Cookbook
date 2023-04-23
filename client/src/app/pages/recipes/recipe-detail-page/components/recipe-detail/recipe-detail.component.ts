@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -67,6 +67,11 @@ export class RecipeDetailComponent {
       (this.recipe.resting_time_minutes || 0) +
       (this.recipe.cooking_time_minutes || 0)
     );
+  }
+
+  @HostBinding('class.no-images')
+  get hasNoImages() {
+    return this.recipe && this.recipe.images.length === 0;
   }
 
   portionsMultiplierStepFunction(currentValue: number, direction: 'up' | 'down') {

@@ -179,3 +179,20 @@ app-layout-default-navbar {
     display: none;
   }
 }
+
+@media print {
+  header {
+    display: none !important;
+  }
+
+  main {
+    margin: 0 !important;
+    padding: 0;
+    width: 100vw;
+  }
+
+  app-layout-default-navbar,
+  app-layout-add-action-fab {
+    display: none;
+  }
+}

@@ -20,7 +20,12 @@
     </div>
 
     <ng-container *ngIf="recipe; else optionsLoading">
-        <app-share-menu color="primary" [disabled]="disabled" [text]="'Recipe: ' + recipe.name"></app-share-menu>
+        <app-share-menu
+            color="primary"
+            [disabled]="disabled"
+            [text]="'Recipe: ' + recipe.name"
+            [showPrint]="true"
+        ></app-share-menu>
         <button
             mat-icon-button
             class="options-button"

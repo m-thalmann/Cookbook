@@ -55,3 +55,24 @@ h3 {
     margin-right: -0.5em;
   }
 }
+
+@media print {
+  :host {
+    background: transparent !important;
+    padding: 0;
+
+    &:first-of-type::before {
+      background: transparent !important;
+    }
+  }
+
+  h3 {
+    position: unset;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0;
+
+    background: transparent !important;
+    box-shadow: none;
+  }
+}

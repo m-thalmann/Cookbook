@@ -1,6 +1,40 @@
-<div class="container" [innerHTML]="contentHtml" *ngIf="contentHtml !== null; else loading"></div>
+<div
+    class="preparation-times"
+    *ngIf="
+        recipe &&
+        (recipe.preparation_time_minutes !== null ||
+            recipe.resting_time_minutes !== null ||
+            recipe.cooking_time_minutes !== null)
+    "
+>
+    <span *ngIf="recipe.preparation_time_minutes !== null">
+        <mat-icon>timer</mat-icon>
+        <span>
+            Preparation time ~
+            {{ recipe.preparation_time_minutes }}<small>m</small>
+        </span>
+    </span>
+    <span *ngIf="recipe.resting_time_minutes !== null">
+        <mat-icon>timer</mat-icon>
+        <span>
+            Resting time ~
+            {{ recipe.resting_time_minutes }}<small>m</small>
+        </span>
+    </span>
+    <span *ngIf="recipe.cooking_time_minutes !== null">
+        <mat-icon>timer</mat-icon>
+        <span>
+            Cooking-/Baking time ~
+            {{ recipe.cooking_time_minutes }}<small>m</small>
+        </span>
+    </span>
+</div>
+
+<div class="container" [innerHTML]="recipe.preparation" *ngIf="recipe !== null; else loading"></div>
 
 <ng-template #loading>
-    <app-skeleton class="text" *appRepeat="5"></app-skeleton>
-    <app-skeleton class="text" width="75%"></app-skeleton>
+    <div class="container">
+        <app-skeleton class="text" *appRepeat="5"></app-skeleton>
+        <app-skeleton class="text" width="75%"></app-skeleton>
+    </div>
 </ng-template>

@@ -33,6 +33,7 @@
 }
 
 app-recipe-detail-header {
+  grid-area: header;
   position: relative;
   z-index: 2;
 }
@@ -52,6 +53,7 @@ app-recipe-detail-section {
   }
 
   &.properties {
+    grid-area: section-properties;
     display: flex;
 
     > div {
@@ -69,7 +71,13 @@ app-recipe-detail-section {
     }
   }
 
+  &.description {
+    grid-area: section-description;
+  }
+
   &.ingredients {
+    grid-area: section-ingredients;
+
     [header] {
       display: flex;
       align-items: center;
@@ -81,23 +89,7 @@ app-recipe-detail-section {
   }
 
   &.preparation {
-    .preparation-content {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5em;
-
-      .preparation-times {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5em;
-
-        > span {
-          display: flex;
-          align-items: center;
-          gap: 0.5em;
-        }
-      }
-    }
+    grid-area: section-preparation;
   }
 
   &.description,
@@ -151,18 +143,12 @@ app-recipe-detail-section {
     display: none;
   }
 
-  app-recipe-detail-header {
-    grid-area: header;
-  }
-
   app-recipe-detail-section {
     &:first-of-type::before {
       display: none;
     }
 
     &.properties {
-      grid-area: section-properties;
-
       flex-direction: column;
       align-items: flex-start;
       justify-content: flex-start;
@@ -185,20 +171,59 @@ app-recipe-detail-section {
       }
     }
 
-    &.description {
-      grid-area: section-description;
-    }
-
     &.ingredients {
-      grid-area: section-ingredients;
-
       position: sticky;
       top: 1em;
       align-self: start;
     }
+  }
+}
 
-    &.preparation {
-      grid-area: section-preparation;
+@media print {
+  :host {
+    display: grid;
+    padding: 0 $layout-padding;
+    position: relative;
+
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1em;
+
+    grid-template-areas:
+      'header header'
+      'section-properties section-properties'
+      'slider section-ingredients'
+      'section-description section-description'
+      'section-preparation section-preparation';
+
+    &.no-images {
+      grid-template-areas:
+        'header header'
+        'section-properties section-properties'
+        'section-ingredients .'
+        'section-description section-description'
+        'section-preparation section-preparation';
+
+      app-recipe-detail-image-slider {
+        display: none;
+      }
     }
+  }
+
+  .navigate-back-button {
+    display: none;
+  }
+
+  .content-spacer {
+    display: none;
+  }
+
+  .properties {
+    mat-icon {
+      color: black !important;
+    }
+  }
+
+  .ingredients {
+    padding-right: 0;
   }
 }

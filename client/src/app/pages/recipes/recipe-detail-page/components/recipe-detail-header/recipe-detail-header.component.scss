@@ -111,3 +111,23 @@
     margin: 0;
   }
 }
+
+@media print {
+  :host {
+    background: transparent !important;
+    box-shadow: none;
+    margin-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 0.5em;
+  }
+
+  app-share-menu,
+  button {
+    display: none;
+  }
+
+  .tags > a {
+    background: #e2e2e2 !important;
+  }
+}

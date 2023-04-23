@@ -7,6 +7,7 @@
 
 <mat-menu #shareMenu="matMenu">
     <button mat-menu-item (click)="copyLink()"><mat-icon>link</mat-icon> Copy link</button>
+    <button mat-menu-item (click)="doPrint()" *ngIf="showPrint"><mat-icon>print</mat-icon> Print</button>
     <a mat-menu-item [href]="shareEmailLink" target="_blank" rel="noopener"> <mat-icon>email</mat-icon> Email </a>
     <a mat-menu-item [href]="shareWhatsAppLink" target="_blank" rel="noopener">
         <mat-icon svgIcon="whatsapp" class="fg-whatsapp"></mat-icon> WhatsApp
