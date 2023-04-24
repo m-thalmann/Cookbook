@@ -1,6 +1,6 @@
 <button mat-button (click)="routeHelper.navigateBack()" class="top-navigation navigate-back-button">
     <mat-icon>arrow_back</mat-icon>
-    Go back
+    {{ 'actions.goBack' | transloco }}
 </button>
 
 <div class="top-navigation goto-auth-button">
@@ -13,7 +13,7 @@
         class="sign-up-button"
     >
         <mat-icon>person_add</mat-icon>
-        Sign up
+        {{ 'auth.signUp' | transloco }}
     </a>
 
     <a
@@ -25,7 +25,7 @@
         class="login-button"
     >
         <mat-icon>login</mat-icon>
-        Login
+        {{ 'auth.login' | transloco }}
     </a>
 </div>
 

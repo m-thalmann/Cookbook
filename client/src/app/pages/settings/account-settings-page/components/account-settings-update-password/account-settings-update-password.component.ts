@@ -5,6 +5,7 @@ import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angu
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { BehaviorSubject, Subscription, distinctUntilChanged, lastValueFrom, take } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
@@ -24,6 +25,7 @@ const Logger = new LoggerClass('Settings');
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    TranslocoModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
@@ -51,7 +53,8 @@ export class AccountSettingsUpdatePasswordComponent implements OnDestroy {
     private auth: AuthService,
     private api: ApiService,
     private fb: FormBuilder,
-    private snackbar: SnackbarService
+    private snackbar: SnackbarService,
+    private transloco: TranslocoService
   ) {
     this.subSink.add(
       this.isLoading$.pipe(distinctUntilChanged()).subscribe((isLoading) => {
@@ -85,13 +88,13 @@ export class AccountSettingsUpdatePasswordComponent implements OnDestroy {
 
       await this.auth.initialize();
 
-      this.snackbar.info({ message: 'Password updated successfully' });
+      this.snackbar.info({ message: this.transloco.translate('messages.passwordUpdated') });
 
       this.isLoading$.next(false);
     } catch (e) {
       this.isLoading$.next(false);
 
-      let errorMessage: string | null = 'An error occurred.';
+      let errorMessage: string | null = this.transloco.translate('messages.errors.unexpectedError');
 
       if (e instanceof HttpErrorResponse) {
         if (

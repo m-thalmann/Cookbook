@@ -4,7 +4,7 @@
     </label>
     <input
         (keydown.enter)="doSearch(searchBarInput.value)"
-        placeholder="Search recipes..."
+        [placeholder]="'recipes.searchRecipes' | transloco"
         [value]="initialValue"
         [disabled]="disabled"
         [id]="inputId"

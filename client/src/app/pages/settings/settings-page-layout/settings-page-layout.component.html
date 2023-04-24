@@ -5,14 +5,14 @@
         isUnverified: auth.isUnverified$ | async
     } as vm"
 >
-    <h2><mat-icon>settings</mat-icon> Settings</h2>
+    <h2><mat-icon>settings</mat-icon> {{ 'pages.settings.title' | transloco }}</h2>
 
     <div class="container">
         <div class="settings-nav">
             <mat-nav-list>
                 <a mat-list-item routerLink="./general" routerLinkActive="current">
                     <mat-icon matListItemIcon>tune</mat-icon>
-                    <span>General</span>
+                    <span>{{ 'pages.settings.children.general.title' | transloco }}</span>
                 </a>
                 <a
                     mat-list-item
@@ -21,7 +21,7 @@
                     [disabled]="!vm.isAuthenticated || !vm.isAuthInitialized"
                 >
                     <mat-icon matListItemIcon>manage_accounts</mat-icon>
-                    <span>Account</span>
+                    <span>{{ 'pages.settings.children.account.title' | transloco }}</span>
                 </a>
                 <a
                     mat-list-item
@@ -31,7 +31,7 @@
                 >
                     <mat-icon matListItemIcon>security</mat-icon>
                     <span>
-                        Security
+                        {{ 'pages.settings.children.security.title' | transloco }}
                         <mat-icon color="warn" *ngIf="vm.isUnverified">warning</mat-icon>
                     </span>
                 </a>

@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { ActivatedRoute, Data, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { TranslocoModule } from '@ngneat/transloco';
 import { Observable, combineLatest, filter, map, of, startWith, switchMap } from 'rxjs';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { User } from 'src/app/core/models/user';
@@ -19,6 +20,7 @@ import { LayoutDefaultNavbarComponent } from './components/layout-default-navbar
   imports: [
     CommonModule,
     RouterOutlet,
+    TranslocoModule,
     MatButtonModule,
     MatIconModule,
     MatMenuModule,

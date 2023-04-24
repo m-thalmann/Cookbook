@@ -10,8 +10,8 @@
     } as vm"
 >
     <app-error-display [error]="vm.cookbookError">
-        <ng-container notFoundMessage> Cookbook could not be found. </ng-container>
-        <ng-container otherErrorMessage> Cookbook could not be loaded. </ng-container>
+        <ng-container notFoundMessage> {{ 'cookbooks.notFound' | transloco }} </ng-container>
+        <ng-container otherErrorMessage> {{ 'cookbooks.singleLoadingError' | transloco }} </ng-container>
     </app-error-display>
 
     <ng-container
@@ -23,23 +23,24 @@
             *ngIf="!vm.cookbookError"
         ></app-cookbook-header>
 
-        <app-page-section heading="Categories" class="categories">
+        <app-page-section [heading]="'categories.categories' | transloco" class="categories">
             <app-category-chip-list
                 [categories]="vm.categories?.body?.data ?? null"
                 routerLink="./recipes"
+                *ngIf="!vm.categoriesError"
             ></app-category-chip-list>
 
             <app-error-display [error]="vm.categoriesError">
-                <ng-container otherErrorMessage> Categories could not be loaded. </ng-container>
+                <ng-container otherErrorMessage> {{ 'categories.loadingError' | transloco }} </ng-container>
             </app-error-display>
         </app-page-section>
 
-        <app-page-section heading="Recipes" seeAllLink="./recipes" class="recipes">
+        <app-page-section [heading]="'recipes.recipes' | transloco" seeAllLink="./recipes" class="recipes">
             <div>
                 <ng-container *ngIf="vm.recipes?.body?.data as recipes; else recipesLoading">
                     <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe"></app-recipe-card>
 
-                    <p *ngIf="recipes.length === 0" class="not-found-item">No recipes found ...</p>
+                    <p *ngIf="recipes.length === 0" class="not-found-item">{{ 'recipes.empty' | transloco }}</p>
                 </ng-container>
 
                 <ng-template #recipesLoading>
@@ -48,7 +49,7 @@
             </div>
 
             <app-error-display [error]="vm.recipesError">
-                <ng-container otherErrorMessage> Recipes could not be loaded. </ng-container>
+                <ng-container otherErrorMessage> {{ 'recipes.loadingError' | transloco }} </ng-container>
             </app-error-display>
 
             <a
@@ -60,7 +61,7 @@
             >
                 <div class="button-wrapper">
                     <mat-icon>restaurant</mat-icon>
-                    Show {{ remainingItems }} more recipes
+                    {{ 'recipes.showAmountMore' | transloco: { amount: remainingItems } }}
                     <mat-icon>arrow_forward</mat-icon>
                 </div>
             </a>

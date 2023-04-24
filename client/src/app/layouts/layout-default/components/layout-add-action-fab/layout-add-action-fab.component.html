@@ -1,9 +1,9 @@
 <div class="add-action-fab" [class.opened]="isOpen" (click)="disabled ? null : (isOpen = !isOpen)">
     <div class="options" *ngIf="!disabled">
-        <a routerLink="/recipes/create" mat-mini-fab data-description="Recipe">
+        <a routerLink="/recipes/create" mat-mini-fab [attr.data-description]="'recipes.recipe' | transloco">
             <mat-icon>restaurant</mat-icon>
         </a>
-        <a routerLink="/cookbooks/create" mat-mini-fab data-description="Cookbook">
+        <a routerLink="/cookbooks/create" mat-mini-fab [attr.data-description]="'cookbooks.cookbook' | transloco">
             <mat-icon>menu_book</mat-icon>
         </a>
     </div>

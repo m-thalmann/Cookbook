@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import {
   BehaviorSubject,
   Observable,
@@ -34,6 +35,7 @@ const Logger = new LoggerClass('Authentication');
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    TranslocoModule,
     MatFormFieldModule,
     MatButtonModule,
     MatIconModule,
@@ -60,7 +62,8 @@ export class PasswordResetPageComponent implements OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private api: ApiService,
-    private snackbar: SnackbarService
+    private snackbar: SnackbarService,
+    private transloco: TranslocoService
   ) {
     this.form = this.fb.group(
       {
@@ -101,13 +104,13 @@ export class PasswordResetPageComponent implements OnDestroy {
     try {
       await lastValueFrom(this.api.auth.resetPassword(this.token, this.email, this.password?.value).pipe(take(1)));
 
-      this.snackbar.info({ message: 'Password reset successfully. You can now login with your new password.' });
+      this.snackbar.info({ message: this.transloco.translate('messages.passwordReset') });
 
       this.router.navigateByUrl('/login');
     } catch (e) {
       this.isLoading$.next(false);
 
-      let errorMessage: string | null = 'An error occurred.';
+      let errorMessage: string | null = this.transloco.translate('messages.errors.errorOccurred');
 
       if (e instanceof HttpErrorResponse) {
         if (ServerValidationHelper.setValidationErrors(e, this.form)) {

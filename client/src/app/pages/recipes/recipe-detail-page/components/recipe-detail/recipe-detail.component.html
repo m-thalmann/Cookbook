@@ -23,19 +23,21 @@
             <ng-container *ngIf="recipe; else propertiesLoading">
                 <div class="property-total-time" *ngIf="totalTime">
                     <mat-icon color="primary" matTooltip="Total time">timer</mat-icon>
-                    <span class="hide-mobile property-name">Total time:</span>
-                    <span> ~ {{ totalTime }}<small>m</small> </span>
+                    <span class="hide-mobile property-name">{{ 'recipes.times.total' | transloco }}:</span>
+                    <span>
+                        ~ {{ totalTime }}<small>{{ 'recipes.times.minutesAbbr' | transloco }}</small>
+                    </span>
                 </div>
 
                 <div class="property-difficulty" *ngIf="recipe.difficulty !== null">
                     <mat-icon color="primary" matTooltip="Difficulty">local_fire_department</mat-icon>
-                    <span class="hide-mobile property-name">Difficulty:</span>
+                    <span class="hide-mobile property-name">{{ 'recipes.difficulty' | transloco }}:</span>
                     <span> {{ recipe.difficulty }} / 5 </span>
                 </div>
 
                 <div class="property-portions" *ngIf="recipe.portions !== null">
                     <mat-icon color="primary" matTooltip="Portions">flatware</mat-icon>
-                    <span class="hide-mobile property-name">Portions:</span>
+                    <span class="hide-mobile property-name">{{ 'recipes.portions' | transloco }}:</span>
                     <span> {{ recipe.portions * portionsMultiplier | amount }} </span>
                 </div>
             </ng-container>
@@ -50,7 +52,7 @@
 
     <app-recipe-detail-section class="description" *ngIf="recipe && recipe.description">
         <ng-container header>
-            <span>Description</span>
+            <span>{{ 'recipes.description' | transloco }}</span>
         </ng-container>
 
         <ng-container content>{{ recipe.description }}</ng-container>
@@ -58,7 +60,7 @@
 
     <app-recipe-detail-section class="ingredients">
         <span header>
-            <span>Ingredients</span>
+            <span>{{ 'ingredients.ingredients' | transloco }}</span>
 
             <app-number-input
                 [(ngModel)]="portionsMultiplier"
@@ -80,7 +82,7 @@
 
     <app-recipe-detail-section class="preparation" *ngIf="!recipe || recipe.preparation">
         <ng-container header>
-            <span>Preparation</span>
+            <span>{{ 'recipes.preparation' | transloco }}</span>
         </ng-container>
 
         <app-recipe-detail-preparation-content content [recipe]="recipe"></app-recipe-detail-preparation-content>

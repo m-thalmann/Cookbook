@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { BehaviorSubject, Subscription, distinctUntilChanged, lastValueFrom, take } from 'rxjs';
 import { PromptDialogComponent } from 'src/app/components/dialogs/prompt-dialog/prompt-dialog.component';
 import { ApiService } from 'src/app/core/api/api.service';
@@ -25,6 +26,7 @@ const Logger = new LoggerClass('Settings');
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    TranslocoModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
@@ -49,7 +51,8 @@ export class AccountSettingsUpdateProfileComponent implements OnDestroy {
     private api: ApiService,
     private fb: FormBuilder,
     private dialog: MatDialog,
-    private snackbar: SnackbarService
+    private snackbar: SnackbarService,
+    private transloco: TranslocoService
   ) {
     this.loadFormData();
 
@@ -92,10 +95,8 @@ export class AccountSettingsUpdateProfileComponent implements OnDestroy {
         this.dialog
           .open(PromptDialogComponent, {
             data: {
-              title: 'Confirm current password',
+              title: this.transloco.translate('pages.settings.confirmCurrentPassword'),
               type: 'password',
-              btnConfirm: 'Confirm',
-              btnDecline: 'Cancel',
             },
           })
           .afterClosed()
@@ -116,13 +117,13 @@ export class AccountSettingsUpdateProfileComponent implements OnDestroy {
 
       await this.auth.initialize();
 
-      this.snackbar.info({ message: 'Profile updated successfully' });
+      this.snackbar.info({ message: this.transloco.translate('messages.profileUpdated') });
 
       this.isLoading$.next(false);
     } catch (e) {
       this.isLoading$.next(false);
 
-      let errorMessage: string | null = 'An error occurred.';
+      let errorMessage: string | null = this.transloco.translate('messages.errors.unexpectedError');
 
       if (e instanceof HttpErrorResponse) {
         if (ServerValidationHelper.setValidationErrors(e, this.form)) {

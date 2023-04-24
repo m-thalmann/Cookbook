@@ -5,7 +5,7 @@
 
         <mat-form-field appearance="outline" color="accent">
             <mat-icon matPrefix>email</mat-icon>
-            <mat-label>Email</mat-label>
+            <mat-label>{{ 'general.email' | transloco }}</mat-label>
             <input matInput type="email" formControlName="email" autofocus />
             <mat-error *ngIf="loginForm.get('email')?.getError('serverError') as serverError">
                 {{ serverError }}
@@ -14,7 +14,7 @@
 
         <mat-form-field appearance="outline" color="accent">
             <mat-icon matPrefix>key</mat-icon>
-            <mat-label>Password</mat-label>
+            <mat-label>{{ 'general.password' | transloco }}</mat-label>
             <input matInput type="password" formControlName="password" />
             <mat-error *ngIf="loginForm.get('password')?.getError('serverError') as serverError">
                 {{ serverError }}
@@ -22,12 +22,12 @@
         </mat-form-field>
 
         <a (click)="openResetPasswordDialog()" [attr.disabled]="vm.isLoading ? 'true' : null">
-            Don't remember your password?
+            {{ 'auth.dontRememberYourPassword' | transloco }}
         </a>
 
         <button mat-raised-button color="accent" type="submit" [disabled]="vm.isLoading">
             <mat-icon *ngIf="!vm.isLoading">login</mat-icon>
-            <ng-container *ngIf="!vm.isLoading"> Login</ng-container>
+            <ng-container *ngIf="!vm.isLoading"> {{ 'auth.login' | transloco }}</ng-container>
 
             <mat-spinner
                 [diameter]="24"

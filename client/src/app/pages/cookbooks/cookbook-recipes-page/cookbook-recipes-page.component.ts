@@ -1,22 +1,23 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { map, shareReplay, switchMap, take } from 'rxjs';
+import { TranslocoModule } from '@ngneat/transloco';
+import { map, shareReplay, switchMap } from 'rxjs';
+import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
+import { RecipeSearchComponent } from 'src/app/components/recipe-search/recipe-search.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { FilterOption } from 'src/app/core/models/filter-option';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
 import { RecipeFilters } from 'src/app/core/models/recipe';
-import { CookbookHeaderComponent } from '../components/cookbook-header/cookbook-header.component';
-import { RecipeSearchComponent } from 'src/app/components/recipe-search/recipe-search.component';
-import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
+import { CookbookHeaderComponent } from '../components/cookbook-header/cookbook-header.component';
 
 @Component({
   selector: 'app-cookbook-recipes-page',
   templateUrl: './cookbook-recipes-page.component.html',
   styleUrls: ['./cookbook-recipes-page.component.scss'],
   standalone: true,
-  imports: [CommonModule, CookbookHeaderComponent, RecipeSearchComponent, ErrorDisplayComponent],
+  imports: [CommonModule, TranslocoModule, CookbookHeaderComponent, RecipeSearchComponent, ErrorDisplayComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CookbookRecipesPageComponent {

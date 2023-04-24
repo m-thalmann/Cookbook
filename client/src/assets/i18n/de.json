@@ -1,0 +1,191 @@
+{
+  "actions": {
+    "abort": "Abbrechen",
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen",
+    "copyLink": "Link kopieren",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "goBack": "Zurück",
+    "loadMore": "Mehr laden",
+    "ok": "OK",
+    "print": "Drucken",
+    "restore": "Wiederherstellen",
+    "seeAll": "Alle anzeigen",
+    "send": "Senden"
+  },
+  "admin": {
+    "area": "Admin Bereich"
+  },
+  "auth": {
+    "dontRememberYourPassword": "Passwort vergessen?",
+    "login": "Anmelden",
+    "logout": "Abmelden",
+    "resetPassword": "Passwort zurücksetzen",
+    "sendResetEmail": "E-Mail zum Zurücksetzen senden",
+    "signUp": "Registrieren",
+    "verifyingEmail": "Email wird verifiziert..."
+  },
+  "categories": {
+    "categories": "Kategorien",
+    "empty": "Keine Kategorien gefunden ...",
+    "filterBy": "Kategorie filtern",
+    "loadingError": "Fehler beim Laden der Kategorien"
+  },
+  "cookbooks": {
+    "cookbook": "Kochbuch",
+    "cookbooks": "Kochbücher",
+    "create": "Kochbuch erstellen",
+    "empty": "Keine Kochbücher gefunden ...",
+    "loadingError": "Kochbücher konnten nicht geladen werden.",
+    "notFound": "Kochbuch konnte nicht gefunden werden.",
+    "showAmountMore": "{amount, plural, one {1 weiteres Kochbuch anzeigen} other {# weitere Kochbücher anzeigen}}",
+    "singleLoadingError": "Kochbuch konnte nicht geladen werden."
+  },
+  "general": {
+    "auto": "Auto",
+    "by": "von",
+    "colorTheme": "Farbthema",
+    "createDate": "Erstellungsdatum",
+    "dangerZone": "Gefahrenzone",
+    "deletedAt": "Gelöscht am",
+    "email": "E-Mail",
+    "enabled": "Aktiviert",
+    "language": "Sprache",
+    "lastUpdated": "Zuletzt aktualisiert",
+    "myPlural": "Meine",
+    "name": "Name",
+    "password": "Passwort",
+    "passwordConfirmation": "Passwort wiederholen",
+    "profile": "Profil",
+    "resultsFound": "{amount, plural, one {1 Ergebnis gefunden} other {# Ergebnisse gefunden}}",
+    "updateDate": "Letzte Änderung",
+    "yourEmail": "Deine E-Mail"
+  },
+  "ingredients": {
+    "ingredients": "Zutaten"
+  },
+  "messages": {
+    "areYouSure": "Bist du dir sicher?",
+    "accountDeleted": "Konto wurde gelöscht",
+    "emailVerified": "E-Mail erfolgreich verifiziert!",
+    "errors": {
+      "clearingTrash": "Fehler beim Leeren des Papierkorbs",
+      "deletingAccount": "Fehler beim Löschen des Kontos",
+      "deletingRecipe": "Fehler beim Löschen des Rezepts",
+      "errorOccurred": "Ein Fehler ist aufgetreten!",
+      "loadingUserInformation": "Fehler beim Laden der Benutzerinformationen",
+      "loggingOutFromAllSessions": "Fehler beim Abmelden aller Sitzung",
+      "loggingOutFromSelectedSession": "Fehler beim Abmelden der ausgewählten Sitzung",
+      "movingRecipeToTrash": "Fehler beim Verschieben des Rezepts in den Papierkorb",
+      "restoringRecipe": "Fehler beim Wiederherstellen des Rezepts",
+      "savingLanguage": "Fehler beim Speichern der Sprache",
+      "sendingResetEmail": "Fehler beim Senden der E-Mail zum Zurücksetzen",
+      "sendingVerificationEmail": "Fehler beim Senden der Verifizierungs-E-Mail",
+      "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten!",
+      "verifyingEmail": "Fehler beim Verifizieren der E-Mail. Bitte versuche es erneut."
+    },
+    "linkCopied": "Link kopiert!",
+    "loggedOut": "Du wurdest abgemeldet.",
+    "loggedOutFromAllSessions": "Du wurdest von allen Sitzungen abgemeldet.",
+    "loggedOutFromSelectedSession": "Du wurdest von der ausgewählten Sitzung abgemeldet.",
+    "noActionRequired": "Keine Aktion erforderlich.",
+    "passwordReset": "Passwort zurückgesetzt. Bitte melde dich mit deinem neuen Passwort an.",
+    "passwordUpdated": "Passwort wurde aktualisiert",
+    "profileUpdated": "Profil wurde aktualisiert",
+    "recipeDeleted": "Rezept wurde endgültig gelöscht",
+    "recipeMovedToTrash": "Rezept wurde in den Papierkorb verschoben",
+    "recipeRestored": "Rezept wurde wiederhergestellt",
+    "resetEmailSent": "E-Mail zum Zurücksetzen gesendet. Bitte prüfe deinen Posteingang für weitere Anweisungen.",
+    "thisActionCantBeUndone": "Diese Aktion kann nicht rückgängig gemacht werden.",
+    "trashCleared": "Papierkorb wurde endgültig geleert",
+    "updateAvailable": "Eine neue Version ist verfügbar.",
+    "verificationEmailSent": "Verifizierungs-E-Mail wurde gesendet"
+  },
+  "pages": {
+    "home": {
+      "title": "Startseite"
+    },
+    "notFound": {
+      "goBack": "Zurück zur Startseite",
+      "message": "Ups... Die Seite wurde nicht gefunden!"
+    },
+    "settings": {
+      "children": {
+        "account": {
+          "deleteAccount": "Konto löschen",
+          "settings": "Konto Einstellungen",
+          "title": "Konto",
+          "updatePassword": "Passwort aktualisieren",
+          "updateProfile": "Profil aktualisieren"
+        },
+        "general": {
+          "title": "Allgemein"
+        },
+        "security": {
+          "activeSessions": "Aktive Sitzungen",
+          "browser": "Browser",
+          "currentSession": "Aktuelle Sitzung",
+          "emailNotVerifiedText": {
+            "line1": "Deine E-Mail-Adresse ist nicht verifiziert. Bitte überprüfe deinen Posteingang und klicke auf den Verifizierungslink.",
+            "line2": "Wenn du keine E-Mail erhalten hast, überprüfe bitte deinen Spam-Ordner."
+          },
+          "emailVerification": "E-Mail Verifizierung",
+          "hostname": "Hostname",
+          "ipAddress": "IP Adresse",
+          "logoutFromAll": "Von allen abmelden",
+          "logoutFromThatSession": "Von dieser Sitzung abmelden",
+          "operatingSystem": "Betriebssystem",
+          "resendVerificationEmail": "Verifizierungs-E-Mail erneut senden",
+          "title": "Sicherheit"
+        }
+      },
+      "confirmCurrentPassword": "Aktuelles Passwort bestätigen",
+      "confirmNewPassword": "Neues Passwort bestätigen",
+      "newPassword": "Neues Passwort",
+      "oldPassword": "Altes Passwort",
+      "title": "Einstellungen"
+    },
+    "trash": {
+      "clearTrash": "Papierkorb leeren",
+      "empty": "Keine Elemente im Papierkorb",
+      "loadingError": "Fehler beim Laden des Papierkorbs.",
+      "title": "Papierkorb"
+    }
+  },
+  "pagination": {
+    "next": "Nächste Seite",
+    "previous": "Vorherige Seite",
+    "first": "Erste Seite",
+    "last": "Letzte Seite",
+    "itemsPerPage": "Elemente pro Seite",
+    "rangeLabel": "Seite {page} von {pages}"
+  },
+  "recipes": {
+    "create": "Rezept erstellen",
+    "description": "Beschreibung",
+    "difficulty": "Schwierigkeit",
+    "empty": "Keine Rezepte gefunden ...",
+    "loadingError": "Fehler beim Laden der Rezepte.",
+    "moveToTrash": "In den Papierkorb verschieben",
+    "notFound": "Rezept konnte nicht gefunden werden.",
+    "onlyMy": "Nur meine Rezepte",
+    "portions": "Portionen",
+    "preparation": "Zubereitung",
+    "publicShare": "Öffentlicher Link",
+    "recipe": "Rezept",
+    "recipes": "Rezepte",
+    "searchRecipes": "Rezepte suchen...",
+    "showAmountMore": "{amount, plural, one {1 weiteres Rezept anzeigen} other {# weitere Rezepte anzeigen}}",
+    "singleLoadingError": "Rezept konnte nicht geladen werden.",
+    "times": {
+      "cooking": "Koch-/Backzeit",
+      "minutesAbbr": "min",
+      "preparation": "Zubereitungszeit",
+      "resting": "Ruhezeit",
+      "total": "Gesamtzeit"
+    },
+    "viewTrash": "Papierkorb anzeigen"
+  }
+}
+

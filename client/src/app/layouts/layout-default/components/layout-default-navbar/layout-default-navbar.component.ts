@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
+import { TranslocoModule } from '@ngneat/transloco';
 import { AuthService } from 'src/app/core/auth/auth.service';
 
 @Component({
@@ -11,7 +12,7 @@ import { AuthService } from 'src/app/core/auth/auth.service';
   templateUrl: './layout-default-navbar.component.html',
   styleUrls: ['./layout-default-navbar.component.scss'],
   standalone: true,
-  imports: [CommonModule, RouterModule, MatToolbarModule, MatIconModule, MatButtonModule],
+  imports: [CommonModule, RouterModule, TranslocoModule, MatToolbarModule, MatIconModule, MatButtonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LayoutDefaultNavbarComponent {

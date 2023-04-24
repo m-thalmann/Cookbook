@@ -47,4 +47,3 @@ class CookbookCategoryController extends Controller {
         return JsonResource::make($categories);
     }
 }
-

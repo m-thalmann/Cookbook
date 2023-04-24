@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { BehaviorSubject, lastValueFrom, map, merge, shareReplay, switchMap, switchScan, take, tap } from 'rxjs';
 import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 import { ApiService } from 'src/app/core/api/api.service';
@@ -25,6 +26,7 @@ const Logger = new LoggerClass('Settings');
   standalone: true,
   imports: [
     CommonModule,
+    TranslocoModule,
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
@@ -72,7 +74,12 @@ export class SecuritySettingsActiveTokensComponent {
 
   error$ = ApiService.handleRequestError(this.activeTokens$);
 
-  constructor(private api: ApiService, private auth: AuthService, private snackbar: SnackbarService) {}
+  constructor(
+    private api: ApiService,
+    private auth: AuthService,
+    private snackbar: SnackbarService,
+    private transloco: TranslocoService
+  ) {}
 
   nextPage() {
     this.paginationOptions$.next({ ...this.paginationOptions$.value, page: this.paginationOptions$.value.page + 1 });
@@ -83,13 +90,13 @@ export class SecuritySettingsActiveTokensComponent {
     try {
       await lastValueFrom(this.api.auth.tokens.delete(tokenId).pipe(take(1)));
 
-      this.snackbar.info({ message: 'Successfully logged out from selected session' });
+      this.snackbar.info({ message: this.transloco.translate('messages.loggedOutFromSelectedSession') });
 
       this.refresh$.emit();
     } catch (e) {
       const errorMessage = ApiService.getErrorMessage(e);
 
-      this.snackbar.warn({ message: 'Error logging out from session' });
+      this.snackbar.warn({ message: this.transloco.translate('messages.errors.loggingOutFromSelectedSession') });
       Logger.error('Error deleting token:', errorMessage, e);
     }
     this.isUpdating$.next(false);
@@ -100,13 +107,13 @@ export class SecuritySettingsActiveTokensComponent {
     try {
       await lastValueFrom(this.api.auth.tokens.deleteAll().pipe(take(1)));
 
-      this.snackbar.info({ message: 'Successfully logged out from all sessions' });
+      this.snackbar.info({ message: this.transloco.translate('messages.loggedOutFromAllSessions') });
 
       this.refresh$.emit();
     } catch (e) {
       const errorMessage = ApiService.getErrorMessage(e);
 
-      this.snackbar.warn({ message: 'Error logging out from all sessions' });
+      this.snackbar.warn({ message: this.transloco.translate('messages.errors.loggingOutFromAllSessions') });
       Logger.error('Error deleting all tokens:', errorMessage, e);
     }
     this.isUpdating$.next(false);

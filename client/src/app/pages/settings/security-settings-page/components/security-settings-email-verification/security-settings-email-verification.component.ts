@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { BehaviorSubject, lastValueFrom, take } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
@@ -20,6 +21,7 @@ const Logger = new LoggerClass('Settings');
   standalone: true,
   imports: [
     CommonModule,
+    TranslocoModule,
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
@@ -31,7 +33,12 @@ const Logger = new LoggerClass('Settings');
 export class SecuritySettingsEmailVerificationComponent {
   isLoading$ = new BehaviorSubject<boolean>(false);
 
-  constructor(private api: ApiService, public auth: AuthService, private snackbar: SnackbarService) {}
+  constructor(
+    private api: ApiService,
+    public auth: AuthService,
+    private snackbar: SnackbarService,
+    private transloco: TranslocoService
+  ) {}
 
   async resendVerificationEmail() {
     this.isLoading$.next(true);
@@ -39,13 +46,13 @@ export class SecuritySettingsEmailVerificationComponent {
     try {
       await lastValueFrom(this.api.auth.resendVerificationEmail().pipe(take(1)));
 
-      this.snackbar.info({ message: 'Verify email sent successfully' });
+      this.snackbar.info({ message: this.transloco.translate('messages.verificationEmailSent') });
 
       this.isLoading$.next(false);
     } catch (e) {
       const errorMessage = ApiService.getErrorMessage(e);
 
-      this.snackbar.warn({ message: 'Error sending verification email' });
+      this.snackbar.warn({ message: this.transloco.translate('messages.sendingVerificationEmail') });
       this.isLoading$.next(false);
       Logger.error('Error sending verification email:', errorMessage);
     }

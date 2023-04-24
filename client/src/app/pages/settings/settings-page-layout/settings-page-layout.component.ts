@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
+import { TranslocoModule } from '@ngneat/transloco';
 import { AuthService } from 'src/app/core/auth/auth.service';
 
 @Component({
@@ -10,7 +11,7 @@ import { AuthService } from 'src/app/core/auth/auth.service';
   templateUrl: './settings-page-layout.component.html',
   styleUrls: ['./settings-page-layout.component.scss'],
   standalone: true,
-  imports: [CommonModule, RouterModule, MatIconModule, MatListModule],
+  imports: [CommonModule, RouterModule, TranslocoModule, MatIconModule, MatListModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsPageLayoutComponent {

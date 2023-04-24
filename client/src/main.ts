@@ -29,15 +29,21 @@ import { ThemeService } from './app/core/services/theme.service';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
+import { MatPaginatorIntl } from '@angular/material/paginator';
 import { AppComponent } from './app/app.component';
+import { LanguageService } from './app/core/language/language.service';
+import { TranslocoRootModule } from './app/core/language/transloco-root.module';
+import { CustomPaginatorIntl } from './app/core/material/custom-paginator-intl';
 import routes from './app/routes';
 
 if (environment.production) {
   enableProdMode();
 }
 
-function setup(config: ConfigService, auth: AuthService) {
+function setup(language: LanguageService, config: ConfigService, auth: AuthService) {
   return async () => {
+    language.init();
+
     await config.load();
 
     auth.initialize();
@@ -75,6 +81,7 @@ bootstrapApplication(AppComponent, {
       }),
       MatSnackBarModule,
       MatDialogModule,
+      TranslocoRootModule,
     ]),
     {
       provide: HTTP_INTERCEPTORS,
@@ -89,7 +96,7 @@ bootstrapApplication(AppComponent, {
     {
       provide: APP_INITIALIZER,
       useFactory: setup,
-      deps: [ConfigService, AuthService],
+      deps: [LanguageService, ConfigService, AuthService],
       multi: true,
     },
     {
@@ -98,5 +105,6 @@ bootstrapApplication(AppComponent, {
       deps: [ThemeService],
       multi: true,
     },
+    { provide: MatPaginatorIntl, useClass: CustomPaginatorIntl },
   ],
 });

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslocoModule } from '@ngneat/transloco';
 import { EMPTY, combineLatest, shareReplay, switchMap } from 'rxjs';
 import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 import { ApiService } from 'src/app/core/api/api.service';
@@ -17,7 +18,7 @@ const Logger = new LoggerClass('Recipes');
   templateUrl: './recipe-detail-page.component.html',
   styleUrls: ['./recipe-detail-page.component.scss'],
   standalone: true,
-  imports: [CommonModule, MatIconModule, RecipeDetailComponent, ErrorDisplayComponent],
+  imports: [CommonModule, TranslocoModule, MatIconModule, RecipeDetailComponent, ErrorDisplayComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeDetailPageComponent {

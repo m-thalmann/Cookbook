@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute } from '@angular/router';
+import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { BehaviorSubject, Observable, Subscription, distinctUntilChanged, lastValueFrom, map, startWith } from 'rxjs';
 import { HcaptchaComponent } from 'src/app/components/hcaptcha/hcaptcha.component';
 import { ApiService } from 'src/app/core/api/api.service';
@@ -27,6 +28,7 @@ const Logger = new LoggerClass('Authentication');
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    TranslocoModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
@@ -52,7 +54,8 @@ export class SignUpPageComponent implements OnDestroy {
     private api: ApiService,
     private fb: FormBuilder,
     private activatedRoute: ActivatedRoute,
-    private changeDetector: ChangeDetectorRef
+    private changeDetector: ChangeDetectorRef,
+    private transloco: TranslocoService
   ) {
     this.signUpForm = this.fb.group(
       {
@@ -125,7 +128,7 @@ export class SignUpPageComponent implements OnDestroy {
     } catch (e) {
       this.isLoading$.next(false);
 
-      let errorMessage: string | null = 'An error occurred.';
+      let errorMessage: string | null = this.transloco.translate('messages.errors.errorOccurred');
 
       if (e instanceof HttpErrorResponse) {
         if (ServerValidationHelper.setValidationErrors(e, this.signUpForm)) {

@@ -9,7 +9,7 @@
 >
     <h2>
         <mat-icon>delete</mat-icon>
-        Trash
+        {{ 'pages.trash.title' | transloco }}
         <small *ngIf="vm.trashedRecipes as trashedRecipes">({{ trashedRecipes.totalRecipes }})</small>
     </h2>
 
@@ -20,12 +20,12 @@
             (click)="clearTrash()"
             [disabled]="vm.loading || vm.actionLoading || vm.trashedRecipes?.totalRecipes === 0"
         >
-            <mat-icon>delete_sweep</mat-icon> Clear trash
+            <mat-icon>delete_sweep</mat-icon> {{ 'pages.trash.clearTrash' | transloco }}
         </button>
     </div>
 
     <app-error-display [error]="vm.error">
-        <ng-container otherErrorMessage> Trashed recipes could not be loaded. </ng-container>
+        <ng-container otherErrorMessage> {{ 'pages.trash.loadingError' | transloco }} </ng-container>
     </app-error-display>
 
     <div class="trash-list" *ngIf="!vm.error">
@@ -33,10 +33,10 @@
             <thead>
                 <tr>
                     <th></th>
-                    <th>Name</th>
-                    <th>Deleted at</th>
-                    <th class="center">Restore</th>
-                    <th class="center">Delete</th>
+                    <th>{{ 'general.name' | transloco }}</th>
+                    <th>{{ 'general.deletedAt' | transloco }}</th>
+                    <th class="center">{{ 'actions.restore' | transloco }}</th>
+                    <th class="center">{{ 'actions.delete' | transloco }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -79,7 +79,7 @@
                 </tr>
 
                 <tr *ngIf="!vm.loading && vm.trashedRecipes?.recipes?.length === 0">
-                    <td colspan="5">No items in trash</td>
+                    <td colspan="5">{{ 'pages.trash.empty' | transloco }}</td>
                 </tr>
             </tbody>
         </table>
@@ -97,7 +97,7 @@
             <mat-spinner *ngIf="vm.loading" [diameter]="20"></mat-spinner>
             <mat-icon *ngIf="!vm.loading">south</mat-icon>
 
-            Load more
+            {{ 'actions.loadMore' | transloco }}
         </div>
     </button>
 </div>

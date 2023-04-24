@@ -7,18 +7,18 @@
     } as vm"
 >
     <p class="amount-results" *ngIf="vm.cookbooks?.totalCookbooks as total">{{ total }} cookbooks found</p>
-    <app-skeleton class="amount-results" *ngIf="vm.cookbooksLoading" width="10em"></app-skeleton>
+    <app-skeleton class="amount-results" *ngIf="vm.cookbooksLoading && !vm.cookbooks" width="10em"></app-skeleton>
 
     <div class="cookbooks">
         <app-cookbook-card [cookbook]="cookbook" *ngFor="let cookbook of vm.cookbooks?.cookbooks"> </app-cookbook-card>
 
-        <ng-container *ngIf="vm.cookbooksLoading">
+        <ng-container *ngIf="vm.cookbooksLoading && !vm.cookbooks">
             <app-cookbook-card [cookbook]="null" *appRepeat="6"> </app-cookbook-card>
         </ng-container>
     </div>
 
     <app-error-display [error]="vm.error">
-        <ng-container otherErrorMessage> Cookbooks could not be loaded. </ng-container>
+        <ng-container otherErrorMessage> {{ 'cookbooks.loadingError' | transloco }} </ng-container>
     </app-error-display>
 
     <button
@@ -32,7 +32,7 @@
             <mat-spinner *ngIf="vm.cookbooksLoading" [diameter]="20"></mat-spinner>
             <mat-icon *ngIf="!vm.cookbooksLoading">south</mat-icon>
 
-            Load more
+            {{ 'actions.loadMore' | transloco }}
         </div>
     </button>
 </div>

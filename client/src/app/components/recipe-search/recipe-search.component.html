@@ -32,7 +32,7 @@
                 [value]="sortOption.column"
                 [selected]="vm.filters?.sort?.[0]?.column === sortOption.column"
             >
-                {{ sortOption.name }}
+                {{ sortOption.nameTranslateKey | transloco }}
             </option>
 
             <ng-container extra>
@@ -52,12 +52,14 @@
             class="category-filter"
             [class.none-selected]="!vm.filters?.category"
             [disabled]="!!vm.recipesLoading"
-            [error]="vm.categoriesError ? 'Error loading categories' : undefined"
-            labelText="Category filter"
+            [error]="vm.categoriesError ? ('categories.loadingError' | transloco) : undefined"
+            [labelText]="'categories.filterBy' | transloco"
             labelIcon="local_dining"
             (change)="doFilterByCategory($event.target!)"
         >
-            <option value="" [selected]="vm.filters?.category === null">Filter by category...</option>
+            <option value="" [selected]="vm.filters?.category === null">
+                {{ 'categories.filterBy' | transloco }}...
+            </option>
             <option
                 *ngFor="let category of vm.categories?.body?.data"
                 [value]="category"
@@ -91,31 +93,31 @@
             [disabled]="vm.recipesLoading"
             *ngIf="vm.isAuthenticated && showAllFilter"
         >
-            Only my recipes
+            {{ 'recipes.onlyMy' | transloco }}
         </mat-slide-toggle>
     </div>
 
-    <p class="amount-results" *ngIf="vm.recipes?.body?.meta?.total as total; else resultsLoading">
-        {{ total }} results found
+    <p class="amount-results" *ngIf="vm.recipes?.body?.meta?.total as total">
+        {{ 'general.resultsFound' | transloco: { amount: total } }}
     </p>
-    <ng-template #resultsLoading>
+    <ng-container *ngIf="!vm.recipes && !vm.recipesError">
         <app-skeleton class="amount-results inline" height="1em" width="10em"></app-skeleton>
-    </ng-template>
+    </ng-container>
 
     <div class="recipes">
-        <ng-container *ngIf="vm.recipes?.body?.data as recipes; else recipesLoading">
+        <ng-container *ngIf="vm.recipes?.body?.data as recipes">
             <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe"></app-recipe-card>
 
-            <p *ngIf="recipes.length === 0" class="not-found-item">No recipes found ...</p>
+            <p *ngIf="recipes.length === 0" class="not-found-item">{{ 'recipes.empty' | transloco }}</p>
         </ng-container>
 
-        <ng-template #recipesLoading>
+        <ng-container *ngIf="!vm.recipes && !vm.recipesError">
             <app-recipe-card [recipe]="null" *appRepeat="6"></app-recipe-card>
-        </ng-template>
+        </ng-container>
     </div>
 
     <app-error-display [error]="vm.recipesError">
-        <ng-container otherErrorMessage> Recipes could not be loaded. </ng-container>
+        <ng-container otherErrorMessage> {{ 'recipes.loadingError' | transloco }} </ng-container>
     </app-error-display>
 
     <mat-paginator

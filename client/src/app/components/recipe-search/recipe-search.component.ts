@@ -6,6 +6,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslocoModule } from '@ngneat/transloco';
 import {
   BehaviorSubject,
   Observable,
@@ -38,6 +39,7 @@ import { RecipeSearchFilterComponent } from './components/recipe-search-filter/r
   standalone: true,
   imports: [
     CommonModule,
+    TranslocoModule,
     MatIconModule,
     MatSlideToggleModule,
     MatPaginatorModule,
@@ -74,11 +76,11 @@ export class RecipeSearchComponent {
 
   @Input() showAllFilter = true;
 
-  availableSortOptions = [
-    { column: 'name', name: 'Name', icon: 'drive_file_rename_outline' },
-    { column: 'difficulty', name: 'Difficulty', icon: 'local_fire_department' },
-    { column: 'created_at', name: 'Create date', icon: 'event_available' },
-    { column: 'updated_at', name: 'Update date', icon: 'edit_calendar' },
+  readonly availableSortOptions = [
+    { column: 'name', nameTranslateKey: 'general.name', icon: 'drive_file_rename_outline' },
+    { column: 'difficulty', nameTranslateKey: 'recipes.difficulty', icon: 'local_fire_department' },
+    { column: 'created_at', nameTranslateKey: 'general.createDate', icon: 'event_available' },
+    { column: 'updated_at', nameTranslateKey: 'general.updateDate', icon: 'edit_calendar' },
   ];
 
   recipesLoading$ = new BehaviorSubject<boolean>(true);
@@ -136,10 +138,6 @@ export class RecipeSearchComponent {
   categoriesError$ = ApiService.handleRequestError(this.categories$);
 
   constructor(private router: Router, private route: ActivatedRoute, public auth: AuthService) {}
-
-  getSortNameForColumn(column?: string) {
-    return this.availableSortOptions.find((sortOption) => sortOption.column === column)?.name || column;
-  }
 
   doSearch(search: string) {
     this.applyFilterParams({ search: search.length > 0 ? search : null });

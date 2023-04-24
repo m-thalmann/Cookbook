@@ -70,11 +70,11 @@
     <mat-menu #addMenu="matMenu" xPosition="before">
         <a routerLink="/recipes/create" mat-menu-item>
             <mat-icon>restaurant</mat-icon>
-            <div matListItemTitle>Create recipe</div>
+            <div matListItemTitle>{{ 'recipes.create' | transloco }}</div>
         </a>
         <a routerLink="/cookbooks/create" mat-menu-item>
             <mat-icon>menu_book</mat-icon>
-            <div matListItemTitle>Create cookbook</div>
+            <div matListItemTitle>{{ 'cookbooks.create' | transloco }}</div>
         </a>
     </mat-menu>
 
@@ -88,24 +88,30 @@
         <a mat-menu-item routerLink="/settings/account">
             <mat-icon>settings</mat-icon>
             <div matListItemTitle>
-                Account settings
+                {{ 'pages.settings.children.account.settings' | transloco }}
                 <mat-icon color="warn" *ngIf="vm.isUnverified">warning</mat-icon>
             </div>
         </a>
 
         <a mat-menu-item routerLink="/admin" *ngIf="vm.user?.is_admin">
             <mat-icon>admin_panel_settings</mat-icon>
-            <div matListItemTitle>Admin area</div>
+            <div matListItemTitle>
+                {{ 'admin.area' | transloco }}
+            </div>
         </a>
 
         <a mat-menu-item routerLink="/recipes/trash">
             <mat-icon>delete</mat-icon>
-            <div matListItemTitle>View trash</div>
+            <div matListItemTitle>
+                {{ 'recipes.viewTrash' | transloco }}
+            </div>
         </a>
 
         <a mat-menu-item class="logout-button" (click)="doLogout()">
             <mat-icon color="warn">logout</mat-icon>
-            <div matListItemTitle class="fg-warn">Logout</div>
+            <div matListItemTitle class="fg-warn">
+                {{ 'auth.logout' | transloco }}
+            </div>
         </a>
     </mat-menu>
 </ng-container>

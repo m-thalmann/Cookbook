@@ -1,15 +1,15 @@
 <h2 mat-dialog-title>
     <mat-icon color="primary">share</mat-icon>
     <div class="title">
-        <span> Public share </span>
-        <small>{{ recipe.name }} by {{ recipe.user.name }}</small>
+        <span> {{ 'recipes.publicShare' | transloco }} </span>
+        <small>{{ recipe.name }} {{ 'general.by' | transloco }} {{ recipe.user.name }}</small>
     </div>
 </h2>
 
 <div mat-dialog-content>
     <div class="toggle-container">
         <mat-slide-toggle [checked]="recipe.share_uuid" [disabled]="updating" (change)="enabledChanged($event)">
-            Enabled
+            {{ 'general.enabled' | transloco }}
         </mat-slide-toggle>
         <mat-spinner [diameter]="24" *ngIf="updating"></mat-spinner>
     </div>
@@ -29,6 +29,5 @@
 </div>
 
 <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close [disabled]="updating" cdkFocusInitial>OK</button>
+    <button mat-button mat-dialog-close [disabled]="updating" cdkFocusInitial>{{ 'actions.ok' | transloco }}</button>
 </mat-dialog-actions>
-

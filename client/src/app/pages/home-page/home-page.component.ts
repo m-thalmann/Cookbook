@@ -3,6 +3,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnDestro
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+import { TranslocoModule } from '@ngneat/transloco';
 import { Subscription, of, shareReplay, switchMap } from 'rxjs';
 import { CategoryChipListComponent } from 'src/app/components/category-chip-list/category-chip-list.component';
 import { CookbookCardComponent } from 'src/app/components/cookbook-card/cookbook-card.component';
@@ -25,6 +26,7 @@ import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interce
   imports: [
     CommonModule,
     RouterLink,
+    TranslocoModule,
     MatButtonModule,
     MatIconModule,
     SearchBarComponent,

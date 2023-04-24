@@ -12,7 +12,7 @@
         +{{ categories.overflowAmount }}
     </span>
 
-    <p *ngIf="categories.items.length === 0" class="not-found-item">No categories found ...</p>
+    <p *ngIf="categories.items.length === 0" class="not-found-item">{{ 'categories.empty' | transloco }}</p>
 </ng-container>
 
 <ng-template #loading>

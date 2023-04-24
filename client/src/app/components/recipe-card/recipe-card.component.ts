@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+import { TranslocoModule } from '@ngneat/transloco';
 import { ListRecipe } from 'src/app/core/models/recipe';
 import { PLACEHOLDER_RECIPE_IMAGE_URL } from 'src/app/core/models/recipe-image';
 import { SkeletonComponent } from '../skeleton/skeleton.component';
@@ -11,7 +12,7 @@ import { SkeletonComponent } from '../skeleton/skeleton.component';
   templateUrl: './recipe-card.component.html',
   styleUrls: ['./recipe-card.component.scss'],
   standalone: true,
-  imports: [CommonModule, RouterLink, MatIconModule, SkeletonComponent],
+  imports: [CommonModule, RouterLink, TranslocoModule, MatIconModule, SkeletonComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeCardComponent {

@@ -6,9 +6,9 @@
     <app-account-settings-update-profile></app-account-settings-update-profile>
     <app-account-settings-update-password></app-account-settings-update-password>
 
-    <app-settings-section icon="dangerous" title="Danger zone" titleColor="warn">
+    <app-settings-section icon="dangerous" [title]="'general.dangerZone' | transloco" titleColor="warn">
         <button mat-raised-button color="warn" (click)="deleteAccount()" [disabled]="vm.isLoading">
-            Delete account
+            {{ 'pages.settings.children.account.deleteAccount' | transloco }}
         </button>
     </app-settings-section>
 </ng-container>

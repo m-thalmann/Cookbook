@@ -3,7 +3,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { BehaviorSubject, map, merge, shareReplay, switchMap, switchScan, tap } from 'rxjs';
+import { TranslocoModule } from '@ngneat/transloco';
+import { BehaviorSubject, catchError, map, merge, shareReplay, switchMap, switchScan, tap, throwError } from 'rxjs';
 import { CookbookCardComponent } from 'src/app/components/cookbook-card/cookbook-card.component';
 import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 import { SkeletonComponent } from 'src/app/components/skeleton/skeleton.component';
@@ -22,6 +23,7 @@ const AMOUNT_ITEMS = 18;
   standalone: true,
   imports: [
     CommonModule,
+    TranslocoModule,
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
@@ -56,6 +58,11 @@ export class CookbooksPageComponent {
         ),
         tap(() => this.cookbooksLoading$.next(false))
       );
+    }),
+    catchError((error) => {
+      this.cookbooksLoading$.next(false);
+
+      return throwError(() => error);
     }),
 
     handledErrorInterceptor(),

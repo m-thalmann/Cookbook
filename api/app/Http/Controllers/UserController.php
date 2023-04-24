@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\UnauthorizedHttpException;
 use App\Http\Resources\UserResource;
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\OpenApi\Parameters\SortParameters;
 use App\OpenApi\Parameters\Users\IndexUsersParameters;
 use App\OpenApi\RequestBodies\Users\CreateUserRequestBody;
 use App\OpenApi\RequestBodies\Users\UpdateUserRequestBody;
@@ -210,6 +210,14 @@ class UserController extends Controller {
             'is_verified' => ['boolean'],
             'do_logout' => ['boolean'],
         ]);
+
+        if (Arr::hasAny($data, ['password']) || $user->id !== auth()->id()) {
+            if (!authUser()->hasVerifiedEmail()) {
+                throw UnauthorizedHttpException::unverified(
+                    __('messages.email_must_be_verified')
+                );
+            }
+        }
 
         // has to confirm current password if updating self credentials
         if (

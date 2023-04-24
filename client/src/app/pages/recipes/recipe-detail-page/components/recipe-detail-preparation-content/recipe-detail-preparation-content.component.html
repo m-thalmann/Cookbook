@@ -10,22 +10,22 @@
     <span *ngIf="recipe.preparation_time_minutes !== null">
         <mat-icon>timer</mat-icon>
         <span>
-            Preparation time ~
-            {{ recipe.preparation_time_minutes }}<small>m</small>
+            {{ 'recipes.times.preparation' | transloco }} ~ {{ recipe.preparation_time_minutes
+            }}<small>{{ 'recipes.times.minutesAbbr' | transloco }}</small>
         </span>
     </span>
     <span *ngIf="recipe.resting_time_minutes !== null">
         <mat-icon>timer</mat-icon>
         <span>
-            Resting time ~
-            {{ recipe.resting_time_minutes }}<small>m</small>
+            {{ 'recipes.times.resting' | transloco }} ~ {{ recipe.resting_time_minutes
+            }}<small>{{ 'recipes.times.minutesAbbr' | transloco }}</small>
         </span>
     </span>
     <span *ngIf="recipe.cooking_time_minutes !== null">
         <mat-icon>timer</mat-icon>
         <span>
-            Cooking-/Baking time ~
-            {{ recipe.cooking_time_minutes }}<small>m</small>
+            {{ 'recipes.times.cooking' | transloco }} ~ {{ recipe.cooking_time_minutes
+            }}<small>{{ 'recipes.times.minutesAbbr' | transloco }}</small>
         </span>
     </span>
 </div>

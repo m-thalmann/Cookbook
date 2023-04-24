@@ -11,7 +11,9 @@
             </ng-template>
         </h2>
         <h3>
-            <ng-container *ngIf="recipe; else authorLoading"> by {{ recipe.user.name }} </ng-container>
+            <ng-container *ngIf="recipe; else authorLoading">
+                {{ 'general.by' | transloco }} {{ recipe.user.name }}
+            </ng-container>
 
             <ng-template #authorLoading>
                 <app-skeleton width="5em"></app-skeleton>
@@ -23,7 +25,7 @@
         <app-share-menu
             color="primary"
             [disabled]="disabled"
-            [text]="'Recipe: ' + recipe.name"
+            [text]="('recipes.recipe' | transloco) + ': ' + recipe.name"
             [showPrint]="true"
         ></app-share-menu>
         <button
@@ -75,14 +77,14 @@
 <mat-menu #menu="matMenu">
     <button mat-menu-item (click)="openPublicShareDialog()">
         <mat-icon>share</mat-icon>
-        <span>Public share</span>
+        <span>{{ 'recipes.publicShare' | transloco }}</span>
     </button>
     <a [routerLink]="['/recipes', recipe?.id, 'edit']" mat-menu-item>
         <mat-icon>edit</mat-icon>
-        <span>Edit</span>
+        <span>{{ 'actions.edit' | transloco }}</span>
     </a>
     <button mat-menu-item (click)="deleteRecipe.emit()">
         <mat-icon color="warn">delete</mat-icon>
-        <span>Move to trash</span>
+        <span>{{ 'recipes.moveToTrash' | transloco }}</span>
     </button>
 </mat-menu>

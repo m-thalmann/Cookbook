@@ -1,6 +1,7 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslocoService } from '@ngneat/transloco';
 import { take } from 'rxjs';
 
 interface SnackbarOptions {
@@ -13,13 +14,17 @@ interface SnackbarOptions {
   providedIn: 'root',
 })
 export class SnackbarService {
-  constructor(private snackBar: MatSnackBar) {}
+  constructor(private snackBar: MatSnackBar, private transloco: TranslocoService) {}
 
   private open(
     message: string,
     duration: number | null,
-    { warn = false, actionName = 'OK' }: { warn?: boolean; actionName?: string }
+    { warn = false, actionName }: { warn?: boolean; actionName?: string }
   ) {
+    if (actionName === undefined) {
+      actionName = this.transloco.translate('actions.ok');
+    }
+
     const options = {
       panelClass: warn ? 'action-warn' : undefined,
       duration: duration === null ? undefined : duration,

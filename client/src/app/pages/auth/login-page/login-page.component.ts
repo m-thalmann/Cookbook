@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { BehaviorSubject, Subscription, distinctUntilChanged, lastValueFrom, take } from 'rxjs';
 import { PromptDialogComponent } from 'src/app/components/dialogs/prompt-dialog/prompt-dialog.component';
 import { ApiService } from 'src/app/core/api/api.service';
@@ -28,6 +29,7 @@ const Logger = new LoggerClass('Authentication');
     CommonModule,
     RouterLink,
     ReactiveFormsModule,
+    TranslocoModule,
     MatFormFieldModule,
     MatButtonModule,
     MatIconModule,
@@ -50,7 +52,8 @@ export class LoginPageComponent implements OnDestroy {
     private fb: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private dialog: MatDialog,
-    private snackbar: SnackbarService
+    private snackbar: SnackbarService,
+    private transloco: TranslocoService
   ) {
     this.loginForm = this.fb.group({
       email: [''],
@@ -87,7 +90,7 @@ export class LoginPageComponent implements OnDestroy {
     } catch (e) {
       this.isLoading$.next(false);
 
-      let errorMessage: string | null = 'An error occurred.';
+      let errorMessage: string | null = this.transloco.translate('messages.errors.errorOccurred');
 
       if (e instanceof HttpErrorResponse) {
         this.loginForm.get('password')?.setValue('');
@@ -113,11 +116,10 @@ export class LoginPageComponent implements OnDestroy {
         .open(PromptDialogComponent, {
           width: '400px',
           data: {
-            title: 'Send reset email',
-            label: 'Your email',
+            title: this.transloco.translate('auth.sendResetEmail'),
+            label: this.transloco.translate('general.yourEmail'),
             type: 'email',
-            btnConfirm: 'Send',
-            btnDecline: 'Cancel',
+            btnConfirm: this.transloco.translate('actions.send'),
           },
         })
         .afterClosed()
@@ -133,13 +135,14 @@ export class LoginPageComponent implements OnDestroy {
     try {
       await lastValueFrom(this.api.auth.sendResetPasswordEmail(email));
 
-      this.snackbar.info({ message: 'Reset email sent. Please check your inbox for further instructions.' });
+      this.snackbar.info({ message: this.transloco.translate('messages.resetEmailSent') });
     } catch (e) {
       const errorMessage = ApiService.getErrorMessage(e);
 
       this.snackbar.warn({
         message:
-          'Error sending reset email' + (typeof errorMessage === 'string' && errorMessage ? ': ' + errorMessage : ''),
+          this.transloco.translate('messages.errors.sendingResetEmail') +
+          (typeof errorMessage === 'string' && errorMessage ? ': ' + errorMessage : ''),
       });
       Logger.error('Error sending reset email:', errorMessage);
     } finally {

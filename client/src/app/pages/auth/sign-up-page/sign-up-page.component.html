@@ -5,7 +5,7 @@
 
         <mat-form-field appearance="outline" color="accent">
             <mat-icon matPrefix>person</mat-icon>
-            <mat-label>Name</mat-label>
+            <mat-label>{{ 'general.name' | transloco }}</mat-label>
             <input matInput formControlName="name" />
             <mat-error *ngIf="name?.getError('serverError') as serverError">
                 {{ serverError }}
@@ -14,7 +14,7 @@
 
         <mat-form-field appearance="outline" color="accent">
             <mat-icon matPrefix>email</mat-icon>
-            <mat-label>Email</mat-label>
+            <mat-label>{{ 'general.email' | transloco }}</mat-label>
             <input matInput type="email" formControlName="email" />
             <mat-error *ngIf="email?.getError('serverError') as serverError">
                 {{ serverError }}
@@ -23,7 +23,7 @@
 
         <mat-form-field appearance="outline" color="accent">
             <mat-icon matPrefix>key</mat-icon>
-            <mat-label>Password</mat-label>
+            <mat-label>{{ 'general.password' | transloco }}</mat-label>
             <input matInput type="password" formControlName="password" />
             <mat-error *ngIf="password?.getError('serverError') as serverError">
                 {{ serverError }}
@@ -31,7 +31,7 @@
         </mat-form-field>
         <mat-form-field appearance="outline" color="accent">
             <mat-icon matPrefix>key</mat-icon>
-            <mat-label>Password confirmation</mat-label>
+            <mat-label>{{ 'general.passwordConfirmation' | transloco }}</mat-label>
             <input matInput type="password" formControlName="password_confirmation" />
         </mat-form-field>
 
@@ -39,7 +39,7 @@
 
         <button mat-raised-button color="accent" type="submit" [disabled]="vm.isLoading || !vm.valid">
             <mat-icon *ngIf="!vm.isLoading">person_add</mat-icon>
-            <ng-container *ngIf="!vm.isLoading"> Sign up</ng-container>
+            <ng-container *ngIf="!vm.isLoading"> {{ 'auth.signUp' | transloco }}</ng-container>
 
             <mat-spinner
                 [diameter]="24"

@@ -1,4 +1,5 @@
 import { ErrorHandler, Injectable, NgZone } from '@angular/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { HandledError } from '../helpers/handled-error';
 import { Logger as LoggerClass } from '../helpers/logger';
 import { SnackbarService } from './snackbar.service';
@@ -9,7 +10,7 @@ const Logger = new LoggerClass('ErrorHandlerService');
   providedIn: 'root',
 })
 export class ErrorHandlerService implements ErrorHandler {
-  constructor(private snackbar: SnackbarService, private zone: NgZone) {}
+  constructor(private snackbar: SnackbarService, private zone: NgZone, private transloco: TranslocoService) {}
 
   handleError(error: any) {
     if (error instanceof HandledError) {
@@ -19,7 +20,7 @@ export class ErrorHandlerService implements ErrorHandler {
     Logger.error('An error occurred:', error);
 
     this.zone.run(() => {
-      this.snackbar.warn({ message: 'An unexpected error occurred!', duration: null });
+      this.snackbar.warn({ message: this.transloco.translate('messages.errors.unexpectedError'), duration: null });
     });
   }
 }

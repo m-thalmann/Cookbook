@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { BehaviorSubject, lastValueFrom, map, merge, shareReplay, switchMap, switchScan, take, tap } from 'rxjs';
 import { ConfirmDialogComponent } from 'src/app/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
@@ -20,7 +21,14 @@ import { SnackbarService } from 'src/app/core/services/snackbar.service';
   templateUrl: './recipes-trash-page.component.html',
   styleUrls: ['./recipes-trash-page.component.scss'],
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule, ErrorDisplayComponent],
+  imports: [
+    CommonModule,
+    TranslocoModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    ErrorDisplayComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipesTrashPageComponent {
@@ -66,7 +74,8 @@ export class RecipesTrashPageComponent {
     private api: ApiService,
     private auth: AuthService,
     private snackbar: SnackbarService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private transloco: TranslocoService
   ) {}
 
   getThumbnailUrl(recipe: ListRecipe) {
@@ -86,10 +95,10 @@ export class RecipesTrashPageComponent {
       this.dialog
         .open(ConfirmDialogComponent, {
           data: {
-            title: 'Are you sure?',
-            content: 'This action cannot be undone.',
-            btnConfirm: 'Confirm',
-            btnDecline: 'Abort',
+            title: this.transloco.translate('messages.areYouSure'),
+            content: this.transloco.translate('messages.thisActionCantBeUndone'),
+            btnConfirm: this.transloco.translate('actions.confirm'),
+            btnDecline: this.transloco.translate('actions.abort'),
             warn: true,
           },
         })
@@ -106,11 +115,11 @@ export class RecipesTrashPageComponent {
     try {
       await lastValueFrom(this.api.recipes.trash.deleteAll());
 
-      this.snackbar.info({ message: 'All trashed recipes deleted permanently' });
+      this.snackbar.info({ message: this.transloco.translate('messages.trashCleared') });
 
       this.resetList$.emit();
     } catch (e) {
-      this.snackbar.warn({ message: 'Error clearing trash', duration: null });
+      this.snackbar.warn({ message: this.transloco.translate('messages.errors.clearingTrash'), duration: null });
     } finally {
       this.actionLoading$.next(false);
     }
@@ -122,11 +131,11 @@ export class RecipesTrashPageComponent {
     try {
       await lastValueFrom(this.api.recipes.trash.restoreRecipe(recipe.id));
 
-      this.snackbar.info({ message: 'Recipe restored successfully' });
+      this.snackbar.info({ message: this.transloco.translate('messages.recipeRestored') });
 
       this.resetList$.emit();
     } catch (e) {
-      this.snackbar.warn({ message: 'Error restoring recipe', duration: null });
+      this.snackbar.warn({ message: this.transloco.translate('messages.errors.restoringRecipe'), duration: null });
     } finally {
       this.actionLoading$.next(false);
     }
@@ -137,10 +146,10 @@ export class RecipesTrashPageComponent {
       this.dialog
         .open(ConfirmDialogComponent, {
           data: {
-            title: 'Are you sure?',
-            content: 'This action cannot be undone.',
-            btnConfirm: 'Delete',
-            btnDecline: 'Abort',
+            title: this.transloco.translate('messages.areYouSure'),
+            content: this.transloco.translate('messages.thisActionCantBeUndone'),
+            btnConfirm: this.transloco.translate('actions.delete'),
+            btnDecline: this.transloco.translate('actions.abort'),
             warn: true,
           },
         })
@@ -157,11 +166,11 @@ export class RecipesTrashPageComponent {
     try {
       await lastValueFrom(this.api.recipes.trash.deleteRecipe(recipe.id));
 
-      this.snackbar.info({ message: 'Recipe permanently deleted' });
+      this.snackbar.info({ message: this.transloco.translate('messages.recipeDeleted') });
 
       this.resetList$.emit();
     } catch (e) {
-      this.snackbar.warn({ message: 'Error permanently deleting recipe', duration: null });
+      this.snackbar.warn({ message: this.transloco.translate('messages.errors.deletingRecipe'), duration: null });
     } finally {
       this.actionLoading$.next(false);
     }

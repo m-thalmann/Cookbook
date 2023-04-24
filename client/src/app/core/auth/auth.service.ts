@@ -1,6 +1,7 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslocoService } from '@ngneat/transloco';
 import {
   BehaviorSubject,
   Observable,
@@ -52,7 +53,8 @@ export class AuthService implements OnDestroy {
     private api: ApiService,
     private activatedRoute: ActivatedRoute,
     private routeHelper: RouteHelperService,
-    private snackbar: SnackbarService
+    private snackbar: SnackbarService,
+    private transloco: TranslocoService
   ) {
     this._accessToken$ = new BehaviorSubject(this.storage.get<string>(ACCESS_TOKEN_KEY));
     this._refreshToken$ = new BehaviorSubject(this.storage.get(REFRESH_TOKEN_KEY));
@@ -131,7 +133,7 @@ export class AuthService implements OnDestroy {
       this.setEmailVerified(userResponse);
     } catch (e) {
       if (!(e instanceof HttpErrorResponse) || e.status !== 401) {
-        this.snackbar.warn({ message: 'Error loading user information' });
+        this.snackbar.warn({ message: this.transloco.translate('messages.errors.loadingUserInformation') });
         Logger.error('Error while initializing the user:', e);
 
         this._isInitialized$.next(false);
@@ -158,7 +160,11 @@ export class AuthService implements OnDestroy {
     this.router.navigateByUrl(redirectUrl);
   }
 
-  public async logout(logoutFromApi: boolean, message: string = 'You have been logged out.') {
+  public async logout(logoutFromApi: boolean, message?: string) {
+    if (message === undefined) {
+      message = this.transloco.translate('messages.loggedOut')!;
+    }
+
     if (logoutFromApi) {
       try {
         await lastValueFrom(this.api.auth.logout());

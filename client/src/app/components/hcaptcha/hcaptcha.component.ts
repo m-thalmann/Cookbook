@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { ConfigService } from 'src/app/core/services/config.service';
 
 const HCAPTCHA_API = 'https://js.hcaptcha.com/1/api.js?render=explicit&onload=_hcaptchaOnLoad&recaptchacompat=off';
@@ -15,7 +16,7 @@ export class HcaptchaComponent {
 
   @Output() verified = new EventEmitter<string>();
 
-  constructor(private config: ConfigService) {}
+  constructor(private config: ConfigService, private translocoService: TranslocoService) {}
 
   ngOnInit() {
     if (!this.hcaptcha) {
@@ -26,7 +27,7 @@ export class HcaptchaComponent {
       const body = <HTMLDivElement>document.body;
       const script = document.createElement('script');
       script.innerHTML = '';
-      script.src = HCAPTCHA_API;
+      script.src = HCAPTCHA_API + '&hl=' + this.translocoService.getActiveLang();
       script.async = true;
       script.defer = true;
       body.appendChild(script);

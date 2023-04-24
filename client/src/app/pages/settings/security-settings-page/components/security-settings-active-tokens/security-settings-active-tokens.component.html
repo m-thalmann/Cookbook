@@ -9,7 +9,10 @@
     <app-settings-section
         class="active-sessions-section"
         icon="devices"
-        [title]="'Active sessions' + (vm.activeTokens ? ' (' + vm.activeTokens.totalItems + ')' : '')"
+        [title]="
+            ('pages.settings.children.security.activeSessions' | transloco) +
+            (vm.activeTokens ? ' (' + vm.activeTokens.totalItems + ')' : '')
+        "
     >
         <button
             mat-raised-button
@@ -17,7 +20,7 @@
             [disabled]="vm.isLoading || vm.isUpdating"
             (click)="logoutFromAllSessions()"
         >
-            <mat-icon>power_settings_new</mat-icon> Logout from all
+            <mat-icon>power_settings_new</mat-icon> {{ 'pages.settings.children.security.logoutFromAll' | transloco }}
         </button>
 
         <app-error-display [error]="vm.error"></app-error-display>
@@ -30,7 +33,7 @@
                 *ngFor="let session of vm.activeTokens?.items"
             ></app-security-settings-active-token-card>
 
-            <ng-container *ngIf="vm.activeTokens === null">
+            <ng-container *ngIf="vm.activeTokens === null && !vm.error">
                 <app-security-settings-active-token-card
                     [token]="null"
                     *appRepeat="6"
@@ -50,7 +53,7 @@
                 <mat-spinner *ngIf="vm.isLoading" [diameter]="20"></mat-spinner>
                 <mat-icon *ngIf="!vm.isLoading">south</mat-icon>
 
-                Load more
+                {{ 'actions.loadMore' | transloco }}
             </div>
         </button>
     </app-settings-section>

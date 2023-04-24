@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { RouterOutlet } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
+import { TranslocoService } from '@ngneat/transloco';
 import { IconSnackbarComponent } from './components/snackbar/icon-snackbar/icon-snackbar.component';
 import { SnackbarService } from './core/services/snackbar.service';
-import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -23,7 +24,7 @@ export class AppComponent implements OnDestroy {
     this.snackbar.openComponent(
       IconSnackbarComponent,
       {
-        message: 'A new update is available.',
+        message: this.transloco.translate('messages.updateAvailable'),
         icon: 'browser_updated',
         action: {
           name: 'download',
@@ -40,7 +41,8 @@ export class AppComponent implements OnDestroy {
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private swUpdate: SwUpdate,
-    private snackbar: SnackbarService
+    private snackbar: SnackbarService,
+    private transloco: TranslocoService
   ) {
     this.registerIcons();
   }

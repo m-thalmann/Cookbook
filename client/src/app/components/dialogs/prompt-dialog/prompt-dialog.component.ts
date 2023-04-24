@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { TranslocoService } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-prompt-dialog',
@@ -27,7 +28,8 @@ export class PromptDialogComponent {
       btnConfirm?: string;
       btnDecline?: string;
     },
-    private dialogRef: MatDialogRef<PromptDialogComponent>
+    private dialogRef: MatDialogRef<PromptDialogComponent>,
+    private translocoService: TranslocoService
   ) {
     if (data.default != null) {
       this.value = data.default;
@@ -35,11 +37,11 @@ export class PromptDialogComponent {
   }
 
   get btnConfirm() {
-    return this.data.btnConfirm ? this.data.btnConfirm : 'Save';
+    return this.data.btnConfirm ? this.data.btnConfirm : this.translocoService.translate('actions.confirm');
   }
 
   get btnDecline() {
-    return this.data.btnDecline ? this.data.btnDecline : 'Cancel';
+    return this.data.btnDecline ? this.data.btnDecline : this.translocoService.translate('actions.cancel');
   }
 
   confirm() {

@@ -1,0 +1,191 @@
+{
+  "actions": {
+    "abort": "Abort",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "copyLink": "Copy link",
+    "delete": "Delete",
+    "edit": "Edit",
+    "goBack": "Go back",
+    "loadMore": "Load more",
+    "ok": "OK",
+    "print": "Print",
+    "restore": "Restore",
+    "seeAll": "See all",
+    "send": "Send"
+  },
+  "admin": {
+    "area": "Admin area"
+  },
+  "auth": {
+    "dontRememberYourPassword": "Don't remember your password?",
+    "login": "Login",
+    "logout": "Logout",
+    "resetPassword": "Reset password",
+    "sendResetEmail": "Send reset email",
+    "signUp": "Sign up",
+    "verifyingEmail": "Verifying email..."
+  },
+  "categories": {
+    "categories": "Categories",
+    "empty": "No categories found ...",
+    "filterBy": "Filter by category",
+    "loadingError": "Error loading categories"
+  },
+  "cookbooks": {
+    "cookbook": "Cookbook",
+    "cookbooks": "Cookbooks",
+    "create": "Create cookbook",
+    "empty": "No cookbooks found ...",
+    "loadingError": "Cookbooks could not be loaded.",
+    "notFound": "Cookbook could not be found.",
+    "showAmountMore": "{amount, plural, one {Show 1 more cookbook} other {Show # more cookbooks}}",
+    "singleLoadingError": "Cookbook could not be loaded."
+  },
+  "general": {
+    "auto": "Auto",
+    "by": "by",
+    "colorTheme": "Color theme",
+    "createDate": "Create date",
+    "dangerZone": "Danger zone",
+    "deletedAt": "Deleted at",
+    "email": "Email",
+    "enabled": "Enabled",
+    "language": "Language",
+    "lastUpdated": "Last updated",
+    "myPlural": "My",
+    "name": "Name",
+    "password": "Password",
+    "passwordConfirmation": "Password confirmation",
+    "profile": "Profile",
+    "resultsFound": "{amount, plural, one {1 result found} other {# results found}}",
+    "updateDate": "Update date",
+    "yourEmail": "Your email"
+  },
+  "ingredients": {
+    "ingredients": "Ingredients"
+  },
+  "messages": {
+    "areYouSure": "Are you sure?",
+    "accountDeleted": "Account deleted successfully",
+    "emailVerified": "Email successfully verified!",
+    "errors": {
+      "clearingTrash": "Error clearing trash",
+      "deletingAccount": "Error deleting account",
+      "deletingRecipe": "Error permanently deleting recipe",
+      "errorOccurred": "An error occurred!",
+      "loadingUserInformation": "Error loading user information",
+      "loggingOutFromAllSessions": "Error logging out from all sessions",
+      "loggingOutFromSelectedSession": "Error logging out from selected session",
+      "movingRecipeToTrash": "Error moving recipe to trash",
+      "restoringRecipe": "Error restoring recipe",
+      "savingLanguage": "Error saving language",
+      "sendingResetEmail": "Error sending reset email",
+      "sendingVerificationEmail": "Error sending verification email",
+      "unexpectedError": "An unexpected error has occurred",
+      "verifyingEmail": "Error verifying email. Please try again"
+    },
+    "linkCopied": "Link copied!",
+    "loggedOut": "You have been logged out.",
+    "loggedOutFromAllSessions": "You have been logged out from all session.",
+    "loggedOutFromSelectedSession": "You have been logged out from the selected session.",
+    "noActionRequired": "No action required.",
+    "passwordReset": "Password reset successfully. You can now login with your new password.",
+    "passwordUpdated": "Password updated successfully",
+    "profileUpdated": "Profile updated successfully",
+    "recipeDeleted": "Recipe permanently deleted",
+    "recipeMovedToTrash": "Recipe moved to trash successfully",
+    "recipeRestored": "Recipe restored successfully",
+    "resetEmailSent": "Reset email sent. Please check your inbox for further instructions.",
+    "thisActionCantBeUndone": "This action cannot be undone.",
+    "trashCleared": "All trashed recipes deleted permanently",
+    "updateAvailable": "A new update is available.",
+    "verificationEmailSent": "Verification email sent successfully"
+  },
+  "pages": {
+    "home": {
+      "title": "Home"
+    },
+    "notFound": {
+      "goBack": "Go to homepage",
+      "message": "Oops... Page not found!"
+    },
+    "settings": {
+      "children": {
+        "account": {
+          "deleteAccount": "Delete account",
+          "settings": "Account settings",
+          "title": "Account",
+          "updatePassword": "Update password",
+          "updateProfile": "Update profile"
+        },
+        "general": {
+          "title": "General"
+        },
+        "security": {
+          "activeSessions": "Active sessions",
+          "browser": "Browser",
+          "currentSession": "Current session",
+          "emailNotVerifiedText": {
+            "line1": "Your email address is not verified. Please check your inbox and click on the verification link.",
+            "line2": "If you did not receive an email, please check your spam folder."
+          },
+          "emailVerification": "Email verification",
+          "hostname": "Hostname",
+          "ipAddress": "IP address",
+          "logoutFromAll": "Logout from all",
+          "logoutFromThatSession": "Logout from that session",
+          "operatingSystem": "Operating system",
+          "resendVerificationEmail": "Resend verification email",
+          "title": "Security"
+        }
+      },
+      "confirmCurrentPassword": "Confirm current password",
+      "confirmNewPassword": "Confirm new password",
+      "newPassword": "New password",
+      "oldPassword": "Old password",
+      "title": "Settings"
+    },
+    "trash": {
+      "clearTrash": "Clear trash",
+      "empty": "No items in trash",
+      "loadingError": "Trashed recipes could not be loaded.",
+      "title": "Trash"
+    }
+  },
+  "pagination": {
+    "next": "Next page",
+    "previous": "Previous page",
+    "first": "First page",
+    "last": "Last page",
+    "itemsPerPage": "Items per page",
+    "rangeLabel": "Page {page} of {pages}"
+  },
+  "recipes": {
+    "create": "Create recipe",
+    "description": "Description",
+    "difficulty": "Difficulty",
+    "empty": "No recipes found ...",
+    "loadingError": "Recipes could not be loaded.",
+    "moveToTrash": "Move to trash",
+    "notFound": "Recipe could not be found.",
+    "onlyMy": "Only my recipes",
+    "portions": "Portions",
+    "preparation": "Preparation",
+    "publicShare": "Public share",
+    "recipe": "Recipe",
+    "recipes": "Recipes",
+    "searchRecipes": "Search recipes...",
+    "showAmountMore": "{amount, plural, one {Show 1 more recipe} other {Show # more recipes}}",
+    "singleLoadingError": "Recipe could not be loaded.",
+    "times": {
+      "cooking": "Cooking-/Baking time",
+      "minutesAbbr": "min",
+      "preparation": "Preparation time",
+      "resting": "Resting time",
+      "total": "Total time"
+    },
+    "viewTrash": "View trash"
+  }
+}
+

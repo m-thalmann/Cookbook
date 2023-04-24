@@ -8,7 +8,9 @@ import {
   HttpResponse,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { TranslocoService } from '@ngneat/transloco';
 import { EMPTY, Observable, catchError, filter, first, of, shareReplay, switchMap } from 'rxjs';
+import { HandledError } from '../helpers/handled-error';
 import { AuthToken } from '../models/auth-token';
 import { Cookbook, CookbookUser, CookbookWithCounts, CookbookWithUserMeta } from '../models/cookbook';
 import { FilterOption } from '../models/filter-option';
@@ -22,7 +24,6 @@ import { SortOption } from '../models/sort-option';
 import { CreateUserData, DetailedUser, EditUserData, User } from '../models/user';
 import { ConfigService } from '../services/config.service';
 import { TOKEN_TYPE_HTTP_CONTEXT } from './auth.interceptor';
-import { HandledError } from '../helpers/handled-error';
 
 export enum TokenType {
   Access,
@@ -49,17 +50,16 @@ interface ListParamOptions {
 export class ApiService {
   static readonly API_VERSION = 1;
 
-  constructor(private http: HttpClient, private config: ConfigService) {}
+  constructor(private http: HttpClient, private config: ConfigService, private transloco: TranslocoService) {}
 
   public get url() {
     return `${this.config.get('apiUrl')}/v${ApiService.API_VERSION}`;
   }
 
   private get httpHeaders() {
-    // TODO: add language header
-
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
+      'X-Language': this.transloco.getActiveLang(),
     });
 
     return headers;

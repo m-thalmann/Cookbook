@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
+import { TranslocoModule } from '@ngneat/transloco';
 import { ShareMenuComponent } from 'src/app/components/share-menu/share-menu.component';
 import { SkeletonComponent } from 'src/app/components/skeleton/skeleton.component';
 import { DetailedRecipe } from 'src/app/core/models/recipe';
@@ -18,6 +19,7 @@ import { RecipePublicShareDialogComponent } from '../recipe-public-share-dialog/
   imports: [
     CommonModule,
     RouterLink,
+    TranslocoModule,
     MatIconModule,
     MatButtonModule,
     MatMenuModule,

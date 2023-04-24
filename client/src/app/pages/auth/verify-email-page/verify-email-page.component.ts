@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { lastValueFrom, take } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
@@ -14,7 +15,7 @@ const Logger = new LoggerClass('Authentication');
   templateUrl: './verify-email-page.component.html',
   styleUrls: ['./verify-email-page.component.scss'],
   standalone: true,
-  imports: [MatProgressSpinnerModule],
+  imports: [TranslocoModule, MatProgressSpinnerModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerifyEmailPageComponent {
@@ -23,7 +24,8 @@ export class VerifyEmailPageComponent {
     private router: Router,
     private api: ApiService,
     private auth: AuthService,
-    private snackbar: SnackbarService
+    private snackbar: SnackbarService,
+    private transloco: TranslocoService
   ) {
     this.verifyEmail();
   }
@@ -49,11 +51,11 @@ export class VerifyEmailPageComponent {
 
       this.auth.setEmailVerified(true);
 
-      this.snackbar.info({ message: 'Email successfully verified!' });
+      this.snackbar.info({ message: this.transloco.translate('messages.emailVerified') });
     } catch (e) {
       const errorMessage = ApiService.getErrorMessage(e);
 
-      this.snackbar.warn({ message: 'Error verifying email. Please try again' });
+      this.snackbar.warn({ message: this.transloco.translate('messages.errors.verifyingEmail') });
       Logger.error('Error verifying email:', errorMessage, e);
     }
 

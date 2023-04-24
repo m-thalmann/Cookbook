@@ -9,6 +9,22 @@
 
 $theme-width: 6em;
 
+.languages-list {
+  button.current {
+    @include theme.apply() using ($variables) {
+      background: theme.adjust-color($variables, map.get($variables, 'background'), 5%);
+    }
+
+    .button-content {
+      font-weight: 500;
+
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+  }
+}
+
 .themes {
   display: grid;
   gap: 1em;

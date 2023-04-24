@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { BehaviorSubject, lastValueFrom, take } from 'rxjs';
 import { ConfirmDialogComponent } from 'src/app/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { ApiService } from 'src/app/core/api/api.service';
@@ -21,6 +22,7 @@ const Logger = new LoggerClass('Settings');
   standalone: true,
   imports: [
     CommonModule,
+    TranslocoModule,
     MatButtonModule,
     SettingsSectionComponent,
     AccountSettingsUpdateProfileComponent,
@@ -35,7 +37,8 @@ export class AccountSettingsPageComponent {
     private auth: AuthService,
     private api: ApiService,
     private dialog: MatDialog,
-    private snackbar: SnackbarService
+    private snackbar: SnackbarService,
+    private transloco: TranslocoService
   ) {}
 
   async deleteAccount() {
@@ -47,10 +50,10 @@ export class AccountSettingsPageComponent {
       this.dialog
         .open(ConfirmDialogComponent, {
           data: {
-            title: 'Are you sure?',
-            content: 'This action cannot be undone.',
-            btnConfirm: 'Delete',
-            btnDecline: 'Abort',
+            title: this.transloco.translate('messages.areYouSure'),
+            content: this.transloco.translate('messages.thisActionCantBeUndone'),
+            btnConfirm: this.transloco.translate('actions.delete'),
+            btnDecline: this.transloco.translate('actions.abort'),
             warn: true,
           },
         })
@@ -69,13 +72,13 @@ export class AccountSettingsPageComponent {
 
       await this.auth.initialize();
 
-      this.snackbar.info({ message: 'Account deleted successfully' });
+      this.snackbar.info({ message: this.transloco.translate('messages.accountDeleted') });
 
       this.isLoading$.next(false);
     } catch (e) {
       const errorMessage = ApiService.getErrorMessage(e);
 
-      this.snackbar.warn({ message: 'Error deleting account' });
+      this.snackbar.warn({ message: this.transloco.translate('messages.errors.deletingAccount') });
       this.isLoading$.next(false);
       Logger.error('Error deleting account:', errorMessage);
     }

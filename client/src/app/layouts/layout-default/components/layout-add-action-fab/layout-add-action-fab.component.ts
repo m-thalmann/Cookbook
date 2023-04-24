@@ -2,13 +2,14 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { TranslocoModule } from '@ngneat/transloco';
 
 @Component({
   selector: 'app-layout-add-action-fab',
   templateUrl: './layout-add-action-fab.component.html',
   styleUrls: ['./layout-add-action-fab.component.scss'],
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, TranslocoModule, MatButtonModule, MatIconModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LayoutAddActionFabComponent {

@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { TranslocoModule } from '@ngneat/transloco';
 import { Observable, combineLatest, map, shareReplay, switchMap } from 'rxjs';
 import { CategoryChipListComponent } from 'src/app/components/category-chip-list/category-chip-list.component';
 import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
@@ -23,6 +24,7 @@ import { CookbookHeaderComponent } from '../components/cookbook-header/cookbook-
   imports: [
     CommonModule,
     RouterLink,
+    TranslocoModule,
     MatButtonModule,
     MatIconModule,
     CookbookHeaderComponent,
@@ -50,7 +52,7 @@ export class CookbookDetailPageComponent {
     shareReplay(1)
   );
   recipes$ = this.reload$.pipe(
-    switchMap((id) => this.api.cookbooks.getRecipes(id, {})),
+    switchMap((id) => this.api.cookbooks.getRecipes(id, { pagination: { perPage: 12, page: 1 } })),
     handledErrorInterceptor(),
     shareReplay(1)
   );

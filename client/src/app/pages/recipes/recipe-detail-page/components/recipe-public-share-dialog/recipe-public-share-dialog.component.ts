@@ -2,11 +2,12 @@ import { ClipboardModule } from '@angular/cdk/clipboard';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleChange, MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { Router } from '@angular/router';
+import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { lastValueFrom } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
@@ -22,6 +23,7 @@ const Logger = new LoggerClass('Recipes');
   standalone: true,
   imports: [
     CommonModule,
+    TranslocoModule,
     MatButtonModule,
     MatIconModule,
     MatSlideToggleModule,
@@ -42,7 +44,8 @@ export class RecipePublicShareDialogComponent {
     private snackbar: SnackbarService,
     private api: ApiService,
     private router: Router,
-    private changeDetector: ChangeDetectorRef
+    private changeDetector: ChangeDetectorRef,
+    private transloco: TranslocoService
   ) {
     this.recipe = data.recipe;
   }
@@ -81,6 +84,6 @@ export class RecipePublicShareDialogComponent {
   }
 
   linkCopied() {
-    this.snackbar.info({ message: 'Link copied' });
+    this.snackbar.info({ message: this.transloco.translate('messages.linkCopied') });
   }
 }

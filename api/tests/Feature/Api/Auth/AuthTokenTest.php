@@ -7,28 +7,34 @@ use Tests\TestCase;
 use TokenAuth\TokenAuth;
 
 class AuthTokenTest extends TestCase {
-    public function testShowAllAccessTokensForUserSucceeds() {
+    public function testShowAllRefreshTokensForUserSucceeds() {
         $user = $this->createAndLoginUser();
         $otherUser = $this->createUser();
 
         $createdTokens = 2;
 
         for ($i = 0; $i < $createdTokens; $i++) {
-            $user->createToken(TokenAuth::TYPE_ACCESS, 'TestToken');
+            $user->createToken(TokenAuth::TYPE_REFRESH, 'TestToken');
         }
 
-        // Refresh tokens should not be included
-        $user->createToken(TokenAuth::TYPE_REFRESH, 'TestToken');
+        // access tokens should not be included
+        $user->createToken(TokenAuth::TYPE_ACCESS, 'TestToken');
 
         // Tokens for other users should not be included
-        $otherUser->createToken(TokenAuth::TYPE_ACCESS, 'TestToken');
+        $otherUser->createToken(TokenAuth::TYPE_REFRESH, 'TestToken');
 
         // Revoked tokens should not be included
-        $revokedToken = $user->createToken(TokenAuth::TYPE_ACCESS, 'TestToken');
+        $revokedToken = $user->createToken(
+            TokenAuth::TYPE_REFRESH,
+            'TestToken'
+        );
         $revokedToken->token->revoke()->save();
 
         // Expired tokens should not be included
-        $expiredToken = $user->createToken(TokenAuth::TYPE_ACCESS, 'TestToken');
+        $expiredToken = $user->createToken(
+            TokenAuth::TYPE_REFRESH,
+            'TestToken'
+        );
         $expiredToken->token->update(['expires_at' => now()->subMinute()]);
 
         $response = $this->getJson('/v1/auth/tokens');
