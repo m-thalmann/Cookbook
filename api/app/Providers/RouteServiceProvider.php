@@ -32,7 +32,7 @@ class RouteServiceProvider extends ServiceProvider {
             Route::fallback(function () {
                 return response()->json(
                     [
-                        'message' => __('messages.route_not_found'),
+                        'message' => __('messages.http.route_not_found'),
                     ],
                     Response::HTTP_NOT_IMPLEMENTED
                 );

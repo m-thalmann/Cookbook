@@ -7,7 +7,6 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'unauthorized' => 'Unauthorized.',
     'cant_update_self' => "You can't update yourself",
     'cookbooks' => [
         'cant_delete_last_admin_user' =>
@@ -15,6 +14,13 @@ return [
         'is_last_admin_user_in_some' =>
             "This user is the last administrator in at least one cookbook. Therefore it can't be deleted.",
     ],
+    'database_error' => 'A database error occurred.',
     'email_must_be_verified' => 'You must verify your email.',
-    'route_not_found' => 'API route not found.',
+
+    'http' => [
+        'route_not_found' => 'API route not found.',
+        'too_many_requests' =>
+            'Too many requests. Please wait before trying again.',
+        'unauthorized' => 'Unauthorized.',
+    ],
 ];

@@ -25,7 +25,7 @@ class UnauthorizedHttpException extends HttpException {
         }
 
         if ($message === null) {
-            $message = __('messages.unauthorized');
+            $message = __('messages.http.unauthorized');
         }
 
         parent::__construct(401, $message, $additional);
@@ -53,4 +53,3 @@ class UnauthorizedHttpException extends HttpException {
         return new self($message, self::REASON_CREDENTIALS);
     }
 }
-

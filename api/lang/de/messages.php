@@ -7,7 +7,6 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'unauthorized' => 'Nicht autorisiert.',
     'cant_update_self' => 'Du kannst dich nicht selbst aktualisieren.',
     'cookbooks' => [
         'cant_delete_last_admin_user' =>
@@ -15,6 +14,13 @@ return [
         'is_last_admin_user_in_some' =>
             'Dieser Benutzer ist der letzte Administrator in mindestens einem Kochbuch. Daher kann er nicht gelöscht werden.',
     ],
+    'database_error' => 'Ein Datenbank-Fehler ist aufgetreten.',
     'email_must_be_verified' => 'Deine E-Mail-Adresse muss verifiziert sein.',
-    'route_not_found' => 'API-Route nicht gefunden.',
+
+    'http' => [
+        'route_not_found' => 'API-Route nicht gefunden.',
+        'too_many_requests' =>
+            'Zu viele Anfragen. Bitte warte bevor du es erneut versuchst.',
+        'unauthorized' => 'Nicht autorisiert.',
+    ],
 ];

@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
-import { Subscription, first, lastValueFrom } from 'rxjs';
+import { Subscription, first, lastValueFrom, skip } from 'rxjs';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
 import { ApiService } from '../api/api.service';
 import { AuthService } from '../auth/auth.service';
@@ -33,7 +33,8 @@ export class LanguageService implements OnDestroy {
     );
 
     this.subSink.add(
-      this.transloco.langChanges$.subscribe((language) => {
+      // the first emission is skipped because it's the default language. See https://ngneat.github.io/transloco/docs/language-api#langchanges
+      this.transloco.langChanges$.pipe(skip(1)).subscribe((language) => {
         this.storage.set(LANGUAGE_KEY, language);
       })
     );
@@ -69,4 +70,3 @@ export class LanguageService implements OnDestroy {
     this.subSink.unsubscribe();
   }
 }
-
