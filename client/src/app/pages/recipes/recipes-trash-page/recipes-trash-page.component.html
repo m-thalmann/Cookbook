@@ -25,7 +25,7 @@
     </div>
 
     <app-error-display [error]="vm.error">
-        <ng-container otherErrorMessage> {{ 'pages.trash.loadingError' | transloco }} </ng-container>
+        <ng-template #otherErrorMessage> {{ 'pages.trash.loadingError' | transloco }} </ng-template>
     </app-error-display>
 
     <div class="trash-list" *ngIf="!vm.error">

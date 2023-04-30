@@ -2,7 +2,7 @@
     <app-recipe-detail [recipe]="vm.recipe?.body?.data ?? null" *ngIf="!vm.error"> </app-recipe-detail>
 
     <app-error-display [error]="vm.error">
-        <ng-container notFoundMessage> {{ 'recipes.notFound' | transloco }} </ng-container>
-        <ng-container otherErrorMessage> {{ 'recipes.singleLoadingError' | transloco }} </ng-container>
+        <ng-template #notFoundMessage> {{ 'recipes.notFound' | transloco }} </ng-template>
+        <ng-template #otherErrorMessage> {{ 'recipes.singleLoadingError' | transloco }} </ng-template>
     </app-error-display>
 </ng-container>

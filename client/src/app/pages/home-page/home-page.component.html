@@ -26,7 +26,7 @@
             ></app-category-chip-list>
 
             <app-error-display [error]="vm.categoriesError">
-                <ng-container otherErrorMessage> {{ 'categories.loadingError' | transloco }} </ng-container>
+                <ng-template #otherErrorMessage> {{ 'categories.loadingError' | transloco }} </ng-template>
             </app-error-display>
         </app-page-section>
 
@@ -49,7 +49,7 @@
             </div>
 
             <app-error-display [error]="vm.recipesError">
-                <ng-container otherErrorMessage> {{ 'recipes.loadingError' | transloco }} </ng-container>
+                <ng-template #otherErrorMessage> {{ 'recipes.loadingError' | transloco }} </ng-template>
             </app-error-display>
 
             <a
@@ -87,7 +87,7 @@
             </div>
 
             <app-error-display [error]="vm.cookbooksError">
-                <ng-container otherErrorMessage> {{ 'cookbooks.loadingError' | transloco }} </ng-container>
+                <ng-template #otherErrorMessage> {{ 'cookbooks.loadingError' | transloco }} </ng-template>
             </app-error-display>
 
             <a

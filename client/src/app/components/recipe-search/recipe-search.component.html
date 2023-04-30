@@ -117,7 +117,7 @@
     </div>
 
     <app-error-display [error]="vm.recipesError">
-        <ng-container otherErrorMessage> {{ 'recipes.loadingError' | transloco }} </ng-container>
+        <ng-template #otherErrorMessage> {{ 'recipes.loadingError' | transloco }} </ng-template>
     </app-error-display>
 
     <mat-paginator

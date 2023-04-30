@@ -18,7 +18,7 @@
     </div>
 
     <app-error-display [error]="vm.error">
-        <ng-container otherErrorMessage> {{ 'cookbooks.loadingError' | transloco }} </ng-container>
+        <ng-template #otherErrorMessage> {{ 'cookbooks.loadingError' | transloco }} </ng-template>
     </app-error-display>
 
     <button

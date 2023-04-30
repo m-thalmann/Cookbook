@@ -6,8 +6,8 @@
     ></app-cookbook-header>
 
     <app-error-display [error]="vm.error">
-        <ng-container notFoundMessage> {{ 'cookbooks.notFound' | transloco }} </ng-container>
-        <ng-container otherErrorMessage> {{ 'cookbooks.singleLoadingError' | transloco }} </ng-container>
+        <ng-template #notFoundMessage> {{ 'cookbooks.notFound' | transloco }} </ng-template>
+        <ng-template #otherErrorMessage> {{ 'cookbooks.singleLoadingError' | transloco }} </ng-template>
     </app-error-display>
 
     <app-recipe-search

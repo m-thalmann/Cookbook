@@ -16,4 +16,5 @@ return [
             'Dieser Benutzer ist der letzte Administrator in mindestens einem Kochbuch. Daher kann er nicht gelöscht werden.',
     ],
     'email_must_be_verified' => 'Deine E-Mail-Adresse muss verifiziert sein.',
+    'route_not_found' => 'API-Route nicht gefunden.',
 ];

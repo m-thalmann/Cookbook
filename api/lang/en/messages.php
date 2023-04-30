@@ -16,4 +16,5 @@ return [
             "This user is the last administrator in at least one cookbook. Therefore it can't be deleted.",
     ],
     'email_must_be_verified' => 'You must verify your email.',
+    'route_not_found' => 'API route not found.',
 ];

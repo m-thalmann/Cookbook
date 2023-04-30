@@ -10,8 +10,8 @@
     } as vm"
 >
     <app-error-display [error]="vm.cookbookError">
-        <ng-container notFoundMessage> {{ 'cookbooks.notFound' | transloco }} </ng-container>
-        <ng-container otherErrorMessage> {{ 'cookbooks.singleLoadingError' | transloco }} </ng-container>
+        <ng-template #notFoundMessage> {{ 'cookbooks.notFound' | transloco }} </ng-template>
+        <ng-template #otherErrorMessage> {{ 'cookbooks.singleLoadingError' | transloco }} </ng-template>
     </app-error-display>
 
     <ng-container
@@ -31,7 +31,7 @@
             ></app-category-chip-list>
 
             <app-error-display [error]="vm.categoriesError">
-                <ng-container otherErrorMessage> {{ 'categories.loadingError' | transloco }} </ng-container>
+                <ng-template #otherErrorMessage> {{ 'categories.loadingError' | transloco }} </ng-template>
             </app-error-display>
         </app-page-section>
 
@@ -49,7 +49,7 @@
             </div>
 
             <app-error-display [error]="vm.recipesError">
-                <ng-container otherErrorMessage> {{ 'recipes.loadingError' | transloco }} </ng-container>
+                <ng-template #otherErrorMessage> {{ 'recipes.loadingError' | transloco }} </ng-template>
             </app-error-display>
 
             <a

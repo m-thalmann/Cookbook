@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,15 @@ class RouteServiceProvider extends ServiceProvider {
                         ->as('v1.')
                         ->group(base_path('routes/api_v1.php'));
                 });
+
+            Route::fallback(function () {
+                return response()->json(
+                    [
+                        'message' => __('messages.route_not_found'),
+                    ],
+                    Response::HTTP_NOT_IMPLEMENTED
+                );
+            });
         });
     }
 
