@@ -39,7 +39,7 @@
     "empty": "No cookbooks found ...",
     "loadingError": "Cookbooks could not be loaded.",
     "notFound": "Cookbook could not be found.",
-    "showAmountMore": "{amount, plural, one {Show 1 more cookbook} other {Show # more cookbooks}}",
+    "showAmountMore": "[[ amount, =1 'Show 1 more cookbook', default 'Show {{amount}} more cookbooks' ]]",
     "singleLoadingError": "Cookbook could not be loaded."
   },
   "general": {
@@ -58,7 +58,7 @@
     "password": "Password",
     "passwordConfirmation": "Password confirmation",
     "profile": "Profile",
-    "resultsFound": "{amount, plural, one {1 result found} other {# results found}}",
+    "resultsFound": "[[ amount, =1 '1 result found', default '{{amount}} results found' ]]",
     "updateDate": "Update date",
     "yourEmail": "Your email"
   },
@@ -176,7 +176,7 @@
     "recipe": "Recipe",
     "recipes": "Recipes",
     "searchRecipes": "Search recipes...",
-    "showAmountMore": "{amount, plural, one {Show 1 more recipe} other {Show # more recipes}}",
+    "showAmountMore": "[[ amount, =1 'Show 1 more recipe', default 'Show {{amount}} more recipes' ]]",
     "singleLoadingError": "Recipe could not be loaded.",
     "times": {
       "cooking": "Cooking-/Baking time",
@@ -188,4 +188,3 @@
     "viewTrash": "View trash"
   }
 }
-

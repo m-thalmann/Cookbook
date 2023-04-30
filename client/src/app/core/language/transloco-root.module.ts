@@ -3,13 +3,14 @@ import { Injectable, NgModule } from '@angular/core';
 import {
   TRANSLOCO_CONFIG,
   TRANSLOCO_LOADER,
+  TRANSLOCO_TRANSPILER,
   Translation,
   TranslocoLoader,
   TranslocoModule,
   translocoConfig,
 } from '@ngneat/transloco';
-import { TranslocoMessageFormatModule } from '@ngneat/transloco-messageformat';
 import { environment } from '../../../environments/environment';
+import { CustomTranspiler } from './custom-transpiler';
 
 @Injectable({ providedIn: 'root' })
 export class TranslocoHttpLoader implements TranslocoLoader {
@@ -21,7 +22,6 @@ export class TranslocoHttpLoader implements TranslocoLoader {
 }
 
 @NgModule({
-  imports: [TranslocoMessageFormatModule.forRoot()],
   exports: [TranslocoModule],
   providers: [
     {
@@ -37,7 +37,10 @@ export class TranslocoHttpLoader implements TranslocoLoader {
       }),
     },
     { provide: TRANSLOCO_LOADER, useClass: TranslocoHttpLoader },
+    {
+      provide: TRANSLOCO_TRANSPILER,
+      useClass: CustomTranspiler,
+    },
   ],
 })
 export class TranslocoRootModule {}
-
