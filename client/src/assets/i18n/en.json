@@ -35,6 +35,7 @@
   "cookbooks": {
     "cookbook": "Cookbook",
     "cookbooks": "Cookbooks",
+    "cookbooksFound": "[[ amount, =1 '1 cookbook found', default '{{amount}} cookbooks found' ]]",
     "create": "Create cookbook",
     "empty": "No cookbooks found ...",
     "loadingError": "Cookbooks could not be loaded.",
@@ -159,7 +160,7 @@
     "first": "First page",
     "last": "Last page",
     "itemsPerPage": "Items per page",
-    "rangeLabel": "Page {page} of {pages}"
+    "rangeLabel": "Page {{page}} of {{pages}}"
   },
   "recipes": {
     "create": "Create recipe",

@@ -6,7 +6,9 @@
         error: error$ | async
     } as vm"
 >
-    <p class="amount-results" *ngIf="vm.cookbooks?.totalCookbooks as total">{{ total }} cookbooks found</p>
+    <p class="amount-results" *ngIf="vm.cookbooks?.totalCookbooks as total">
+        {{ 'cookbooks.cookbooksFound' | transloco: { amount: total } }}
+    </p>
     <app-skeleton class="amount-results" *ngIf="vm.cookbooksLoading && !vm.cookbooks" width="10em"></app-skeleton>
 
     <div class="cookbooks">
