@@ -49,6 +49,7 @@
         background: mat.get-color-from-palette(map.get($variables, 'primary-palette'), 'A700');
 
         &::after {
+          color: map.get($variables, 'foreground');
           background: map.get($variables, 'background');
         }
       }

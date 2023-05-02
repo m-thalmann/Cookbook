@@ -43,6 +43,7 @@
 
     @include theme.apply() using ($variables) {
       button {
+        color: map.get($variables, 'accent-text');
         background: theme.adjust-color($variables, map.get($variables, 'accent'), -2.5%);
 
         &:not(:disabled):hover {

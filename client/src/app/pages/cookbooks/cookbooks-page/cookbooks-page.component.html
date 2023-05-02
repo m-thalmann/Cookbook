@@ -11,6 +11,10 @@
     </p>
     <app-skeleton class="amount-results" *ngIf="vm.cookbooksLoading && !vm.cookbooks" width="10em"></app-skeleton>
 
+    <em *ngIf="vm.cookbooks && vm.cookbooks.totalCookbooks === 0" class="not-found-item">
+        {{ 'cookbooks.empty' | transloco }}
+    </em>
+
     <div class="cookbooks">
         <app-cookbook-card [cookbook]="cookbook" *ngFor="let cookbook of vm.cookbooks?.cookbooks"> </app-cookbook-card>
 

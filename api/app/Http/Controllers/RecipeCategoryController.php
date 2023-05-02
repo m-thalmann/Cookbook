@@ -39,6 +39,7 @@ class RecipeCategoryController extends Controller {
 
         $categories = Recipe::query()
             ->forUser(authUser(), $all)
+            ->whereNotNull('category')
             ->orderBy('category', 'asc')
             ->select('category')
             ->distinct()

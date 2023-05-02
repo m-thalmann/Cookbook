@@ -38,6 +38,7 @@ class CookbookCategoryController extends Controller {
 
         $categories = $cookbook
             ->recipes()
+            ->whereNotNull('category')
             ->orderBy('category', 'asc')
             ->select('category')
             ->distinct()

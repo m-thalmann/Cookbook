@@ -22,7 +22,7 @@
         <ng-container content>
             <ng-container *ngIf="recipe; else propertiesLoading">
                 <div class="property-total-time" *ngIf="totalTime">
-                    <mat-icon color="primary" matTooltip="Total time">timer</mat-icon>
+                    <mat-icon color="primary" [matTooltip]="'recipes.times.total' | transloco">timer</mat-icon>
                     <span class="hide-mobile property-name">{{ 'recipes.times.total' | transloco }}:</span>
                     <span>
                         ~ {{ totalTime }}<small>{{ 'recipes.times.minutesAbbr' | transloco }}</small>
@@ -30,13 +30,15 @@
                 </div>
 
                 <div class="property-difficulty" *ngIf="recipe.difficulty !== null">
-                    <mat-icon color="primary" matTooltip="Difficulty">local_fire_department</mat-icon>
+                    <mat-icon color="primary" [matTooltip]="'recipes.difficulty' | transloco">
+                        local_fire_department
+                    </mat-icon>
                     <span class="hide-mobile property-name">{{ 'recipes.difficulty' | transloco }}:</span>
                     <span> {{ recipe.difficulty }} / 5 </span>
                 </div>
 
                 <div class="property-portions" *ngIf="recipe.portions !== null">
-                    <mat-icon color="primary" matTooltip="Portions">flatware</mat-icon>
+                    <mat-icon color="primary" [matTooltip]="'recipes.portions' | transloco">flatware</mat-icon>
                     <span class="hide-mobile property-name">{{ 'recipes.portions' | transloco }}:</span>
                     <span> {{ recipe.portions * portionsMultiplier | amount }} </span>
                 </div>

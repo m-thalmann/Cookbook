@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { BehaviorSubject, lastValueFrom } from 'rxjs';
 import { NumberInputComponent } from 'src/app/components/number-input/number-input.component';
@@ -31,6 +32,7 @@ const Logger = new LoggerClass('Recipes');
     CommonModule,
     FormsModule,
     TranslocoModule,
+    MatTooltipModule,
     MatButtonModule,
     MatIconModule,
     RecipeDetailImageSliderComponent,
