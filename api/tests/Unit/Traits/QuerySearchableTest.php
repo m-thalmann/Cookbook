@@ -128,6 +128,9 @@ class QuerySearchableTest extends TestCase {
     }
 }
 
+/**
+ * @property array $searchProperties
+ */
 class QuerySearchableTestClass {
     use QuerySearchable;
 }

@@ -254,7 +254,7 @@ class QueryFilterableTest extends TestCase {
         $this->instance->scopeFilter($this->query, $this->request);
     }
 
-    private function filterOperatorProvider() {
+    public static function filterOperatorProvider() {
         return [
             ['lt', '<'],
             ['le', '<='],
@@ -265,6 +265,9 @@ class QueryFilterableTest extends TestCase {
     }
 }
 
+/**
+ * @property array $filterableProperties
+ */
 class QueryFilterableTestClass {
     use QueryFilterable;
 }

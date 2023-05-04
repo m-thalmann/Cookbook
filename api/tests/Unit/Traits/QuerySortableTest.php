@@ -162,6 +162,9 @@ class QuerySortableTest extends TestCase {
     }
 }
 
+/**
+ * @property array $sortableProperties
+ */
 class QuerySortableTestClass {
     use QuerySortable;
 }

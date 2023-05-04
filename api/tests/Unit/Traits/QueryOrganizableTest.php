@@ -102,6 +102,11 @@ class QueryOrganizableTest extends TestCase {
     }
 }
 
+/**
+ * @property array $filterableProperties
+ * @property array $searchProperties
+ * @property array $sortableProperties
+ */
 class QueryOrganizableTestClass {
     use QueryOrganizable;
 }
