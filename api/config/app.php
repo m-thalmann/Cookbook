@@ -29,6 +29,7 @@ return [
 
     'env' => env('APP_ENV', 'production'),
     'api_version' => intval(env('APP_API_VERSION', 1)),
+    'demo' => env('APP_DEMO', false),
 
     /*
     |--------------------------------------------------------------------------

@@ -37,5 +37,31 @@ class RecipeImage extends BaseModel {
 
         Storage::disk('public')->delete($images);
     }
-}
 
+    public static function pruneImages() {
+        $databaseImages = RecipeImage::query()
+            ->get('image_path')
+            ->pluck('image_path')
+            ->toArray();
+
+        $storageImages = Storage::disk('public')->allFiles(
+            RecipeImage::IMAGE_DIRECTORY
+        );
+
+        $pathToDelete = [];
+
+        foreach ($storageImages as $image) {
+            if (!in_array($image, $databaseImages)) {
+                $pathToDelete[] = $image;
+            }
+        }
+
+        $amountToDelete = count($pathToDelete);
+
+        if ($amountToDelete > 0) {
+            Storage::disk('public')->delete($pathToDelete);
+        }
+
+        return $amountToDelete;
+    }
+}

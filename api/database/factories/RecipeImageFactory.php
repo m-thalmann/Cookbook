@@ -20,11 +20,6 @@ class RecipeImageFactory extends Factory {
         'https://loremflickr.com/640/480/cake',
     ];
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition() {
         $contents = file_get_contents(
             $this->faker->randomElement(self::RANDOM_IMAGE_URLS)
