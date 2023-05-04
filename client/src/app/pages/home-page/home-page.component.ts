@@ -47,7 +47,7 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
   @ViewChild('searchBarContainer', { read: ElementRef }) searchBarContainer!: ElementRef;
 
   categories$ = this.auth.user$.pipe(
-    switchMap(() => this.api.categories.getList()),
+    switchMap(() => this.api.categories.getList(false, 'desc')),
     handledErrorInterceptor(),
     shareReplay(1)
   );

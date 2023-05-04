@@ -18,7 +18,10 @@ class RecipeCategoryController extends Controller {
      * If authentication is provided it will show all categories for recipes owned by the user.
      * If furthermore the `all` parameter is set, all categories of visible recipes for the user are returned (admin can see any recipe).
      *
-     * If no authentication is provided the categories of all public recipes are returned (independent of the `all` parameter)
+     * If no authentication is provided the categories of all public recipes are returned (independent of the `all` parameter).
+     *
+     * The `sort` parameter can be used to sort the categories by the amount of recipes in the category.
+     * If it is not set the categories are default sorted by their name (asc).
      */
     #[
         OpenApi\Operation(
@@ -36,13 +39,12 @@ class RecipeCategoryController extends Controller {
     ]
     public function index(Request $request) {
         $all = $request->exists('all');
+        $sort = $request->input('sort', null);
 
         $categories = Recipe::query()
             ->forUser(authUser(), $all)
             ->whereNotNull('category')
-            ->orderBy('category', 'asc')
-            ->select('category')
-            ->distinct()
+            ->categories($sort)
             ->get()
             ->pluck('category');
 

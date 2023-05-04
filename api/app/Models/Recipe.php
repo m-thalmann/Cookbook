@@ -129,6 +129,24 @@ class Recipe extends BaseModel {
         });
     }
 
+    public function scopeCategories(Builder $query, ?string $sort) {
+        $sortByAmount =
+            $sort !== null &&
+            preg_match_all('/^-?amount$/', $sort, $matches, PREG_SET_ORDER, 0);
+
+        if ($sortByAmount) {
+            $sortDir = $sort[0] === '-' ? 'desc' : 'asc';
+
+            $query
+                ->groupBy('category')
+                ->select('category')
+                ->selectRaw('count(*) as amount')
+                ->orderBy('amount', $sortDir);
+        } else {
+            $query->distinct('category')->orderBy('category', 'asc');
+        }
+    }
+
     public function prunable() {
         return static::where('deleted_at', '<', now()->subWeek());
     }

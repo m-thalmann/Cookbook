@@ -47,7 +47,7 @@ export class CookbookDetailPageComponent {
     shareReplay(1)
   );
   categories$ = this.reload$.pipe(
-    switchMap((id) => this.api.cookbooks.getCategories(id)),
+    switchMap((id) => this.api.cookbooks.getCategories(id, 'desc')),
     handledErrorInterceptor(),
     shareReplay(1)
   );

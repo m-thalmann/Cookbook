@@ -2,6 +2,7 @@
 
 namespace App\OpenApi\Parameters\Categories;
 
+use App\OpenApi\Parameters\SortParameters;
 use GoldSpecDigital\ObjectOrientedOAS\Objects\Parameter;
 use Vyuldashev\LaravelOpenApi\Factories\ParametersFactory;
 
@@ -18,7 +19,8 @@ class IndexCategoriesParameters extends ParametersFactory {
                 )
                 ->required(false)
                 ->allowEmptyValue(true),
+
+            ...(new SortParameters(['amount']))->build(),
         ];
     }
 }
-

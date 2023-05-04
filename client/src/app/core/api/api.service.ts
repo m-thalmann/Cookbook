@@ -335,12 +335,17 @@ export class ApiService {
 
   public get categories() {
     return {
-      getList: (all = false) =>
-        this.get<{ data: string[] }>(
+      getList: (all = false, sortByAmount?: 'asc' | 'desc') => {
+        const sortParams = sortByAmount
+          ? ApiService.generateSortParams([{ column: 'amount', dir: sortByAmount }])
+          : null;
+
+        return this.get<{ data: string[] }>(
           '/categories',
           TokenType.AccessOptional,
-          ApiService.generateParams({ all: all ? '' : undefined })
-        ),
+          ApiService.mergeParams(ApiService.generateParams({ all: all ? '' : undefined }), sortParams)
+        );
+      },
     };
   }
 
@@ -445,8 +450,13 @@ export class ApiService {
           ApiService.generateListParamOptions(options)
         ),
 
-      getCategories: (cookbookId: number) =>
-        this.get<{ data: string[] }>(`/cookbooks/${cookbookId}/categories`, TokenType.Access),
+      getCategories: (cookbookId: number, sortByAmount?: 'asc' | 'desc') => {
+        const sortParams = sortByAmount
+          ? ApiService.generateSortParams([{ column: 'amount', dir: sortByAmount }])!
+          : undefined;
+
+        return this.get<{ data: string[] }>(`/cookbooks/${cookbookId}/categories`, TokenType.Access, sortParams);
+      },
 
       create: (name: string) => this.post<{ data: Cookbook }>('/cookbooks', { name }, TokenType.Access),
 
