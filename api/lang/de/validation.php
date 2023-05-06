@@ -187,10 +187,10 @@ return [
     |
     */
 
-    // TODO: needs extension?
     'attributes' => [
         'amount' => 'Menge',
         'category' => 'Kategorie',
+        'cookbook_id' => 'Kochbuch',
         'cooking_time_minutes' => 'Kochzeit',
         'current_password' => 'Aktuelles Passwort',
         'description' => 'Beschreibung',
@@ -198,7 +198,9 @@ return [
         'do_logout' => 'Abmelden',
         'email' => 'E-Mail',
         'group' => 'Gruppe',
+        'group_id' => 'Gruppe',
         'image' => 'Bild',
+        'image_path' => 'Bild',
         'is_admin' => 'Admin',
         'is_public' => 'Öffentlich',
         'is_shared' => 'Geteilt',
@@ -212,6 +214,7 @@ return [
         'recipe_id' => 'Rezept',
         'resting_time_minutes' => 'Ruhezeit',
         'token' => 'Token',
+        'type' => 'Art',
         'unit' => 'Einheit',
         'user_id' => 'Benutzer',
     ],

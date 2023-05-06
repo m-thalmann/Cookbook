@@ -134,17 +134,20 @@ class Recipe extends BaseModel {
             $sort !== null &&
             preg_match_all('/^-?amount$/', $sort, $matches, PREG_SET_ORDER, 0);
 
+        $query->select('category');
+
         if ($sortByAmount) {
             $sortDir = $sort[0] === '-' ? 'desc' : 'asc';
 
             $query
                 ->groupBy('category')
-                ->select('category')
                 ->selectRaw('count(*) as amount')
                 ->orderBy('amount', $sortDir);
         } else {
-            $query->distinct('category')->orderBy('category', 'asc');
+            $query->distinct();
         }
+
+        $query->orderBy('category', 'asc');
     }
 
     public function prunable() {

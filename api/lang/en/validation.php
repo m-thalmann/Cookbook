@@ -177,6 +177,7 @@ return [
     'attributes' => [
         'amount' => 'amount',
         'category' => 'category',
+        'cookbook_id' => 'cookbook',
         'cooking_time_minutes' => 'cooking time',
         'current_password' => 'current password',
         'description' => 'description',
