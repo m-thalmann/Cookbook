@@ -134,10 +134,15 @@ export class RecipeSearchComponent {
     shareReplay(1)
   );
 
-  recipesError$ = ApiService.handleRequestError(this.recipes$);
-  categoriesError$ = ApiService.handleRequestError(this.categories$);
+  recipesError$ = this.api.handleRequestError(this.recipes$);
+  categoriesError$ = this.api.handleRequestError(this.categories$);
 
-  constructor(private router: Router, private route: ActivatedRoute, public auth: AuthService) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    public auth: AuthService,
+    private api: ApiService
+  ) {}
 
   doSearch(search: string) {
     this.applyFilterParams({ search: search.length > 0 ? search : null });

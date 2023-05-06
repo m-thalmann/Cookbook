@@ -116,7 +116,7 @@ export class PasswordResetPageComponent implements OnDestroy {
         if (ServerValidationHelper.setValidationErrors(e, this.form)) {
           errorMessage = null;
         } else {
-          errorMessage = ApiService.getErrorMessage(e);
+          errorMessage = this.api.getErrorMessage(e);
         }
       }
 

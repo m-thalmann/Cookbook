@@ -79,6 +79,7 @@
       "loggingOutFromAllSessions": "Fehler beim Abmelden aller Sitzung",
       "loggingOutFromSelectedSession": "Fehler beim Abmelden der ausgewählten Sitzung",
       "movingRecipeToTrash": "Fehler beim Verschieben des Rezepts in den Papierkorb",
+      "noServerConnection": "Keine Verbindung mit dem Server möglich.",
       "restoringRecipe": "Fehler beim Wiederherstellen des Rezepts",
       "savingLanguage": "Fehler beim Speichern der Sprache",
       "sendingResetEmail": "Fehler beim Senden der E-Mail zum Zurücksetzen",

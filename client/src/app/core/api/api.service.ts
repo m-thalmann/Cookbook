@@ -97,50 +97,6 @@ export class ApiService {
     return this.request(new HttpRequest<T>('DELETE', path, { params: params }), tokenType);
   }
 
-  public static getErrorMessage(error: unknown) {
-    if (error instanceof HttpErrorResponse) {
-      if (error.status === 422) {
-        return error.error.errors[Object.keys(error.error.errors)[0]][0];
-      } else {
-        return error.error.message;
-      }
-    }
-
-    return error;
-  }
-
-  public static handleRequestError(request: Observable<unknown>, errorCallback?: (error: unknown) => void) {
-    return request.pipe(
-      switchMap(() => EMPTY),
-      catchError((error) => {
-        if (error instanceof HandledError) {
-          error = error.error;
-        }
-
-        if (errorCallback) {
-          errorCallback(error);
-        }
-
-        if (error instanceof HttpErrorResponse) {
-          return of({
-            type: 'HTTP_ERROR',
-            error,
-            httpError: {
-              status: error.status,
-              data: error.error,
-              message: ApiService.getErrorMessage(error) || 'Unknown error',
-            },
-          } as LoadingError);
-        }
-
-        return of({
-          type: 'UNKNOWN_ERROR',
-          error,
-        } as LoadingError);
-      })
-    );
-  }
-
   private static generateParams(params: { [key: string]: string | undefined }) {
     for (const key in params) {
       if (params[key] === undefined) {
@@ -231,6 +187,65 @@ export class ApiService {
     const filterParams = ApiService.generateFilterParams(options.filters);
 
     return this.mergeParams(baseParams, paginationParams, sortParams, filterParams);
+  }
+
+  public getErrorMessage(error: unknown) {
+    if (error instanceof HttpErrorResponse) {
+      if (error.status !== 0 && error.error) {
+        if (error.status === 422) {
+          return error.error.errors[Object.keys(error.error.errors)[0]][0];
+        } else {
+          return error.error.message;
+        }
+      } else if (error.status === 504 || error.status === 0) {
+        // gateway timeout -> offline
+
+        return this.transloco.translate('messages.errors.noServerConnection');
+      }
+
+      return this.transloco.translate('messages.errors.unexpectedError');
+    }
+
+    return error;
+  }
+
+  public handleRequestError(request: Observable<unknown>, errorCallback?: (error: unknown) => void) {
+    return request.pipe(
+      switchMap(() => EMPTY),
+      catchError((error) => {
+        if (error instanceof HandledError) {
+          error = error.error;
+        }
+
+        if (errorCallback) {
+          errorCallback(error);
+        }
+
+        if (error instanceof HttpErrorResponse) {
+          const apiErrorMessage = this.getErrorMessage(error);
+
+          const message =
+            typeof apiErrorMessage === 'string'
+              ? apiErrorMessage
+              : this.transloco.translate('messages.errors.errorOccurred');
+
+          return of({
+            type: 'HTTP_ERROR',
+            error,
+            httpError: {
+              status: error.status,
+              data: error.error,
+              message,
+            },
+          } as LoadingError);
+        }
+
+        return of({
+          type: 'UNKNOWN_ERROR',
+          error,
+        } as LoadingError);
+      })
+    );
   }
 
   /*

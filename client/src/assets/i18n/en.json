@@ -79,6 +79,7 @@
       "loggingOutFromAllSessions": "Error logging out from all sessions",
       "loggingOutFromSelectedSession": "Error logging out from selected session",
       "movingRecipeToTrash": "Error moving recipe to trash",
+      "noServerConnection": "No server connection.",
       "restoringRecipe": "Error restoring recipe",
       "savingLanguage": "Error saving language",
       "sendingResetEmail": "Error sending reset email",

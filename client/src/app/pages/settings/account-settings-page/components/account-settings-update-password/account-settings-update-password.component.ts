@@ -105,7 +105,7 @@ export class AccountSettingsUpdatePasswordComponent implements OnDestroy {
         ) {
           errorMessage = null;
         } else {
-          errorMessage = ApiService.getErrorMessage(e);
+          errorMessage = this.api.getErrorMessage(e);
         }
       }
 

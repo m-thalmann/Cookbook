@@ -71,7 +71,7 @@ export class RecipesTrashPageComponent {
 
   actionLoading$ = new BehaviorSubject<boolean>(false);
 
-  error$ = ApiService.handleRequestError(this.trashedRecipes$);
+  error$ = this.api.handleRequestError(this.trashedRecipes$);
 
   constructor(
     private api: ApiService,

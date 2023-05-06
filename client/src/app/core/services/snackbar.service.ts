@@ -16,7 +16,7 @@ interface SnackbarOptions {
   providedIn: 'root',
 })
 export class SnackbarService {
-  constructor(private snackBar: MatSnackBar, private transloco: TranslocoService) {}
+  constructor(private snackBar: MatSnackBar, private transloco: TranslocoService, private api: ApiService) {}
 
   private open(
     message: string,
@@ -72,7 +72,7 @@ export class SnackbarService {
     let message: string | undefined = undefined;
 
     if (error instanceof HttpErrorResponse) {
-      let apiErrorMessage = ApiService.getErrorMessage(error);
+      let apiErrorMessage = this.api.getErrorMessage(error);
 
       if (typeof apiErrorMessage === 'string') {
         message = apiErrorMessage;

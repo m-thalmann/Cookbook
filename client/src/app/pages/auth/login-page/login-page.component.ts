@@ -98,7 +98,7 @@ export class LoginPageComponent implements OnDestroy {
         if (ServerValidationHelper.setValidationErrors(e, this.loginForm)) {
           errorMessage = null;
         } else {
-          errorMessage = ApiService.getErrorMessage(e);
+          errorMessage = this.api.getErrorMessage(e);
         }
       } else {
         Logger.error('Error on login:', e);

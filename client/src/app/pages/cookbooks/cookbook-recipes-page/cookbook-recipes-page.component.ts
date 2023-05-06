@@ -31,7 +31,7 @@ export class CookbookRecipesPageComponent {
     shareReplay(1)
   );
 
-  error$ = ApiService.handleRequestError(this.cookbook$);
+  error$ = this.api.handleRequestError(this.cookbook$);
 
   constructor(private route: ActivatedRoute, private api: ApiService) {}
 

@@ -116,7 +116,9 @@ export class SignUpPageComponent implements OnDestroy {
     this.error$.next(null);
 
     try {
-      const signUpResponse = await lastValueFrom(this.api.auth.signUp(this.signUpForm.value));
+      const signUpResponse = await lastValueFrom(
+        this.api.auth.signUp({ ...this.signUpForm.value, language_code: this.transloco.getActiveLang() })
+      );
 
       const signUpData = signUpResponse.body!.data;
 
@@ -134,7 +136,7 @@ export class SignUpPageComponent implements OnDestroy {
         if (ServerValidationHelper.setValidationErrors(e, this.signUpForm)) {
           errorMessage = null;
         } else {
-          errorMessage = ApiService.getErrorMessage(e);
+          errorMessage = this.api.getErrorMessage(e);
         }
       } else {
         Logger.error('Error on sign up:', e);

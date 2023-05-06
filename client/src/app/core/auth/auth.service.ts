@@ -143,7 +143,7 @@ export class AuthService implements OnDestroy {
 
       await this.logout(false);
 
-      let error = ApiService.getErrorMessage(e);
+      let error = this.api.getErrorMessage(e);
 
       Logger.info('User logged out due to the following error:', error);
     }

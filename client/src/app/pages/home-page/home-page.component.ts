@@ -68,9 +68,9 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
     shareReplay(1)
   );
 
-  categoriesError$ = ApiService.handleRequestError(this.categories$);
-  recipesError$ = ApiService.handleRequestError(this.recipes$);
-  cookbooksError$ = ApiService.handleRequestError(this.cookbooks$);
+  categoriesError$ = this.api.handleRequestError(this.categories$);
+  recipesError$ = this.api.handleRequestError(this.recipes$);
+  cookbooksError$ = this.api.handleRequestError(this.cookbooks$);
 
   constructor(private api: ApiService, public auth: AuthService) {}
 

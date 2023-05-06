@@ -41,8 +41,8 @@ export class RecipeDetailPageComponent {
     shareReplay(1)
   );
 
-  error$ = ApiService.handleRequestError(this.recipe$, (error) =>
-    Logger.error('Error while loading recipe:', ApiService.getErrorMessage(error), error)
+  error$ = this.api.handleRequestError(this.recipe$, (error) =>
+    Logger.error('Error while loading recipe:', this.api.getErrorMessage(error), error)
   );
 
   constructor(

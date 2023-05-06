@@ -57,9 +57,9 @@ export class CookbookDetailPageComponent {
     shareReplay(1)
   );
 
-  cookbookError$ = ApiService.handleRequestError(this.cookbook$);
-  categoriesError$ = ApiService.handleRequestError(this.categories$);
-  recipesError$ = ApiService.handleRequestError(this.recipes$);
+  cookbookError$ = this.api.handleRequestError(this.cookbook$);
+  categoriesError$ = this.api.handleRequestError(this.categories$);
+  recipesError$ = this.api.handleRequestError(this.recipes$);
 
   constructor(private api: ApiService, private activatedRoute: ActivatedRoute, private auth: AuthService) {}
 

@@ -69,7 +69,7 @@ export class CookbooksPageComponent {
     shareReplay(1)
   );
 
-  error$ = ApiService.handleRequestError(this.cookbooks$);
+  error$ = this.api.handleRequestError(this.cookbooks$);
 
   constructor(private auth: AuthService, private api: ApiService) {}
 

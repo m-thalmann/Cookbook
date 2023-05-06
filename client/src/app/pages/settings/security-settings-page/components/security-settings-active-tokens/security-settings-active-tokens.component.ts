@@ -72,7 +72,7 @@ export class SecuritySettingsActiveTokensComponent {
     shareReplay(1)
   );
 
-  error$ = ApiService.handleRequestError(this.activeTokens$);
+  error$ = this.api.handleRequestError(this.activeTokens$);
 
   constructor(private api: ApiService, private auth: AuthService, private snackbar: SnackbarService) {}
 
