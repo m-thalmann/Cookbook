@@ -23,4 +23,6 @@ return [
             'Too many requests. Please wait before trying again.',
         'unauthorized' => 'Unauthorized.',
     ],
+
+    'not_available_in_demo' => 'This action is not available in demo mode.',
 ];

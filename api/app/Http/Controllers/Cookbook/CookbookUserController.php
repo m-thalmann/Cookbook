@@ -98,6 +98,8 @@ class CookbookUserController extends Controller {
         )
     ]
     public function store(Request $request, Cookbook $cookbook) {
+        $this->verifyNoDemo();
+
         $this->authorizeAnonymously('update', $cookbook);
 
         $data = $request->validate([
@@ -163,6 +165,8 @@ class CookbookUserController extends Controller {
         )
     ]
     public function update(Request $request, Cookbook $cookbook, User $user) {
+        $this->verifyNoDemo();
+
         $this->authorizeAnonymously('update', $cookbook);
 
         if ($user->user_id === auth()->id()) {
@@ -211,6 +215,8 @@ class CookbookUserController extends Controller {
         )
     ]
     public function destroy(Cookbook $cookbook, int $user) {
+        $this->verifyNoDemo();
+
         $this->authorizeAnonymously('update', $cookbook);
 
         if (
@@ -235,4 +241,3 @@ class CookbookUserController extends Controller {
         return response()->noContent();
     }
 }
-

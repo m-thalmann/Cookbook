@@ -9,7 +9,6 @@ use App\OpenApi\RequestBodies\Auth\SendResetPasswordRequestBody;
 use App\OpenApi\Responses\ForbiddenResponse;
 use App\OpenApi\Responses\NoContentResponse;
 use App\OpenApi\Responses\TooManyRequestsResponse;
-use App\OpenApi\Responses\UnauthorizedResponse;
 use App\OpenApi\Responses\ValidationErrorResponse;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Events\PasswordReset;
@@ -41,6 +40,8 @@ class PasswordResetController extends Controller {
         )
     ]
     public function reset(Request $request) {
+        $this->verifyNoDemo();
+
         $request->validate([
             'token' => ['required'],
             'email' => ['required', 'email'],
@@ -80,6 +81,8 @@ class PasswordResetController extends Controller {
         )
     ]
     public function sendResetEmail(Request $request) {
+        $this->verifyNoDemo();
+
         $request->validate([
             'email' => ['required', 'email'],
         ]);

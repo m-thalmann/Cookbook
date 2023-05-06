@@ -22,7 +22,6 @@ class Controller extends BaseController {
      * @return \Illuminate\Auth\Access\Response
      *
      * @see \Illuminate\Routing\Controller::authorize()
-     * @see
      *
      * @throws \Illuminate\Auth\Access\NotFoundHttpException
      */
@@ -31,6 +30,18 @@ class Controller extends BaseController {
             return $this->authorize($ability, $arguments);
         } catch (AuthorizationException $e) {
             throw new NotFoundHttpException();
+        }
+    }
+
+    /**
+     * Verifies that the current environment is not 'demo'.
+     * If it is an authorization exception is thrown.
+     */
+    public function verifyNoDemo() {
+        if (app()->environment('demo')) {
+            throw new AuthorizationException(
+                __('messages.not_available_in_demo')
+            );
         }
     }
 }

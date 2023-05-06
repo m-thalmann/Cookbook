@@ -97,6 +97,8 @@ class RecipeController extends Controller {
         )
     ]
     public function store(Request $request) {
+        $this->verifyNoDemo();
+
         $this->authorize('create', Recipe::class);
 
         $data = $request->validate([
@@ -261,6 +263,8 @@ class RecipeController extends Controller {
         )
     ]
     public function update(Request $request, Recipe $recipe) {
+        $this->verifyNoDemo();
+
         $this->authorizeAnonymously('update', $recipe);
 
         $validationRules = [
@@ -336,6 +340,8 @@ class RecipeController extends Controller {
         )
     ]
     public function destroy(Recipe $recipe) {
+        $this->verifyNoDemo();
+
         $this->authorizeAnonymously('delete', $recipe);
 
         $recipe->delete();
@@ -400,6 +406,8 @@ class RecipeController extends Controller {
         )
     ]
     public function truncateTrash() {
+        $this->verifyNoDemo();
+
         $query = authUser()
             ->recipes()
             ->onlyTrashed();
@@ -432,6 +440,8 @@ class RecipeController extends Controller {
         )
     ]
     public function forceDestroy(Recipe $recipe) {
+        $this->verifyNoDemo();
+
         $this->authorizeAnonymously('forceDelete', $recipe);
 
         $recipe->forceDelete();
@@ -460,6 +470,8 @@ class RecipeController extends Controller {
         )
     ]
     public function restore(Recipe $recipe) {
+        $this->verifyNoDemo();
+
         $this->authorizeAnonymously('restore', $recipe);
 
         $recipe->restore();

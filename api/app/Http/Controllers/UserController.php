@@ -77,6 +77,8 @@ class UserController extends Controller {
         )
     ]
     public function store(Request $request) {
+        $this->verifyNoDemo();
+
         $this->authorize('create', User::class);
 
         $data = $request->validate([
@@ -194,6 +196,8 @@ class UserController extends Controller {
         )
     ]
     public function update(Request $request, User $user) {
+        $this->verifyNoDemo();
+
         $this->authorizeAnonymously('update', $user);
 
         $data = $request->validate([
@@ -293,6 +297,8 @@ class UserController extends Controller {
         )
     ]
     public function destroy(User $user) {
+        $this->verifyNoDemo();
+
         $this->authorizeAnonymously('delete', $user);
 
         // check if user is last admin user in at least one cookbook

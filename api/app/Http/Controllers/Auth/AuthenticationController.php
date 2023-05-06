@@ -117,6 +117,8 @@ class AuthenticationController extends Controller {
             throw new HttpException(405, __('auth.sign_up_disabled'));
         }
 
+        $this->verifyNoDemo();
+
         if (config('services.hcaptcha.enabled')) {
             /**
              * @var HCaptchaService

@@ -82,6 +82,8 @@ class RecipeImageController extends Controller {
         )
     ]
     public function store(Request $request, Recipe $recipe) {
+        $this->verifyNoDemo();
+
         $this->authorizeAnonymously('update', $recipe);
 
         $request->validate([
@@ -126,6 +128,8 @@ class RecipeImageController extends Controller {
         )
     ]
     public function destroy(RecipeImage $recipeImage) {
+        $this->verifyNoDemo();
+
         $this->authorizeAnonymously('update', $recipeImage->recipe);
 
         $recipeImage->delete();
@@ -133,4 +137,3 @@ class RecipeImageController extends Controller {
         return response()->noContent();
     }
 }
-

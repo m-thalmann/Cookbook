@@ -93,6 +93,8 @@ class IngredientController extends Controller {
         )
     ]
     public function store(Request $request, Recipe $recipe) {
+        $this->verifyNoDemo();
+
         $this->authorizeAnonymously('update', $recipe);
 
         $ingredient = self::storeIngredient($request->all(), $recipe);
@@ -130,6 +132,8 @@ class IngredientController extends Controller {
         )
     ]
     public function update(Request $request, Ingredient $ingredient) {
+        $this->verifyNoDemo();
+
         $this->authorizeAnonymously('update', $ingredient);
 
         $data = $request->validate([
@@ -165,6 +169,8 @@ class IngredientController extends Controller {
         )
     ]
     public function destroy(Ingredient $ingredient) {
+        $this->verifyNoDemo();
+
         $this->authorizeAnonymously('delete', $ingredient);
 
         $ingredient->delete();
@@ -206,4 +212,3 @@ class IngredientController extends Controller {
         return $recipe->ingredients()->create($data);
     }
 }
-

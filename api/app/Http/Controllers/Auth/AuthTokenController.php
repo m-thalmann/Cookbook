@@ -35,6 +35,8 @@ class AuthTokenController extends Controller {
         )
     ]
     public function index() {
+        $this->verifyNoDemo();
+
         return response()->pagination(
             fn($perPage) => AuthTokenResource::collection(
                 authUser()
@@ -67,6 +69,8 @@ class AuthTokenController extends Controller {
         )
     ]
     public function show(AuthToken $authToken) {
+        $this->verifyNoDemo();
+
         $this->authorizeAnonymously('view', $authToken);
 
         return AuthTokenResource::make($authToken);
@@ -93,6 +97,8 @@ class AuthTokenController extends Controller {
         )
     ]
     public function indexGroup(int $groupId) {
+        $this->verifyNoDemo();
+
         return response()->pagination(
             fn($perPage) => AuthTokenResource::collection(
                 authUser()
@@ -124,6 +130,8 @@ class AuthTokenController extends Controller {
         )
     ]
     public function destroy(AuthToken $authToken) {
+        $this->verifyNoDemo();
+
         $this->authorizeAnonymously('delete', $authToken);
 
         $authToken->deleteAllTokensFromSameGroup();
@@ -149,6 +157,8 @@ class AuthTokenController extends Controller {
         )
     ]
     public function truncate() {
+        $this->verifyNoDemo();
+
         authUser()
             ->tokens()
             ->delete();

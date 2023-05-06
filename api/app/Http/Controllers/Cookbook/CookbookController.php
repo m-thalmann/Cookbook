@@ -91,6 +91,8 @@ class CookbookController extends Controller {
         )
     ]
     public function store(Request $request) {
+        $this->verifyNoDemo();
+
         $this->authorize('create', Cookbook::class);
 
         $data = $request->validate([
@@ -169,6 +171,8 @@ class CookbookController extends Controller {
         )
     ]
     public function update(Request $request, Cookbook $cookbook) {
+        $this->verifyNoDemo();
+
         $this->authorizeAnonymously('update', $cookbook);
 
         $data = $request->validate([
@@ -201,6 +205,8 @@ class CookbookController extends Controller {
         )
     ]
     public function destroy(Cookbook $cookbook) {
+        $this->verifyNoDemo();
+
         $this->authorizeAnonymously('delete', $cookbook);
 
         $cookbook->delete();

@@ -29,7 +29,6 @@ return [
 
     'env' => env('APP_ENV', 'production'),
     'api_version' => intval(env('APP_API_VERSION', 1)),
-    'demo' => env('APP_DEMO', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -54,7 +53,9 @@ return [
     */
 
     'sign_up_enabled' => env('APP_SIGN_UP_ENABLED', true),
-    'email_verification_enabled' => env('APP_EMAIL_VERIFICATION_ENABLED', true),
+    'email_verification_enabled' =>
+        env('APP_EMAIL_VERIFICATION_ENABLED', true) &&
+        env('APP_ENV') !== 'demo',
 
     /*
     |--------------------------------------------------------------------------

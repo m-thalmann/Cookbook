@@ -4,10 +4,12 @@ namespace Database\Seeders;
 
 use App\Models\Recipe;
 use App\Models\Cookbook;
+use App\Models\Ingredient;
 use App\Models\RecipeImage;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Exception;
+use Illuminate\Support\Facades\Hash;
 
 class DemoSeeder extends Seeder {
     const USER_AMOUNT = 3;
@@ -15,13 +17,14 @@ class DemoSeeder extends Seeder {
     const COOKBOOK_AMOUNT = 3;
 
     public function run() {
-        if (!config('app.demo')) {
+        if (!app()->environment('demo')) {
             throw new Exception('Demo mode is not enabled.');
         }
 
         $demoUser = User::factory()->create([
             'name' => 'John Doe',
-            'email' => 'john@example.com',
+            'email' => 'demo@example.com',
+            'password' => Hash::make('demo'),
         ]);
 
         $users = [
@@ -45,7 +48,6 @@ class DemoSeeder extends Seeder {
                 $recipes->add(
                     Recipe::factory()
                         ->for($user)
-                        ->hasIngredients(rand(1, 10))
                         ->make([
                             'cookbook_id' => fake()->randomElement($cookbooks)
                                 ->id,
@@ -57,7 +59,6 @@ class DemoSeeder extends Seeder {
                 Recipe::factory()
                     ->count(self::RECIPE_AMOUNT)
                     ->for($user)
-                    ->hasIngredients(rand(1, 10))
                     ->make()
             );
         }
@@ -66,6 +67,11 @@ class DemoSeeder extends Seeder {
             Recipe $recipe
         ) {
             $recipe->save();
+
+            Ingredient::factory()
+                ->count(rand(1, 10))
+                ->for($recipe)
+                ->create();
 
             try {
                 RecipeImage::factory()
