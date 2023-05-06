@@ -1,4 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { DefaultTranspiler, HashMap, Translation, TranslocoTranspiler } from '@ngneat/transloco';
 
 const PLURAL_MATCH = /^\[\[ (\w+(?:,(?:\\.|[^,])+)+) \]\]$/g;
@@ -7,10 +7,6 @@ const SPLIT_BY_NON_ESCAPED_COMMA = /(\\.|[^,])+/g;
 
 @Injectable()
 export class CustomTranspiler extends DefaultTranspiler implements TranslocoTranspiler {
-  constructor(private injector: Injector) {
-    super();
-  }
-
   override transpile(value: any, params: HashMap = {}, translation: Translation, key: string): any {
     if (typeof value === 'string') {
       const pluralMatch = PLURAL_MATCH.exec(value);

@@ -117,7 +117,7 @@ export class AccountSettingsUpdateProfileComponent implements OnDestroy {
 
       await this.auth.initialize();
 
-      this.snackbar.info({ message: this.transloco.translate('messages.profileUpdated') });
+      this.snackbar.info('messages.profileUpdated', { translateMessage: true });
 
       this.isLoading$.next(false);
     } catch (e) {
@@ -149,4 +149,3 @@ export class AccountSettingsUpdateProfileComponent implements OnDestroy {
     this.subSink.unsubscribe();
   }
 }
-

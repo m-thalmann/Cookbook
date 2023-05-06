@@ -88,7 +88,7 @@ export class AccountSettingsUpdatePasswordComponent implements OnDestroy {
 
       await this.auth.initialize();
 
-      this.snackbar.info({ message: this.transloco.translate('messages.passwordUpdated') });
+      this.snackbar.info('messages.passwordUpdated', { translateMessage: true });
 
       this.isLoading$.next(false);
     } catch (e) {
@@ -125,4 +125,3 @@ export class AccountSettingsUpdatePasswordComponent implements OnDestroy {
     this.subSink.unsubscribe();
   }
 }
-

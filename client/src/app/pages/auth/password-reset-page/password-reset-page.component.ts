@@ -104,7 +104,7 @@ export class PasswordResetPageComponent implements OnDestroy {
     try {
       await lastValueFrom(this.api.auth.resetPassword(this.token, this.email, this.password?.value).pipe(take(1)));
 
-      this.snackbar.info({ message: this.transloco.translate('messages.passwordReset') });
+      this.snackbar.info('messages.passwordReset', { translateMessage: true });
 
       this.router.navigateByUrl('/login');
     } catch (e) {
@@ -132,4 +132,3 @@ export class PasswordResetPageComponent implements OnDestroy {
     this.subSink.unsubscribe();
   }
 }
-

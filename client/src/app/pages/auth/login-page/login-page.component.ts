@@ -135,19 +135,17 @@ export class LoginPageComponent implements OnDestroy {
     try {
       await lastValueFrom(this.api.auth.sendResetPasswordEmail(email));
 
-      this.snackbar.info({ message: this.transloco.translate('messages.resetEmailSent') });
+      this.snackbar.info('messages.resetEmailSent', { translateMessage: true });
     } catch (e) {
-      const errorMessage = ApiService.getErrorMessage(e);
+      const errorMessage = this.snackbar.exception(e, {
+        defaultMessage: 'messages.errors.sendingResetEmail',
+        translateMessage: true,
+      }).message;
 
-      this.snackbar.warn({
-        message:
-          this.transloco.translate('messages.errors.sendingResetEmail') +
-          (typeof errorMessage === 'string' && errorMessage ? ': ' + errorMessage : ''),
-      });
-      Logger.error('Error sending reset email:', errorMessage);
-    } finally {
-      this.isLoading$.next(false);
+      Logger.error('Error sending reset email:', errorMessage, e);
     }
+
+    this.isLoading$.next(false);
   }
 
   ngOnDestroy() {

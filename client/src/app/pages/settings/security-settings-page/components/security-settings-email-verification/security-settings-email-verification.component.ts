@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
+import { TranslocoModule } from '@ngneat/transloco';
 import { BehaviorSubject, lastValueFrom, take } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
@@ -33,12 +33,7 @@ const Logger = new LoggerClass('Settings');
 export class SecuritySettingsEmailVerificationComponent {
   isLoading$ = new BehaviorSubject<boolean>(false);
 
-  constructor(
-    private api: ApiService,
-    public auth: AuthService,
-    private snackbar: SnackbarService,
-    private transloco: TranslocoService
-  ) {}
+  constructor(private api: ApiService, public auth: AuthService, private snackbar: SnackbarService) {}
 
   async resendVerificationEmail() {
     this.isLoading$.next(true);
@@ -46,16 +41,16 @@ export class SecuritySettingsEmailVerificationComponent {
     try {
       await lastValueFrom(this.api.auth.resendVerificationEmail().pipe(take(1)));
 
-      this.snackbar.info({ message: this.transloco.translate('messages.verificationEmailSent') });
-
-      this.isLoading$.next(false);
+      this.snackbar.info('messages.verificationEmailSent', { translateMessage: true });
     } catch (e) {
-      const errorMessage = ApiService.getErrorMessage(e);
+      const errorMessage = this.snackbar.exception(e, {
+        defaultMessage: 'messages.errors.sendingVerificationEmail',
+        translateMessage: true,
+      }).message;
 
-      this.snackbar.warn({ message: this.transloco.translate('messages.sendingVerificationEmail') });
-      this.isLoading$.next(false);
-      Logger.error('Error sending verification email:', errorMessage);
+      Logger.error('Error sending verification email:', errorMessage, e);
     }
+
+    this.isLoading$.next(false);
   }
 }
-

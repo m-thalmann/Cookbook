@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
+import { TranslocoModule } from '@ngneat/transloco';
 import { BehaviorSubject, lastValueFrom } from 'rxjs';
 import { NumberInputComponent } from 'src/app/components/number-input/number-input.component';
 import { SkeletonComponent } from 'src/app/components/skeleton/skeleton.component';
@@ -54,12 +54,7 @@ export class RecipeDetailComponent {
 
   portionsMultiplier: number = 1;
 
-  constructor(
-    private api: ApiService,
-    private snackbar: SnackbarService,
-    public routeHelper: RouteHelperService,
-    private transloco: TranslocoService
-  ) {}
+  constructor(private api: ApiService, private snackbar: SnackbarService, public routeHelper: RouteHelperService) {}
 
   get totalTime() {
     if (
@@ -101,14 +96,18 @@ export class RecipeDetailComponent {
     try {
       await lastValueFrom(this.api.recipes.delete(this.recipe!.id));
 
-      this.snackbar.info({ message: this.transloco.translate('messages.recipeMovedToTrash') });
+      this.snackbar.info('messages.recipeMovedToTrash', { translateMessage: true });
 
       this.routeHelper.navigateBack();
     } catch (e) {
-      this.snackbar.warn({ message: this.transloco.translate('messages.errors.movingRecipeToTrash'), duration: null });
-      Logger.error('Error moving recipe to trash:', e);
-    } finally {
-      this.isLoading$.next(false);
+      const errorMessage = this.snackbar.exception(e, {
+        translateMessage: true,
+        defaultMessage: 'messages.errors.movingRecipeToTrash',
+      }).message;
+
+      Logger.error('Error moving recipe to trash:', errorMessage, e);
     }
+
+    this.isLoading$.next(false);
   }
 }

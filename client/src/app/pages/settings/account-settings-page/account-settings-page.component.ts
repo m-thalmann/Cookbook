@@ -72,16 +72,17 @@ export class AccountSettingsPageComponent {
 
       await this.auth.initialize();
 
-      this.snackbar.info({ message: this.transloco.translate('messages.accountDeleted') });
-
-      this.isLoading$.next(false);
+      this.snackbar.info('messages.accountDeleted', { translateMessage: true });
     } catch (e) {
-      const errorMessage = ApiService.getErrorMessage(e);
+      const errorMessage = this.snackbar.exception(e, {
+        defaultMessage: 'messages.errors.deletingAccount',
+        translateMessage: true,
+      }).message;
 
-      this.snackbar.warn({ message: this.transloco.translate('messages.errors.deletingAccount') });
-      this.isLoading$.next(false);
-      Logger.error('Error deleting account:', errorMessage);
+      Logger.error('Error deleting account:', errorMessage, e);
     }
+
+    this.isLoading$.next(false);
   }
 
   private async getUser() {

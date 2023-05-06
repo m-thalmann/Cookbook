@@ -33,7 +33,7 @@ export class NumberInputComponent implements ControlValueAccessor {
   value: number = 0;
   isDisabled = false;
 
-  private onChange = (value: number) => {};
+  private onChange = (_: number) => {};
   private onTouched = () => {};
 
   constructor() {}

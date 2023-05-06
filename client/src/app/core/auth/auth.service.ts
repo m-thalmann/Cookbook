@@ -133,7 +133,7 @@ export class AuthService implements OnDestroy {
       this.setEmailVerified(userResponse);
     } catch (e) {
       if (!(e instanceof HttpErrorResponse) || e.status !== 401) {
-        this.snackbar.warn({ message: this.transloco.translate('messages.errors.loadingUserInformation') });
+        this.snackbar.warn('messages.errors.loadingUserInformation', { translateMessage: true });
         Logger.error('Error while initializing the user:', e);
 
         this._isInitialized$.next(false);
@@ -180,7 +180,7 @@ export class AuthService implements OnDestroy {
       await this.router.navigate(['/home']);
     }
 
-    this.snackbar.info({ message });
+    this.snackbar.info(message, {});
   }
 
   public refreshAccessToken(accessToken: string, refreshToken: string) {

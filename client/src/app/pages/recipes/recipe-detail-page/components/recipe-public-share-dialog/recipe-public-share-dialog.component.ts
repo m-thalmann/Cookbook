@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleChange, MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { Router } from '@angular/router';
-import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
+import { TranslocoModule } from '@ngneat/transloco';
 import { lastValueFrom } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
@@ -35,6 +35,7 @@ const Logger = new LoggerClass('Recipes');
 })
 export class RecipePublicShareDialogComponent {
   recipe: DetailedRecipe;
+  publicShareEnabled: boolean;
 
   updating = false;
 
@@ -44,10 +45,10 @@ export class RecipePublicShareDialogComponent {
     private snackbar: SnackbarService,
     private api: ApiService,
     private router: Router,
-    private changeDetector: ChangeDetectorRef,
-    private transloco: TranslocoService
+    private changeDetector: ChangeDetectorRef
   ) {
     this.recipe = data.recipe;
+    this.publicShareEnabled = this.recipe.share_uuid !== null;
   }
 
   get shareLink() {
@@ -66,15 +67,21 @@ export class RecipePublicShareDialogComponent {
     this.updating = true;
     this.dialogRef.disableClose = true;
 
-    const enabled = e.checked;
+    this.publicShareEnabled = e.checked;
 
     try {
-      const response = await lastValueFrom(this.api.recipes.update(this.recipe.id, { is_shared: enabled }));
+      const response = await lastValueFrom(
+        this.api.recipes.update(this.recipe.id, { is_shared: this.publicShareEnabled })
+      );
 
       // recipe is passed by reference, so this is also updated in caller
       this.recipe.share_uuid = response.body!.data.share_uuid;
     } catch (e) {
-      Logger.error('Error updating recipe share-uuid:', e);
+      this.publicShareEnabled = !this.publicShareEnabled;
+
+      const errorMessage = this.snackbar.exception(e, {}).message;
+
+      Logger.error('Error updating recipe share-uuid:', errorMessage, e);
     }
 
     this.updating = false;
@@ -84,6 +91,6 @@ export class RecipePublicShareDialogComponent {
   }
 
   linkCopied() {
-    this.snackbar.info({ message: this.transloco.translate('messages.linkCopied') });
+    this.snackbar.info('messages.linkCopied', { translateMessage: true });
   }
 }

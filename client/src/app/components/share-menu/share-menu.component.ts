@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
+import { TranslocoModule } from '@ngneat/transloco';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
@@ -24,7 +24,7 @@ export class ShareMenuComponent {
 
   @Input() disabled = false;
 
-  constructor(private clipboard: Clipboard, private snackbar: SnackbarService, private transloco: TranslocoService) {}
+  constructor(private clipboard: Clipboard, private snackbar: SnackbarService) {}
 
   get hasShareApi() {
     return !!navigator.share;
@@ -36,7 +36,7 @@ export class ShareMenuComponent {
 
   copyLink() {
     if (this.clipboard.copy(location.href)) {
-      this.snackbar.info({ message: this.transloco.translate('messages.linkCopied') });
+      this.snackbar.info('messages.linkCopied', { translateMessage: true });
     }
   }
 

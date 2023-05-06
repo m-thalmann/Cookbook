@@ -10,11 +10,14 @@ import { ConfirmDialogComponent } from 'src/app/components/dialogs/confirm-dialo
 import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
+import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
 import { ListRecipe } from 'src/app/core/models/recipe';
 import { PLACEHOLDER_RECIPE_IMAGE_URL } from 'src/app/core/models/recipe-image';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+
+const Logger = new LoggerClass('Recipes');
 
 @Component({
   selector: 'app-recipes-trash-page',
@@ -115,14 +118,19 @@ export class RecipesTrashPageComponent {
     try {
       await lastValueFrom(this.api.recipes.trash.deleteAll());
 
-      this.snackbar.info({ message: this.transloco.translate('messages.trashCleared') });
+      this.snackbar.info('messages.trashCleared', { translateMessage: true });
 
       this.resetList$.emit();
     } catch (e) {
-      this.snackbar.warn({ message: this.transloco.translate('messages.errors.clearingTrash'), duration: null });
-    } finally {
-      this.actionLoading$.next(false);
+      const errorMessage = this.snackbar.exception(e, {
+        defaultMessage: 'messages.errors.clearingTrash',
+        translateMessage: true,
+      }).message;
+
+      Logger.error('Error clearing trash', errorMessage, e);
     }
+
+    this.actionLoading$.next(false);
   }
 
   async restoreRecipe(recipe: ListRecipe) {
@@ -131,14 +139,19 @@ export class RecipesTrashPageComponent {
     try {
       await lastValueFrom(this.api.recipes.trash.restoreRecipe(recipe.id));
 
-      this.snackbar.info({ message: this.transloco.translate('messages.recipeRestored') });
+      this.snackbar.info('messages.recipeRestored', { translateMessage: true });
 
       this.resetList$.emit();
     } catch (e) {
-      this.snackbar.warn({ message: this.transloco.translate('messages.errors.restoringRecipe'), duration: null });
-    } finally {
-      this.actionLoading$.next(false);
+      const errorMessage = this.snackbar.exception(e, {
+        defaultMessage: 'messages.errors.restoringRecipe',
+        translateMessage: true,
+      }).message;
+
+      Logger.error('Error restoring recipe', errorMessage, e);
     }
+
+    this.actionLoading$.next(false);
   }
 
   async permanentlyDeleteRecipe(recipe: ListRecipe) {
@@ -166,13 +179,18 @@ export class RecipesTrashPageComponent {
     try {
       await lastValueFrom(this.api.recipes.trash.deleteRecipe(recipe.id));
 
-      this.snackbar.info({ message: this.transloco.translate('messages.recipeDeleted') });
+      this.snackbar.info('messages.recipeDeleted', { translateMessage: true });
 
       this.resetList$.emit();
     } catch (e) {
-      this.snackbar.warn({ message: this.transloco.translate('messages.errors.deletingRecipe'), duration: null });
-    } finally {
-      this.actionLoading$.next(false);
+      const errorMessage = this.snackbar.exception(e, {
+        defaultMessage: 'messages.errors.deletingRecipe',
+        translateMessage: true,
+      }).message;
+
+      Logger.error('Error deleting recipe', errorMessage, e);
     }
+
+    this.actionLoading$.next(false);
   }
 }

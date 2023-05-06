@@ -61,8 +61,13 @@ export class LanguageService implements OnDestroy {
 
       this.auth.updateUser(updateResponse.body!.data);
     } catch (e) {
-      this.snackbar.warn({ message: this.transloco.translate('messages.errors.savingLanguage'), duration: null });
-      Logger.error('Error saving language to user:', e);
+      const errorMessage = this.snackbar.exception(e, {
+        defaultMessage: 'messages.errors.savingLanguage',
+        translateMessage: true,
+        duration: null,
+      }).message;
+
+      Logger.error('Error saving language to user:', errorMessage, e);
     }
   }
 
