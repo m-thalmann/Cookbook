@@ -59,6 +59,7 @@
     "password": "Password",
     "passwordConfirmation": "Password confirmation",
     "profile": "Profile",
+    "public": "Public",
     "resultsFound": "[[ amount, =1 '1 result found', default '{{amount}} results found' ]]",
     "updateDate": "Update date",
     "yourEmail": "Your email"

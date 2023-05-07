@@ -82,15 +82,15 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
     );
   }
 
-  ngOnDestroy() {
-    this.subSink.unsubscribe();
-  }
-
   getRemainingItems(meta?: PaginationMeta) {
     if (!meta) {
       return 0;
     }
 
     return meta.total - meta.count;
+  }
+
+  ngOnDestroy() {
+    this.subSink.unsubscribe();
   }
 }

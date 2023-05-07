@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
 import { ShareMenuComponent } from 'src/app/components/share-menu/share-menu.component';
@@ -23,6 +24,7 @@ import { RecipePublicShareDialogComponent } from '../recipe-public-share-dialog/
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
+    MatTooltipModule,
     ShareMenuComponent,
     SkeletonComponent,
   ],

@@ -59,6 +59,7 @@
     "password": "Passwort",
     "passwordConfirmation": "Passwort wiederholen",
     "profile": "Profil",
+    "public": "Öffentlich",
     "resultsFound": "[[ amount, =1 '1 Ergebnis gefunden', default '{{amount}} Ergebnisse gefunden' ]]",
     "updateDate": "Letzte Änderung",
     "yourEmail": "Deine E-Mail"

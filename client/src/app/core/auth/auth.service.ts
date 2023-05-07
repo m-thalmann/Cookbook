@@ -10,6 +10,7 @@ import {
   distinctUntilChanged,
   lastValueFrom,
   map,
+  shareReplay,
 } from 'rxjs';
 import { ApiService } from '../api/api.service';
 import { Logger as LoggerClass } from '../helpers/logger';
@@ -59,8 +60,8 @@ export class AuthService implements OnDestroy {
     this._accessToken$ = new BehaviorSubject(this.storage.get<string>(ACCESS_TOKEN_KEY));
     this._refreshToken$ = new BehaviorSubject(this.storage.get(REFRESH_TOKEN_KEY));
 
-    this.accessToken$ = this._accessToken$.asObservable().pipe(distinctUntilChanged());
-    this.refreshToken$ = this._refreshToken$.asObservable().pipe(distinctUntilChanged());
+    this.accessToken$ = this._accessToken$.asObservable().pipe(distinctUntilChanged(), shareReplay(1));
+    this.refreshToken$ = this._refreshToken$.asObservable().pipe(distinctUntilChanged(), shareReplay(1));
 
     this.subSink.add(
       this.accessToken$.subscribe((accessToken) => {
@@ -92,9 +93,10 @@ export class AuthService implements OnDestroy {
     );
 
     this._user$ = new BehaviorSubject<DetailedUser | null>(this.storage.get<DetailedUser>(USER_KEY));
-    this.user$ = this._user$
-      .asObservable()
-      .pipe(distinctUntilChanged((previous, current) => JSON.stringify(previous) === JSON.stringify(current)));
+    this.user$ = this._user$.asObservable().pipe(
+      distinctUntilChanged((previous, current) => JSON.stringify(previous) === JSON.stringify(current)),
+      shareReplay(1)
+    );
 
     this.subSink.add(
       this.user$.subscribe((user) => {
@@ -108,12 +110,9 @@ export class AuthService implements OnDestroy {
 
     this.isAuthenticated$ = this._user$.pipe(
       map((user) => user !== null),
-      distinctUntilChanged()
+      distinctUntilChanged(),
+      shareReplay(1)
     );
-  }
-
-  ngOnDestroy() {
-    this.subSink.unsubscribe();
   }
 
   async initialize() {
@@ -204,5 +203,9 @@ export class AuthService implements OnDestroy {
     }
 
     this._isUnverified$.next(unverified);
+  }
+
+  ngOnDestroy() {
+    this.subSink.unsubscribe();
   }
 }

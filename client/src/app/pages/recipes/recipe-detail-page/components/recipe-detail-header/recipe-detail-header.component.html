@@ -3,7 +3,11 @@
         <h2>
             <ng-container *ngIf="recipe; else titleLoading">
                 <span>{{ recipe.name }}</span>
-                <mat-icon *ngIf="recipe.is_public">public</mat-icon>
+
+                <div class="icons">
+                    <mat-icon [matTooltip]="'general.public' | transloco" *ngIf="recipe.is_public">public</mat-icon>
+                    <mat-icon [matTooltip]="'recipes.publicShare' | transloco" *ngIf="recipe.share_uuid">link</mat-icon>
+                </div>
             </ng-container>
 
             <ng-template #titleLoading>
