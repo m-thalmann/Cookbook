@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\HttpException;
 use App\Models\Recipe;
 use App\Models\RecipeImage;
+use App\OpenApi\Parameters\BaseParameters;
 use App\OpenApi\RequestBodies\RecipeImages\CreateRecipeImageRequestBody;
 use App\OpenApi\Responses\NoContentResponse;
 use App\OpenApi\Responses\NotFoundResponse;
@@ -30,6 +31,7 @@ class RecipeImageController extends Controller {
             security: 'OptionalAccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[
         OpenApi\Response(
             factory: RecipeImageIndexResponse::class,
@@ -60,6 +62,7 @@ class RecipeImageController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\RequestBody(factory: CreateRecipeImageRequestBody::class)]
     #[
         OpenApi\Response(
@@ -118,6 +121,7 @@ class RecipeImageController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]

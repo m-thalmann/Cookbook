@@ -3,6 +3,7 @@
 namespace App\OpenApi\Parameters\Recipes;
 
 use App\Models\Recipe;
+use App\OpenApi\Parameters\BaseParameters;
 use App\OpenApi\Parameters\FilterParameters;
 use App\OpenApi\Parameters\PaginationParameters;
 use App\OpenApi\Parameters\SearchParameters;
@@ -37,7 +38,8 @@ class IndexRecipesParameters extends ParametersFactory {
             ...(new FilterParameters(
                 $recipeObject->getFilterableProperties()
             ))->build(),
+
+            ...(new BaseParameters())->build(),
         ];
     }
 }
-

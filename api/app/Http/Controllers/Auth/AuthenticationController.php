@@ -7,6 +7,7 @@ use App\Exceptions\UnauthorizedHttpException;
 use App\Http\Resources\UserResource;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\OpenApi\Parameters\BaseParameters;
 use App\OpenApi\RequestBodies\Auth\LoginRequestBody;
 use App\OpenApi\RequestBodies\Auth\SignUpRequestBody;
 use App\OpenApi\Responses\Auth\LoginSuccessResponse;
@@ -39,6 +40,7 @@ class AuthenticationController extends Controller {
      * If the authentication succeeds the user and tokens are returned.
      */
     #[OpenApi\Operation(tags: ['Auth'])]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\RequestBody(factory: LoginRequestBody::class)]
     #[OpenApi\Response(factory: LoginSuccessResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
@@ -97,6 +99,7 @@ class AuthenticationController extends Controller {
      * Uses the data supplied to create a new user
      */
     #[OpenApi\Operation(tags: ['Auth'])]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\RequestBody(factory: SignUpRequestBody::class)]
     #[OpenApi\Response(factory: SignUpSuccessResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: ForbiddenResponse::class, statusCode: 403)]
@@ -183,6 +186,7 @@ class AuthenticationController extends Controller {
      * Uses the supplied refresh-token to generate a new access/refresh-token-pair
      */
     #[OpenApi\Operation(tags: ['Auth'], security: 'RefreshTokenSecurityScheme')]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\Response(factory: RefreshTokenResponse::class, statusCode: 201)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[
@@ -219,6 +223,7 @@ class AuthenticationController extends Controller {
      * Deletes all access and refresh tokens for the session (from the same group)
      */
     #[OpenApi\Operation(tags: ['Auth'], security: 'AccessTokenSecurityScheme')]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 201)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[
@@ -239,6 +244,7 @@ class AuthenticationController extends Controller {
      * Returns the authenticated user
      */
     #[OpenApi\Operation(tags: ['Auth'], security: 'AccessTokenSecurityScheme')]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\Response(factory: UserResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[

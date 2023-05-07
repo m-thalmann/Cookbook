@@ -66,7 +66,7 @@ class RecipeSchema extends ExtendableSchemaFactory {
                     'The amount of minutes the prepared recipe has to cook / bake'
                 )
                 ->nullable(),
-            Schema::string('deleted_at')
+            Schema::integer('deleted_at')
                 ->description('The unix-timestamp when the recipe was deleted')
                 ->nullable()
                 ->example(null),
@@ -109,4 +109,3 @@ class RecipeSchema extends ExtendableSchemaFactory {
         ];
     }
 }
-

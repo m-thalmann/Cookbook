@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Cookbook;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cookbook;
+use App\OpenApi\Parameters\BaseParameters;
 use App\OpenApi\Parameters\Cookbooks\IndexCookbooksParameters;
 use App\OpenApi\RequestBodies\Cookbooks\CreateCookbookRequestBody;
 use App\OpenApi\RequestBodies\Cookbooks\UpdateCookbookRequestBody;
@@ -69,6 +70,7 @@ class CookbookController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\RequestBody(factory: CreateCookbookRequestBody::class)]
     #[
         OpenApi\Response(
@@ -121,6 +123,7 @@ class CookbookController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[
         OpenApi\Response(
             factory: CookbookShowWithUserResponse::class,
@@ -154,6 +157,7 @@ class CookbookController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\RequestBody(factory: UpdateCookbookRequestBody::class)]
     #[OpenApi\Response(factory: CookbookShowResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
@@ -195,6 +199,7 @@ class CookbookController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]

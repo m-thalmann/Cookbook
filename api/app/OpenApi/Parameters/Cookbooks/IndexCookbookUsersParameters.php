@@ -3,6 +3,7 @@
 namespace App\OpenApi\Parameters\Cookbooks;
 
 use App\Models\User;
+use App\OpenApi\Parameters\BaseParameters;
 use App\OpenApi\Parameters\FilterParameters;
 use App\OpenApi\Parameters\PaginationParameters;
 use App\OpenApi\Parameters\SearchParameters;
@@ -36,7 +37,8 @@ class IndexCookbookUsersParameters extends ParametersFactory {
             ...(new FilterParameters(
                 $userObject->getFilterableProperties()
             ))->build(),
+
+            ...(new BaseParameters())->build(),
         ];
     }
 }
-

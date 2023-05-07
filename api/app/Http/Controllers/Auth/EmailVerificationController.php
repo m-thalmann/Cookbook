@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\OpenApi\Parameters\Auth\EmailVerificationParameters;
+use App\OpenApi\Parameters\BaseParameters;
 use App\OpenApi\Responses\ForbiddenResponse;
 use App\OpenApi\Responses\NoContentResponse;
 use App\OpenApi\Responses\TooManyRequestsResponse;
@@ -40,6 +41,7 @@ class EmailVerificationController extends Controller {
      * Resends the email-verification email for the authenticated user
      */
     #[OpenApi\Operation(tags: ['Auth'], security: 'AccessTokenSecurityScheme')]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[OpenApi\Response(factory: ForbiddenResponse::class, statusCode: 403)]

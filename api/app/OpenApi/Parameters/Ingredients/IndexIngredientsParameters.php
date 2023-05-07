@@ -3,6 +3,7 @@
 namespace App\OpenApi\Parameters\Ingredients;
 
 use App\Models\Ingredient;
+use App\OpenApi\Parameters\BaseParameters;
 use App\OpenApi\Parameters\SearchParameters;
 use App\OpenApi\Parameters\SortParameters;
 use GoldSpecDigital\ObjectOrientedOAS\Objects\Parameter;
@@ -22,7 +23,8 @@ class IndexIngredientsParameters extends ParametersFactory {
             ...(new SearchParameters(
                 $ingredientObject->getSearchProperties()
             ))->build(),
+
+            ...(new BaseParameters())->build(),
         ];
     }
 }
-

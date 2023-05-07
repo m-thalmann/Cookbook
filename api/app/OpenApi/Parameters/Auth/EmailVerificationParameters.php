@@ -2,6 +2,7 @@
 
 namespace App\OpenApi\Parameters\Auth;
 
+use App\OpenApi\Parameters\BaseParameters;
 use App\OpenApi\Parameters\SignedRouteParameters;
 use GoldSpecDigital\ObjectOrientedOAS\Objects\Parameter;
 use GoldSpecDigital\ObjectOrientedOAS\Objects\Schema;
@@ -22,7 +23,8 @@ class EmailVerificationParameters extends ParametersFactory {
                 ->schema(Schema::string()),
 
             ...(new SignedRouteParameters())->build(),
+
+            ...(new BaseParameters())->build(),
         ];
     }
 }
-

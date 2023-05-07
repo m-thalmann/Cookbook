@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Recipe;
 use App\Models\Cookbook;
 use App\Models\User;
+use App\OpenApi\Parameters\BaseParameters;
 use App\OpenApi\Parameters\Cookbooks\IndexCookbookUsersParameters;
 use App\OpenApi\RequestBodies\Cookbooks\CreateCookbookUserRequestBody;
 use App\OpenApi\RequestBodies\Cookbooks\UpdateCookbookUserRequestBody;
@@ -76,6 +77,7 @@ class CookbookUserController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\RequestBody(factory: CreateCookbookUserRequestBody::class)]
     #[
         OpenApi\Response(
@@ -142,6 +144,7 @@ class CookbookUserController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\RequestBody(factory: UpdateCookbookUserRequestBody::class)]
     #[
         OpenApi\Response(
@@ -204,6 +207,7 @@ class CookbookUserController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]

@@ -6,6 +6,7 @@ use App\Exceptions\UnauthorizedHttpException;
 use App\Http\Resources\UserResource;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\OpenApi\Parameters\BaseParameters;
 use App\OpenApi\Parameters\Users\IndexUsersParameters;
 use App\OpenApi\RequestBodies\Users\CreateUserRequestBody;
 use App\OpenApi\RequestBodies\Users\UpdateUserRequestBody;
@@ -60,6 +61,7 @@ class UserController extends Controller {
      * Creates a new user
      */
     #[OpenApi\Operation(tags: ['Users'], security: 'AccessTokenSecurityScheme')]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\RequestBody(factory: CreateUserRequestBody::class)]
     #[OpenApi\Response(factory: UserCreatedResponse::class, statusCode: 201)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
@@ -126,6 +128,7 @@ class UserController extends Controller {
      * @param User $user The user's id
      */
     #[OpenApi\Operation(tags: ['Users'], security: 'AccessTokenSecurityScheme')]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[
         OpenApi\Response(
             factory: UserShowDetailedResponse::class,
@@ -152,6 +155,7 @@ class UserController extends Controller {
      * @param string $email The email of the searched user
      */
     #[OpenApi\Operation(tags: ['Users'], security: 'AccessTokenSecurityScheme')]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\Response(factory: UserShowResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
@@ -173,6 +177,7 @@ class UserController extends Controller {
      * @param User $user The user's id
      */
     #[OpenApi\Operation(tags: ['Users'], security: 'AccessTokenSecurityScheme')]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\RequestBody(factory: UpdateUserRequestBody::class)]
     #[
         OpenApi\Response(
@@ -286,6 +291,7 @@ class UserController extends Controller {
      * @param User $user The user's id
      */
     #[OpenApi\Operation(tags: ['Users'], security: 'AccessTokenSecurityScheme')]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]

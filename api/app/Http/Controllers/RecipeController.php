@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\RecipeResource;
 use App\Models\Recipe;
 use App\Models\Cookbook;
+use App\OpenApi\Parameters\BaseParameters;
 use App\OpenApi\Parameters\Recipes\IndexRecipesParameters;
 use App\OpenApi\Parameters\Recipes\IndexRecipesTrashParameters;
 use App\OpenApi\RequestBodies\Recipes\CreateRecipeRequestBody;
@@ -80,6 +81,7 @@ class RecipeController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\RequestBody(factory: CreateRecipeRequestBody::class)]
     #[OpenApi\Response(factory: RecipeCreatedResponse::class, statusCode: 201)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
@@ -166,6 +168,7 @@ class RecipeController extends Controller {
             security: 'OptionalAccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\Response(factory: RecipeShowResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
     #[
@@ -207,6 +210,7 @@ class RecipeController extends Controller {
             security: 'OptionalAccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\Response(factory: RecipeShowResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
     #[
@@ -246,6 +250,7 @@ class RecipeController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\RequestBody(factory: UpdateRecipeRequestBody::class)]
     #[OpenApi\Response(factory: RecipeShowResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
@@ -316,7 +321,11 @@ class RecipeController extends Controller {
 
         $recipe->update($data);
 
-        return RecipeResource::make($recipe->makeVisible('share_uuid'));
+        return RecipeResource::make(
+            $recipe
+                ->load(['user', 'ingredients', 'cookbook'])
+                ->makeVisible('share_uuid')
+        )->response();
     }
 
     /**
@@ -330,6 +339,7 @@ class RecipeController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
@@ -397,6 +407,7 @@ class RecipeController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[
@@ -430,6 +441,7 @@ class RecipeController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
@@ -460,6 +472,7 @@ class RecipeController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]

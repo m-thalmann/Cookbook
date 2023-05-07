@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Exceptions\HttpException;
 use App\Http\Controllers\Controller;
+use App\OpenApi\Parameters\BaseParameters;
 use App\OpenApi\RequestBodies\Auth\ResetPasswordRequestBody;
 use App\OpenApi\RequestBodies\Auth\SendResetPasswordRequestBody;
 use App\OpenApi\Responses\ForbiddenResponse;
@@ -24,6 +25,7 @@ class PasswordResetController extends Controller {
      * Resets the user's password
      */
     #[OpenApi\Operation(tags: ['Auth'])]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\RequestBody(factory: ResetPasswordRequestBody::class)]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
     #[OpenApi\Response(factory: ForbiddenResponse::class, statusCode: 403)]
@@ -72,6 +74,7 @@ class PasswordResetController extends Controller {
      * Requests a password-reset-email
      */
     #[OpenApi\Operation(tags: ['Auth'])]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\RequestBody(factory: SendResetPasswordRequestBody::class)]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
     #[

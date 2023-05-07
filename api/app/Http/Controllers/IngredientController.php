@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ingredient;
 use App\Models\Recipe;
+use App\OpenApi\Parameters\BaseParameters;
 use App\OpenApi\Parameters\Ingredients\IndexIngredientsParameters;
 use App\OpenApi\RequestBodies\Ingredients\CreateIngredientRequestBody;
 use App\OpenApi\RequestBodies\Ingredients\UpdateIngredientRequestBody;
@@ -71,6 +72,7 @@ class IngredientController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\RequestBody(factory: CreateIngredientRequestBody::class)]
     #[
         OpenApi\Response(
@@ -115,6 +117,7 @@ class IngredientController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\RequestBody(factory: UpdateIngredientRequestBody::class)]
     #[OpenApi\Response(factory: IngredientShowResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
@@ -159,6 +162,7 @@ class IngredientController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]

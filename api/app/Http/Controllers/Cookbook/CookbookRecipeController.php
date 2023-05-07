@@ -51,4 +51,3 @@ class CookbookRecipeController extends Controller {
         );
     }
 }
-

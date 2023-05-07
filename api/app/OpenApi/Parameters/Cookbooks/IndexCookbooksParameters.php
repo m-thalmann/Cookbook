@@ -3,6 +3,7 @@
 namespace App\OpenApi\Parameters\Cookbooks;
 
 use App\Models\Cookbook;
+use App\OpenApi\Parameters\BaseParameters;
 use App\OpenApi\Parameters\PaginationParameters;
 use App\OpenApi\Parameters\SearchParameters;
 use App\OpenApi\Parameters\SortParameters;
@@ -31,7 +32,8 @@ class IndexCookbooksParameters extends ParametersFactory {
             ...(new SearchParameters(
                 $cookbookObject->getSearchProperties()
             ))->build(),
+
+            ...(new BaseParameters())->build(),
         ];
     }
 }
-

@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Resources\AuthTokenResource;
 use App\Http\Controllers\Controller;
 use App\Models\AuthToken;
-use App\OpenApi\Parameters\PaginationParameters;
+use App\OpenApi\Parameters\Auth\AuthTokenParameters;
+use App\OpenApi\Parameters\BaseParameters;
 use App\OpenApi\Responses\Auth\Tokens\TokenIndexResponse;
 use App\OpenApi\Responses\Auth\Tokens\TokenShowResponse;
 use App\OpenApi\Responses\NoContentResponse;
@@ -25,7 +26,7 @@ class AuthTokenController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
-    #[OpenApi\Parameters(factory: PaginationParameters::class)]
+    #[OpenApi\Parameters(factory: AuthTokenParameters::class)]
     #[OpenApi\Response(factory: TokenIndexResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[
@@ -59,6 +60,7 @@ class AuthTokenController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\Response(factory: TokenShowResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
@@ -87,7 +89,7 @@ class AuthTokenController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
-    #[OpenApi\Parameters(factory: PaginationParameters::class)]
+    #[OpenApi\Parameters(factory: AuthTokenParameters::class)]
     #[OpenApi\Response(factory: TokenIndexResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[
@@ -120,6 +122,7 @@ class AuthTokenController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
@@ -148,6 +151,7 @@ class AuthTokenController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[
