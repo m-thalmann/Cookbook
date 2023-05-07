@@ -44,17 +44,17 @@ export class CookbookDetailPageComponent {
   cookbook$ = this.reload$.pipe(
     switchMap((id) => this.api.cookbooks.get(id)),
     handledErrorInterceptor(),
-    shareReplay(1)
+    shareReplay({ bufferSize: 1, refCount: true })
   );
   categories$ = this.reload$.pipe(
     switchMap((id) => this.api.cookbooks.getCategories(id, 'desc')),
     handledErrorInterceptor(),
-    shareReplay(1)
+    shareReplay({ bufferSize: 1, refCount: true })
   );
   recipes$ = this.reload$.pipe(
     switchMap((id) => this.api.cookbooks.getRecipes(id, { pagination: { perPage: 12, page: 1 } })),
     handledErrorInterceptor(),
-    shareReplay(1)
+    shareReplay({ bufferSize: 1, refCount: true })
   );
 
   cookbookError$ = this.api.handleRequestError(this.cookbook$);

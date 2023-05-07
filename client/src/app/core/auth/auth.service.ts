@@ -151,10 +151,10 @@ export class AuthService implements OnDestroy {
   }
 
   public async login(user: DetailedUser, accessToken: string, refreshToken: string, redirectUrl = '/home') {
-    this._user$.next(user);
-
     this._accessToken$.next(accessToken);
     this._refreshToken$.next(refreshToken);
+
+    this._user$.next(user);
 
     this.router.navigateByUrl(redirectUrl);
   }

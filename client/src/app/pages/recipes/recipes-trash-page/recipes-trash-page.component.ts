@@ -64,7 +64,7 @@ export class RecipesTrashPageComponent {
     }),
 
     handledErrorInterceptor(),
-    shareReplay(1)
+    shareReplay({ bufferSize: 1, refCount: true })
   );
 
   loading$ = new BehaviorSubject<boolean>(false);

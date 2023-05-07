@@ -37,7 +37,7 @@ export class StorageService {
     return fromEvent<StorageEvent>(window, 'storage').pipe(
       filter((event) => event.key === generatedKey),
       map((event) => this.parseValue<T>(generatedKey, event.newValue, defaultValue)),
-      shareReplay(1)
+      shareReplay({ bufferSize: 1, refCount: true })
     );
   }
 

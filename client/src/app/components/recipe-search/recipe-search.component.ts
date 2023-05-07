@@ -119,7 +119,7 @@ export class RecipeSearchComponent {
     switchMap(([filters, paginationOptions, authUser]) => this.fetchRecipesFn(filters, paginationOptions, !!authUser)),
     tap(() => this.recipesLoading$.next(false)),
     handledErrorInterceptor(),
-    shareReplay(1)
+    shareReplay({ bufferSize: 1, refCount: true })
   );
 
   categories$ = combineLatest([
@@ -131,7 +131,7 @@ export class RecipeSearchComponent {
   ]).pipe(
     switchMap(([allCategories, authUser]) => this.fetchCategoriesFn(!!allCategories, !!authUser)),
     handledErrorInterceptor(),
-    shareReplay(1)
+    shareReplay({ bufferSize: 1, refCount: true })
   );
 
   recipesError$ = this.api.handleRequestError(this.recipes$);

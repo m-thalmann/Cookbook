@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslocoModule } from '@ngneat/transloco';
-import { BehaviorSubject, catchError, map, merge, shareReplay, switchMap, switchScan, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, shareReplay, switchMap, switchScan, tap, throwError } from 'rxjs';
 import { CookbookCardComponent } from 'src/app/components/cookbook-card/cookbook-card.component';
 import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 import { SkeletonComponent } from 'src/app/components/skeleton/skeleton.component';
@@ -38,7 +38,7 @@ export class CookbooksPageComponent {
   cookbooksLoading$ = new BehaviorSubject<boolean>(true);
   paginationOptions$ = new BehaviorSubject<PaginationOptions>({ page: 1, perPage: AMOUNT_ITEMS });
 
-  cookbooks$ = merge(this.auth.user$).pipe(
+  cookbooks$ = this.auth.user$.pipe(
     switchMap(() => {
       this.paginationOptions$.next({ ...this.paginationOptions$.value, page: 1 });
 
@@ -66,7 +66,7 @@ export class CookbooksPageComponent {
     }),
 
     handledErrorInterceptor(),
-    shareReplay(1)
+    shareReplay({ bufferSize: 1, refCount: true })
   );
 
   error$ = this.api.handleRequestError(this.cookbooks$);

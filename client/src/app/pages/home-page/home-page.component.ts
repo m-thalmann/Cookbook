@@ -49,12 +49,12 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
   categories$ = this.auth.user$.pipe(
     switchMap(() => this.api.categories.getList(false, 'desc')),
     handledErrorInterceptor(),
-    shareReplay(1)
+    shareReplay({ bufferSize: 1, refCount: true })
   );
   recipes$ = this.auth.user$.pipe(
     switchMap(() => this.api.recipes.getList({ pagination: { page: 1, perPage: this.amountItems } })),
     handledErrorInterceptor(),
-    shareReplay(1)
+    shareReplay({ bufferSize: 1, refCount: true })
   );
   cookbooks$ = this.auth.user$.pipe(
     switchMap((user) => {
@@ -65,7 +65,7 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
       return this.api.cookbooks.getList(false, { page: 1, perPage: this.amountItems });
     }),
     handledErrorInterceptor(),
-    shareReplay(1)
+    shareReplay({ bufferSize: 1, refCount: true })
   );
 
   categoriesError$ = this.api.handleRequestError(this.categories$);

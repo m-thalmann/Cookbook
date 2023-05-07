@@ -38,7 +38,7 @@ export class RecipeDetailPageComponent {
       return EMPTY;
     }),
     handledErrorInterceptor(),
-    shareReplay(1)
+    shareReplay({ bufferSize: 1, refCount: true })
   );
 
   error$ = this.api.handleRequestError(this.recipe$, (error) =>

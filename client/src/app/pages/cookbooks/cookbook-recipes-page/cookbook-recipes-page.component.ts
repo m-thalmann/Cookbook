@@ -28,7 +28,7 @@ export class CookbookRecipesPageComponent {
       return this.api.cookbooks.get(id);
     }),
     handledErrorInterceptor(),
-    shareReplay(1)
+    shareReplay({ bufferSize: 1, refCount: true })
   );
 
   error$ = this.api.handleRequestError(this.cookbook$);
