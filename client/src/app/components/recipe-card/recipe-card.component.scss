@@ -139,9 +139,12 @@ $border-radius: 1em;
 
     padding: 0.25em 0.5em;
 
+    max-width: 10em;
     border-radius: 0.5em;
-    overflow: hidden;
 
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 
     transition: bottom $transition-time, background $transition-time;
 

@@ -3,6 +3,10 @@
 @use 'variables' as *;
 @use 'theme';
 
+:host {
+  min-width: 0;
+}
+
 .container,
 app-skeleton {
   border-radius: 0.5em;
@@ -57,10 +61,20 @@ app-skeleton {
       flex: 1;
       gap: 0.75em;
 
+      min-width: 0;
+
+      mat-icon {
+        flex-shrink: 0;
+      }
+
       h3 {
         margin: 0;
 
         font-size: 1.25rem;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
 
