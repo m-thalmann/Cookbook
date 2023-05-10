@@ -43,6 +43,16 @@
     "showAmountMore": "[[ amount, =1 'Show 1 more cookbook', default 'Show {{amount}} more cookbooks' ]]",
     "singleLoadingError": "Cookbook could not be loaded."
   },
+  "editor": {
+    "addLink": "Add link",
+    "bold": "Bold",
+    "clearAllFormatting": "Clear all formatting",
+    "italic": "Italic",
+    "orderedList": "Ordered list",
+    "removeLink": "Remove link",
+    "underline": "Underline",
+    "unorderedList": "Unordered list"
+  },
   "general": {
     "auto": "Auto",
     "by": "by",
@@ -52,8 +62,10 @@
     "deletedAt": "Deleted at",
     "email": "Email",
     "enabled": "Enabled",
+    "insertTextPlaceholder": "Insert text here ...",
     "language": "Language",
     "lastUpdated": "Last updated",
+    "link": "Link",
     "myPlural": "My",
     "name": "Name",
     "password": "Password",

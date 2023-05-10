@@ -43,6 +43,16 @@
     "showAmountMore": "[[ amount, =1 '1 weiteres Kochbuch anzeigen', default '{{amount}} weitere Kochbücher anzeigen' ]]",
     "singleLoadingError": "Kochbuch konnte nicht geladen werden."
   },
+  "editor": {
+    "addLink": "Link hinzufügen",
+    "bold": "Fett",
+    "clearAllFormatting": "Alle Formatierungen löschen",
+    "italic": "Kursiv",
+    "orderedList": "Geordnete Liste",
+    "removeLink": "Link entfernen",
+    "underline": "Unterstreichen",
+    "unorderedList": "Ungeordnete Liste"
+  },
   "general": {
     "auto": "Auto",
     "by": "von",
@@ -52,8 +62,10 @@
     "deletedAt": "Gelöscht am",
     "email": "E-Mail",
     "enabled": "Aktiviert",
+    "insertTextPlaceholder": "Text einfügen...",
     "language": "Sprache",
     "lastUpdated": "Zuletzt aktualisiert",
+    "link": "Link",
     "myPlural": "Meine",
     "name": "Name",
     "password": "Passwort",
