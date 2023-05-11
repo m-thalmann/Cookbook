@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { SkeletonComponent } from 'src/app/components/skeleton/skeleton.component';
 import { RepeatDirective } from 'src/app/core/directives/repeat.directive';
+import { Ingredient } from 'src/app/core/models/ingredient';
 import { DetailedRecipe } from 'src/app/core/models/recipe';
 import { AmountPipe } from 'src/app/core/pipes/amount.pipe';
 
@@ -26,5 +27,12 @@ export class RecipeDetailIngredientsComponent {
 
     return Math.round(amount * 100) / 100;
   }
-}
 
+  trackByGroup(index: number, group: DetailedRecipe['ingredients'][0]) {
+    return group.group;
+  }
+
+  trackByIngredient(index: number, ingredient: Ingredient) {
+    return ingredient.id;
+  }
+}

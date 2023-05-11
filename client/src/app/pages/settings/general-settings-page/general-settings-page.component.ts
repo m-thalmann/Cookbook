@@ -2,10 +2,10 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
+import { LangDefinition, TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { BehaviorSubject } from 'rxjs';
 import { LanguageService } from 'src/app/core/language/language.service';
-import { ThemeService } from 'src/app/core/services/theme.service';
+import { ThemeConfig, ThemeService } from 'src/app/core/services/theme.service';
 import { SettingsSectionComponent } from '../components/settings-section/settings-section.component';
 
 @Component({
@@ -52,5 +52,13 @@ export class GeneralSettingsPageComponent {
     await this.language.selectLanguage(language);
 
     this.languageLoading$.next(false);
+  }
+
+  trackByLanguage(index: number, language: LangDefinition) {
+    return language.id;
+  }
+
+  trackByTheme(index: number, theme: ThemeConfig) {
+    return theme.key;
   }
 }

@@ -7,7 +7,7 @@
                 mat-list-item
                 [class.current]="language.id === activeLanguage"
                 (click)="setLanguage(language.id)"
-                *ngFor="let language of languages"
+                *ngFor="let language of languages; trackBy: trackByLanguage"
             >
                 <div class="button-content">
                     {{ language.label }}
@@ -32,7 +32,7 @@
                 [class]="'theme mat-elevation-z1 scheme-' + theme.scheme"
                 [class.selected]="theme.key === vm.selectedTheme?.key"
                 (click)="themeService.setTheme(theme)"
-                *ngFor="let theme of themes"
+                *ngFor="let theme of themes; trackBy: trackByTheme"
             >
                 <div class="colors">
                     <div class="color" [style.background]="theme.primaryColor"></div>

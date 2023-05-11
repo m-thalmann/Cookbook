@@ -40,7 +40,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let recipe of vm.trashedRecipes?.recipes">
+                <tr *ngFor="let recipe of vm.trashedRecipes?.recipes; trackBy: trackByRecipe">
                     <td>
                         <img [src]="getThumbnailUrl(recipe)" fadeIn />
                     </td>

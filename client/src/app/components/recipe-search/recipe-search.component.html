@@ -28,7 +28,7 @@
             (change)="doSort($event.target!)"
         >
             <option
-                *ngFor="let sortOption of availableSortOptions"
+                *ngFor="let sortOption of availableSortOptions; trackBy: trackBySortOption"
                 [value]="sortOption.column"
                 [selected]="vm.filters?.sort?.[0]?.column === sortOption.column"
             >
@@ -106,7 +106,7 @@
 
     <div class="recipes">
         <ng-container *ngIf="vm.recipes?.body?.data as recipes">
-            <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe"></app-recipe-card>
+            <app-recipe-card *ngFor="let recipe of recipes; trackBy: trackByRecipe" [recipe]="recipe"></app-recipe-card>
 
             <p *ngIf="recipes.length === 0" class="not-found-item">{{ 'recipes.empty' | transloco }}</p>
         </ng-container>

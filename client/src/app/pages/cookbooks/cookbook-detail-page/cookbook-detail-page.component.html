@@ -38,7 +38,10 @@
         <app-page-section [heading]="'recipes.recipes' | transloco" seeAllLink="./recipes" class="recipes">
             <div>
                 <ng-container *ngIf="vm.recipes?.body?.data as recipes; else recipesLoading">
-                    <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe"></app-recipe-card>
+                    <app-recipe-card
+                        *ngFor="let recipe of recipes; trackBy: trackByRecipe"
+                        [recipe]="recipe"
+                    ></app-recipe-card>
 
                     <p *ngIf="recipes.length === 0" class="not-found-item">{{ 'recipes.empty' | transloco }}</p>
                 </ng-container>

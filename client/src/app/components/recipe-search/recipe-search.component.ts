@@ -32,6 +32,12 @@ import { SearchBarComponent } from '../search-bar/search-bar.component';
 import { SkeletonComponent } from '../skeleton/skeleton.component';
 import { RecipeSearchFilterComponent } from './components/recipe-search-filter/recipe-search-filter.component';
 
+interface AvailableSortOption {
+  column: string;
+  nameTranslateKey: string;
+  icon: string;
+}
+
 @Component({
   selector: 'app-recipe-search',
   templateUrl: './recipe-search.component.html',
@@ -76,7 +82,7 @@ export class RecipeSearchComponent {
 
   @Input() showAllFilter = true;
 
-  readonly availableSortOptions = [
+  readonly availableSortOptions: AvailableSortOption[] = [
     { column: 'name', nameTranslateKey: 'general.name', icon: 'drive_file_rename_outline' },
     { column: 'difficulty', nameTranslateKey: 'recipes.difficulty', icon: 'local_fire_department' },
     { column: 'created_at', nameTranslateKey: 'general.createDate', icon: 'event_available' },
@@ -174,5 +180,13 @@ export class RecipeSearchComponent {
 
   private applyFilterParams(params: { [key: string]: string | null }) {
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
+  }
+
+  trackBySortOption(index: number, option: AvailableSortOption) {
+    return option.column;
+  }
+
+  trackByRecipe(index: number, recipe: ListRecipe) {
+    return recipe.id;
   }
 }

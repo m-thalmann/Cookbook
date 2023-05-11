@@ -38,7 +38,10 @@
         >
             <div>
                 <ng-container *ngIf="vm.recipes?.body?.data as recipes">
-                    <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe"></app-recipe-card>
+                    <app-recipe-card
+                        *ngFor="let recipe of recipes; trackBy: trackByRecipe"
+                        [recipe]="recipe"
+                    ></app-recipe-card>
 
                     <p *ngIf="recipes.length === 0" class="not-found-item">{{ 'recipes.empty' | transloco }}</p>
                 </ng-container>
@@ -76,7 +79,10 @@
         >
             <div>
                 <ng-container *ngIf="vm.cookbooks?.body?.data as cookbooks">
-                    <app-cookbook-card *ngFor="let cookbook of cookbooks" [cookbook]="cookbook"></app-cookbook-card>
+                    <app-cookbook-card
+                        *ngFor="let cookbook of cookbooks; trackBy: trackByCookbook"
+                        [cookbook]="cookbook"
+                    ></app-cookbook-card>
 
                     <p *ngIf="cookbooks.length === 0" class="not-found-item">{{ 'cookbooks.empty' | transloco }}</p>
                 </ng-container>

@@ -193,4 +193,8 @@ export class RecipesTrashPageComponent {
 
     this.actionLoading$.next(false);
   }
+
+  trackByRecipe(index: number, recipe: ListRecipe) {
+    return recipe.id;
+  }
 }

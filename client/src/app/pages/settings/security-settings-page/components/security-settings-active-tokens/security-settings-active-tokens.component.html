@@ -30,7 +30,7 @@
                 [token]="session"
                 [disabled]="!!vm.isLoading || !!vm.isUpdating"
                 (logout)="logoutFromSession(session.id)"
-                *ngFor="let session of vm.activeTokens?.items"
+                *ngFor="let session of vm.activeTokens?.items; trackBy: trackBySession"
             ></app-security-settings-active-token-card>
 
             <ng-container *ngIf="vm.activeTokens === null && !vm.error">
@@ -58,4 +58,3 @@
         </button>
     </app-settings-section>
 </ng-container>
-

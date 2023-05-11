@@ -16,7 +16,11 @@
     </em>
 
     <div class="cookbooks">
-        <app-cookbook-card [cookbook]="cookbook" *ngFor="let cookbook of vm.cookbooks?.cookbooks"> </app-cookbook-card>
+        <app-cookbook-card
+            [cookbook]="cookbook"
+            *ngFor="let cookbook of vm.cookbooks?.cookbooks; trackBy: trackByCookbook"
+        >
+        </app-cookbook-card>
 
         <ng-container *ngIf="vm.cookbooksLoading && !vm.cookbooks">
             <app-cookbook-card [cookbook]="null" *appRepeat="6"> </app-cookbook-card>

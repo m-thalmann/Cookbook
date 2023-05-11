@@ -10,6 +10,7 @@ import { ErrorDisplayComponent } from 'src/app/components/error-display/error-di
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { RepeatDirective } from 'src/app/core/directives/repeat.directive';
+import { AuthToken } from 'src/app/core/models/auth-token';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
@@ -120,5 +121,9 @@ export class SecuritySettingsActiveTokensComponent {
     }
 
     this.isUpdating$.next(false);
+  }
+
+  trackBySession(index: number, session: AuthToken) {
+    return session.id;
   }
 }

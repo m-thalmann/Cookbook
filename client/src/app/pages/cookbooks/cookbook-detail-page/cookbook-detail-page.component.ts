@@ -13,6 +13,7 @@ import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { RepeatDirective } from 'src/app/core/directives/repeat.directive';
 import { PaginationMeta } from 'src/app/core/models/pagination-meta';
+import { ListRecipe } from 'src/app/core/models/recipe';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 import { CookbookHeaderComponent } from '../components/cookbook-header/cookbook-header.component';
 
@@ -69,5 +70,9 @@ export class CookbookDetailPageComponent {
     }
 
     return meta.total - meta.count;
+  }
+
+  trackByRecipe(index: number, recipe: ListRecipe) {
+    return recipe.id;
   }
 }

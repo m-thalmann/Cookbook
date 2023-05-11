@@ -15,7 +15,9 @@ import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { RepeatDirective } from 'src/app/core/directives/repeat.directive';
 import { createIntersectionObserver } from 'src/app/core/helpers/intersection-observer';
+import { CookbookWithCounts } from 'src/app/core/models/cookbook';
 import { PaginationMeta } from 'src/app/core/models/pagination-meta';
+import { ListRecipe } from 'src/app/core/models/recipe';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 
 @Component({
@@ -92,5 +94,13 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.subSink.unsubscribe();
+  }
+
+  trackByRecipe(index: number, recipe: ListRecipe) {
+    return recipe.id;
+  }
+
+  trackByCookbook(index: number, cookbook: CookbookWithCounts) {
+    return cookbook.id;
   }
 }

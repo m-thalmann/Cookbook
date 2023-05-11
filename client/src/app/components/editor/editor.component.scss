@@ -26,6 +26,8 @@
 
   padding: 0.125em 0.5em;
 
+  overflow: auto;
+
   @include theme.apply() using ($variables) {
     background: darken(map.get($variables, 'background'), 5%);
 
@@ -76,7 +78,7 @@
   max-height: 25em;
   overflow: auto;
 
-  padding: 0.75em 1em;
+  padding: 1.25em 1em;
 
   outline: none;
 

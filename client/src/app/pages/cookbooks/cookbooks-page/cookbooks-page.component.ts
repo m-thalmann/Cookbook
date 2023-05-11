@@ -11,6 +11,7 @@ import { SkeletonComponent } from 'src/app/components/skeleton/skeleton.componen
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { RepeatDirective } from 'src/app/core/directives/repeat.directive';
+import { CookbookWithCounts } from 'src/app/core/models/cookbook';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 
@@ -75,5 +76,9 @@ export class CookbooksPageComponent {
 
   nextPage() {
     this.paginationOptions$.next({ ...this.paginationOptions$.value, page: this.paginationOptions$.value.page + 1 });
+  }
+
+  trackByCookbook(index: number, cookbook: CookbookWithCounts) {
+    return cookbook.id;
   }
 }
