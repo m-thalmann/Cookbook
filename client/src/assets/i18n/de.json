@@ -183,6 +183,7 @@
     "empty": "Keine Rezepte gefunden ...",
     "loadingError": "Fehler beim Laden der Rezepte.",
     "moveToTrash": "In den Papierkorb verschieben",
+    "noIngredients": "Keine Zutaten für dieses Rezept...",
     "notFound": "Rezept konnte nicht gefunden werden.",
     "onlyMy": "Nur meine Rezepte",
     "portions": "Portionen",

@@ -11,6 +11,8 @@
     </div>
 </div>
 
+<p *ngIf="ingredients && ingredients.length === 0" class="no-ingredients">{{ 'recipes.noIngredients' | transloco }}</p>
+
 <div class="ingredient-group" *ngIf="!ingredients">
     <div class="ingredient" *appRepeat="7">
         <app-skeleton></app-skeleton>

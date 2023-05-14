@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { TranslocoModule } from '@ngneat/transloco';
 import { SkeletonComponent } from 'src/app/components/skeleton/skeleton.component';
 import { RepeatDirective } from 'src/app/core/directives/repeat.directive';
 import { Ingredient } from 'src/app/core/models/ingredient';
@@ -11,7 +12,7 @@ import { AmountPipe } from 'src/app/core/pipes/amount.pipe';
   templateUrl: './recipe-detail-ingredients.component.html',
   styleUrls: ['./recipe-detail-ingredients.component.scss'],
   standalone: true,
-  imports: [CommonModule, SkeletonComponent, AmountPipe, RepeatDirective],
+  imports: [CommonModule, TranslocoModule, SkeletonComponent, AmountPipe, RepeatDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeDetailIngredientsComponent {
