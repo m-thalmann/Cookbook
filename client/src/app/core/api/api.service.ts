@@ -456,6 +456,9 @@ export class ApiService {
         );
       },
 
+      getEditableList: () =>
+        this.get<{ data: { id: number; name: string }[] }>(`/cookbooks/editable`, TokenType.Access),
+
       get: (id: number) => this.get<{ data: CookbookWithUserMeta }>(`/cookbooks/${id}`, TokenType.Access),
 
       getRecipes: (cookbookId: number, options: ListParamOptions) =>

@@ -12,6 +12,7 @@ use App\OpenApi\Responses\Cookbooks\CookbookCreatedResponse;
 use App\OpenApi\Responses\Cookbooks\CookbookIndexResponse;
 use App\OpenApi\Responses\Cookbooks\CookbookShowResponse;
 use App\OpenApi\Responses\Cookbooks\CookbookShowWithUserResponse;
+use App\OpenApi\Responses\Cookbooks\EditableCookbookIndexResponse;
 use App\OpenApi\Responses\ForbiddenResponse;
 use App\OpenApi\Responses\NoContentResponse;
 use App\OpenApi\Responses\NotFoundResponse;
@@ -59,6 +60,39 @@ class CookbookController extends Controller {
         return response()->pagination(
             fn($perPage) => $cookbooks->paginate($perPage)
         );
+    }
+
+    /**
+     * Lists all cookbooks the authenticated user can administrate
+     */
+    #[OpenApi\Parameters(factory: BaseParameters::class)]
+    #[
+        OpenApi\Operation(
+            tags: ['Cookbooks'],
+            security: 'AccessTokenSecurityScheme'
+        )
+    ]
+    #[
+        OpenApi\Response(
+            factory: EditableCookbookIndexResponse::class,
+            statusCode: 200
+        )
+    ]
+    #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
+    #[
+        OpenApi\Response(
+            factory: TooManyRequestsResponse::class,
+            statusCode: 429
+        )
+    ]
+    public function indexEditable() {
+        $cookbooks = Cookbook::query()
+            ->forUser(authUser(), mustBeAdmin: true)
+            ->orderBy('name', 'asc')
+            ->select(['id', 'name'])
+            ->get();
+
+        return JsonResource::make($cookbooks);
     }
 
     /**

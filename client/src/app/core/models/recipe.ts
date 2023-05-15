@@ -1,5 +1,5 @@
 import { Cookbook } from './cookbook';
-import { Ingredient } from './ingredient';
+import { CreateIngredientData, Ingredient } from './ingredient';
 import { RecipeImage } from './recipe-image';
 import { SortOption } from './sort-option';
 import { User } from './user';
@@ -52,12 +52,7 @@ export interface CreateRecipeData {
   resting_time_minutes?: number | null;
   cooking_time_minutes?: number | null;
   cookbook_id?: number | null;
-  ingredients?: {
-    name: string;
-    amount?: number | null;
-    unit?: string | null;
-    group?: string | null;
-  }[];
+  ingredients?: CreateIngredientData[];
 }
 
 export interface EditRecipeData {
