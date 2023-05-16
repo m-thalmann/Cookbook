@@ -12,7 +12,7 @@ import { TranslocoService } from '@ngneat/transloco';
 import { EMPTY, Observable, catchError, filter, first, of, shareReplay, switchMap } from 'rxjs';
 import { HandledError } from '../helpers/handled-error';
 import { AuthToken } from '../models/auth-token';
-import { Cookbook, CookbookUser, CookbookWithCounts, CookbookWithUserMeta } from '../models/cookbook';
+import { Cookbook, CookbookUser, CookbookWithCounts, CookbookWithUserMeta, SimpleCookbook } from '../models/cookbook';
 import { FilterOption } from '../models/filter-option';
 import { CreateIngredientData, EditIngredientData, Ingredient, SimpleIngredient } from '../models/ingredient';
 import { LoadingError } from '../models/loading-error';
@@ -456,8 +456,7 @@ export class ApiService {
         );
       },
 
-      getEditableList: () =>
-        this.get<{ data: { id: number; name: string }[] }>(`/cookbooks/editable`, TokenType.Access),
+      getEditableList: () => this.get<{ data: SimpleCookbook[] }>(`/cookbooks/editable`, TokenType.Access),
 
       get: (id: number) => this.get<{ data: CookbookWithUserMeta }>(`/cookbooks/${id}`, TokenType.Access),
 

@@ -28,6 +28,7 @@
   },
   "categories": {
     "categories": "Categories",
+    "category": "Category",
     "empty": "No categories found ...",
     "filterBy": "Filter by category",
     "loadingError": "Error loading categories"
@@ -62,6 +63,7 @@
     "deletedAt": "Deleted at",
     "email": "Email",
     "enabled": "Enabled",
+    "generalInformation": "General information",
     "insertTextPlaceholder": "Insert text here ...",
     "language": "Language",
     "lastUpdated": "Last updated",
@@ -73,11 +75,19 @@
     "profile": "Profile",
     "public": "Public",
     "resultsFound": "[[ amount, =1 '1 result found', default '{{amount}} results found' ]]",
+    "save": "Save",
     "updateDate": "Update date",
     "yourEmail": "Your email"
   },
   "ingredients": {
-    "ingredients": "Ingredients"
+    "addGroup": "Add ingredient group",
+    "addIngredient": "Add ingredient",
+    "amount": "Amount",
+    "groupName": "Group name",
+    "ingredient": "Ingredient",
+    "ingredients": "Ingredients",
+    "removeGroup": "Remove ingredient group",
+    "unit": "Unit"
   },
   "messages": {
     "areYouSure": "Are you sure?",
@@ -196,9 +206,11 @@
     "singleLoadingError": "Recipe could not be loaded.",
     "times": {
       "cooking": "Cooking-/Baking time",
+      "minutes": "minutes",
       "minutesAbbr": "min",
       "preparation": "Preparation time",
       "resting": "Resting time",
+      "times": "Times",
       "total": "Total time"
     },
     "viewTrash": "View trash"

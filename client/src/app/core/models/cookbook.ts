@@ -20,6 +20,11 @@ export interface CookbookWithUserMeta extends Cookbook {
   };
 }
 
+export interface SimpleCookbook {
+  id: number;
+  name: string;
+}
+
 export interface CookbookUser extends User {
   meta: {
     is_admin: boolean;

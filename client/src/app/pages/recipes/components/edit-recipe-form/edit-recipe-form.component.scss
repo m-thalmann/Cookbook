@@ -1,0 +1,188 @@
+@use 'sass:map';
+@use 'mixins';
+@use 'theme';
+@use 'variables' as *;
+
+form {
+  padding: 0 $layout-padding;
+
+  .form-container {
+    display: flex;
+    flex-direction: column;
+
+    gap: 1em;
+
+    margin-bottom: 2em;
+
+    h3 {
+      margin-bottom: 0;
+    }
+
+    .field-public {
+      span {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+      }
+    }
+
+    .field-difficulty {
+      &,
+      label,
+      > span {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+
+        flex-wrap: wrap;
+      }
+    }
+
+    .field-ingredients {
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+
+      .ingredient-group {
+        padding: 1em;
+        border-radius: 0.5em;
+
+        > mat-form-field {
+          margin-bottom: 2em;
+        }
+
+        .ingredients {
+          display: flex;
+          flex-direction: column;
+          gap: 1em;
+
+          padding-bottom: 1em;
+          margin-bottom: 1em;
+
+          .ingredient {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5em;
+
+            mat-form-field {
+              width: 100%;
+            }
+          }
+        }
+
+        .buttons {
+          display: flex;
+          gap: 1em;
+        }
+
+        @include theme.apply() using ($variables) {
+          background: theme.adjust-color($variables, map.get($variables, 'background'), -2%);
+
+          border: 1px solid theme.adjust-color($variables, map.get($variables, 'background'), -15%);
+          border-left: 2px solid map.get($variables, 'primary');
+
+          .ingredients {
+            border-bottom: 1px solid theme.adjust-color($variables, map.get($variables, 'background'), -15%);
+          }
+        }
+      }
+    }
+  }
+}
+
+@include mixins.desktop() {
+  form {
+    .form-container {
+      display: grid;
+      grid-template-areas:
+        'title-general title-general title-general'
+        'name name name'
+        'public public public'
+        'category cookbook .'
+        'description description description'
+        'portions difficulty .'
+        'title-times title-times title-times'
+        'preparation-time resting-time cooking-time'
+        'title-ingredients title-ingredients title-ingredients'
+        'ingredients ingredients ingredients'
+        'title-preparation title-preparation title-preparation'
+        'preparation preparation preparation';
+
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1em;
+
+      h3 {
+        margin-bottom: 0;
+
+        &.section-title-general {
+          grid-area: title-general;
+        }
+        &.section-title-times {
+          grid-area: title-times;
+        }
+        &.section-title-ingredients {
+          grid-area: title-ingredients;
+        }
+        &.section-title-preparation {
+          grid-area: title-preparation;
+        }
+      }
+
+      .field-name {
+        grid-area: name;
+      }
+      .field-public {
+        grid-area: public;
+      }
+      .field-cookbook {
+        grid-area: cookbook;
+      }
+      .field-description {
+        grid-area: description;
+      }
+      .field-portions {
+        grid-area: portions;
+      }
+      .field-difficulty {
+        grid-area: difficulty;
+      }
+      .field-preparation-time {
+        grid-area: preparation-time;
+      }
+      .field-resting-time {
+        grid-area: resting-time;
+      }
+      .field-cooking-time {
+        grid-area: cooking-time;
+      }
+      .field-ingredients {
+        grid-area: ingredients;
+
+        > button {
+          width: fit-content;
+        }
+
+        .ingredient-group {
+          .ingredients {
+            .ingredient {
+              flex-direction: row;
+
+              mat-form-field {
+                width: unset;
+
+                &:nth-of-type(2),
+                &:nth-of-type(3) {
+                  width: 9em;
+                }
+              }
+            }
+          }
+        }
+      }
+      .field-preparation {
+        grid-area: preparation;
+      }
+    }
+  }
+}

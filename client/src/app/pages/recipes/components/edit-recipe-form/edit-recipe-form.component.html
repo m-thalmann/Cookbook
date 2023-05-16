@@ -1,0 +1,282 @@
+<ng-container
+    *ngIf="{
+        filteredCategories: filteredCategories$ | async,
+        cookbooks: cookbooks$ | async,
+        filteredIngredients: filteredIngredients$ | async,
+        amountOfIngredients: amountOfIngredients$ | async
+    } as vm"
+>
+    <form [formGroup]="form" (submit)="onSubmit()">
+        <div class="form-container">
+            <h3 class="section-title-general">{{ 'general.generalInformation' | transloco }}</h3>
+
+            <mat-form-field appearance="outline" class="field-name">
+                <mat-icon matPrefix>drive_file_rename_outline</mat-icon>
+                <mat-label>{{ 'general.name' | transloco }}</mat-label>
+                <input matInput type="text" formControlName="name" />
+                <mat-error *ngIf="form.get('name')?.getError('serverError') as serverError">
+                    {{ serverError }}
+                </mat-error>
+            </mat-form-field>
+
+            <mat-checkbox formControlName="isPublic" class="field-public">
+                <span>
+                    {{ 'general.public' | transloco }}
+                    <mat-icon>public</mat-icon>
+                </span>
+            </mat-checkbox>
+
+            <mat-form-field appearance="outline" class="field-category">
+                <mat-icon matPrefix>sell</mat-icon>
+                <mat-label>{{ 'categories.category' | transloco }}</mat-label>
+                <input matInput type="text" formControlName="category" [matAutocomplete]="categoryAutocomplete" />
+                <mat-error *ngIf="form.get('category')?.getError('serverError') as serverError">
+                    {{ serverError }}
+                </mat-error>
+                <mat-autocomplete #categoryAutocomplete="matAutocomplete">
+                    <mat-option *ngFor="let category of vm.filteredCategories" [value]="category">
+                        {{ category }}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="field-cookbook">
+                <mat-icon matPrefix>menu_book</mat-icon>
+                <mat-label>{{ 'cookbooks.cookbook' | transloco }}</mat-label>
+                <mat-select formControlName="cookbookId">
+                    <mat-option [value]="null">-</mat-option>
+                    <mat-option
+                        *ngFor="let cookbook of vm.cookbooks?.body?.data; trackBy: trackByCookbook"
+                        [value]="cookbook.id"
+                    >
+                        {{ cookbook.name }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.get('cookbookId')?.getError('serverError') as serverError">
+                    {{ serverError }}
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="field-description">
+                <mat-label>{{ 'recipes.description' | transloco }}</mat-label>
+                <textarea matInput formControlName="description"></textarea>
+                <mat-error *ngIf="form.get('description')?.getError('serverError') as serverError">
+                    {{ serverError }}
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="field-portions">
+                <mat-icon matPrefix>restaurant</mat-icon>
+                <mat-label>{{ 'recipes.portions' | transloco }}</mat-label>
+                <input matInput type="number" formControlName="portions" />
+                <mat-error *ngIf="form.get('portions')?.getError('serverError') as serverError">
+                    {{ serverError }}
+                </mat-error>
+            </mat-form-field>
+
+            <div class="field-difficulty">
+                <label>
+                    {{ 'recipes.difficulty' | transloco }}
+
+                    <mat-slider min="0" max="5" step="1" showTickMarks discrete [displayWith]="difficultyValueFn">
+                        <input matSliderThumb formControlName="difficulty" />
+                    </mat-slider>
+                </label>
+
+                <span>
+                    <span>{{ difficultyValueFn(form.controls.difficulty.value) }}/5</span>
+                    <mat-icon>local_fire_department</mat-icon>
+                </span>
+            </div>
+
+            <h3 class="section-title-times">
+                {{ 'recipes.times.times' | transloco }} ({{ 'recipes.times.minutes' | transloco }})
+            </h3>
+
+            <mat-form-field appearance="outline" class="field-preparation-time">
+                <mat-icon matPrefix>timer</mat-icon>
+                <mat-label>
+                    {{ 'recipes.times.preparation' | transloco }}
+                </mat-label>
+                <input matInput type="number" formControlName="preparationTimeMinutes" />
+                <mat-error *ngIf="form.get('preparationTimeMinutes')?.getError('serverError') as serverError">
+                    {{ serverError }}
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="field-resting-time">
+                <mat-icon matPrefix>timer</mat-icon>
+                <mat-label>
+                    {{ 'recipes.times.resting' | transloco }}
+                </mat-label>
+                <input matInput type="number" formControlName="restingTimeMinutes" />
+                <mat-error *ngIf="form.get('restingTimeMinutes')?.getError('serverError') as serverError">
+                    {{ serverError }}
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="field-cooking-time">
+                <mat-icon matPrefix>timer</mat-icon>
+                <mat-label>
+                    {{ 'recipes.times.cooking' | transloco }}
+                </mat-label>
+                <input matInput type="number" formControlName="cookingTimeMinutes" />
+                <mat-error *ngIf="form.get('cookingTimeMinutes')?.getError('serverError') as serverError">
+                    {{ serverError }}
+                </mat-error>
+            </mat-form-field>
+
+            <h3 class="section-title-ingredients">
+                {{ 'ingredients.ingredients' | transloco }} ({{ vm.amountOfIngredients }})
+            </h3>
+
+            <div class="field-ingredients" formArrayName="ingredients">
+                <div
+                    class="ingredient-group"
+                    [formGroupName]="groupIndex"
+                    *ngFor="let group of form.controls.ingredients.controls; let groupIndex = index"
+                >
+                    <mat-form-field
+                        appearance="outline"
+                        *ngIf="form.controls.ingredients.controls.length > 1 || group.controls.name.value"
+                    >
+                        <mat-label>
+                            {{ 'ingredients.groupName' | transloco }}
+                        </mat-label>
+                        <input matInput type="string" formControlName="name" />
+                    </mat-form-field>
+
+                    <div class="ingredients" formArrayName="ingredients">
+                        <div
+                            class="ingredient"
+                            [attr.data-ingredient-key]="getIngredientKey(groupIndex, ingredientIndex)"
+                            *ngFor="let ingredient of group.controls.ingredients.controls; let ingredientIndex = index"
+                            [formGroupName]="ingredientIndex"
+                        >
+                            <mat-form-field appearance="outline">
+                                <mat-label>
+                                    {{ 'ingredients.ingredient' | transloco }}
+                                </mat-label>
+                                <input
+                                    matInput
+                                    type="string"
+                                    formControlName="name"
+                                    [matAutocomplete]="ingredientAutocomplete"
+                                    (keydown.enter)="$event.preventDefault()"
+                                />
+                                <mat-error *ngIf="ingredient.controls.name.getError('serverError') as serverError">
+                                    {{ serverError }}
+                                </mat-error>
+
+                                <mat-autocomplete
+                                    #ingredientAutocomplete="matAutocomplete"
+                                    (optionSelected)="
+                                        onIngredientAutocompleteSelected($event, groupIndex, ingredientIndex)
+                                    "
+                                >
+                                    <mat-option
+                                        *ngFor="let ingredient of vm.filteredIngredients?.[getIngredientKey(groupIndex, ingredientIndex)]"
+                                        [value]="ingredient"
+                                    >
+                                        {{ ingredient.name }}
+
+                                        <ng-container *ngIf="ingredient.unit as unit">
+                                            &nbsp;&nbsp;|&nbsp;&nbsp;
+                                            <small>{{ unit }}</small>
+                                        </ng-container>
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>
+                                    {{ 'ingredients.amount' | transloco }}
+                                </mat-label>
+                                <input
+                                    matInput
+                                    type="number"
+                                    formControlName="amount"
+                                    (keydown.enter)="onIngredientKeyDownEnter($event, groupIndex)"
+                                />
+                                <mat-error *ngIf="ingredient.controls.amount.getError('serverError') as serverError">
+                                    {{ serverError }}
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>
+                                    {{ 'ingredients.unit' | transloco }}
+                                </mat-label>
+                                <input
+                                    matInput
+                                    type="string"
+                                    formControlName="unit"
+                                    (keydown.enter)="onIngredientKeyDownEnter($event, groupIndex)"
+                                />
+                                <mat-error *ngIf="ingredient.controls.unit.getError('serverError') as serverError">
+                                    {{ serverError }}
+                                </mat-error>
+                            </mat-form-field>
+
+                            <button
+                                mat-icon-button
+                                type="button"
+                                [disabled]="form.disabled"
+                                (click)="removeIngredient(groupIndex, ingredientIndex)"
+                            >
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="buttons">
+                        <button
+                            mat-raised-button
+                            type="button"
+                            color="primary"
+                            [disabled]="form.disabled"
+                            (click)="addIngredient(groupIndex, null, true)"
+                        >
+                            <mat-icon>add</mat-icon>
+                            {{ 'ingredients.addIngredient' | transloco }}
+                        </button>
+                        <button
+                            mat-raised-button
+                            type="button"
+                            [disabled]="form.disabled"
+                            (click)="removeIngredientGroup(groupIndex)"
+                        >
+                            <mat-icon>delete</mat-icon>{{ 'ingredients.removeGroup' | transloco }}
+                        </button>
+                    </div>
+                </div>
+
+                <button
+                    mat-raised-button
+                    type="button"
+                    color="primary"
+                    [disabled]="form.disabled"
+                    (click)="addIngredient(addIngredientGroup(null), null, true)"
+                >
+                    <mat-icon>add</mat-icon>
+                    {{
+                        (vm.amountOfIngredients! > 0 ? 'ingredients.addGroup' : 'ingredients.addIngredient') | transloco
+                    }}
+                </button>
+            </div>
+
+            <h3 class="section-title-preparation">{{ 'recipes.preparation' | transloco }}</h3>
+
+            <app-editor
+                class="field-preparation"
+                formControlName="preparation"
+                [placeholder]="'general.insertTextPlaceholder' | transloco"
+            ></app-editor>
+        </div>
+
+        <button mat-raised-button color="primary" [disabled]="form.invalid || form.disabled">
+            {{ 'general.save' | transloco }}
+        </button>
+    </form>
+</ng-container>
+

@@ -1,0 +1,392 @@
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSliderModule } from '@angular/material/slider';
+import { TranslocoModule } from '@ngneat/transloco';
+import {
+  BehaviorSubject,
+  Observable,
+  combineLatest,
+  distinctUntilChanged,
+  map,
+  shareReplay,
+  startWith,
+  switchMap,
+  tap,
+} from 'rxjs';
+import { EditorComponent } from 'src/app/components/editor/editor.component';
+import { ApiService } from 'src/app/core/api/api.service';
+import { AuthService } from 'src/app/core/auth/auth.service';
+import { CreateIngredientData, Ingredient, SimpleIngredient } from 'src/app/core/models/ingredient';
+import { CreateRecipeData, DetailedRecipe } from 'src/app/core/models/recipe';
+import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
+
+interface FormIngredientGroup {
+  name: FormControl<string | null>;
+  ingredients: FormArray<FormGroup<FormIngredient>>;
+}
+
+interface FormIngredient {
+  name: FormControl<string>;
+  amount: FormControl<number | null>;
+  unit: FormControl<string | null>;
+}
+
+@Component({
+  selector: 'app-edit-recipe-form',
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TranslocoModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatAutocompleteModule,
+    MatSelectModule,
+    MatSliderModule,
+    MatIconModule,
+    EditorComponent,
+  ],
+  templateUrl: './edit-recipe-form.component.html',
+  styleUrls: ['./edit-recipe-form.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { subscriptSizing: 'dynamic', hideRequiredMarker: true } },
+  ],
+})
+export class EditRecipeFormComponent {
+  @Input()
+  set disabled(disabled: any) {
+    const isDisabled = coerceBooleanProperty(disabled);
+
+    if (isDisabled) {
+      this.form.disable();
+    } else {
+      this.form.enable();
+    }
+
+    this.disabled$.next(isDisabled);
+  }
+
+  disabled$ = new BehaviorSubject<boolean>(false);
+
+  @Input()
+  set recipe(recipe: DetailedRecipe | null) {
+    this._recipe = recipe;
+
+    this.resetForm();
+  }
+
+  get recipe() {
+    return this._recipe;
+  }
+
+  private _recipe: DetailedRecipe | null = null;
+
+  @Output() save = new EventEmitter<CreateRecipeData>();
+
+  categories$ = this.auth.user$.pipe(
+    switchMap(() => this.api.categories.getList()),
+    handledErrorInterceptor(),
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
+
+  cookbooks$ = this.auth.user$.pipe(
+    tap(() => this.form.controls.cookbookId.disable()),
+    switchMap(() => this.api.cookbooks.getEditableList()),
+    tap(() => {
+      if (!this.disabled$.value) {
+        this.form.controls.cookbookId.enable();
+      }
+    }),
+    handledErrorInterceptor(),
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
+
+  ingredients$ = this.auth.user$.pipe(
+    switchMap(() => this.api.ingredients.getList()),
+    handledErrorInterceptor(),
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
+
+  categoriesError$ = this.api.handleRequestError(this.categories$);
+  cookbooksError$ = this.api.handleRequestError(this.cookbooks$);
+  ingredientsError$ = this.api.handleRequestError(this.ingredients$);
+
+  form = this.fb.nonNullable.group({
+    name: [<string>'', [Validators.required]],
+    isPublic: [<boolean>false, [Validators.required]],
+    category: [<string | null>null],
+    cookbookId: [<number | null>null],
+    description: [<string | null>null],
+    portions: [<number | null>null, [Validators.min(1)]],
+    difficulty: [<number | null>null, [Validators.min(1), Validators.max(5)]],
+    preparationTimeMinutes: [<number | null>null, [Validators.min(1)]],
+    restingTimeMinutes: [<number | null>null, [Validators.min(1)]],
+    cookingTimeMinutes: [<number | null>null, [Validators.min(1)]],
+    ingredients: this.fb.nonNullable.array<FormGroup<FormIngredientGroup>>([]),
+    preparation: [<string | null>null],
+  });
+
+  filteredCategories$: Observable<string[]> = combineLatest([
+    this.form.controls.category.valueChanges.pipe(startWith(this.form.controls.category.value)),
+    this.categories$,
+  ]).pipe(
+    map(([_, categoriesResponse]) => {
+      const categories = categoriesResponse.body?.data;
+
+      const filterCategory = (this.form.controls.category.value || '').toLowerCase();
+
+      return categories?.filter((category) => category.toLowerCase().includes(filterCategory)) || [];
+    }),
+    startWith([]),
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
+
+  amountOfIngredients$ = this.form.controls.ingredients.valueChanges.pipe(
+    startWith(undefined),
+    map(() =>
+      Object.entries(this.form.controls.ingredients.controls).reduce(
+        (acc, [_, formIngredients]) => formIngredients.controls.ingredients.length + acc,
+        0
+      )
+    ),
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
+
+  filteredIngredients$: Observable<{ [key: string]: SimpleIngredient[] }> = combineLatest([
+    this.form.controls.ingredients.valueChanges.pipe(startWith(undefined)),
+    this.ingredients$,
+  ]).pipe(
+    distinctUntilChanged(([value1, ingredients1], [value2, ingredients2]) => {
+      if (JSON.stringify(ingredients1) !== JSON.stringify(ingredients2)) {
+        return false;
+      }
+
+      if (value1 === undefined && value2 === undefined) {
+        return true;
+      }
+
+      return JSON.stringify(value1) === JSON.stringify(value2);
+    }),
+    map(([_, ingredientsResponse]) => {
+      const ingredients = ingredientsResponse.body?.data;
+
+      const filteredIngredients: { [key: string]: SimpleIngredient[] } = {};
+
+      this.form.controls.ingredients.controls.forEach((ingredientGroup, groupIndex) => {
+        ingredientGroup.controls.ingredients.controls.forEach((ingredient, ingredientIndex) => {
+          const name = ingredient.controls.name.value;
+
+          // fixes intermediate state when autocomplete selects option
+          if (typeof name !== 'string' && name !== null) {
+            return;
+          }
+
+          const filterName = (name || '').toLowerCase();
+
+          filteredIngredients[this.getIngredientKey(groupIndex, ingredientIndex)] =
+            ingredients?.filter((ingredient) => ingredient.name.toLowerCase().includes(filterName)) || [];
+        });
+      });
+
+      return filteredIngredients;
+    }),
+    startWith({}),
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
+
+  constructor(
+    private fb: FormBuilder,
+    private elementRef: ElementRef,
+    private api: ApiService,
+    private auth: AuthService
+  ) {}
+
+  resetForm() {
+    if (!this.recipe) {
+      this.form.reset();
+
+      return;
+    }
+
+    this.form.patchValue({
+      name: this.recipe.name,
+      isPublic: this.recipe.is_public,
+      category: this.recipe.category,
+      cookbookId: this.recipe.cookbook_id,
+      description: this.recipe.description,
+      portions: this.recipe.portions,
+      difficulty: this.recipe.difficulty,
+      preparationTimeMinutes: this.recipe.preparation_time_minutes,
+      restingTimeMinutes: this.recipe.resting_time_minutes,
+      cookingTimeMinutes: this.recipe.cooking_time_minutes,
+      ingredients: [],
+      preparation: this.recipe.preparation,
+    });
+
+    const ingredientGroupIndices: { [key: string]: number } = {};
+
+    this.recipe.ingredients.forEach((ingredientGroup) => {
+      const groupName = ingredientGroup.group || '';
+
+      if (ingredientGroupIndices[groupName] === undefined) {
+        ingredientGroupIndices[groupName] = this.addIngredientGroup(ingredientGroup.group);
+      }
+
+      return ingredientGroup.items.forEach((ingredient) =>
+        this.addIngredient(ingredientGroupIndices[groupName], ingredient)
+      );
+    });
+  }
+
+  difficultyValueFn(value: number | null) {
+    if (value) {
+      return value.toString();
+    }
+
+    return '-';
+  }
+
+  addIngredient(groupIndex: number, ingredient: Ingredient | null, focusIngredient = false) {
+    const ingredientGroup = this.fb.nonNullable.group({
+      name: [ingredient?.name ?? '', [Validators.required]],
+      amount: [ingredient?.amount ?? null, [Validators.min(0.01)]],
+      unit: [ingredient?.unit ?? null],
+    });
+
+    this.form.controls.ingredients.at(groupIndex).controls.ingredients.push(ingredientGroup);
+
+    const index = this.form.controls.ingredients.at(groupIndex).controls.ingredients.length - 1;
+
+    if (focusIngredient) {
+      setTimeout(() => {
+        this.getIngredientInputNativeElement(groupIndex, index, 'name')?.focus();
+      });
+    }
+
+    return index;
+  }
+
+  removeIngredient(groupIndex: number, index: number) {
+    const ingredientGroup = this.form.controls.ingredients.at(groupIndex).controls.ingredients;
+
+    ingredientGroup.removeAt(index);
+
+    if (ingredientGroup.length === 0) {
+      this.form.controls.ingredients.removeAt(groupIndex);
+    }
+  }
+
+  addIngredientGroup(groupName: string | null) {
+    this.form.controls.ingredients.push(
+      this.fb.nonNullable.group({
+        name: [groupName, []],
+        ingredients: this.fb.nonNullable.array<FormGroup<FormIngredient>>([]),
+      })
+    );
+
+    return this.form.controls.ingredients.length - 1;
+  }
+
+  removeIngredientGroup(groupIndex: number) {
+    this.form.controls.ingredients.removeAt(groupIndex);
+  }
+
+  onIngredientKeyDownEnter(event: Event, groupIndex: number) {
+    event.preventDefault();
+
+    this.addIngredient(groupIndex, null, true);
+  }
+
+  onIngredientAutocompleteSelected(event: MatAutocompleteSelectedEvent, groupIndex: number, ingredientIndex: number) {
+    const ingredientField = this.form.controls.ingredients.controls
+      .at(groupIndex)
+      ?.controls.ingredients.controls.at(ingredientIndex);
+
+    if (!ingredientField) {
+      return;
+    }
+
+    let ingredient = event.option.value as SimpleIngredient;
+
+    ingredientField.controls.name.setValue(ingredient.name);
+    ingredientField.controls.unit.setValue(ingredient.unit);
+
+    setTimeout(() => {
+      this.getIngredientInputNativeElement(groupIndex, ingredientIndex, 'amount')?.focus();
+    });
+  }
+
+  onSubmit() {
+    if (this.form.invalid) {
+      return;
+    }
+
+    const ingredients: CreateIngredientData[] = this.form.controls.ingredients.controls.reduce(
+      (allIngredients, ingredientGroup) => {
+        const groupIngredients = ingredientGroup.controls.ingredients.controls.map((ingredient) => ({
+          name: ingredient.controls.name.value,
+          amount: ingredient.controls.amount.value,
+          unit: ingredient.controls.unit.value,
+          group: ingredientGroup.controls.name.value,
+        }));
+
+        return [...allIngredients, ...groupIngredients];
+      },
+      [] as CreateIngredientData[]
+    );
+
+    const recipe: CreateRecipeData = {
+      name: this.form.controls.name.value,
+      is_public: this.form.controls.isPublic.value,
+      category: this.form.controls.category.value,
+      cookbook_id: this.form.controls.cookbookId.value,
+      description: this.form.controls.description.value,
+      portions: this.form.controls.portions.value,
+      difficulty: this.form.controls.difficulty.value,
+      preparation_time_minutes: this.form.controls.preparationTimeMinutes.value,
+      resting_time_minutes: this.form.controls.restingTimeMinutes.value,
+      cooking_time_minutes: this.form.controls.cookingTimeMinutes.value,
+      preparation: this.form.controls.preparation.value,
+      ingredients,
+    };
+
+    this.save.emit(recipe);
+  }
+
+  trackByCookbook(index: number, cookbook: { id: number; name: string }) {
+    return cookbook.id;
+  }
+
+  getIngredientKey(groupIndex: number, ingredientIndex: number) {
+    return `${groupIndex}-${ingredientIndex}`;
+  }
+
+  private getIngredientInputNativeElement(
+    groupIndex: number,
+    ingredientIndex: number,
+    field: string | null
+  ): HTMLInputElement | null {
+    const container = this.elementRef.nativeElement.querySelector(
+      `[data-ingredient-key="${this.getIngredientKey(groupIndex, ingredientIndex)}"]`
+    );
+
+    if (field === null) {
+      return container;
+    }
+
+    return container?.querySelector(`input[formControlName="${field}"]`);
+  }
+}
+

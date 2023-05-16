@@ -41,6 +41,7 @@
       @include mat.core-theme($app-theme);
       @include mat.button-theme($app-theme);
       @include mat.icon-button-theme($app-theme);
+      @include mat.checkbox-theme($app-theme);
       @include mat.chips-theme($app-theme);
       @include mat.dialog-theme($app-theme);
       @include mat.fab-theme($app-theme);
@@ -51,6 +52,7 @@
       @include mat.menu-theme($app-theme);
       @include mat.paginator-theme($app-theme);
       @include mat.progress-spinner-theme($app-theme);
+      @include mat.slider-theme($app-theme);
       @include mat.slide-toggle-theme($app-theme);
       @include mat.snack-bar-theme($app-theme);
       @include mat.toolbar-theme($app-theme);
@@ -67,6 +69,7 @@
       @include mat.core-color($app-theme);
       @include mat.button-color($app-theme);
       @include mat.icon-button-color($app-theme);
+      @include mat.checkbox-color($app-theme);
       @include mat.chips-color($app-theme);
       @include mat.dialog-color($app-theme);
       @include mat.fab-color($app-theme);
@@ -77,6 +80,7 @@
       @include mat.menu-color($app-theme);
       @include mat.paginator-color($app-theme);
       @include mat.progress-spinner-color($app-theme);
+      @include mat.slider-color($app-theme);
       @include mat.slide-toggle-color($app-theme);
       @include mat.snack-bar-color($app-theme);
       @include mat.toolbar-color($app-theme);
