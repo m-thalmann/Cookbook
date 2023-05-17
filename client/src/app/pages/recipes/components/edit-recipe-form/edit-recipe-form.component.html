@@ -3,30 +3,32 @@
         filteredCategories: filteredCategories$ | async,
         cookbooks: cookbooks$ | async,
         filteredIngredients: filteredIngredients$ | async,
-        amountOfIngredients: amountOfIngredients$ | async
+        amountOfIngredients: amountOfIngredients$ | async,
+        cookbooksError: cookbooksError$ | async,
+        savingError: savingError$ | async
     } as vm"
 >
     <form [formGroup]="form" (submit)="onSubmit()">
         <div class="form-container">
-            <h3 class="section-title-general">{{ 'general.generalInformation' | transloco }}</h3>
+            <h3 style="grid-area: title-general">{{ 'general.generalInformation' | transloco }}</h3>
 
-            <mat-form-field appearance="outline" class="field-name">
+            <mat-form-field appearance="outline" class="field-name" style="grid-area: name">
                 <mat-icon matPrefix>drive_file_rename_outline</mat-icon>
                 <mat-label>{{ 'general.name' | transloco }}</mat-label>
                 <input matInput type="text" formControlName="name" />
-                <mat-error *ngIf="form.get('name')?.getError('serverError') as serverError">
+                <mat-error *ngIf="form.controls.name.getError('serverError') as serverError">
                     {{ serverError }}
                 </mat-error>
             </mat-form-field>
 
-            <mat-checkbox formControlName="isPublic" class="field-public">
+            <mat-checkbox formControlName="isPublic" class="field-public" style="grid-area: public">
                 <span>
                     {{ 'general.public' | transloco }}
                     <mat-icon>public</mat-icon>
                 </span>
             </mat-checkbox>
 
-            <mat-form-field appearance="outline" class="field-category">
+            <mat-form-field appearance="outline" class="field-category" style="grid-area: category">
                 <mat-icon matPrefix>sell</mat-icon>
                 <mat-label>{{ 'categories.category' | transloco }}</mat-label>
                 <input matInput type="text" formControlName="category" [matAutocomplete]="categoryAutocomplete" />
@@ -40,7 +42,7 @@
                 </mat-autocomplete>
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="field-cookbook">
+            <mat-form-field appearance="outline" class="field-cookbook" style="grid-area: cookbook">
                 <mat-icon matPrefix>menu_book</mat-icon>
                 <mat-label>{{ 'cookbooks.cookbook' | transloco }}</mat-label>
                 <mat-select formControlName="cookbookId">
@@ -52,12 +54,20 @@
                         {{ cookbook.name }}
                     </mat-option>
                 </mat-select>
+                <mat-icon
+                    color="warn"
+                    [matTooltip]="'cookbooks.loadingError' | transloco"
+                    matSuffix
+                    *ngIf="vm.cookbooksError"
+                >
+                    error_outline
+                </mat-icon>
                 <mat-error *ngIf="form.get('cookbookId')?.getError('serverError') as serverError">
                     {{ serverError }}
                 </mat-error>
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="field-description">
+            <mat-form-field appearance="outline" class="field-description" style="grid-area: description">
                 <mat-label>{{ 'recipes.description' | transloco }}</mat-label>
                 <textarea matInput formControlName="description"></textarea>
                 <mat-error *ngIf="form.get('description')?.getError('serverError') as serverError">
@@ -65,7 +75,7 @@
                 </mat-error>
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="field-portions">
+            <mat-form-field appearance="outline" class="field-portions" style="grid-area: portions">
                 <mat-icon matPrefix>restaurant</mat-icon>
                 <mat-label>{{ 'recipes.portions' | transloco }}</mat-label>
                 <input matInput type="number" formControlName="portions" />
@@ -74,7 +84,7 @@
                 </mat-error>
             </mat-form-field>
 
-            <div class="field-difficulty">
+            <div class="field-difficulty" style="grid-area: difficulty">
                 <label>
                     {{ 'recipes.difficulty' | transloco }}
 
@@ -89,11 +99,11 @@
                 </span>
             </div>
 
-            <h3 class="section-title-times">
+            <h3 style="grid-area: title-times">
                 {{ 'recipes.times.times' | transloco }} ({{ 'recipes.times.minutes' | transloco }})
             </h3>
 
-            <mat-form-field appearance="outline" class="field-preparation-time">
+            <mat-form-field appearance="outline" class="field-preparation-time" style="grid-area: preparation-time">
                 <mat-icon matPrefix>timer</mat-icon>
                 <mat-label>
                     {{ 'recipes.times.preparation' | transloco }}
@@ -104,7 +114,7 @@
                 </mat-error>
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="field-resting-time">
+            <mat-form-field appearance="outline" class="field-resting-time" style="grid-area: resting-time">
                 <mat-icon matPrefix>timer</mat-icon>
                 <mat-label>
                     {{ 'recipes.times.resting' | transloco }}
@@ -115,7 +125,7 @@
                 </mat-error>
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="field-cooking-time">
+            <mat-form-field appearance="outline" class="field-cooking-time" style="grid-area: cooking-time">
                 <mat-icon matPrefix>timer</mat-icon>
                 <mat-label>
                     {{ 'recipes.times.cooking' | transloco }}
@@ -126,11 +136,11 @@
                 </mat-error>
             </mat-form-field>
 
-            <h3 class="section-title-ingredients">
+            <h3 style="grid-area: title-ingredients">
                 {{ 'ingredients.ingredients' | transloco }} ({{ vm.amountOfIngredients }})
             </h3>
 
-            <div class="field-ingredients" formArrayName="ingredients">
+            <div class="field-ingredients" style="grid-area: ingredients" formArrayName="ingredients">
                 <div
                     class="ingredient-group"
                     [formGroupName]="groupIndex"
@@ -144,6 +154,9 @@
                             {{ 'ingredients.groupName' | transloco }}
                         </mat-label>
                         <input matInput type="string" formControlName="name" />
+                        <mat-error *ngIf="group.controls.name.getError('serverError') as serverError">
+                            {{ serverError }}
+                        </mat-error>
                     </mat-form-field>
 
                     <div class="ingredients" formArrayName="ingredients">
@@ -265,18 +278,25 @@
                 </button>
             </div>
 
-            <h3 class="section-title-preparation">{{ 'recipes.preparation' | transloco }}</h3>
+            <h3 style="grid-area: title-preparation">{{ 'recipes.preparation' | transloco }}</h3>
 
             <app-editor
                 class="field-preparation"
+                style="grid-area: preparation"
                 formControlName="preparation"
                 [placeholder]="'general.insertTextPlaceholder' | transloco"
             ></app-editor>
         </div>
 
-        <button mat-raised-button color="primary" [disabled]="form.invalid || form.disabled">
-            {{ 'general.save' | transloco }}
-        </button>
+        <div class="form-actions">
+            <button mat-raised-button color="primary" [disabled]="form.invalid || form.disabled">
+                {{ 'general.save' | transloco }}
+            </button>
+
+            <mat-spinner [diameter]="32" color="accent" *ngIf="loading"></mat-spinner>
+
+            <span class="saving-error fg-warn" *ngIf="vm.savingError as savingError">{{ savingError }}</span>
+        </div>
     </form>
 </ng-container>
 

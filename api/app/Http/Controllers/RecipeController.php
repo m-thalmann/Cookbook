@@ -24,6 +24,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Vyuldashev\LaravelOpenApi\Attributes as OpenApi;
 
 #[OpenApi\PathItem]
@@ -106,11 +107,11 @@ class RecipeController extends Controller {
         $data = $request->validate([
             'is_public' => ['boolean'],
             'name' => ['required', 'filled', 'max:255'],
-            'description' => ['nullable', 'filled', 'max:255'],
-            'category' => ['nullable', 'filled', 'max:50'],
+            'description' => ['nullable', 'max:255'],
+            'category' => ['nullable', 'max:50'],
             'portions' => ['nullable', 'integer', 'min:1'],
             'difficulty' => ['nullable', 'integer', 'min:1', 'max:5'],
-            'preparation' => ['nullable', 'filled', 'max:2000'],
+            'preparation' => ['nullable', 'max:2000'],
             'preparation_time_minutes' => ['nullable', 'integer', 'min:1'],
             'resting_time_minutes' => ['nullable', 'integer', 'min:1'],
             'cooking_time_minutes' => ['nullable', 'integer', 'min:1'],
@@ -139,8 +140,24 @@ class RecipeController extends Controller {
             $ingredients = Arr::get($ingredientsData, 'ingredients', []);
 
             if (count($ingredients) > 0) {
-                foreach ($ingredients as $ingredient) {
-                    IngredientController::storeIngredient($ingredient, $recipe);
+                foreach ($ingredients as $ingredientIndex => $ingredient) {
+                    try {
+                        IngredientController::storeIngredient(
+                            $ingredient,
+                            $recipe
+                        );
+                    } catch (ValidationException $e) {
+                        $ingredientErrors = collect($e->validator->errors());
+                        throw ValidationException::withMessages(
+                            $ingredientErrors
+                                ->mapWithKeys(
+                                    fn($errors, $key) => [
+                                        "ingredients.{$ingredientIndex}.{$key}" => $errors,
+                                    ]
+                                )
+                                ->toArray()
+                        );
+                    }
                 }
             }
 

@@ -1,5 +1,6 @@
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
@@ -8,8 +9,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoModule } from '@ngneat/transloco';
 import {
   BehaviorSubject,
@@ -26,6 +29,8 @@ import { EditorComponent } from 'src/app/components/editor/editor.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { CreateIngredientData, Ingredient, SimpleIngredient } from 'src/app/core/models/ingredient';
+import { ServerValidationHelper } from 'src/app/core/forms/ServerValidationHelper';
+import { trimAndNull } from 'src/app/core/helpers/trim-and-null';
 import { CreateRecipeData, DetailedRecipe } from 'src/app/core/models/recipe';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 
@@ -47,6 +52,7 @@ interface FormIngredient {
     CommonModule,
     ReactiveFormsModule,
     TranslocoModule,
+    MatTooltipModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
@@ -55,6 +61,7 @@ interface FormIngredient {
     MatSelectModule,
     MatSliderModule,
     MatIconModule,
+    MatProgressSpinnerModule,
     EditorComponent,
   ],
   templateUrl: './edit-recipe-form.component.html',
@@ -79,6 +86,33 @@ export class EditRecipeFormComponent {
   }
 
   disabled$ = new BehaviorSubject<boolean>(false);
+
+  @Input()
+  set loading(loading: any) {
+    this._loading = coerceBooleanProperty(loading);
+  }
+
+  get loading() {
+    return this._loading;
+  }
+
+  private _loading = false;
+
+  @Input()
+  set serverErrorResponse(errorResponse: HttpErrorResponse | null) {
+    if (!errorResponse) {
+      this.savingError$.next(null);
+      return;
+    }
+
+    if (this.setServerValidationErrors(errorResponse)) {
+      return;
+    }
+
+    this.savingError$.next(this.api.getErrorMessage(errorResponse));
+  }
+
+  savingError$ = new BehaviorSubject<string | null>(null);
 
   @Input()
   set recipe(recipe: DetailedRecipe | null) {
@@ -119,9 +153,7 @@ export class EditRecipeFormComponent {
     shareReplay({ bufferSize: 1, refCount: true })
   );
 
-  categoriesError$ = this.api.handleRequestError(this.categories$);
   cookbooksError$ = this.api.handleRequestError(this.cookbooks$);
-  ingredientsError$ = this.api.handleRequestError(this.ingredients$);
 
   form = this.fb.nonNullable.group({
     name: [<string>'', [Validators.required]],
@@ -335,11 +367,13 @@ export class EditRecipeFormComponent {
 
     const ingredients: CreateIngredientData[] = this.form.controls.ingredients.controls.reduce(
       (allIngredients, ingredientGroup) => {
+        const groupName = trimAndNull(ingredientGroup.controls.name.value);
+
         const groupIngredients = ingredientGroup.controls.ingredients.controls.map((ingredient) => ({
           name: ingredient.controls.name.value,
           amount: ingredient.controls.amount.value,
-          unit: ingredient.controls.unit.value,
-          group: ingredientGroup.controls.name.value,
+          unit: trimAndNull(ingredient.controls.unit.value),
+          group: groupName,
         }));
 
         return [...allIngredients, ...groupIngredients];
@@ -350,15 +384,15 @@ export class EditRecipeFormComponent {
     const recipe: CreateRecipeData = {
       name: this.form.controls.name.value,
       is_public: this.form.controls.isPublic.value,
-      category: this.form.controls.category.value,
+      category: trimAndNull(this.form.controls.category.value),
       cookbook_id: this.form.controls.cookbookId.value,
-      description: this.form.controls.description.value,
+      description: trimAndNull(this.form.controls.description.value),
       portions: this.form.controls.portions.value,
       difficulty: this.form.controls.difficulty.value,
       preparation_time_minutes: this.form.controls.preparationTimeMinutes.value,
       resting_time_minutes: this.form.controls.restingTimeMinutes.value,
       cooking_time_minutes: this.form.controls.cookingTimeMinutes.value,
-      preparation: this.form.controls.preparation.value,
+      preparation: trimAndNull(this.form.controls.preparation.value),
       ingredients,
     };
 
@@ -371,6 +405,31 @@ export class EditRecipeFormComponent {
 
   getIngredientKey(groupIndex: number, ingredientIndex: number) {
     return `${groupIndex}-${ingredientIndex}`;
+  }
+
+  private setServerValidationErrors(errorResponse: HttpErrorResponse) {
+    const fieldsMap: { [key: string]: string } = {
+      is_public: 'isPublic',
+      preparation_time_minutes: 'preparationTimeMinutes',
+      resting_time_minutes: 'restingTimeMinutes',
+      cooking_time_minutes: 'cookingTimeMinutes',
+      cookbook_id: 'cookbookId',
+    };
+
+    this.form.controls.ingredients.controls.reduce((ingredientIndexOffset, ingredientGroup, groupIndex) => {
+      ingredientGroup.controls.ingredients.controls.forEach((ingredient, ingredientIndex) => {
+        const index = ingredientIndexOffset + ingredientIndex;
+
+        fieldsMap[`ingredients.${index}.name`] = `ingredients.${groupIndex}.ingredients.${ingredientIndex}.name`;
+        fieldsMap[`ingredients.${index}.unit`] = `ingredients.${groupIndex}.ingredients.${ingredientIndex}.unit`;
+        fieldsMap[`ingredients.${index}.amount`] = `ingredients.${groupIndex}.ingredients.${ingredientIndex}.amount`;
+        fieldsMap[`ingredients.${index}.group`] = `ingredients.${groupIndex}.name`;
+      });
+
+      return ingredientIndexOffset + ingredientGroup.controls.ingredients.controls.length;
+    }, 0);
+
+    return ServerValidationHelper.setValidationErrors(errorResponse, this.form, fieldsMap);
   }
 
   private getIngredientInputNativeElement(

@@ -1,21 +1,21 @@
 @use 'sass:map';
 @use 'mixins';
 @use 'theme';
-@use 'variables' as *;
 
 form {
-  padding: 0 $layout-padding;
-
   .form-container {
     display: flex;
     flex-direction: column;
-
     gap: 1em;
 
     margin-bottom: 2em;
 
     h3 {
       margin-bottom: 0;
+    }
+
+    mat-form-field {
+      height: fit-content;
     }
 
     .field-public {
@@ -27,6 +27,8 @@ form {
     }
 
     .field-difficulty {
+      height: 3.5em;
+
       &,
       label,
       > span {
@@ -73,6 +75,7 @@ form {
 
         .buttons {
           display: flex;
+          flex-direction: column;
           gap: 1em;
         }
 
@@ -89,6 +92,18 @@ form {
       }
     }
   }
+
+  .form-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+
+    button,
+    > span {
+      width: 100%;
+    }
+  }
 }
 
 @include mixins.desktop() {
@@ -101,64 +116,20 @@ form {
         'public public public'
         'category cookbook .'
         'description description description'
-        'portions difficulty .'
+        'portions difficulty difficulty'
         'title-times title-times title-times'
         'preparation-time resting-time cooking-time'
         'title-ingredients title-ingredients title-ingredients'
         'ingredients ingredients ingredients'
         'title-preparation title-preparation title-preparation'
         'preparation preparation preparation';
-
       grid-template-columns: repeat(3, 1fr);
-      gap: 1em;
 
       h3 {
         margin-bottom: 0;
-
-        &.section-title-general {
-          grid-area: title-general;
-        }
-        &.section-title-times {
-          grid-area: title-times;
-        }
-        &.section-title-ingredients {
-          grid-area: title-ingredients;
-        }
-        &.section-title-preparation {
-          grid-area: title-preparation;
-        }
       }
 
-      .field-name {
-        grid-area: name;
-      }
-      .field-public {
-        grid-area: public;
-      }
-      .field-cookbook {
-        grid-area: cookbook;
-      }
-      .field-description {
-        grid-area: description;
-      }
-      .field-portions {
-        grid-area: portions;
-      }
-      .field-difficulty {
-        grid-area: difficulty;
-      }
-      .field-preparation-time {
-        grid-area: preparation-time;
-      }
-      .field-resting-time {
-        grid-area: resting-time;
-      }
-      .field-cooking-time {
-        grid-area: cooking-time;
-      }
       .field-ingredients {
-        grid-area: ingredients;
-
         > button {
           width: fit-content;
         }
@@ -177,11 +148,19 @@ form {
                 }
               }
             }
+          .buttons {
+            flex-direction: row;
           }
         }
       }
-      .field-preparation {
-        grid-area: preparation;
+    }
+
+    .form-actions {
+      flex-direction: row;
+
+      button,
+      > span {
+        width: unset;
       }
     }
   }
