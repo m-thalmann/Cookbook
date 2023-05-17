@@ -2,7 +2,7 @@
     *ngIf="{
         filteredCategories: filteredCategories$ | async,
         cookbooks: cookbooks$ | async,
-        filteredIngredients: filteredIngredients$ | async,
+        ingredients: ingredients$ | async,
         amountOfIngredients: amountOfIngredients$ | async,
         cookbooksError: cookbooksError$ | async,
         savingError: savingError$ | async
@@ -160,86 +160,15 @@
                     </mat-form-field>
 
                     <div class="ingredients" formArrayName="ingredients">
-                        <div
-                            class="ingredient"
-                            [attr.data-ingredient-key]="getIngredientKey(groupIndex, ingredientIndex)"
+                        <app-edit-recipe-ingredient-form-group
+                            [formControlGroup]="ingredient"
+                            [ingredientKey]="getIngredientKey(groupIndex, ingredientIndex)"
+                            [ingredientOptions]="vm.ingredients?.body?.data ?? null"
+                            [disabled]="form.disabled"
+                            (addIngredient)="addIngredient(groupIndex, null, true)"
+                            (removeIngredient)="removeIngredient(groupIndex, ingredientIndex)"
                             *ngFor="let ingredient of group.controls.ingredients.controls; let ingredientIndex = index"
-                            [formGroupName]="ingredientIndex"
-                        >
-                            <mat-form-field appearance="outline">
-                                <mat-label>
-                                    {{ 'ingredients.ingredient' | transloco }}
-                                </mat-label>
-                                <input
-                                    matInput
-                                    type="string"
-                                    formControlName="name"
-                                    [matAutocomplete]="ingredientAutocomplete"
-                                    (keydown.enter)="$event.preventDefault()"
-                                />
-                                <mat-error *ngIf="ingredient.controls.name.getError('serverError') as serverError">
-                                    {{ serverError }}
-                                </mat-error>
-
-                                <mat-autocomplete
-                                    #ingredientAutocomplete="matAutocomplete"
-                                    (optionSelected)="
-                                        onIngredientAutocompleteSelected($event, groupIndex, ingredientIndex)
-                                    "
-                                >
-                                    <mat-option
-                                        *ngFor="let ingredient of vm.filteredIngredients?.[getIngredientKey(groupIndex, ingredientIndex)]"
-                                        [value]="ingredient"
-                                    >
-                                        {{ ingredient.name }}
-
-                                        <ng-container *ngIf="ingredient.unit as unit">
-                                            &nbsp;&nbsp;|&nbsp;&nbsp;
-                                            <small>{{ unit }}</small>
-                                        </ng-container>
-                                    </mat-option>
-                                </mat-autocomplete>
-                            </mat-form-field>
-
-                            <mat-form-field appearance="outline">
-                                <mat-label>
-                                    {{ 'ingredients.amount' | transloco }}
-                                </mat-label>
-                                <input
-                                    matInput
-                                    type="number"
-                                    formControlName="amount"
-                                    (keydown.enter)="onIngredientKeyDownEnter($event, groupIndex)"
-                                />
-                                <mat-error *ngIf="ingredient.controls.amount.getError('serverError') as serverError">
-                                    {{ serverError }}
-                                </mat-error>
-                            </mat-form-field>
-
-                            <mat-form-field appearance="outline">
-                                <mat-label>
-                                    {{ 'ingredients.unit' | transloco }}
-                                </mat-label>
-                                <input
-                                    matInput
-                                    type="string"
-                                    formControlName="unit"
-                                    (keydown.enter)="onIngredientKeyDownEnter($event, groupIndex)"
-                                />
-                                <mat-error *ngIf="ingredient.controls.unit.getError('serverError') as serverError">
-                                    {{ serverError }}
-                                </mat-error>
-                            </mat-form-field>
-
-                            <button
-                                mat-icon-button
-                                type="button"
-                                [disabled]="form.disabled"
-                                (click)="removeIngredient(groupIndex, ingredientIndex)"
-                            >
-                                <mat-icon>delete</mat-icon>
-                            </button>
-                        </div>
+                        ></app-edit-recipe-ingredient-form-group>
                     </div>
 
                     <div class="buttons">

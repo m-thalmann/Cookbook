@@ -1,0 +1,67 @@
+<ng-container *ngIf="{ filteredIngredients: filteredIngredients$ | async } as vm">
+    <div class="ingredient-container" [attr.data-ingredient-key]="ingredientKey" [formGroup]="formControlGroup">
+        <mat-form-field appearance="outline">
+            <mat-label>
+                {{ 'ingredients.ingredient' | transloco }}
+            </mat-label>
+            <input
+                matInput
+                type="string"
+                formControlName="name"
+                [matAutocomplete]="ingredientAutocomplete"
+                (keydown.enter)="$event.preventDefault()"
+            />
+
+            <mat-error *ngIf="formControlGroup.controls.name.getError('serverError') as serverError">
+                {{ serverError }}
+            </mat-error>
+
+            <mat-autocomplete
+                #ingredientAutocomplete="matAutocomplete"
+                (optionSelected)="onIngredientAutocompleteSelected($event)"
+            >
+                <mat-option *ngFor="let ingredient of vm.filteredIngredients" [value]="ingredient">
+                    {{ ingredient.name }}
+
+                    <ng-container *ngIf="ingredient.unit as unit">
+                        &nbsp;&nbsp;|&nbsp;&nbsp;
+                        <small>{{ unit }}</small>
+                    </ng-container>
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>
+                {{ 'ingredients.amount' | transloco }}
+            </mat-label>
+            <input
+                matInput
+                type="number"
+                formControlName="amount"
+                (keydown.enter)="onIngredientKeyDownEnter($event)"
+                #amountInput
+            />
+            <mat-error *ngIf="formControlGroup.controls.amount.getError('serverError') as serverError">
+                {{ serverError }}
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>
+                {{ 'ingredients.unit' | transloco }}
+            </mat-label>
+            <input matInput type="string" formControlName="unit" (keydown.enter)="onIngredientKeyDownEnter($event)" />
+            <mat-error *ngIf="formControlGroup.controls.unit.getError('serverError') as serverError">
+                {{ serverError }}
+            </mat-error>
+        </mat-form-field>
+
+        <div class="ingredient-actions">
+            <button mat-icon-button type="button" [disabled]="disabled" (click)="removeIngredient.emit()">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </div>
+    </div>
+</ng-container>
+

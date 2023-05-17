@@ -60,17 +60,6 @@ form {
 
           padding-bottom: 1em;
           margin-bottom: 1em;
-
-          .ingredient {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5em;
-
-            mat-form-field {
-              width: 100%;
-            }
-          }
         }
 
         .buttons {
@@ -135,19 +124,6 @@ form {
         }
 
         .ingredient-group {
-          .ingredients {
-            .ingredient {
-              flex-direction: row;
-
-              mat-form-field {
-                width: unset;
-
-                &:nth-of-type(2),
-                &:nth-of-type(3) {
-                  width: 9em;
-                }
-              }
-            }
           .buttons {
             flex-direction: row;
           }

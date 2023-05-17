@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/material/form-field';
@@ -14,32 +14,23 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoModule } from '@ngneat/transloco';
-import {
-  BehaviorSubject,
-  Observable,
-  combineLatest,
-  distinctUntilChanged,
-  map,
-  shareReplay,
-  startWith,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, map, shareReplay, startWith, switchMap, tap } from 'rxjs';
 import { EditorComponent } from 'src/app/components/editor/editor.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
-import { CreateIngredientData, Ingredient, SimpleIngredient } from 'src/app/core/models/ingredient';
 import { ServerValidationHelper } from 'src/app/core/forms/ServerValidationHelper';
 import { trimAndNull } from 'src/app/core/helpers/trim-and-null';
+import { CreateIngredientData, Ingredient } from 'src/app/core/models/ingredient';
 import { CreateRecipeData, DetailedRecipe } from 'src/app/core/models/recipe';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
+import { EditRecipeIngredientFormGroupComponent } from './components/edit-recipe-ingredient-form-group/edit-recipe-ingredient-form-group.component';
 
 interface FormIngredientGroup {
   name: FormControl<string | null>;
   ingredients: FormArray<FormGroup<FormIngredient>>;
 }
 
-interface FormIngredient {
+export interface FormIngredient {
   name: FormControl<string>;
   amount: FormControl<number | null>;
   unit: FormControl<string | null>;
@@ -62,6 +53,7 @@ interface FormIngredient {
     MatSliderModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    EditRecipeIngredientFormGroupComponent,
     EditorComponent,
   ],
   templateUrl: './edit-recipe-form.component.html',
@@ -196,48 +188,6 @@ export class EditRecipeFormComponent {
     shareReplay({ bufferSize: 1, refCount: true })
   );
 
-  filteredIngredients$: Observable<{ [key: string]: SimpleIngredient[] }> = combineLatest([
-    this.form.controls.ingredients.valueChanges.pipe(startWith(undefined)),
-    this.ingredients$,
-  ]).pipe(
-    distinctUntilChanged(([value1, ingredients1], [value2, ingredients2]) => {
-      if (JSON.stringify(ingredients1) !== JSON.stringify(ingredients2)) {
-        return false;
-      }
-
-      if (value1 === undefined && value2 === undefined) {
-        return true;
-      }
-
-      return JSON.stringify(value1) === JSON.stringify(value2);
-    }),
-    map(([_, ingredientsResponse]) => {
-      const ingredients = ingredientsResponse.body?.data;
-
-      const filteredIngredients: { [key: string]: SimpleIngredient[] } = {};
-
-      this.form.controls.ingredients.controls.forEach((ingredientGroup, groupIndex) => {
-        ingredientGroup.controls.ingredients.controls.forEach((ingredient, ingredientIndex) => {
-          const name = ingredient.controls.name.value;
-
-          // fixes intermediate state when autocomplete selects option
-          if (typeof name !== 'string' && name !== null) {
-            return;
-          }
-
-          const filterName = (name || '').toLowerCase();
-
-          filteredIngredients[this.getIngredientKey(groupIndex, ingredientIndex)] =
-            ingredients?.filter((ingredient) => ingredient.name.toLowerCase().includes(filterName)) || [];
-        });
-      });
-
-      return filteredIngredients;
-    }),
-    startWith({}),
-    shareReplay({ bufferSize: 1, refCount: true })
-  );
-
   constructor(
     private fb: FormBuilder,
     private elementRef: ElementRef,
@@ -333,31 +283,6 @@ export class EditRecipeFormComponent {
 
   removeIngredientGroup(groupIndex: number) {
     this.form.controls.ingredients.removeAt(groupIndex);
-  }
-
-  onIngredientKeyDownEnter(event: Event, groupIndex: number) {
-    event.preventDefault();
-
-    this.addIngredient(groupIndex, null, true);
-  }
-
-  onIngredientAutocompleteSelected(event: MatAutocompleteSelectedEvent, groupIndex: number, ingredientIndex: number) {
-    const ingredientField = this.form.controls.ingredients.controls
-      .at(groupIndex)
-      ?.controls.ingredients.controls.at(ingredientIndex);
-
-    if (!ingredientField) {
-      return;
-    }
-
-    let ingredient = event.option.value as SimpleIngredient;
-
-    ingredientField.controls.name.setValue(ingredient.name);
-    ingredientField.controls.unit.setValue(ingredient.unit);
-
-    setTimeout(() => {
-      this.getIngredientInputNativeElement(groupIndex, ingredientIndex, 'amount')?.focus();
-    });
   }
 
   onSubmit() {
