@@ -1,121 +1,125 @@
-<div class="toolbar">
-    <div class="section">
-        <button
-            type="button"
-            tabindex="-1"
-            (click)="toggleBold()"
-            [matTooltip]="'editor.bold' | transloco"
-            matTooltipPosition="above"
-            [matTooltipDisabled]="disabled"
-            [disabled]="disabled"
-        >
-            <mat-icon>format_bold</mat-icon>
-        </button>
-        <button
-            type="button"
-            tabindex="-1"
-            (click)="toggleItalic()"
-            [matTooltip]="'editor.italic' | transloco"
-            matTooltipPosition="above"
-            [matTooltipDisabled]="disabled"
-            [disabled]="disabled"
-        >
-            <mat-icon>format_italic</mat-icon>
-        </button>
-        <button
-            type="button"
-            tabindex="-1"
-            (click)="toggleUnderline()"
-            [matTooltip]="'editor.underline' | transloco"
-            matTooltipPosition="above"
-            [matTooltipDisabled]="disabled"
-            [disabled]="disabled"
-        >
-            <mat-icon>format_underline</mat-icon>
-        </button>
+<ng-container *ngIf="{ disabled: disabled$ | async } as vm">
+    <div class="container" [class.disabled]="vm.disabled">
+        <div class="toolbar">
+            <div class="section">
+                <button
+                    type="button"
+                    tabindex="-1"
+                    (click)="toggleBold()"
+                    [matTooltip]="'editor.bold' | transloco"
+                    matTooltipPosition="above"
+                    [matTooltipDisabled]="vm.disabled"
+                    [disabled]="vm.disabled"
+                >
+                    <mat-icon>format_bold</mat-icon>
+                </button>
+                <button
+                    type="button"
+                    tabindex="-1"
+                    (click)="toggleItalic()"
+                    [matTooltip]="'editor.italic' | transloco"
+                    matTooltipPosition="above"
+                    [matTooltipDisabled]="vm.disabled"
+                    [disabled]="vm.disabled"
+                >
+                    <mat-icon>format_italic</mat-icon>
+                </button>
+                <button
+                    type="button"
+                    tabindex="-1"
+                    (click)="toggleUnderline()"
+                    [matTooltip]="'editor.underline' | transloco"
+                    matTooltipPosition="above"
+                    [matTooltipDisabled]="vm.disabled"
+                    [disabled]="vm.disabled"
+                >
+                    <mat-icon>format_underline</mat-icon>
+                </button>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="section">
+                <button
+                    type="button"
+                    tabindex="-1"
+                    (click)="toggleUnorderedList()"
+                    [matTooltip]="'editor.unorderedList' | transloco"
+                    matTooltipPosition="above"
+                    [matTooltipDisabled]="vm.disabled"
+                    [disabled]="vm.disabled"
+                >
+                    <mat-icon>format_list_bulleted</mat-icon>
+                </button>
+                <button
+                    type="button"
+                    tabindex="-1"
+                    (click)="toggleOrderedList()"
+                    [matTooltip]="'editor.orderedList' | transloco"
+                    matTooltipPosition="above"
+                    [matTooltipDisabled]="vm.disabled"
+                    [disabled]="vm.disabled"
+                >
+                    <mat-icon>format_list_numbered</mat-icon>
+                </button>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="section">
+                <button
+                    type="button"
+                    tabindex="-1"
+                    (click)="addLink()"
+                    [matTooltip]="'editor.addLink' | transloco"
+                    matTooltipPosition="above"
+                    [matTooltipDisabled]="vm.disabled"
+                    [disabled]="vm.disabled"
+                >
+                    <mat-icon>insert_link</mat-icon>
+                </button>
+                <button
+                    type="button"
+                    tabindex="-1"
+                    (click)="removeLink()"
+                    [matTooltip]="'editor.removeLink' | transloco"
+                    matTooltipPosition="above"
+                    [matTooltipDisabled]="vm.disabled"
+                    [disabled]="vm.disabled"
+                >
+                    <mat-icon>link_off</mat-icon>
+                </button>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="section">
+                <button
+                    type="button"
+                    tabindex="-1"
+                    (click)="clearFormatting()"
+                    [matTooltip]="'editor.clearAllFormatting' | transloco"
+                    matTooltipPosition="above"
+                    [matTooltipDisabled]="vm.disabled"
+                    [disabled]="vm.disabled"
+                >
+                    <mat-icon>format_clear</mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <div
+            #content
+            class="content"
+            [class.empty]="isEmpty"
+            [attr.contenteditable]="!vm.disabled"
+            [attr.data-placeholder]="placeholder"
+            [innerHTML]="value"
+            (keyup)="update()"
+            (paste)="update()"
+            (keydown)="keydown($event)"
+            (blur)="blur()"
+        ></div>
     </div>
-
-    <div class="divider"></div>
-
-    <div class="section">
-        <button
-            type="button"
-            tabindex="-1"
-            (click)="toggleUnorderedList()"
-            [matTooltip]="'editor.unorderedList' | transloco"
-            matTooltipPosition="above"
-            [matTooltipDisabled]="disabled"
-            [disabled]="disabled"
-        >
-            <mat-icon>format_list_bulleted</mat-icon>
-        </button>
-        <button
-            type="button"
-            tabindex="-1"
-            (click)="toggleOrderedList()"
-            [matTooltip]="'editor.orderedList' | transloco"
-            matTooltipPosition="above"
-            [matTooltipDisabled]="disabled"
-            [disabled]="disabled"
-        >
-            <mat-icon>format_list_numbered</mat-icon>
-        </button>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="section">
-        <button
-            type="button"
-            tabindex="-1"
-            (click)="addLink()"
-            [matTooltip]="'editor.addLink' | transloco"
-            matTooltipPosition="above"
-            [matTooltipDisabled]="disabled"
-            [disabled]="disabled"
-        >
-            <mat-icon>insert_link</mat-icon>
-        </button>
-        <button
-            type="button"
-            tabindex="-1"
-            (click)="removeLink()"
-            [matTooltip]="'editor.removeLink' | transloco"
-            matTooltipPosition="above"
-            [matTooltipDisabled]="disabled"
-            [disabled]="disabled"
-        >
-            <mat-icon>link_off</mat-icon>
-        </button>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="section">
-        <button
-            type="button"
-            tabindex="-1"
-            (click)="clearFormatting()"
-            [matTooltip]="'editor.clearAllFormatting' | transloco"
-            matTooltipPosition="above"
-            [matTooltipDisabled]="disabled"
-            [disabled]="disabled"
-        >
-            <mat-icon>format_clear</mat-icon>
-        </button>
-    </div>
-</div>
-
-<div
-    #content
-    class="content"
-    [class.empty]="isEmpty"
-    [attr.contenteditable]="!disabled"
-    [attr.data-placeholder]="placeholder"
-    [innerHTML]="value"
-    (keyup)="update()"
-    (paste)="update()"
-    (keydown)="keydown($event)"
-    (blur)="blur()"
-></div>
+</ng-container>
 

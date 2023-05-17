@@ -20,8 +20,8 @@ import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { ServerValidationHelper } from 'src/app/core/forms/ServerValidationHelper';
 import { trimAndNull } from 'src/app/core/helpers/trim-and-null';
-import { CreateIngredientData, Ingredient } from 'src/app/core/models/ingredient';
-import { CreateRecipeData, DetailedRecipe } from 'src/app/core/models/recipe';
+import { Ingredient } from 'src/app/core/models/ingredient';
+import { DetailedRecipe, EditRecipeFormData } from 'src/app/core/models/recipe';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 import { EditRecipeIngredientFormGroupComponent } from './components/edit-recipe-ingredient-form-group/edit-recipe-ingredient-form-group.component';
 
@@ -34,6 +34,7 @@ export interface FormIngredient {
   name: FormControl<string>;
   amount: FormControl<number | null>;
   unit: FormControl<string | null>;
+  recipeIngredientId: FormControl<number | null>;
 }
 
 @Component({
@@ -119,7 +120,7 @@ export class EditRecipeFormComponent {
 
   private _recipe: DetailedRecipe | null = null;
 
-  @Output() save = new EventEmitter<CreateRecipeData>();
+  @Output() save = new EventEmitter<EditRecipeFormData>();
 
   categories$ = this.auth.user$.pipe(
     switchMap(() => this.api.categories.getList()),
@@ -245,6 +246,7 @@ export class EditRecipeFormComponent {
       name: [ingredient?.name ?? '', [Validators.required]],
       amount: [ingredient?.amount ?? null, [Validators.min(0.01)]],
       unit: [ingredient?.unit ?? null],
+      recipeIngredientId: [ingredient?.id ?? null],
     });
 
     this.form.controls.ingredients.at(groupIndex).controls.ingredients.push(ingredientGroup);
@@ -290,7 +292,7 @@ export class EditRecipeFormComponent {
       return;
     }
 
-    const ingredients: CreateIngredientData[] = this.form.controls.ingredients.controls.reduce(
+    const ingredients: EditRecipeFormData['ingredients'] = this.form.controls.ingredients.controls.reduce(
       (allIngredients, ingredientGroup) => {
         const groupName = trimAndNull(ingredientGroup.controls.name.value);
 
@@ -299,14 +301,15 @@ export class EditRecipeFormComponent {
           amount: ingredient.controls.amount.value,
           unit: trimAndNull(ingredient.controls.unit.value),
           group: groupName,
+          recipeIngredientId: ingredient.controls.recipeIngredientId.value,
         }));
 
         return [...allIngredients, ...groupIngredients];
       },
-      [] as CreateIngredientData[]
+      [] as EditRecipeFormData['ingredients']
     );
 
-    const recipe: CreateRecipeData = {
+    const recipe: EditRecipeFormData = {
       name: this.form.controls.name.value,
       is_public: this.form.controls.isPublic.value,
       category: trimAndNull(this.form.controls.category.value),

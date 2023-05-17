@@ -1,19 +1,13 @@
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { CommonModule } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  HostBinding,
-  Input,
-  SecurityContext,
-  ViewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, SecurityContext, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslocoModule } from '@ngneat/transloco';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-editor',
@@ -38,8 +32,11 @@ export class EditorComponent implements ControlValueAccessor {
   value: string | null = '';
   private currentValue: string | null = '';
 
-  @HostBinding('class.disabled')
-  disabled = false;
+  set disabled(disabled: any) {
+    this.disabled$.next(coerceBooleanProperty(disabled));
+  }
+
+  disabled$ = new BehaviorSubject<boolean>(false);
 
   private onChange = (_: string | null) => {};
   private onTouched = () => {};

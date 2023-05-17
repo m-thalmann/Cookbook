@@ -1,0 +1,12 @@
+<ng-container *ngIf="{ saving: saving$ | async, serverErrorResponse: serverErrorResponse$ | async } as vm">
+    <h2><mat-icon>restaurant</mat-icon> {{ 'pages.recipes.children.create.title' | transloco }}</h2>
+
+    <app-edit-recipe-form
+        [recipe]="null"
+        [disabled]="vm.saving"
+        [loading]="vm.saving"
+        [serverErrorResponse]="vm.serverErrorResponse"
+        (save)="onSave($event)"
+    ></app-edit-recipe-form>
+</ng-container>
+

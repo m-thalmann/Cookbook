@@ -77,6 +77,7 @@
     "resultsFound": "[[ amount, =1 '1 Ergebnis gefunden', default '{{amount}} Ergebnisse gefunden' ]]",
     "save": "Speichern",
     "updateDate": "Letzte Änderung",
+    "view": "Anzeigen",
     "yourEmail": "Deine E-Mail"
   },
   "ingredients": {
@@ -118,6 +119,7 @@
     "passwordReset": "Passwort zurückgesetzt. Bitte melde dich mit deinem neuen Passwort an.",
     "passwordUpdated": "Passwort wurde aktualisiert",
     "profileUpdated": "Profil wurde aktualisiert",
+    "recipeCreated": "Rezept wurde erfolgreich erstellt",
     "recipeDeleted": "Rezept wurde endgültig gelöscht",
     "recipeMovedToTrash": "Rezept wurde in den Papierkorb verschoben",
     "recipeRestored": "Rezept wurde wiederhergestellt",
@@ -134,6 +136,13 @@
     "notFound": {
       "goBack": "Zurück zur Startseite",
       "message": "Ups... Die Seite wurde nicht gefunden!"
+    },
+    "recipes": {
+      "children": {
+        "create": {
+          "title": "Rezept erstellen"
+        }
+      }
     },
     "settings": {
       "children": {

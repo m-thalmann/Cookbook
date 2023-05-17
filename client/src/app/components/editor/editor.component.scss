@@ -8,10 +8,6 @@
   border-radius: 0.25em;
   overflow: hidden;
 
-  &.disabled {
-    opacity: 0.5;
-  }
-
   @include theme.apply() using ($variables) {
     border: 1px solid theme.adjust-color($variables, map.get($variables, 'background'), -20%);
 
@@ -19,6 +15,12 @@
       border-color: map.get($variables, 'primary');
       outline: 1px solid map.get($variables, 'primary');
     }
+  }
+}
+
+.container {
+  &.disabled {
+    opacity: 0.5;
   }
 }
 

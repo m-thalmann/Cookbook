@@ -77,6 +77,7 @@
     "resultsFound": "[[ amount, =1 '1 result found', default '{{amount}} results found' ]]",
     "save": "Save",
     "updateDate": "Update date",
+    "view": "View",
     "yourEmail": "Your email"
   },
   "ingredients": {
@@ -118,6 +119,7 @@
     "passwordReset": "Password reset successfully. You can now login with your new password.",
     "passwordUpdated": "Password updated successfully",
     "profileUpdated": "Profile updated successfully",
+    "recipeCreated": "Recipe created successfully",
     "recipeDeleted": "Recipe permanently deleted",
     "recipeMovedToTrash": "Recipe moved to trash successfully",
     "recipeRestored": "Recipe restored successfully",
@@ -134,6 +136,13 @@
     "notFound": {
       "goBack": "Go to homepage",
       "message": "Oops... Page not found!"
+    },
+    "recipes": {
+      "children": {
+        "create": {
+          "title": "Create recipe"
+        }
+      }
     },
     "settings": {
       "children": {

@@ -27,3 +27,11 @@ export interface EditIngredientData {
   unit?: string | null;
   group?: string | null;
 }
+
+export interface EditRecipeFormIngredientData {
+  name: string;
+  amount: number | null;
+  unit: string | null;
+  group: string | null;
+  recipeIngredientId: number | null;
+}
