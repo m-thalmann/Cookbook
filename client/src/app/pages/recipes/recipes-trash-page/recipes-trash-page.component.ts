@@ -5,12 +5,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
-import { BehaviorSubject, lastValueFrom, map, merge, shareReplay, switchMap, switchScan, take, tap } from 'rxjs';
+import { BehaviorSubject, map, merge, shareReplay, switchMap, switchScan, tap } from 'rxjs';
 import { ConfirmDialogComponent } from 'src/app/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
+import { toPromise } from 'src/app/core/helpers/to-promise';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
 import { ListRecipe } from 'src/app/core/models/recipe';
 import { PLACEHOLDER_RECIPE_IMAGE_URL } from 'src/app/core/models/recipe-image';
@@ -94,7 +95,7 @@ export class RecipesTrashPageComponent {
   }
 
   async clearTrash() {
-    const confirmed = await lastValueFrom(
+    const confirmed = await toPromise(
       this.dialog
         .open(ConfirmDialogComponent, {
           data: {
@@ -106,7 +107,6 @@ export class RecipesTrashPageComponent {
           },
         })
         .afterClosed()
-        .pipe(take(1))
     );
 
     if (!confirmed) {
@@ -116,7 +116,7 @@ export class RecipesTrashPageComponent {
     this.actionLoading$.next(true);
 
     try {
-      await lastValueFrom(this.api.recipes.trash.deleteAll());
+      await toPromise(this.api.recipes.trash.deleteAll());
 
       this.snackbar.info('messages.trashCleared', { translateMessage: true });
 
@@ -137,7 +137,7 @@ export class RecipesTrashPageComponent {
     this.actionLoading$.next(true);
 
     try {
-      await lastValueFrom(this.api.recipes.trash.restoreRecipe(recipe.id));
+      await toPromise(this.api.recipes.trash.restoreRecipe(recipe.id));
 
       this.snackbar.info('messages.recipeRestored', { translateMessage: true });
 
@@ -155,7 +155,7 @@ export class RecipesTrashPageComponent {
   }
 
   async permanentlyDeleteRecipe(recipe: ListRecipe) {
-    const confirmed = await lastValueFrom(
+    const confirmed = await toPromise(
       this.dialog
         .open(ConfirmDialogComponent, {
           data: {
@@ -167,7 +167,6 @@ export class RecipesTrashPageComponent {
           },
         })
         .afterClosed()
-        .pipe(take(1))
     );
 
     if (!confirmed) {
@@ -177,7 +176,7 @@ export class RecipesTrashPageComponent {
     this.actionLoading$.next(true);
 
     try {
-      await lastValueFrom(this.api.recipes.trash.deleteRecipe(recipe.id));
+      await toPromise(this.api.recipes.trash.deleteRecipe(recipe.id));
 
       this.snackbar.info('messages.recipeDeleted', { translateMessage: true });
 

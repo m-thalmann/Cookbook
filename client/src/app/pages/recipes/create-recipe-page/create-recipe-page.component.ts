@@ -4,9 +4,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
-import { BehaviorSubject, lastValueFrom, take } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
+import { toPromise } from 'src/app/core/helpers/to-promise';
 import { EditRecipeFormData } from 'src/app/core/models/recipe';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { EditRecipeFormComponent } from '../components/edit-recipe-form/edit-recipe-form.component';
@@ -36,7 +37,7 @@ export class CreateRecipePageComponent {
     this.saving$.next(true);
 
     try {
-      const response = await lastValueFrom(this.api.recipes.create(recipe).pipe(take(1)));
+      const response = await toPromise(this.api.recipes.create(recipe));
 
       this.snackbar.info('messages.recipeCreated', { translateMessage: true });
 

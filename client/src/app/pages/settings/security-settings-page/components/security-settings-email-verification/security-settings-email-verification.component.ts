@@ -4,9 +4,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslocoModule } from '@ngneat/transloco';
-import { BehaviorSubject, lastValueFrom, take } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
+import { toPromise } from 'src/app/core/helpers/to-promise';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { Logger as LoggerClass } from '../../../../../core/helpers/logger';
 import { SettingsSectionComponent } from '../../../components/settings-section/settings-section.component';
@@ -39,7 +40,7 @@ export class SecuritySettingsEmailVerificationComponent {
     this.isLoading$.next(true);
 
     try {
-      await lastValueFrom(this.api.auth.resendVerificationEmail().pipe(take(1)));
+      await toPromise(this.api.auth.resendVerificationEmail());
 
       this.snackbar.info('messages.verificationEmailSent', { translateMessage: true });
     } catch (e) {

@@ -10,12 +10,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
-import { BehaviorSubject, Subscription, distinctUntilChanged, lastValueFrom, take } from 'rxjs';
+import { BehaviorSubject, Subscription, distinctUntilChanged } from 'rxjs';
 import { PromptDialogComponent } from 'src/app/components/dialogs/prompt-dialog/prompt-dialog.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { ServerValidationHelper } from 'src/app/core/forms/ServerValidationHelper';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
+import { toPromise } from 'src/app/core/helpers/to-promise';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 const Logger = new LoggerClass('Authentication');
@@ -76,7 +77,7 @@ export class LoginPageComponent implements OnDestroy {
     this.error$.next(null);
 
     try {
-      const loginResponse = await lastValueFrom(
+      const loginResponse = await toPromise(
         this.api.auth.login(this.loginForm.value.email, this.loginForm.value.password)
       );
 
@@ -111,7 +112,7 @@ export class LoginPageComponent implements OnDestroy {
   }
 
   async openResetPasswordDialog() {
-    const email: string | null = await lastValueFrom(
+    const email: string | null = await toPromise(
       this.dialog
         .open(PromptDialogComponent, {
           width: '400px',
@@ -123,7 +124,6 @@ export class LoginPageComponent implements OnDestroy {
           },
         })
         .afterClosed()
-        .pipe(take(1))
     );
 
     if (!email) {
@@ -133,7 +133,7 @@ export class LoginPageComponent implements OnDestroy {
     this.isLoading$.next(true);
 
     try {
-      await lastValueFrom(this.api.auth.sendResetPasswordEmail(email));
+      await toPromise(this.api.auth.sendResetPasswordEmail(email));
 
       this.snackbar.info('messages.resetEmailSent', { translateMessage: true });
     } catch (e) {

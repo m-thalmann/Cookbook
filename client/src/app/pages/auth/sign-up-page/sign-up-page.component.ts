@@ -9,13 +9,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute } from '@angular/router';
 import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
-import { BehaviorSubject, Observable, Subscription, distinctUntilChanged, lastValueFrom, map, startWith } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, distinctUntilChanged, map, startWith } from 'rxjs';
 import { HcaptchaComponent } from 'src/app/components/hcaptcha/hcaptcha.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { CustomValidators } from 'src/app/core/forms/CustomValidators';
 import { ServerValidationHelper } from 'src/app/core/forms/ServerValidationHelper';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
+import { toPromise } from 'src/app/core/helpers/to-promise';
 import { ConfigService } from 'src/app/core/services/config.service';
 
 const Logger = new LoggerClass('Authentication');
@@ -116,7 +117,7 @@ export class SignUpPageComponent implements OnDestroy {
     this.error$.next(null);
 
     try {
-      const signUpResponse = await lastValueFrom(
+      const signUpResponse = await toPromise(
         this.api.auth.signUp({ ...this.signUpForm.value, language_code: this.transloco.getActiveLang() })
       );
 

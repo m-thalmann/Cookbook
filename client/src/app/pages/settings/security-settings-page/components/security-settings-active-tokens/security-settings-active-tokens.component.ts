@@ -5,11 +5,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoModule } from '@ngneat/transloco';
-import { BehaviorSubject, lastValueFrom, map, merge, shareReplay, switchMap, switchScan, take, tap } from 'rxjs';
+import { BehaviorSubject, map, merge, shareReplay, switchMap, switchScan, tap } from 'rxjs';
 import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { RepeatDirective } from 'src/app/core/directives/repeat.directive';
+import { toPromise } from 'src/app/core/helpers/to-promise';
 import { AuthToken } from 'src/app/core/models/auth-token';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
@@ -85,7 +86,7 @@ export class SecuritySettingsActiveTokensComponent {
     this.isUpdating$.next(true);
 
     try {
-      await lastValueFrom(this.api.auth.tokens.delete(tokenId).pipe(take(1)));
+      await toPromise(this.api.auth.tokens.delete(tokenId));
 
       this.snackbar.info('messages.loggedOutFromSelectedSession', { translateMessage: true });
 
@@ -106,7 +107,7 @@ export class SecuritySettingsActiveTokensComponent {
     this.isUpdating$.next(true);
 
     try {
-      await lastValueFrom(this.api.auth.tokens.deleteAll().pipe(take(1)));
+      await toPromise(this.api.auth.tokens.deleteAll());
 
       this.snackbar.info('messages.loggedOutFromAllSessions', { translateMessage: true });
 

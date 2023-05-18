@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { lastValueFrom } from 'rxjs';
 import { Logger as LoggerClass } from '../helpers/logger';
+import { toPromise } from '../helpers/to-promise';
 
 const CONFIG_URL = '/assets/config.json';
 
@@ -27,7 +27,7 @@ export class ConfigService {
 
   async load() {
     try {
-      this.data = await lastValueFrom(this.http.get<ConfigType>(CONFIG_URL));
+      this.data = await toPromise(this.http.get<ConfigType>(CONFIG_URL));
     } catch (e) {
       let error = e;
 
@@ -39,4 +39,3 @@ export class ConfigService {
     }
   }
 }
-

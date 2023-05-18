@@ -8,9 +8,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleChange, MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { Router } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
-import { lastValueFrom } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
+import { toPromise } from 'src/app/core/helpers/to-promise';
 import { DetailedRecipe } from 'src/app/core/models/recipe';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
@@ -70,9 +70,7 @@ export class RecipePublicShareDialogComponent {
     this.publicShareEnabled = e.checked;
 
     try {
-      const response = await lastValueFrom(
-        this.api.recipes.update(this.recipe.id, { is_shared: this.publicShareEnabled })
-      );
+      const response = await toPromise(this.api.recipes.update(this.recipe.id, { is_shared: this.publicShareEnabled }));
 
       // recipe is passed by reference, so this is also updated in caller
       this.recipe.share_uuid = response.body!.data.share_uuid;

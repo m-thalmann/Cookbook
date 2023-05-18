@@ -2,18 +2,10 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
-import {
-  BehaviorSubject,
-  Observable,
-  ReplaySubject,
-  Subscription,
-  distinctUntilChanged,
-  lastValueFrom,
-  map,
-  shareReplay,
-} from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject, Subscription, distinctUntilChanged, map, shareReplay } from 'rxjs';
 import { ApiService } from '../api/api.service';
 import { Logger as LoggerClass } from '../helpers/logger';
+import { toPromise } from '../helpers/to-promise';
 import { DetailedUser } from '../models/user';
 import { RouteHelperService } from '../services/route-helper.service';
 import { SnackbarService } from '../services/snackbar.service';
@@ -125,7 +117,7 @@ export class AuthService implements OnDestroy {
     }
 
     try {
-      const userResponse = await lastValueFrom(this.api.auth.getAuthenticatedUser());
+      const userResponse = await toPromise(this.api.auth.getAuthenticatedUser());
 
       this._user$.next(userResponse.body!.data);
 
@@ -166,7 +158,7 @@ export class AuthService implements OnDestroy {
 
     if (logoutFromApi) {
       try {
-        await lastValueFrom(this.api.auth.logout());
+        await toPromise(this.api.auth.logout());
       } catch (e) {}
     }
 

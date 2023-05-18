@@ -1,12 +1,10 @@
 import { Cookbook } from './cookbook';
-import { CreateIngredientData, EditRecipeFormIngredientData, Ingredient } from './ingredient';
+import { BaseIngredient, EditRecipeFormIngredientData, Ingredient } from './ingredient';
 import { RecipeImage } from './recipe-image';
 import { SortOption } from './sort-option';
 import { User } from './user';
 
-export interface Recipe {
-  id: number;
-  user_id: number;
+export interface BasicRecipe {
   cookbook_id: number | null;
   is_public: boolean;
   name: string;
@@ -18,6 +16,11 @@ export interface Recipe {
   preparation_time_minutes: number | null;
   resting_time_minutes: number | null;
   cooking_time_minutes: number | null;
+}
+
+export interface Recipe extends BasicRecipe {
+  id: number;
+  user_id: number;
   deleted_at: number | null;
   created_at: number;
   updated_at: number;
@@ -40,19 +43,8 @@ export interface DetailedRecipe extends Recipe {
   cookbook?: Cookbook | null;
 }
 
-export interface CreateRecipeData {
-  name: string;
-  is_public?: boolean;
-  description?: string | null;
-  category?: string | null;
-  portions?: number | null;
-  difficulty?: number | null;
-  preparation?: string | null;
-  preparation_time_minutes?: number | null;
-  resting_time_minutes?: number | null;
-  cooking_time_minutes?: number | null;
-  cookbook_id?: number | null;
-  ingredients?: CreateIngredientData[];
+export interface CreateRecipeData extends BasicRecipe {
+  ingredients: BaseIngredient[];
 }
 
 export interface EditRecipeData {
@@ -71,18 +63,7 @@ export interface EditRecipeData {
   cookbook_id?: number | null;
 }
 
-export interface EditRecipeFormData {
-  name: string;
-  is_public: boolean;
-  description: string | null;
-  category: string | null;
-  portions: number | null;
-  difficulty: number | null;
-  preparation: string | null;
-  preparation_time_minutes: number | null;
-  resting_time_minutes: number | null;
-  cooking_time_minutes: number | null;
-  cookbook_id: number | null;
+export interface EditRecipeFormData extends BasicRecipe {
   ingredients: EditRecipeFormIngredientData[];
 }
 

@@ -2,10 +2,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
-import { lastValueFrom, take } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
+import { toPromise } from 'src/app/core/helpers/to-promise';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 const Logger = new LoggerClass('Authentication');
@@ -39,13 +39,11 @@ export class VerifyEmailPageComponent {
     const signature = routeSnapshot.queryParams['signature'];
 
     try {
-      await lastValueFrom(
-        this.api.auth
-          .verifyEmail(userId, token, {
-            expires,
-            signature,
-          })
-          .pipe(take(1))
+      await toPromise(
+        this.api.auth.verifyEmail(userId, token, {
+          expires,
+          signature,
+        })
       );
 
       this.auth.setEmailVerified(true);

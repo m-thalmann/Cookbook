@@ -7,11 +7,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
-import { BehaviorSubject, Subscription, distinctUntilChanged, lastValueFrom, take } from 'rxjs';
+import { BehaviorSubject, Subscription, distinctUntilChanged } from 'rxjs';
 import { PromptDialogComponent } from 'src/app/components/dialogs/prompt-dialog/prompt-dialog.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { ServerValidationHelper } from 'src/app/core/forms/ServerValidationHelper';
+import { toPromise } from 'src/app/core/helpers/to-promise';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { Logger as LoggerClass } from '../../../../../core/helpers/logger';
 import { SettingsSectionComponent } from '../../../components/settings-section/settings-section.component';
@@ -91,7 +92,7 @@ export class AccountSettingsUpdateProfileComponent implements OnDestroy {
     };
 
     if (hasChangedEmail) {
-      const confirmedPassword: string | null = await lastValueFrom(
+      const confirmedPassword: string | null = await toPromise(
         this.dialog
           .open(PromptDialogComponent, {
             data: {
@@ -100,7 +101,6 @@ export class AccountSettingsUpdateProfileComponent implements OnDestroy {
             },
           })
           .afterClosed()
-          .pipe(take(1))
       );
 
       if (!confirmedPassword) {
@@ -113,7 +113,7 @@ export class AccountSettingsUpdateProfileComponent implements OnDestroy {
     this.isLoading$.next(true);
 
     try {
-      await lastValueFrom(this.api.users.update(user.id, updateData).pipe(take(1)));
+      await toPromise(this.api.users.update(user.id, updateData));
 
       await this.auth.initialize();
 
@@ -142,7 +142,7 @@ export class AccountSettingsUpdateProfileComponent implements OnDestroy {
   }
 
   private async getUser() {
-    return (await lastValueFrom(this.auth.user$.pipe(take(1))))!;
+    return (await toPromise(this.auth.user$))!;
   }
 
   ngOnDestroy() {

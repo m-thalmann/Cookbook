@@ -5,12 +5,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoModule } from '@ngneat/transloco';
-import { BehaviorSubject, lastValueFrom } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { NumberInputComponent } from 'src/app/components/number-input/number-input.component';
 import { SkeletonComponent } from 'src/app/components/skeleton/skeleton.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { RepeatDirective } from 'src/app/core/directives/repeat.directive';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
+import { toPromise } from 'src/app/core/helpers/to-promise';
 import { DetailedRecipe } from 'src/app/core/models/recipe';
 import { AmountPipe } from 'src/app/core/pipes/amount.pipe';
 import { RouteHelperService } from 'src/app/core/services/route-helper.service';
@@ -94,7 +95,7 @@ export class RecipeDetailComponent {
     this.isLoading$.next(true);
 
     try {
-      await lastValueFrom(this.api.recipes.delete(this.recipe!.id));
+      await toPromise(this.api.recipes.delete(this.recipe!.id));
 
       this.snackbar.info('messages.recipeMovedToTrash', { translateMessage: true });
 

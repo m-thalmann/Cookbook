@@ -14,7 +14,7 @@ import { HandledError } from '../helpers/handled-error';
 import { AuthToken } from '../models/auth-token';
 import { Cookbook, CookbookUser, CookbookWithCounts, CookbookWithUserMeta, SimpleCookbook } from '../models/cookbook';
 import { FilterOption } from '../models/filter-option';
-import { CreateIngredientData, EditIngredientData, Ingredient, SimpleIngredient } from '../models/ingredient';
+import { BaseIngredient, EditIngredientData, Ingredient, SimpleIngredient } from '../models/ingredient';
 import { LoadingError } from '../models/loading-error';
 import { PaginationMeta } from '../models/pagination-meta';
 import { PaginationOptions } from '../models/pagination-options';
@@ -432,7 +432,7 @@ export class ApiService {
           ApiService.generateListParamOptions({ search, sort })
         ),
 
-      create: (recipeId: number, data: CreateIngredientData) =>
+      create: (recipeId: number, data: BaseIngredient) =>
         this.post<{ data: Ingredient }>(`/recipes/${recipeId}/ingredients`, data, TokenType.Access),
 
       update: (id: number, data: EditIngredientData) =>

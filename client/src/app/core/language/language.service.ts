@@ -1,9 +1,10 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
-import { Subscription, first, lastValueFrom, skip } from 'rxjs';
+import { Subscription, skip } from 'rxjs';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
 import { ApiService } from '../api/api.service';
 import { AuthService } from '../auth/auth.service';
+import { toPromise } from '../helpers/to-promise';
 import { SnackbarService } from '../services/snackbar.service';
 import { StorageService } from '../services/storage.service';
 
@@ -49,7 +50,7 @@ export class LanguageService implements OnDestroy {
   }
 
   async selectLanguage(language: string) {
-    const user = await lastValueFrom(this.auth.user$.pipe(first()));
+    const user = await toPromise(this.auth.user$);
 
     if (!user) {
       this.transloco.setActiveLang(language);
@@ -57,7 +58,7 @@ export class LanguageService implements OnDestroy {
     }
 
     try {
-      const updateResponse = await lastValueFrom(this.api.users.update(user.id, { language_code: language }));
+      const updateResponse = await toPromise(this.api.users.update(user.id, { language_code: language }));
 
       this.auth.updateUser(updateResponse.body!.data);
     } catch (e) {

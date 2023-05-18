@@ -1,10 +1,13 @@
-export interface Ingredient {
-  id: number;
-  recipe_id: number;
+export interface BaseIngredient {
   name: string;
   amount: number | null;
   unit: string | null;
   group: string | null;
+}
+
+export interface Ingredient extends BaseIngredient {
+  id: number;
+  recipe_id: number;
   created_at: number;
   updated_at: number;
 }
@@ -14,24 +17,13 @@ export interface SimpleIngredient {
   unit: string | null;
 }
 
-export interface CreateIngredientData {
-  name: string;
-  amount?: number | null;
-  unit?: string | null;
-  group?: string | null;
-}
-
 export interface EditIngredientData {
-  name: string;
+  name?: string;
   amount?: number | null;
   unit?: string | null;
   group?: string | null;
 }
 
-export interface EditRecipeFormIngredientData {
-  name: string;
-  amount: number | null;
-  unit: string | null;
-  group: string | null;
+export interface EditRecipeFormIngredientData extends BaseIngredient {
   recipeIngredientId: number | null;
 }
