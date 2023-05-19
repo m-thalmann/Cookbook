@@ -2,8 +2,6 @@
     *ngIf="{
         recipe: (recipe$ | async)?.body?.data ?? null,
         error: error$ | async,
-        saving: saving$ | async,
-        serverErrorResponse: serverErrorResponse$ | async
     } as vm"
 >
     <h2>
@@ -15,14 +13,12 @@
         </a>
     </h2>
 
-    <app-edit-recipe-form
+    <app-edit-recipe-details
         [recipe]="vm.recipe"
-        [disabled]="vm.recipe === null || vm.saving"
-        [loading]="vm.saving"
-        [serverErrorResponse]="vm.serverErrorResponse"
-        (save)="onSave(vm.recipe!, $event)"
+        (updateRecipe)="updateRecipe$.emit()"
+        (saving)="onDetailsSaving($event)"
         *ngIf="!vm.error"
-    ></app-edit-recipe-form>
+    ></app-edit-recipe-details>
 
     <app-error-display [error]="vm.error">
         <ng-template #notFoundMessage> {{ 'recipes.notFound' | transloco }} </ng-template>

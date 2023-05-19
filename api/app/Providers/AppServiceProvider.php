@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Http\Resources\PaginationResource;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
@@ -25,6 +26,8 @@ class AppServiceProvider extends ServiceProvider {
     public function boot() {
         $this->definePasswordRules();
         $this->registerResponseMarcos();
+
+        Model::preventSilentlyDiscardingAttributes(!app()->isProduction());
     }
 
     private function definePasswordRules() {

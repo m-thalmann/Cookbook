@@ -38,7 +38,7 @@ export interface FormIngredient {
 }
 
 @Component({
-  selector: 'app-edit-recipe-form',
+  selector: 'app-edit-recipe-details-form',
   standalone: true,
   imports: [
     CommonModule,
@@ -57,14 +57,14 @@ export interface FormIngredient {
     EditRecipeIngredientFormGroupComponent,
     EditorComponent,
   ],
-  templateUrl: './edit-recipe-form.component.html',
-  styleUrls: ['./edit-recipe-form.component.scss'],
+  templateUrl: './edit-recipe-details-form.component.html',
+  styleUrls: ['./edit-recipe-details-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { subscriptSizing: 'dynamic', hideRequiredMarker: true } },
   ],
 })
-export class EditRecipeFormComponent {
+export class EditRecipeDetailsFormComponent {
   @Input()
   set disabled(disabled: any) {
     const isDisabled = coerceBooleanProperty(disabled);

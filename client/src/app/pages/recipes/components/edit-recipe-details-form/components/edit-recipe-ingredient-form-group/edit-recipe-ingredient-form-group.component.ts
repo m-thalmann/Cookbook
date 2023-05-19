@@ -18,7 +18,7 @@ import { MatInputModule } from '@angular/material/input';
 import { TranslocoModule } from '@ngneat/transloco';
 import { EMPTY, Observable, ReplaySubject, combineLatest, map, shareReplay, startWith } from 'rxjs';
 import { SimpleIngredient } from 'src/app/core/models/ingredient';
-import { FormIngredient } from '../../edit-recipe-form.component';
+import { FormIngredient } from '../../edit-recipe-details-form.component';
 
 @Component({
   selector: 'app-edit-recipe-ingredient-form-group',

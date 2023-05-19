@@ -142,8 +142,8 @@ class IngredientController extends Controller {
         $data = $request->validate([
             'name' => ['filled', 'max:40'],
             'amount' => ['nullable', 'numeric', 'min:0'],
-            'unit' => ['nullable', 'filled', 'max:20'],
-            'group' => ['nullable', 'filled', 'max:20'],
+            'unit' => ['nullable', 'max:20'],
+            'group' => ['nullable', 'max:20'],
         ]);
 
         $ingredient->update($data);
