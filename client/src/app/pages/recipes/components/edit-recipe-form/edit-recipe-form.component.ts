@@ -214,9 +214,9 @@ export class EditRecipeFormComponent {
       preparationTimeMinutes: this.recipe.preparation_time_minutes,
       restingTimeMinutes: this.recipe.resting_time_minutes,
       cookingTimeMinutes: this.recipe.cooking_time_minutes,
-      ingredients: [],
       preparation: this.recipe.preparation,
     });
+    this.form.controls.ingredients.clear();
 
     const ingredientGroupIndices: { [key: string]: number } = {};
 

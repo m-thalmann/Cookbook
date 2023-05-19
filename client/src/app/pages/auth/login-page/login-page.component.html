@@ -7,18 +7,18 @@
             <mat-icon matPrefix>email</mat-icon>
             <mat-label>{{ 'general.email' | transloco }}</mat-label>
             <input matInput type="email" formControlName="email" autofocus />
-            <mat-error *ngIf="loginForm.get('email')?.getError('serverError') as serverError">
-                {{ serverError }}
-            </mat-error>
+            <mat-error *ngIf="loginForm.get('email')?.getError('serverError') as serverError">{{
+                serverError
+            }}</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" color="accent">
             <mat-icon matPrefix>key</mat-icon>
             <mat-label>{{ 'general.password' | transloco }}</mat-label>
             <input matInput type="password" formControlName="password" />
-            <mat-error *ngIf="loginForm.get('password')?.getError('serverError') as serverError">
-                {{ serverError }}
-            </mat-error>
+            <mat-error *ngIf="loginForm.get('password')?.getError('serverError') as serverError">{{
+                serverError
+            }}</mat-error>
         </mat-form-field>
 
         <a (click)="openResetPasswordDialog()" [attr.disabled]="vm.isLoading ? 'true' : null">

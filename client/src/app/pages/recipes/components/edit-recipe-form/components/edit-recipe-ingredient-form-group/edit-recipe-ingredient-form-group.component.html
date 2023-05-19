@@ -12,9 +12,9 @@
                 (keydown.enter)="$event.preventDefault()"
             />
 
-            <mat-error *ngIf="formControlGroup.controls.name.getError('serverError') as serverError">
-                {{ serverError }}
-            </mat-error>
+            <mat-error *ngIf="formControlGroup.controls.name.getError('serverError') as serverError">{{
+                serverError
+            }}</mat-error>
 
             <mat-autocomplete
                 #ingredientAutocomplete="matAutocomplete"
@@ -42,9 +42,9 @@
                 (keydown.enter)="onIngredientKeyDownEnter($event)"
                 #amountInput
             />
-            <mat-error *ngIf="formControlGroup.controls.amount.getError('serverError') as serverError">
-                {{ serverError }}
-            </mat-error>
+            <mat-error *ngIf="formControlGroup.controls.amount.getError('serverError') as serverError">{{
+                serverError
+            }}</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -52,9 +52,9 @@
                 {{ 'ingredients.unit' | transloco }}
             </mat-label>
             <input matInput type="string" formControlName="unit" (keydown.enter)="onIngredientKeyDownEnter($event)" />
-            <mat-error *ngIf="formControlGroup.controls.unit.getError('serverError') as serverError">
-                {{ serverError }}
-            </mat-error>
+            <mat-error *ngIf="formControlGroup.controls.unit.getError('serverError') as serverError">{{
+                serverError
+            }}</mat-error>
         </mat-form-field>
 
         <div class="ingredient-actions">

@@ -7,27 +7,21 @@
             <mat-icon matPrefix>person</mat-icon>
             <mat-label>{{ 'general.name' | transloco }}</mat-label>
             <input matInput formControlName="name" />
-            <mat-error *ngIf="name?.getError('serverError') as serverError">
-                {{ serverError }}
-            </mat-error>
+            <mat-error *ngIf="name?.getError('serverError') as serverError">{{ serverError }}</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" color="accent">
             <mat-icon matPrefix>email</mat-icon>
             <mat-label>{{ 'general.email' | transloco }}</mat-label>
             <input matInput type="email" formControlName="email" />
-            <mat-error *ngIf="email?.getError('serverError') as serverError">
-                {{ serverError }}
-            </mat-error>
+            <mat-error *ngIf="email?.getError('serverError') as serverError">{{ serverError }}</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" color="accent">
             <mat-icon matPrefix>key</mat-icon>
             <mat-label>{{ 'general.password' | transloco }}</mat-label>
             <input matInput type="password" formControlName="password" />
-            <mat-error *ngIf="password?.getError('serverError') as serverError">
-                {{ serverError }}
-            </mat-error>
+            <mat-error *ngIf="password?.getError('serverError') as serverError">{{ serverError }}</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline" color="accent">
             <mat-icon matPrefix>key</mat-icon>

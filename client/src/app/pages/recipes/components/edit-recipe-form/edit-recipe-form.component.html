@@ -16,9 +16,9 @@
                 <mat-icon matPrefix>drive_file_rename_outline</mat-icon>
                 <mat-label>{{ 'general.name' | transloco }}</mat-label>
                 <input matInput type="text" formControlName="name" />
-                <mat-error *ngIf="form.controls.name.getError('serverError') as serverError">
-                    {{ serverError }}
-                </mat-error>
+                <mat-error *ngIf="form.controls.name.getError('serverError') as serverError">{{
+                    serverError
+                }}</mat-error>
             </mat-form-field>
 
             <mat-checkbox formControlName="isPublic" class="field-public" style="grid-area: public">
@@ -32,9 +32,9 @@
                 <mat-icon matPrefix>sell</mat-icon>
                 <mat-label>{{ 'categories.category' | transloco }}</mat-label>
                 <input matInput type="text" formControlName="category" [matAutocomplete]="categoryAutocomplete" />
-                <mat-error *ngIf="form.get('category')?.getError('serverError') as serverError">
-                    {{ serverError }}
-                </mat-error>
+                <mat-error *ngIf="form.get('category')?.getError('serverError') as serverError">{{
+                    serverError
+                }}</mat-error>
                 <mat-autocomplete #categoryAutocomplete="matAutocomplete">
                     <mat-option *ngFor="let category of vm.filteredCategories" [value]="category">
                         {{ category }}
@@ -62,26 +62,26 @@
                 >
                     error_outline
                 </mat-icon>
-                <mat-error *ngIf="form.get('cookbookId')?.getError('serverError') as serverError">
-                    {{ serverError }}
-                </mat-error>
+                <mat-error *ngIf="form.get('cookbookId')?.getError('serverError') as serverError">{{
+                    serverError
+                }}</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="field-description" style="grid-area: description">
                 <mat-label>{{ 'recipes.description' | transloco }}</mat-label>
                 <textarea matInput formControlName="description"></textarea>
-                <mat-error *ngIf="form.get('description')?.getError('serverError') as serverError">
-                    {{ serverError }}
-                </mat-error>
+                <mat-error *ngIf="form.get('description')?.getError('serverError') as serverError">{{
+                    serverError
+                }}</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="field-portions" style="grid-area: portions">
                 <mat-icon matPrefix>restaurant</mat-icon>
                 <mat-label>{{ 'recipes.portions' | transloco }}</mat-label>
                 <input matInput type="number" formControlName="portions" />
-                <mat-error *ngIf="form.get('portions')?.getError('serverError') as serverError">
-                    {{ serverError }}
-                </mat-error>
+                <mat-error *ngIf="form.get('portions')?.getError('serverError') as serverError">{{
+                    serverError
+                }}</mat-error>
             </mat-form-field>
 
             <div class="field-difficulty" style="grid-area: difficulty">
@@ -109,9 +109,9 @@
                     {{ 'recipes.times.preparation' | transloco }}
                 </mat-label>
                 <input matInput type="number" formControlName="preparationTimeMinutes" />
-                <mat-error *ngIf="form.get('preparationTimeMinutes')?.getError('serverError') as serverError">
-                    {{ serverError }}
-                </mat-error>
+                <mat-error *ngIf="form.get('preparationTimeMinutes')?.getError('serverError') as serverError">{{
+                    serverError
+                }}</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="field-resting-time" style="grid-area: resting-time">
@@ -120,9 +120,9 @@
                     {{ 'recipes.times.resting' | transloco }}
                 </mat-label>
                 <input matInput type="number" formControlName="restingTimeMinutes" />
-                <mat-error *ngIf="form.get('restingTimeMinutes')?.getError('serverError') as serverError">
-                    {{ serverError }}
-                </mat-error>
+                <mat-error *ngIf="form.get('restingTimeMinutes')?.getError('serverError') as serverError">{{
+                    serverError
+                }}</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="field-cooking-time" style="grid-area: cooking-time">
@@ -131,9 +131,9 @@
                     {{ 'recipes.times.cooking' | transloco }}
                 </mat-label>
                 <input matInput type="number" formControlName="cookingTimeMinutes" />
-                <mat-error *ngIf="form.get('cookingTimeMinutes')?.getError('serverError') as serverError">
-                    {{ serverError }}
-                </mat-error>
+                <mat-error *ngIf="form.get('cookingTimeMinutes')?.getError('serverError') as serverError">{{
+                    serverError
+                }}</mat-error>
             </mat-form-field>
 
             <h3 style="grid-area: title-ingredients">
@@ -154,9 +154,9 @@
                             {{ 'ingredients.groupName' | transloco }}
                         </mat-label>
                         <input matInput type="string" formControlName="name" />
-                        <mat-error *ngIf="group.controls.name.getError('serverError') as serverError">
-                            {{ serverError }}
-                        </mat-error>
+                        <mat-error *ngIf="group.controls.name.getError('serverError') as serverError">{{
+                            serverError
+                        }}</mat-error>
                     </mat-form-field>
 
                     <div class="ingredients" formArrayName="ingredients">
