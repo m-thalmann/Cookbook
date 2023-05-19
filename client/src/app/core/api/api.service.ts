@@ -6,6 +6,7 @@ import {
   HttpParams,
   HttpRequest,
   HttpResponse,
+  HttpStatusCode,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
@@ -192,7 +193,7 @@ export class ApiService {
   public getErrorMessage(error: unknown) {
     if (error instanceof HttpErrorResponse) {
       if (error.status !== 0 && error.error) {
-        if (error.status === 422) {
+        if (error.status === HttpStatusCode.UnprocessableEntity) {
           return error.error.errors[Object.keys(error.error.errors)[0]][0];
         } else {
           return error.error.message;

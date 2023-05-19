@@ -12,4 +12,5 @@ export default [
   { path: 'create', component: CreateRecipePageComponent, canActivate: [AuthGuard], runGuardsAndResolvers: 'always' },
   { path: 'shared/:shareUuid', component: RecipeDetailPageComponent, data: { isOverlay: true } },
   { path: ':id', component: RecipeDetailPageComponent, data: { isOverlay: true } },
+  { path: ':id/edit', component: EditRecipePageComponent, canActivate: [AuthGuard], runGuardsAndResolvers: 'always' },
 ] as Routes;

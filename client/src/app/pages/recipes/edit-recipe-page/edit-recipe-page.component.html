@@ -1,0 +1,32 @@
+<ng-container
+    *ngIf="{
+        recipe: (recipe$ | async)?.body?.data ?? null,
+        error: error$ | async,
+        saving: saving$ | async,
+        serverErrorResponse: serverErrorResponse$ | async
+    } as vm"
+>
+    <h2>
+        <mat-icon>restaurant</mat-icon>
+        {{ 'pages.recipes.children.edit.title' | transloco }}
+        <a [routerLink]="['/recipes', vm.recipe?.id]" mat-raised-button [disabled]="vm.recipe === null">
+            <mat-icon>visibility</mat-icon>
+            {{ 'general.view' | transloco }}
+        </a>
+    </h2>
+
+    <app-edit-recipe-form
+        [recipe]="vm.recipe"
+        [disabled]="vm.recipe === null || vm.saving"
+        [loading]="vm.saving"
+        [serverErrorResponse]="vm.serverErrorResponse"
+        (save)="onSave(vm.recipe!, $event)"
+        *ngIf="!vm.error"
+    ></app-edit-recipe-form>
+
+    <app-error-display [error]="vm.error">
+        <ng-template #notFoundMessage> {{ 'recipes.notFound' | transloco }} </ng-template>
+        <ng-template #otherErrorMessage> {{ 'recipes.singleLoadingError' | transloco }} </ng-template>
+    </app-error-display>
+</ng-container>
+

@@ -109,6 +109,7 @@
       "sendingResetEmail": "Error sending reset email",
       "sendingVerificationEmail": "Error sending verification email",
       "unexpectedError": "An unexpected error has occurred",
+      "userCantEditRecipe": "You can't edit this recipe",
       "verifyingEmail": "Error verifying email. Please try again"
     },
     "linkCopied": "Link copied!",
@@ -141,6 +142,9 @@
       "children": {
         "create": {
           "title": "Create recipe"
+        },
+        "edit": {
+          "title": "Edit recipe"
         }
       }
     },

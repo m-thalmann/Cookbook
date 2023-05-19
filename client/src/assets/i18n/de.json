@@ -109,6 +109,7 @@
       "sendingResetEmail": "Fehler beim Senden der E-Mail zum Zurücksetzen",
       "sendingVerificationEmail": "Fehler beim Senden der Verifizierungs-E-Mail",
       "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten!",
+      "userCantEditRecipe": "Du kannst dieses Rezept nicht bearbeiten",
       "verifyingEmail": "Fehler beim Verifizieren der E-Mail. Bitte versuche es erneut."
     },
     "linkCopied": "Link kopiert!",
@@ -141,6 +142,9 @@
       "children": {
         "create": {
           "title": "Rezept erstellen"
+        },
+        "edit": {
+          "title": "Rezept bearbeiten"
         }
       }
     },

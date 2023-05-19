@@ -1,11 +1,11 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { FormGroup } from '@angular/forms';
 
 export class ServerValidationHelper {
   static setValidationErrors(errorResponse: HttpErrorResponse, form: FormGroup, fieldsMap?: { [key: string]: string }) {
     let foundError = false;
 
-    if (errorResponse.status === 422) {
+    if (errorResponse.status === HttpStatusCode.UnprocessableEntity) {
       const validationErrors = errorResponse.error.errors;
 
       Object.keys(validationErrors).forEach((controlName) => {
