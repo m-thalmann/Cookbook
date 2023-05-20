@@ -33,7 +33,7 @@ export class EditRecipeDetailsComponent {
   constructor(private api: ApiService, private snackbar: SnackbarService) {}
 
   async onSave(currentRecipe: DetailedRecipe, recipe: EditRecipeFormData) {
-    if (this.saving.value) {
+    if (this.saving.value || this.disabled) {
       return;
     }
 

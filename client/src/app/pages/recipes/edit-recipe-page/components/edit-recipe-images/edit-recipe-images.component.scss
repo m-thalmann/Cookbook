@@ -1,0 +1,121 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use 'theme';
+@use 'variables' as *;
+
+:host {
+  display: grid;
+
+  gap: 1em;
+  grid-auto-rows: 10em;
+
+  @media screen and (min-width: 400px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media screen and (min-width: 600px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media screen and (min-width: 800px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  > * {
+    height: 100%;
+  }
+
+  .image,
+  .add-image-button,
+  app-skeleton {
+    border-radius: 0.5em;
+  }
+}
+
+.image {
+  position: relative;
+
+  @include mat.elevation(1);
+
+  transition: box-shadow $transition-time;
+
+  &:hover {
+    @include mat.elevation(4);
+  }
+
+  &.disabled {
+    img {
+      filter: grayscale(50%);
+    }
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+    border-radius: inherit;
+    cursor: pointer;
+  }
+
+  > button {
+    font-size: 0.5em;
+
+    position: absolute;
+    top: -1em;
+    right: -1em;
+    width: 3.5em;
+    height: 3.5em;
+
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    cursor: pointer;
+
+    transition: background $transition-time;
+
+    @include theme.apply() using ($variables) {
+      border: 0.325em solid map.get($variables, 'background');
+      background: map.get($variables, 'warn');
+      color: map.get($variables, 'warn-text');
+
+      &:not(:disabled):hover {
+        background: theme.adjust-color($variables, map.get($variables, 'warn'), -10%);
+      }
+
+      &:disabled {
+        background: theme.adjust-color($variables, map.get($variables, 'background'), -20%);
+        color: map.get($variables, 'background');
+      }
+    }
+  }
+}
+
+.add-image-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition: border $transition-time, background $transition-time, color $transition-time;
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.5;
+  }
+
+  @include theme.apply() using ($variables) {
+    border: 2px dashed theme.adjust-color($variables, map.get($variables, 'foreground'), 50%);
+    color: theme.adjust-color($variables, map.get($variables, 'foreground'), 50%);
+    background: transparent;
+
+    &:not(:disabled):hover {
+      border-color: map.get($variables, 'foreground');
+      color: map.get($variables, 'foreground');
+      background: theme.adjust-color($variables, map.get($variables, 'background'), -10%);
+    }
+  }
+}

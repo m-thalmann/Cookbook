@@ -112,6 +112,8 @@
       "userCantEditRecipe": "You can't edit this recipe",
       "verifyingEmail": "Error verifying email. Please try again"
     },
+    "imageDeleted": "Image deleted successfully",
+    "imageUploaded": "Image uploaded successfully",
     "linkCopied": "Link copied!",
     "loggedOut": "You have been logged out.",
     "loggedOutFromAllSessions": "You have been logged out from all session.",

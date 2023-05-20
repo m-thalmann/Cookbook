@@ -1,0 +1,35 @@
+<ng-container *ngIf="{ saving: saving | async, uploadProgress: uploadProgress$ | async } as vm">
+    <ng-container *ngIf="recipe; else loading">
+        <div
+            class="image"
+            [class.disabled]="disabled || vm.saving"
+            *ngFor="let image of recipe.images; let index = index"
+        >
+            <img [src]="image.url" fadeIn (click)="openImageSlider(index)" />
+
+            <button (click)="deleteImage(image.id)" [disabled]="disabled || vm.saving">
+                <mat-icon>remove</mat-icon>
+            </button>
+        </div>
+
+        <button class="add-image-button" [disabled]="disabled || vm.saving" (click)="fileInput.click()">
+            <mat-icon *ngIf="!vm.saving || vm.uploadProgress === null; else fileUploadingProgress">add</mat-icon>
+            <ng-template #fileUploadingProgress>
+                <mat-spinner [diameter]="48" [value]="vm.uploadProgress" mode="determinate"></mat-spinner>
+            </ng-template>
+        </button>
+
+        <input
+            type="file"
+            hidden
+            (change)="uploadImage(fileInput.files)"
+            #fileInput
+            accept=".jpg,.jpeg,.jfif,.png,.gif"
+        />
+    </ng-container>
+
+    <ng-template #loading>
+        <app-skeleton *appRepeat="7"></app-skeleton>
+    </ng-template>
+</ng-container>
+

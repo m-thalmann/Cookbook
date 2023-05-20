@@ -31,7 +31,7 @@ export class RecipeDetailImageSliderComponent {
 
   currentImageIndex = 0;
 
-  constructor(private dialog: Dialog) {}
+  constructor(private cdkDialog: Dialog) {}
 
   get images() {
     return this._images;
@@ -72,7 +72,7 @@ export class RecipeDetailImageSliderComponent {
       imageUrls.push(PLACEHOLDER_RECIPE_IMAGE_URL);
     }
 
-    this.dialog.open(ImageSliderDialogComponent, {
+    this.cdkDialog.open(ImageSliderDialogComponent, {
       data: { images: imageUrls, startIndex: this.currentImageIndex },
     });
   }

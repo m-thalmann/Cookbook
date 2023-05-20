@@ -30,7 +30,7 @@ export class CreateRecipeDetailsComponent {
   constructor(private router: Router, private api: ApiService, private snackbar: SnackbarService) {}
 
   async onSave(recipe: EditRecipeFormData) {
-    if (this.saving.value) {
+    if (this.saving.value || this.disabled) {
       return;
     }
 

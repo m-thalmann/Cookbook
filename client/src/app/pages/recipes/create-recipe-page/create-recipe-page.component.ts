@@ -15,9 +15,5 @@ const Logger = new LoggerClass('Recipes');
   styleUrls: ['./create-recipe-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CreateRecipePageComponent {
-  onDetailsSaving(saving: boolean) {
-    // TODO: handle
-  }
-}
+export class CreateRecipePageComponent {}
 

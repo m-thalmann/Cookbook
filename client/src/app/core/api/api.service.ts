@@ -2,6 +2,7 @@ import {
   HttpClient,
   HttpContext,
   HttpErrorResponse,
+  HttpEventType,
   HttpHeaders,
   HttpParams,
   HttpRequest,
@@ -10,7 +11,7 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
-import { EMPTY, Observable, catchError, filter, first, of, shareReplay, switchMap } from 'rxjs';
+import { EMPTY, Observable, catchError, filter, first, map, of, shareReplay, switchMap } from 'rxjs';
 import { HandledError } from '../helpers/handled-error';
 import { AuthToken } from '../models/auth-token';
 import { Cookbook, CookbookUser, CookbookWithCounts, CookbookWithUserMeta, SimpleCookbook } from '../models/cookbook';
@@ -55,6 +56,14 @@ export class ApiService {
 
   public get url() {
     return `${this.config.get('apiUrl')}/v${ApiService.API_VERSION}`;
+  }
+
+  private get baseHttpHeaders() {
+    let headers = new HttpHeaders({
+      'X-Language': this.transloco.getActiveLang(),
+    });
+
+    return headers;
   }
 
   private get httpHeaders() {
@@ -415,8 +424,24 @@ export class ApiService {
           const fd = new FormData();
           fd.append('image', image, image.name);
 
-          // IDEA: add progress
-          return this.post<{ data: RecipeImage }>(`/recipes/${recipeId}/images`, fd, TokenType.Access);
+          return this.http
+            .post<{ data: RecipeImage }>(`${this.url}/recipes/${recipeId}/images`, fd, {
+              headers: this.baseHttpHeaders,
+              reportProgress: true,
+              observe: 'events',
+              context: new HttpContext().set(TOKEN_TYPE_HTTP_CONTEXT, TokenType.Access),
+            })
+            .pipe(
+              map((event) => {
+                if (event instanceof HttpResponse) {
+                  return event;
+                } else if (event.type === HttpEventType.UploadProgress) {
+                  return Math.round((event.loaded / event.total!) * 100);
+                }
+                return null;
+              }),
+              shareReplay(1)
+            );
         },
 
         delete: (imageId: number) => this.delete<void>(`/recipe-images/${imageId}`, TokenType.Access),
