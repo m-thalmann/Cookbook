@@ -42,7 +42,7 @@ export class CreateRecipeDetailsComponent {
 
       this.snackbar.info('messages.recipeCreated', { translateMessage: true });
 
-      this.router.navigate(['/recipes', response.body!.data.id, 'edit']);
+      this.router.navigate(['/recipes', response.body!.data.id, 'edit'], { queryParams: { tab: 'images' } });
     } catch (e) {
       if (e instanceof HttpErrorResponse) {
         this.serverErrorResponse$.next(e);

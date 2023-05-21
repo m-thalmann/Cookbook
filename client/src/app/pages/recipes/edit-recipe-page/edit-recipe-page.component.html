@@ -1,5 +1,6 @@
 <ng-container
     *ngIf="{
+        selectedTab: selectedTab$ | async,
         recipe: (recipe$ | async)?.body?.data ?? null,
         error: error$ | async,
         detailsSaving: detailsSaving$ | async,
@@ -15,7 +16,14 @@
         </a>
     </h2>
 
-    <mat-tab-group mat-stretch-tabs="false" preserveContent dynamicHeight *ngIf="!vm.error">
+    <mat-tab-group
+        mat-stretch-tabs="false"
+        preserveContent
+        dynamicHeight
+        [selectedIndex]="vm.selectedTab"
+        (selectedIndexChange)="onTabChange($event)"
+        *ngIf="!vm.error"
+    >
         <mat-tab [disabled]="vm.detailsSaving || vm.imagesSaving">
             <ng-template mat-tab-label>
                 <div class="tab-label">

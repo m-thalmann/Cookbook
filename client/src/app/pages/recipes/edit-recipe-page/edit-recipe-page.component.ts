@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
-import { BehaviorSubject, EMPTY, combineLatest, of, shareReplay, startWith, switchMap } from 'rxjs';
+import { BehaviorSubject, EMPTY, combineLatest, map, of, shareReplay, startWith, switchMap } from 'rxjs';
 import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
@@ -36,6 +36,16 @@ const Logger = new LoggerClass('Recipes');
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditRecipePageComponent {
+  selectedTab$ = this.activatedRoute.queryParams.pipe(
+    map((params) => {
+      if (params['tab'] === 'images') {
+        return 1;
+      }
+
+      return 0;
+    })
+  );
+
   private recipeId$ = combineLatest([this.activatedRoute.params, this.auth.user$]).pipe(
     switchMap(([params, _]) => {
       if (params['id']) {
@@ -84,6 +94,14 @@ export class EditRecipePageComponent {
     private auth: AuthService,
     private snackbar: SnackbarService
   ) {}
+
+  onTabChange(index: number) {
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: { tab: index === 1 ? 'images' : 'details' },
+      queryParamsHandling: 'merge',
+    });
+  }
 
   onDetailsSaving(saving: boolean) {
     this.detailsSaving$.next(saving);
