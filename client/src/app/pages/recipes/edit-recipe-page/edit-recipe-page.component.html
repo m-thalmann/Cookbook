@@ -2,6 +2,8 @@
     *ngIf="{
         recipe: (recipe$ | async)?.body?.data ?? null,
         error: error$ | async,
+        detailsSaving: detailsSaving$ | async,
+        imagesSaving: imagesSaving$ | async
     } as vm"
 >
     <h2>
@@ -13,12 +15,38 @@
         </a>
     </h2>
 
-    <app-edit-recipe-details
-        [recipe]="vm.recipe"
-        (updateRecipe)="updateRecipe$.emit()"
-        (saving)="onDetailsSaving($event)"
-        *ngIf="!vm.error"
-    ></app-edit-recipe-details>
+    <mat-tab-group mat-stretch-tabs="false" preserveContent dynamicHeight *ngIf="!vm.error">
+        <mat-tab [disabled]="vm.detailsSaving || vm.imagesSaving">
+            <ng-template mat-tab-label>
+                <div class="tab-label">
+                    <mat-icon>format_list_bulleted</mat-icon>
+                    {{ 'general.details' | transloco }}
+                </div>
+            </ng-template>
+
+            <app-edit-recipe-details
+                [recipe]="vm.recipe"
+                (updateRecipe)="updateRecipe$.emit()"
+                (saving)="onDetailsSaving($event)"
+            ></app-edit-recipe-details>
+        </mat-tab>
+
+        <mat-tab [disabled]="vm.detailsSaving || vm.imagesSaving">
+            <ng-template mat-tab-label>
+                <div class="tab-label">
+                    <mat-icon>photo_library</mat-icon>
+                    {{ 'general.images' | transloco }}
+                    <ng-container *ngIf="vm.recipe"> ({{ vm.recipe.images.length }}) </ng-container>
+                </div>
+            </ng-template>
+
+            <app-edit-recipe-images
+                [recipe]="vm.recipe"
+                (updateRecipe)="updateRecipe$.emit()"
+                (saving)="onImagesSaving($event)"
+            ></app-edit-recipe-images>
+        </mat-tab>
+    </mat-tab-group>
 
     <app-error-display [error]="vm.error">
         <ng-template #notFoundMessage> {{ 'recipes.notFound' | transloco }} </ng-template>

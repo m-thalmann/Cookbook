@@ -1,3 +1,5 @@
+@use 'sass:map';
+@use 'theme';
 @use 'variables' as *;
 
 :host {
@@ -9,4 +11,27 @@ h2 {
   display: flex;
   align-items: center;
   gap: 0.5em;
+}
+
+mat-tab-group {
+  ::ng-deep mat-tab-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding-bottom: 0.25em;
+
+    @include theme.apply() using ($variables) {
+      background: map.get($variables, 'background');
+    }
+  }
+
+  .tab-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+  }
+
+  app-edit-recipe-images {
+    padding: 1em;
+  }
 }

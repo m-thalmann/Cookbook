@@ -79,6 +79,7 @@ export class EditRecipeDetailsComponent {
     }
 
     if (!hasError && (recipeUpdated || ingredientsUpdated)) {
+      this.snackbar.info('messages.recipeUpdated', { translateMessage: true });
       this.updateRecipe.emit();
     }
 

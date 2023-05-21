@@ -2,9 +2,10 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
-import { EMPTY, combineLatest, of, shareReplay, startWith, switchMap } from 'rxjs';
+import { BehaviorSubject, EMPTY, combineLatest, of, shareReplay, startWith, switchMap } from 'rxjs';
 import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
@@ -12,6 +13,7 @@ import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { EditRecipeDetailsComponent } from './components/edit-recipe-details/edit-recipe-details.component';
+import { EditRecipeImagesComponent } from './components/edit-recipe-images/edit-recipe-images.component';
 
 const Logger = new LoggerClass('Recipes');
 
@@ -24,7 +26,9 @@ const Logger = new LoggerClass('Recipes');
     TranslocoModule,
     MatIconModule,
     MatButtonModule,
+    MatTabsModule,
     EditRecipeDetailsComponent,
+    EditRecipeImagesComponent,
     ErrorDisplayComponent,
   ],
   templateUrl: './edit-recipe-page.component.html',
@@ -70,6 +74,9 @@ export class EditRecipePageComponent {
     Logger.error('Error while loading recipe:', this.api.getErrorMessage(error), error)
   );
 
+  detailsSaving$ = new BehaviorSubject<boolean>(false);
+  imagesSaving$ = new BehaviorSubject<boolean>(false);
+
   constructor(
     private api: ApiService,
     private activatedRoute: ActivatedRoute,
@@ -79,7 +86,11 @@ export class EditRecipePageComponent {
   ) {}
 
   onDetailsSaving(saving: boolean) {
-    // TODO: handle
+    this.detailsSaving$.next(saving);
+  }
+
+  onImagesSaving(saving: boolean) {
+    this.imagesSaving$.next(saving);
   }
 }
 
