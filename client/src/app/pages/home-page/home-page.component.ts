@@ -54,7 +54,12 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
     shareReplay({ bufferSize: 1, refCount: true })
   );
   recipes$ = this.auth.user$.pipe(
-    switchMap(() => this.api.recipes.getList({ pagination: { page: 1, perPage: this.amountItems } })),
+    switchMap(() =>
+      this.api.recipes.getList({
+        sort: [{ column: 'created_at', dir: 'desc' }],
+        pagination: { page: 1, perPage: this.amountItems },
+      })
+    ),
     handledErrorInterceptor(),
     shareReplay({ bufferSize: 1, refCount: true })
   );

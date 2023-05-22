@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { TranslocoService } from '@ngneat/transloco';
+import { TranslocoService, getBrowserLang } from '@ngneat/transloco';
 import { Subscription, skip } from 'rxjs';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
 import { ApiService } from '../api/api.service';
@@ -43,9 +43,12 @@ export class LanguageService implements OnDestroy {
 
   init() {
     const language = this.storage.get<string>(LANGUAGE_KEY);
+    const browserLang = getBrowserLang();
 
     if (language) {
       this.transloco.setActiveLang(language);
+    } else if (browserLang) {
+      this.transloco.setActiveLang(browserLang);
     }
   }
 

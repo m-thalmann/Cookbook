@@ -146,6 +146,27 @@ class IngredientController extends Controller {
             'group' => ['nullable', 'max:20'],
         ]);
 
+        if (isset($data['name']) && $data['name'] === $ingredient->name) {
+            unset($data['name']);
+        }
+        if (isset($data['group']) && $data['group'] === $ingredient->group) {
+            unset($data['group']);
+        }
+
+        if (isset($data['name']) || isset($data['group'])) {
+            if (
+                !Ingredient::isUniqueInRecipe(
+                    $ingredient->recipe,
+                    $data['name'],
+                    $data['group'] ?? null
+                )
+            ) {
+                throw ValidationException::withMessages([
+                    'name' => __('validation.ingredient_not_unique'),
+                ]);
+            }
+        }
+
         $ingredient->update($data);
 
         return JsonResource::make($ingredient);

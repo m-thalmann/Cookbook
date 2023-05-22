@@ -25,7 +25,7 @@ import { BehaviorSubject } from 'rxjs';
   ],
 })
 export class EditorComponent implements ControlValueAccessor {
-  @ViewChild('content', { static: true }) content!: ElementRef;
+  @ViewChild('content', { static: false }) content!: ElementRef;
 
   @Input() placeholder: string | null = null;
 
@@ -64,8 +64,6 @@ export class EditorComponent implements ControlValueAccessor {
     this.disabled = disabled;
   }
 
-  // TODO: use modern approach to make text bold etc.
-
   toggleBold() {
     document.execCommand('bold', false, '');
     this.focus();
@@ -92,7 +90,6 @@ export class EditorComponent implements ControlValueAccessor {
     this.update();
   }
   async addLink() {
-    // TODO: use dialog component
     let link = window.prompt('Enter link');
 
     if (link) {

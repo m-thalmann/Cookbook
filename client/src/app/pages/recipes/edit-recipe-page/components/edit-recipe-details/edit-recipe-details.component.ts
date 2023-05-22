@@ -1,3 +1,4 @@
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
@@ -21,7 +22,16 @@ const Logger = new LoggerClass('Recipes');
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditRecipeDetailsComponent {
-  @Input() disabled = false;
+  @Input()
+  set disabled(disable: any) {
+    this._disabled = coerceBooleanProperty(disable);
+  }
+
+  get disabled() {
+    return this._disabled;
+  }
+
+  private _disabled = false;
 
   @Input() recipe!: DetailedRecipe | null;
 
