@@ -68,6 +68,17 @@ export class ImageSliderDialogComponent implements AfterViewInit {
     }
   }
 
+  onKeyUp(e: KeyboardEvent) {
+    switch (e.key) {
+      case 'ArrowLeft':
+        this.nextImage(-1);
+        break;
+      case 'ArrowRight':
+        this.nextImage(1);
+        break;
+    }
+  }
+
   private updateImagePosition() {
     if (this.imagesContainer.nativeElement.firstChild) {
       const firstImage = this.imagesContainer.nativeElement.firstChild as HTMLImageElement;
