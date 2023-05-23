@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoModule } from '@ngneat/transloco';
+import { CreateCookbookDialogComponent } from 'src/app/pages/cookbooks/components/create-cookbook-dialog/create-cookbook-dialog.component';
 
 @Component({
   selector: 'app-layout-add-action-fab',
@@ -28,4 +30,10 @@ export class LayoutAddActionFabComponent {
   private _disabled = false;
 
   isOpen = false;
+
+  constructor(private dialog: MatDialog) {}
+
+  openCreateCookbookDialog() {
+    this.dialog.open(CreateCookbookDialogComponent);
+  }
 }

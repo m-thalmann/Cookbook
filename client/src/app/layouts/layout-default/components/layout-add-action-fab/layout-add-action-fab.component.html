@@ -3,9 +3,13 @@
         <a routerLink="/recipes/create" mat-mini-fab [attr.data-description]="'recipes.recipe' | transloco">
             <mat-icon>restaurant</mat-icon>
         </a>
-        <a routerLink="/cookbooks/create" mat-mini-fab [attr.data-description]="'cookbooks.cookbook' | transloco">
+        <button
+            mat-mini-fab
+            (click)="openCreateCookbookDialog()"
+            [attr.data-description]="'cookbooks.cookbook' | transloco"
+        >
             <mat-icon>menu_book</mat-icon>
-        </a>
+        </button>
     </div>
 
     <button mat-fab color="primary" [disabled]="disabled">

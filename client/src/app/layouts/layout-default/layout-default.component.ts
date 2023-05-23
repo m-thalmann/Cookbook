@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { ActivatedRoute, Data, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
@@ -9,6 +10,7 @@ import { Observable, combineLatest, filter, map, of, startWith, switchMap } from
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { User } from 'src/app/core/models/user';
 import { RouteHelperService } from 'src/app/core/services/route-helper.service';
+import { CreateCookbookDialogComponent } from 'src/app/pages/cookbooks/components/create-cookbook-dialog/create-cookbook-dialog.component';
 import { LayoutAddActionFabComponent } from './components/layout-add-action-fab/layout-add-action-fab.component';
 import { LayoutDefaultNavbarComponent } from './components/layout-default-navbar/layout-default-navbar.component';
 
@@ -55,7 +57,8 @@ export class LayoutDefaultComponent {
     public auth: AuthService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private routeHelper: RouteHelperService
+    private routeHelper: RouteHelperService,
+    private dialog: MatDialog
   ) {}
 
   get loginQueryParams() {
@@ -76,5 +79,9 @@ export class LayoutDefaultComponent {
 
   doLogout() {
     this.auth.logout(true);
+  }
+
+  openCreateCookbookDialog() {
+    this.dialog.open(CreateCookbookDialogComponent);
   }
 }

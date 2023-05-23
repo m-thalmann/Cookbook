@@ -1,0 +1,20 @@
+[mat-dialog-title] {
+  mat-icon {
+    vertical-align: bottom;
+  }
+}
+
+[mat-dialog-content] {
+  padding-top: 0.5em;
+
+  mat-form-field {
+    width: 20em;
+    max-width: 100%;
+  }
+}
+
+[mat-dialog-actions] {
+  mat-spinner {
+    margin-right: 1em;
+  }
+}

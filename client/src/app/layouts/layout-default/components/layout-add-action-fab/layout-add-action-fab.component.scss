@@ -23,9 +23,11 @@
 
     transition: all $transition-time;
 
-    > a {
+    > a,
+    > button {
       margin: -1.25em 0;
       transition: all $transition-time;
+      font-size: inherit;
 
       &::after {
         visibility: hidden;
@@ -66,7 +68,8 @@
       transform: translate(-50%, 0);
       gap: 0.5em;
 
-      > a {
+      > a,
+      > button {
         position: relative;
         margin: 0;
 

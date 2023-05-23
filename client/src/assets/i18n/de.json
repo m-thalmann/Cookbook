@@ -4,6 +4,7 @@
     "cancel": "Abbrechen",
     "confirm": "Bestätigen",
     "copyLink": "Link kopieren",
+    "create": "Erstellen",
     "delete": "Löschen",
     "edit": "Bearbeiten",
     "goBack": "Zurück",
@@ -95,6 +96,7 @@
   "messages": {
     "areYouSure": "Bist du dir sicher?",
     "accountDeleted": "Konto wurde gelöscht",
+    "cookbookCreated": "Kochbuch wurde erfolgreich erstellt",
     "emailVerified": "E-Mail erfolgreich verifiziert!",
     "errors": {
       "clearingTrash": "Fehler beim Leeren des Papierkorbs",

@@ -72,10 +72,10 @@
             <mat-icon>restaurant</mat-icon>
             <div matListItemTitle>{{ 'recipes.create' | transloco }}</div>
         </a>
-        <a routerLink="/cookbooks/create" mat-menu-item>
+        <button mat-menu-item (click)="openCreateCookbookDialog()">
             <mat-icon>menu_book</mat-icon>
             <div matListItemTitle>{{ 'cookbooks.create' | transloco }}</div>
-        </a>
+        </button>
     </mat-menu>
 
     <mat-menu #accountMenu="matMenu" xPosition="before">

@@ -60,11 +60,12 @@
                 mat-raised-button
                 color="primary"
                 class="show-more-items"
-                *ngIf="getRemainingItems(vm.recipes?.body?.meta) as remainingItems"
+                [disabled]="getRemainingItems(vm.recipes?.body?.meta) === 0"
+                *ngIf="!vm.recipesError"
             >
                 <div class="button-wrapper">
                     <mat-icon>restaurant</mat-icon>
-                    {{ 'recipes.showAmountMore' | transloco: { amount: remainingItems } }}
+                    {{ 'recipes.showAmountMore' | transloco: { amount: getRemainingItems(vm.recipes?.body?.meta) } }}
                     <mat-icon>arrow_forward</mat-icon>
                 </div>
             </a>

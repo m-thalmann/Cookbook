@@ -4,6 +4,7 @@
     "cancel": "Cancel",
     "confirm": "Confirm",
     "copyLink": "Copy link",
+    "create": "Create",
     "delete": "Delete",
     "edit": "Edit",
     "goBack": "Go back",
@@ -95,6 +96,7 @@
   "messages": {
     "areYouSure": "Are you sure?",
     "accountDeleted": "Account deleted successfully",
+    "cookbookCreated": "Cookbook created successfully",
     "emailVerified": "Email successfully verified!",
     "errors": {
       "clearingTrash": "Error clearing trash",

@@ -2,31 +2,35 @@ type LoggerType = 'log' | 'info' | 'warn' | 'error';
 
 const LoggerModulesConfig = {
   ConfigService: {
-    background: '#d10000',
+    background: 'red',
     foreground: 'white',
   },
   StorageService: {
-    background: '#630000',
+    background: 'darkred',
     foreground: 'white',
   },
   AuthService: {
-    background: '#037ffc',
+    background: 'turquoise',
     foreground: 'white',
   },
   ErrorHandlerService: {
-    background: '#fc0303',
+    background: 'orangered',
     foreground: 'white',
   },
   Authentication: {
-    background: '#030bfc',
+    background: 'blue',
     foreground: 'white',
   },
   Recipes: {
-    background: '#fc9d03',
+    background: 'orange',
+    foreground: 'white',
+  },
+  Cookbooks: {
+    background: 'coral',
     foreground: 'white',
   },
   Settings: {
-    background: '#9d03fc',
+    background: 'purple',
     foreground: 'white',
   },
 };
