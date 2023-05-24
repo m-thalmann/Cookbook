@@ -9,10 +9,10 @@ const SPLIT_BY_NON_ESCAPED_COMMA = /(\\.|[^,])+/g;
 export class CustomTranspiler extends DefaultTranspiler implements TranslocoTranspiler {
   override transpile(value: any, params: HashMap = {}, translation: Translation, key: string): any {
     if (typeof value === 'string') {
-      const pluralMatch = PLURAL_MATCH.exec(value);
+      const pluralMatch = [...value.matchAll(PLURAL_MATCH)][0]?.[1];
 
       if (pluralMatch) {
-        return this.transpilePlural(pluralMatch[1].trim(), params, translation, key);
+        return this.transpilePlural(pluralMatch.trim(), params, translation, key);
       }
     }
 
@@ -57,7 +57,7 @@ class PluralCase {
       throw new Error('Invalid format');
     }
 
-    const pluralCaseMatch = PLURAL_CASE_MATCH.exec(caseString)!;
+    const pluralCaseMatch = [...caseString.matchAll(PLURAL_CASE_MATCH)][0];
 
     const [_, operator, amountString, translationString] = pluralCaseMatch;
 

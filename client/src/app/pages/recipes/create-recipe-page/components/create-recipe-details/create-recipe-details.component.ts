@@ -43,7 +43,11 @@ export class CreateRecipeDetailsComponent {
       this.snackbar.info('messages.recipeCreated', { translateMessage: true });
 
       this.router.navigate(['/recipes', response.body!.data.id, 'edit'], { queryParams: { tab: 'images' } });
+
+      this.saving.next(false);
     } catch (e) {
+      this.saving.next(false);
+
       if (e instanceof HttpErrorResponse) {
         this.serverErrorResponse$.next(e);
       } else {
@@ -52,8 +56,6 @@ export class CreateRecipeDetailsComponent {
         Logger.error('Error creating recipe:', errorMessage, e);
       }
     }
-
-    this.saving.next(false);
   }
 }
 

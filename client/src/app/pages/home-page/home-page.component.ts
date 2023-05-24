@@ -91,7 +91,7 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
 
   getRemainingItems(meta?: PaginationMeta) {
     if (!meta) {
-      return 0;
+      return '';
     }
 
     return meta.total - meta.count;

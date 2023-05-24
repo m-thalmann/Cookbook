@@ -10,7 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription, distinctUntilChanged } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
 import { ServerValidationHelper } from 'src/app/core/forms/ServerValidationHelper';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
@@ -54,7 +54,7 @@ export class CreateCookbookDialogComponent {
     private snackbar: SnackbarService
   ) {
     this.subSink.add(
-      this.saving$.subscribe((saving) => {
+      this.saving$.pipe(distinctUntilChanged()).subscribe((saving) => {
         this.dialogRef.disableClose = saving;
 
         if (saving) {
@@ -67,7 +67,7 @@ export class CreateCookbookDialogComponent {
   }
 
   async onSubmit() {
-    if (this.saving$.value) return;
+    if (this.saving$.value || this.form.invalid) return;
 
     this.saving$.next(true);
 
@@ -80,14 +80,14 @@ export class CreateCookbookDialogComponent {
 
       this.dialogRef.close();
     } catch (e) {
-      if (!(e instanceof HttpErrorResponse) || !ServerValidationHelper.setValidationErrors(e, this.form)) {
+      this.saving$.next(false);
+
+      if (!(e instanceof HttpErrorResponse && ServerValidationHelper.setValidationErrors(e, this.form))) {
         const errorMessage = this.snackbar.exception(e, {});
 
         Logger.error('Error creating cookbook:', errorMessage, e);
       }
     }
-
-    this.saving$.next(false);
   }
 }
 

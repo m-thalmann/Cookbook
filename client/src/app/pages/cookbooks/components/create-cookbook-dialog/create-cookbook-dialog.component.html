@@ -21,7 +21,7 @@
 
         <button mat-button mat-dialog-close [disabled]="vm.saving">{{ 'actions.cancel' | transloco }}</button>
 
-        <button mat-button (click)="onSubmit()" color="primary" [disabled]="vm.saving" #submitButton>
+        <button mat-button (click)="onSubmit()" color="primary" [disabled]="vm.saving || form.invalid" #submitButton>
             {{ 'actions.create' | transloco }}
         </button>
     </div>
