@@ -18,8 +18,8 @@
 
                 <div class="spacer"></div>
 
-                <div class="header-buttons">
-                    <ng-container *ngIf="vm.isAuthenticated; else loginButton">
+                <div class="header-buttons" [class.logged-in]="vm.isAuthenticated">
+                    <ng-container *ngIf="vm.isAuthenticated; else unauthenticatedButtons">
                         <button
                             class="hide-mobile"
                             mat-icon-button
@@ -43,7 +43,10 @@
                             </span>
                         </button>
                     </ng-container>
-                    <ng-template #loginButton>
+                    <ng-template #unauthenticatedButtons>
+                        <a mat-icon-button routerLink="/settings">
+                            <mat-icon>settings</mat-icon>
+                        </a>
                         <a mat-icon-button routerLink="/login" [queryParams]="loginQueryParams" color="primary">
                             <mat-icon>login</mat-icon>
                         </a>
@@ -85,10 +88,10 @@
             <div matListItemLine>{{ vm.user?.email }}</div>
         </div>
 
-        <a mat-menu-item routerLink="/settings/account">
+        <a mat-menu-item routerLink="/settings">
             <mat-icon>settings</mat-icon>
             <div matListItemTitle>
-                {{ 'pages.settings.children.account.settings' | transloco }}
+                {{ 'pages.settings.title' | transloco }}
                 <mat-icon color="warn" *ngIf="vm.isUnverified">warning</mat-icon>
             </div>
         </a>

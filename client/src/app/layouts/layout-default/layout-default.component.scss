@@ -39,7 +39,11 @@ $add-button-height-mobile: 5em;
 
     .header-buttons {
       display: flex;
-      gap: 1em;
+      gap: 0.25em;
+
+      &.logged-in {
+        gap: 1em;
+      }
 
       .user-account-button {
         display: flex;
@@ -112,6 +116,10 @@ app-layout-default-navbar {
   right: 0;
 
   z-index: 10;
+}
+
+a[mat-menu-item] {
+  color: inherit;
 }
 
 [mat-menu-item] {
