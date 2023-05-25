@@ -10,9 +10,7 @@
   flex-direction: column;
   gap: 1em;
 
-  padding: 0 $layout-padding;
-  padding-top: $content-border-radius;
-  padding-bottom: $content-border-radius;
+  padding: $content-border-radius $layout-padding;
   margin-bottom: 1.5em;
 
   border-radius: $content-border-radius;
@@ -111,6 +109,8 @@
     box-shadow: none;
 
     margin: 0;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
   }
 }
 
@@ -131,5 +131,6 @@
 
   .tags > a {
     background: #e2e2e2 !important;
+    color: black !important;
   }
 }

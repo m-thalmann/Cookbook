@@ -67,7 +67,7 @@
 
 @media print {
   :host {
-    gap: 0;
+    gap: 0.75em;
   }
 
   .container ::ng-deep ol {
