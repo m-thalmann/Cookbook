@@ -1,4 +1,3 @@
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Dialog } from '@angular/cdk/dialog';
 import { CommonModule } from '@angular/common';
 import { HttpResponse } from '@angular/common/http';
@@ -13,6 +12,7 @@ import { ImageSliderDialogComponent } from 'src/app/components/image-slider-dial
 import { SkeletonComponent } from 'src/app/components/skeleton/skeleton.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { RepeatDirective } from 'src/app/core/directives/repeat.directive';
+import { coerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
 import { toPromise } from 'src/app/core/helpers/to-promise';
 import { DetailedRecipe } from 'src/app/core/models/recipe';
@@ -33,15 +33,8 @@ export class EditRecipeImagesComponent implements OnDestroy {
   private subSink = new Subscription();
 
   @Input()
-  set disabled(disabled: any) {
-    this._disabled = coerceBooleanProperty(disabled);
-  }
-
-  get disabled() {
-    return this._disabled;
-  }
-
-  private _disabled = false;
+  @coerceBooleanProperty()
+  disabled: any = false;
 
   @Input() recipe!: DetailedRecipe | null;
 
@@ -148,4 +141,3 @@ export class EditRecipeImagesComponent implements OnDestroy {
     this.subSink.unsubscribe();
   }
 }
-

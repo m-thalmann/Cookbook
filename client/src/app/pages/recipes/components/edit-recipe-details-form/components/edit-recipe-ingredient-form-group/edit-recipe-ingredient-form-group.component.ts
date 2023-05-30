@@ -17,6 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { TranslocoModule } from '@ngneat/transloco';
 import { EMPTY, Observable, ReplaySubject, combineLatest, map, shareReplay, startWith } from 'rxjs';
+import { coerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
 import { SimpleIngredient } from 'src/app/core/models/ingredient';
 import { FormIngredient } from '../../edit-recipe-details-form.component';
 
@@ -42,7 +43,10 @@ export class EditRecipeIngredientFormGroupComponent implements AfterViewInit {
 
   @Input() formControlGroup!: FormGroup<FormIngredient>;
   @Input() ingredientKey!: string;
-  @Input() disabled = false;
+
+  @Input()
+  @coerceBooleanProperty()
+  disabled: any = false;
 
   @Input()
   set ingredientOptions(ingredients: SimpleIngredient[] | null) {
@@ -95,4 +99,3 @@ export class EditRecipeIngredientFormGroupComponent implements AfterViewInit {
     });
   }
 }
-

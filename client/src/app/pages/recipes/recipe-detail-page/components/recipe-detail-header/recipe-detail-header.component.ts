@@ -9,6 +9,7 @@ import { RouterLink } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
 import { ShareMenuComponent } from 'src/app/components/share-menu/share-menu.component';
 import { SkeletonComponent } from 'src/app/components/skeleton/skeleton.component';
+import { coerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
 import { DetailedRecipe } from 'src/app/core/models/recipe';
 import { RecipePublicShareDialogComponent } from '../recipe-public-share-dialog/recipe-public-share-dialog.component';
 
@@ -32,7 +33,10 @@ import { RecipePublicShareDialogComponent } from '../recipe-public-share-dialog/
 })
 export class RecipeDetailHeaderComponent {
   @Input() recipe!: DetailedRecipe | null;
-  @Input() disabled = false;
+
+  @Input()
+  @coerceBooleanProperty()
+  disabled: any = false;
 
   @Output() deleteRecipe = new EventEmitter<void>();
 

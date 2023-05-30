@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
+import { coerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
 
 /**
  * Variable used to create unique ids for each used searchbar,
@@ -21,7 +22,11 @@ let nextIdSuffix = 0;
 export class SearchBarComponent {
   @Input() initialValue: string | null = null;
   @Input() searchOnSubmit = true;
-  @Input() disabled = false;
+
+  @Input()
+  @coerceBooleanProperty()
+  disabled: any = false;
+
   @Input() clearable = false;
 
   @Output() search = new EventEmitter<string>();

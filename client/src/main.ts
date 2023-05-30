@@ -16,7 +16,7 @@ import {
   bootstrapApplication,
 } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from './environments/environment';
 
@@ -67,7 +67,7 @@ class CustomHammerConfig extends HammerGestureConfig {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideRouter(routes),
+    provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'enabled' })),
     provideHttpClient(withInterceptorsFromDi()),
     importProvidersFrom([
       BrowserModule,

@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ImageSliderDialogComponent } from 'src/app/components/image-slider-dialog/image-slider-dialog.component';
 import { SkeletonComponent } from 'src/app/components/skeleton/skeleton.component';
+import { coerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
 import { PLACEHOLDER_RECIPE_IMAGE_URL, RecipeImage } from 'src/app/core/models/recipe-image';
 
 const SWIPE_LEFT_DIRECTION = 2;
@@ -25,7 +26,9 @@ export class RecipeDetailImageSliderComponent {
     this.currentImageIndex = 0;
   }
 
-  @Input() disabled = false;
+  @Input()
+  @coerceBooleanProperty()
+  disabled: any = false;
 
   private _images!: RecipeImage[] | null;
 

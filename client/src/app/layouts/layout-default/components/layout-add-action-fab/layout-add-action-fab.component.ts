@@ -1,3 +1,4 @@
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,8 +17,8 @@ import { CreateCookbookDialogComponent } from 'src/app/pages/cookbooks/component
 })
 export class LayoutAddActionFabComponent {
   @Input()
-  set disabled(disabled: boolean) {
-    this._disabled = disabled;
+  set disabled(disabled: any) {
+    this._disabled = coerceBooleanProperty(disabled);
 
     if (disabled) {
       this.isOpen = false;

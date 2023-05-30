@@ -1,9 +1,9 @@
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
+import { coerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
 import { toPromise } from 'src/app/core/helpers/to-promise';
 import { EditIngredientData } from 'src/app/core/models/ingredient';
@@ -23,15 +23,8 @@ const Logger = new LoggerClass('Recipes');
 })
 export class EditRecipeDetailsComponent {
   @Input()
-  set disabled(disable: any) {
-    this._disabled = coerceBooleanProperty(disable);
-  }
-
-  get disabled() {
-    return this._disabled;
-  }
-
-  private _disabled = false;
+  @coerceBooleanProperty()
+  disabled: any = false;
 
   @Input() recipe!: DetailedRecipe | null;
 
@@ -236,4 +229,3 @@ export class EditRecipeDetailsComponent {
     return true;
   }
 }
-

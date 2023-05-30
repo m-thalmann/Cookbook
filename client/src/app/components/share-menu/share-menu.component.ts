@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { TranslocoModule } from '@ngneat/transloco';
+import { coerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
@@ -22,7 +23,9 @@ export class ShareMenuComponent {
 
   @Input() showPrint = false;
 
-  @Input() disabled = false;
+  @Input()
+  @coerceBooleanProperty()
+  disabled: any = false;
 
   constructor(private clipboard: Clipboard, private snackbar: SnackbarService) {}
 

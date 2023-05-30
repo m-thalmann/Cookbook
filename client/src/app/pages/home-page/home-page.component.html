@@ -61,7 +61,7 @@
                 color="primary"
                 class="show-more-items"
                 [disabled]="getRemainingItems(vm.recipes?.body?.meta) === 0"
-                *ngIf="!vm.recipesError"
+                *ngIf="!vm.recipesError && (!vm.recipes || getRemainingItems(vm.recipes?.body?.meta) > 0)"
             >
                 <div class="button-wrapper">
                     <mat-icon>restaurant</mat-icon>
