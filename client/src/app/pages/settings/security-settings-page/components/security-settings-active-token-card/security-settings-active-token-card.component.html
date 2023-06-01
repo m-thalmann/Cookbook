@@ -8,7 +8,7 @@
         ></span>
 
         <mat-icon>
-            {{ token.user_agent_details?.name_key === 'androidChrome' ? 'smartphone' : 'laptop' }}
+            {{ token.user_agent_details?.is_mobile ? 'smartphone' : 'laptop' }}
         </mat-icon>
 
         <span class="updated-at">
@@ -53,11 +53,7 @@
                 <tr>
                     <td>{{ 'pages.settings.children.security.browser' | transloco }}:</td>
                     <td>
-                        {{
-                            token.user_agent_details
-                                ? token.user_agent_details.name + ' ' + token.user_agent_details.version
-                                : '-'
-                        }}
+                        {{ token.user_agent_details ? token.user_agent_details.browser : '-' }}
                     </td>
                 </tr>
             </tbody>

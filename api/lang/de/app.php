@@ -11,11 +11,5 @@ return [
     |
     */
 
-    'browsers' => [
-        'edge' => 'Microsoft Edge',
-        'firefox' => 'Mozilla Firefox',
-        'chrome' => 'Google Chrome',
-        'safari' => 'Apple Safari',
-        'androidChrome' => 'Google Chrome auf Android',
-    ],
+    'unknown' => 'Unbekannt',
 ];

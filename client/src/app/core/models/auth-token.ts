@@ -10,10 +10,10 @@ export interface AuthToken {
   ip_host: string | null;
   user_agent: string | null;
   user_agent_details: {
-    name: string;
-    name_key: string;
+    browser: string;
     os: string;
-    version: string;
+    is_desktop: boolean;
+    is_mobile: boolean;
   } | null;
   revoked_at: number | null;
   expires_at: number | null;

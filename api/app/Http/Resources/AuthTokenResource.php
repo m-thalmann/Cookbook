@@ -3,35 +3,10 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Jenssegers\Agent\Agent;
 use TokenAuth\TokenAuth;
 
 class AuthTokenResource extends JsonResource {
-    /**
-     * @var array User-Agent information that should be parsed and displayed to the user
-     *
-     * @see https://github.com/nextcloud/server/blob/e5497d285be700e1f4953deb620cd3a5a1a2798b/apps/settings/src/components/AuthToken.vue
-     */
-    private const USER_AGENTS = [
-        // Microsoft Edge User Agent from https://msdn.microsoft.com/en-us/library/hh869301(v=vs.85).aspx
-        'edge' =>
-            "/^Mozilla\/5\.0 \([^)]+\) AppleWebKit\/[0-9.]+ \(KHTML, like Gecko\) Chrome\/[0-9.]+ (?:Mobile Safari|Safari)\/[0-9.]+ Edge\/[0-9.]+$/",
-
-        // Firefox User Agent from https://developer.mozilla.org/en-US/docs/Web/HTTP/Gecko_user_agent_string_reference
-        'firefox' =>
-            "/^Mozilla\/5\.0 \([^)]*(Windows|OS X|Linux)[^)]+\) Gecko\/[0-9.]+ Firefox\/([0-9.]+)$/",
-
-        // Chrome User Agent from https://developer.chrome.com/multidevice/user-agent
-        'chrome' =>
-            "/^Mozilla\/5\.0 \([^)]*(Windows|OS X|Linux)[^)]+\) AppleWebKit\/[0-9.]+ \(KHTML, like Gecko\) Chrome\/([0-9.]+) (?:Mobile Safari|Safari)\/[0-9.]+$/",
-
-        // Safari User Agent from http://www.useragentstring.com/pages/Safari/
-        'safari' =>
-            "/^Mozilla\/5\.0 \([^)]*(Windows|OS X)[^)]+\) AppleWebKit\/[0-9.]+ \(KHTML, like Gecko\)(?: Version\/([0-9.]+))? Safari\/[0-9.A-Z]+$/",
-
-        // Android Chrome user agent: https://developers.google.com/chrome/mobile/docs/user-agent
-        'androidChrome' => '/Android.*(?:; (.*) Build\/).*Chrome\/([0-9.]+)/',
-    ];
-
     /**
      * Transform the resource into an array.
      *
@@ -54,18 +29,33 @@ class AuthTokenResource extends JsonResource {
 
     protected function getUserAgentDetails() {
         if ($this->user_agent !== null) {
-            foreach (self::USER_AGENTS as $userAgent => $pattern) {
-                if (preg_match($pattern, $this->user_agent, $matches) === 1) {
-                    return [
-                        'name' => __("app.browsers.$userAgent"),
-                        'name_key' => $userAgent,
-                        'os' => $matches[1],
-                        'version' => $matches[2],
-                    ];
-                }
-            }
+            $agent = new Agent();
+            $agent->setUserAgent($this->user_agent);
+
+            return [
+                'browser' => $this->getFullName($agent, $agent->browser()),
+                'os' => $this->getFullName($agent, $agent->platform()),
+                'is_desktop' => $agent->isDesktop(),
+                'is_mobile' => $agent->isMobile(),
+            ];
         }
 
         return null;
+    }
+
+    protected function getFullName(Agent $agent, string|null $property) {
+        if ($property === null) {
+            return __('app.unknown');
+        }
+
+        $version = $agent->version($property);
+
+        $fullName = $property;
+
+        if ($version !== false) {
+            $fullName .= ' ' . $version;
+        }
+
+        return $fullName;
     }
 }

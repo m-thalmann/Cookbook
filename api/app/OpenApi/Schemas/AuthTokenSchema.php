@@ -58,20 +58,20 @@ class AuthTokenSchema extends SchemaFactory implements Reusable {
                 Schema::object('user_agent_details')
                     ->nullable()
                     ->properties(
-                        Schema::string('name')->description(
-                            'The name of the browser'
-                        ),
-                        Schema::string('name_key')->description(
-                            'The browser\'s name key'
+                        Schema::string('browser')->description(
+                            'The full name of the browser (including the versions)'
                         ),
                         Schema::string('os')->description(
                             'The operating system'
                         ),
-                        Schema::string('version')->description(
-                            'The version of the browser'
+                        Schema::boolean('is_desktop')->description(
+                            'Whether the user-agent is a desktop browser'
+                        ),
+                        Schema::boolean('is_mobile')->description(
+                            'Whether the user-agent is a mobile browser'
                         )
                     )
-                    ->required('name', 'name_key', 'os', 'version'),
+                    ->required('browser', 'os', 'is_desktop', 'is_mobile'),
                 Schema::integer('revoked_at')
                     ->nullable()
                     ->description('Unix-timestamp when the token was revoked')
