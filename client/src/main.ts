@@ -16,7 +16,7 @@ import {
   bootstrapApplication,
 } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import { provideRouter, withInMemoryScrolling, withPreloading } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from './environments/environment';
 
@@ -34,6 +34,7 @@ import { AppComponent } from './app/app.component';
 import { LanguageService } from './app/core/language/language.service';
 import { TranslocoRootModule } from './app/core/language/transloco-root.module';
 import { CustomPaginatorIntl } from './app/core/material/custom-paginator-intl';
+import { ConditionalPreloadStrategy } from './app/core/routes/conditional-preload-strategy';
 import routes from './app/routes';
 
 if (environment.production) {
@@ -67,7 +68,11 @@ class CustomHammerConfig extends HammerGestureConfig {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'enabled' })),
+    provideRouter(
+      routes,
+      withInMemoryScrolling({ scrollPositionRestoration: 'enabled' }),
+      withPreloading(ConditionalPreloadStrategy)
+    ),
     provideHttpClient(withInterceptorsFromDi()),
     importProvidersFrom([
       BrowserModule,

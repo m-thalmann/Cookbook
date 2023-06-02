@@ -47,14 +47,15 @@ export default [
       {
         path: 'home',
         loadComponent: () => import('./pages/home-page/home-page.component').then((comp) => comp.HomePageComponent),
-        data: { showAddButton: true },
+        data: { preload: true, showAddButton: true },
       },
-      { path: 'recipes', loadChildren: () => import('./pages/recipes/routes') },
+      { path: 'recipes', loadChildren: () => import('./pages/recipes/routes'), data: { preload: true } },
       {
         path: 'cookbooks',
         canActivate: [AuthGuard],
         runGuardsAndResolvers: 'always',
         loadChildren: () => import('./pages/cookbooks/routes'),
+        data: { preload: true },
       },
       {
         path: 'settings',
@@ -65,6 +66,7 @@ export default [
         path: 'not-found',
         loadComponent: () =>
           import('./pages/not-found-page/not-found-page.component').then((comp) => comp.NotFoundPageComponent),
+        data: { preload: true },
       },
     ],
   },
