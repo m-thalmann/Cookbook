@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component, Input, Output } from '@angular/core
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
-import { coerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
+import { CoerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
 import { toPromise } from 'src/app/core/helpers/to-promise';
 import { EditRecipeFormData } from 'src/app/core/models/recipe';
@@ -23,7 +23,7 @@ const Logger = new LoggerClass('Recipes');
 })
 export class CreateRecipeDetailsComponent {
   @Input()
-  @coerceBooleanProperty()
+  @CoerceBooleanProperty()
   disabled: any = false;
 
   @Output() saving = new BehaviorSubject<boolean>(false);

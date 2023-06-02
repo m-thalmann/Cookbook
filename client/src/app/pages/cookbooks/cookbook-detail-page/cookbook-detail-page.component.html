@@ -19,7 +19,7 @@
     >
         <app-cookbook-header
             [cookbook]="vm.cookbook?.body?.data || null"
-            [showEditButton]="true"
+            showEditButton
             *ngIf="!vm.cookbookError"
         ></app-cookbook-header>
 

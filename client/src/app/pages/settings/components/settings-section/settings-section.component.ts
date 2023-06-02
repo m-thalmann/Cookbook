@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { CoerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
 
 @Component({
   selector: 'app-settings-section',
@@ -16,5 +17,7 @@ export class SettingsSectionComponent {
 
   @Input() titleColor: 'primary' | 'accent' | 'warn' | null = null;
 
-  @Input() warn = false;
+  @Input()
+  @CoerceBooleanProperty()
+  warn: any = false;
 }

@@ -17,7 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { TranslocoModule } from '@ngneat/transloco';
 import { EMPTY, Observable, ReplaySubject, combineLatest, map, shareReplay, startWith } from 'rxjs';
-import { coerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
+import { CoerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
 import { SimpleIngredient } from 'src/app/core/models/ingredient';
 import { FormIngredient } from '../../edit-recipe-details-form.component';
 
@@ -45,7 +45,7 @@ export class EditRecipeIngredientFormGroupComponent implements AfterViewInit {
   @Input() ingredientKey!: string;
 
   @Input()
-  @coerceBooleanProperty()
+  @CoerceBooleanProperty()
   disabled: any = false;
 
   @Input()

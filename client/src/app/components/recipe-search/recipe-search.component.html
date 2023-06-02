@@ -13,7 +13,7 @@
 >
     <app-search-bar
         [searchOnSubmit]="false"
-        [clearable]="true"
+        clearable
         [initialValue]="vm.filters?.search || null"
         (search)="doSearch($event)"
         [disabled]="!!vm.recipesLoading"
@@ -126,7 +126,7 @@
         [pageIndex]="vm.paginationOptions?.page !== null ? vm.paginationOptions!.page - 1 : null"
         [pageSize]="vm.paginationOptions?.perPage"
         [pageSizeOptions]="[6, 12, 18, 24, 30]"
-        [showFirstLastButtons]="true"
+        showFirstLastButtons
         (page)="onPagination($event)"
         [disabled]="vm.recipesLoading"
         *ngIf="(vm.recipes?.body?.data?.length || 0) > 0"

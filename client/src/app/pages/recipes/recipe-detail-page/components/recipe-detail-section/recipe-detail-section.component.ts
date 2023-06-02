@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { CoerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
 
 @Component({
   selector: 'app-recipe-detail-section',
@@ -10,5 +11,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeDetailSectionComponent {
-  @Input() hideHeader = false;
+  @Input()
+  @CoerceBooleanProperty()
+  hideHeader: any = false;
 }

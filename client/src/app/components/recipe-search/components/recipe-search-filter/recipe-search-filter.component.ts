@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { coerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
+import { CoerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
 
 @Component({
   selector: 'app-recipe-search-filter',
@@ -16,7 +16,7 @@ import { coerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-prope
 export class RecipeSearchFilterComponent {
   @HostBinding('class.disabled')
   @Input()
-  @coerceBooleanProperty()
+  @CoerceBooleanProperty()
   disabled: any = false;
 
   @HostBinding('class.error')

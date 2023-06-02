@@ -19,6 +19,7 @@ import { EditorComponent } from 'src/app/components/editor/editor.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { ServerValidationHelper } from 'src/app/core/forms/ServerValidationHelper';
+import { CoerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
 import { trimAndNull } from 'src/app/core/helpers/trim-and-null';
 import { Ingredient } from 'src/app/core/models/ingredient';
 import { DetailedRecipe, EditRecipeFormData } from 'src/app/core/models/recipe';
@@ -74,22 +75,11 @@ export class EditRecipeDetailsFormComponent {
     } else {
       this.form.enable();
     }
-
-    this.disabled$.next(isDisabled);
   }
-
-  disabled$ = new BehaviorSubject<boolean>(false);
 
   @Input()
-  set loading(loading: any) {
-    this._loading = coerceBooleanProperty(loading);
-  }
-
-  get loading() {
-    return this._loading;
-  }
-
-  private _loading = false;
+  @CoerceBooleanProperty()
+  loading: any = false;
 
   @Input()
   set serverErrorResponse(errorResponse: HttpErrorResponse | null) {
@@ -132,7 +122,7 @@ export class EditRecipeDetailsFormComponent {
     tap(() => this.form.controls.cookbookId.disable()),
     switchMap(() => this.api.cookbooks.getEditableList()),
     tap(() => {
-      if (!this.disabled$.value) {
+      if (!this.form.disabled) {
         this.form.controls.cookbookId.enable();
       }
     }),
@@ -376,4 +366,3 @@ export class EditRecipeDetailsFormComponent {
     return container?.querySelector(`input[formControlName="${field}"]`);
   }
 }
-

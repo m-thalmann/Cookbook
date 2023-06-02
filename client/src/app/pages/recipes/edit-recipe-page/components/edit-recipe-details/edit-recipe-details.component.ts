@@ -3,7 +3,7 @@ import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ApiService } from 'src/app/core/api/api.service';
-import { coerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
+import { CoerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
 import { toPromise } from 'src/app/core/helpers/to-promise';
 import { EditIngredientData } from 'src/app/core/models/ingredient';
@@ -23,7 +23,7 @@ const Logger = new LoggerClass('Recipes');
 })
 export class EditRecipeDetailsComponent {
   @Input()
-  @coerceBooleanProperty()
+  @CoerceBooleanProperty()
   disabled: any = false;
 
   @Input() recipe!: DetailedRecipe | null;

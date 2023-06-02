@@ -1,4 +1,8 @@
 <h2>
+    <button mat-icon-button (click)="routeHelper.navigateBack()" *ngIf="showBackButton">
+        <mat-icon>arrow_back</mat-icon>
+    </button>
+
     <mat-icon color="primary">menu_book</mat-icon>
 
     <span *ngIf="cookbook; else loading">

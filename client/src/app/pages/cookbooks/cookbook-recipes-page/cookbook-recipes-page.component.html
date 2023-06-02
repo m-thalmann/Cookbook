@@ -1,7 +1,7 @@
 <ng-container *ngIf="{ cookbook: cookbook$ | async, error: error$ | async } as vm">
     <app-cookbook-header
         [cookbook]="vm.cookbook?.body?.data || null"
-        [showBackButton]="true"
+        showBackButton
         *ngIf="!vm.error"
     ></app-cookbook-header>
 

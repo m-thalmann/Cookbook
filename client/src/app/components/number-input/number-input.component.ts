@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { CoerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
 import { AmountPipe } from 'src/app/core/pipes/amount.pipe';
 
 @Component({
@@ -26,7 +27,9 @@ export class NumberInputComponent implements ControlValueAccessor {
 
   @Input() stepFunction?: (currentValue: number, direction: 'up' | 'down') => number;
 
-  @Input() inputEnabled = true;
+  @Input()
+  @CoerceBooleanProperty()
+  inputEnabled: any = true;
 
   @Input() defaultValue?: number;
 

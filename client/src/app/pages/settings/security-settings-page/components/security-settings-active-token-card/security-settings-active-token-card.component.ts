@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoModule } from '@ngneat/transloco';
 import { SkeletonComponent } from 'src/app/components/skeleton/skeleton.component';
-import { coerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
+import { CoerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
 import { AuthToken } from 'src/app/core/models/auth-token';
 
 @Component({
@@ -20,7 +20,7 @@ export class SecuritySettingsActiveTokenCardComponent {
   @Input() token!: AuthToken | null;
 
   @Input()
-  @coerceBooleanProperty()
+  @CoerceBooleanProperty()
   disabled: any = false;
 
   @Output() logout = new EventEmitter<void>();

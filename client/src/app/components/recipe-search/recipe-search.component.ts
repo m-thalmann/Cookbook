@@ -21,6 +21,7 @@ import {
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { RepeatDirective } from 'src/app/core/directives/repeat.directive';
+import { CoerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
 import { PaginationMeta } from 'src/app/core/models/pagination-meta';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
 import { ListRecipe, RecipeFilters } from 'src/app/core/models/recipe';
@@ -80,7 +81,9 @@ export class RecipeSearchComponent {
     }>
   >;
 
-  @Input() showAllFilter = true;
+  @Input()
+  @CoerceBooleanProperty()
+  showAllFilter: any = true;
 
   readonly availableSortOptions: AvailableSortOption[] = [
     { column: 'name', nameTranslateKey: 'general.name', icon: 'drive_file_rename_outline' },

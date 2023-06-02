@@ -18,7 +18,7 @@
         (deleteRecipe)="deleteRecipe()"
     ></app-recipe-detail-header>
 
-    <app-recipe-detail-section [hideHeader]="true" class="properties">
+    <app-recipe-detail-section hideHeader class="properties">
         <ng-container content>
             <ng-container *ngIf="recipe; else propertiesLoading">
                 <div class="property-total-time" *ngIf="totalTime">

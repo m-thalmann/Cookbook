@@ -12,7 +12,7 @@ import { ImageSliderDialogComponent } from 'src/app/components/image-slider-dial
 import { SkeletonComponent } from 'src/app/components/skeleton/skeleton.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { RepeatDirective } from 'src/app/core/directives/repeat.directive';
-import { coerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
+import { CoerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
 import { toPromise } from 'src/app/core/helpers/to-promise';
 import { DetailedRecipe } from 'src/app/core/models/recipe';
@@ -33,7 +33,7 @@ export class EditRecipeImagesComponent implements OnDestroy {
   private subSink = new Subscription();
 
   @Input()
-  @coerceBooleanProperty()
+  @CoerceBooleanProperty()
   disabled: any = false;
 
   @Input() recipe!: DetailedRecipe | null;

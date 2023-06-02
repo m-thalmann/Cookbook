@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { TranslocoModule } from '@ngneat/transloco';
-import { coerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
+import { CoerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
 @Component({
@@ -21,10 +21,12 @@ export class ShareMenuComponent {
   @Input() url: string = location.href;
   @Input() text?: string;
 
-  @Input() showPrint = false;
+  @Input()
+  @CoerceBooleanProperty()
+  showPrint: any = false;
 
   @Input()
-  @coerceBooleanProperty()
+  @CoerceBooleanProperty()
   disabled: any = false;
 
   constructor(private clipboard: Clipboard, private snackbar: SnackbarService) {}
