@@ -97,6 +97,7 @@
     "areYouSure": "Are you sure?",
     "accountDeleted": "Account deleted successfully",
     "cookbookCreated": "Cookbook created successfully",
+    "cookbookUpdated": "Cookbook updated successfully",
     "emailVerified": "Email successfully verified!",
     "errors": {
       "clearingTrash": "Error clearing trash",
@@ -113,6 +114,7 @@
       "sendingResetEmail": "Error sending reset email",
       "sendingVerificationEmail": "Error sending verification email",
       "unexpectedError": "An unexpected error has occurred",
+      "userCantEditCookbook": "You can't edit this cookbook",
       "userCantEditRecipe": "You can't edit this recipe",
       "verifyingEmail": "Error verifying email. Please try again"
     },
@@ -138,6 +140,14 @@
     "verificationEmailSent": "Verification email sent successfully"
   },
   "pages": {
+    "cookbooks": {
+      "children": {
+        "edit": {
+          "manageUsers": "Manage users",
+          "deleteCookbook": "Delete cookbook"
+        }
+      }
+    },
     "home": {
       "title": "Home"
     },

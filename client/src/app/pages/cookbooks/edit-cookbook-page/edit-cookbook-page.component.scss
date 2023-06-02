@@ -1,0 +1,15 @@
+@use 'variables' as *;
+
+section {
+  padding: 0 $layout-padding;
+
+  &:not(:last-of-type) {
+    margin-bottom: 2em;
+  }
+
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+  }
+}

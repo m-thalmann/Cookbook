@@ -1,0 +1,46 @@
+@use 'mixins';
+
+form {
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+
+    margin-bottom: 1em;
+
+    mat-form-field {
+      height: fit-content;
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+
+    button,
+    >span {
+      width: 100%;
+    }
+  }
+}
+
+@include mixins.desktop() {
+  form {
+    .form-container {
+      mat-form-field {
+        width: 30%;
+      }
+    }
+
+    .form-actions {
+      flex-direction: row;
+
+      button,
+      >span {
+        width: unset;
+      }
+    }
+  }
+}
