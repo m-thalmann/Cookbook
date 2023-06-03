@@ -48,7 +48,7 @@
                         {{ recipe.name }}
                     </td>
                     <td>
-                        {{ recipe.deleted_at! * 1000 | date: 'dd.MM.y HH:mm:ss' }}
+                        {{ recipe.deleted_at! * 1000 | i18nDate: true }}
                     </td>
                     <td class="center">
                         <button

@@ -15,6 +15,7 @@ import { toPromise } from 'src/app/core/helpers/to-promise';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
 import { ListRecipe } from 'src/app/core/models/recipe';
 import { PLACEHOLDER_RECIPE_IMAGE_URL } from 'src/app/core/models/recipe-image';
+import { I18nDatePipe } from 'src/app/core/pipes/i18n-date.pipe';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 
@@ -32,6 +33,7 @@ const Logger = new LoggerClass('Recipes');
     MatIconModule,
     MatProgressSpinnerModule,
     ErrorDisplayComponent,
+    I18nDatePipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

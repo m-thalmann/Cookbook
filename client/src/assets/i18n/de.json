@@ -45,6 +45,8 @@
     "showAmountMore": "[[ amount, =1 '1 weiteres Kochbuch anzeigen', default '{{amount}} weitere Kochbücher anzeigen' ]]",
     "singleLoadingError": "Kochbuch konnte nicht geladen werden."
   },
+  "dateFormat": "dd.MM.y",
+  "dateTimeFormat": "dd.MM.y HH:mm:ss",
   "editor": {
     "addLink": "Link hinzufügen",
     "bold": "Fett",

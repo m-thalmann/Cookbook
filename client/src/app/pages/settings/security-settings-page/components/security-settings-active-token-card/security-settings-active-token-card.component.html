@@ -15,7 +15,7 @@
             <label>
                 {{ 'general.lastUpdated' | transloco }}
             </label>
-            {{ token.created_at * 1000 | date: 'dd.MM.y HH:mm:ss' }}
+            {{ token.created_at * 1000 | i18nDate: true }}
         </span>
 
         <button mat-icon-button (click)="expanded = !expanded">

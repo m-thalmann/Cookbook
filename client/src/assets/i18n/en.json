@@ -45,6 +45,8 @@
     "showAmountMore": "[[ amount, =1 'Show 1 more cookbook', default 'Show {{amount}} more cookbooks' ]]",
     "singleLoadingError": "Cookbook could not be loaded."
   },
+  "dateFormat": "dd/MM/y",
+  "dateTimeFormat": "dd/MM/y HH:mm:ss",
   "editor": {
     "addLink": "Add link",
     "bold": "Bold",
