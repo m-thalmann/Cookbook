@@ -57,7 +57,7 @@ export class EditRecipeDetailsComponent {
       if (e instanceof HttpErrorResponse) {
         error = e;
       } else {
-        const errorMessage = this.snackbar.exception(e, {});
+        const errorMessage = this.snackbar.exception(e, {}).message;
 
         Logger.error('Error updating recipe:', errorMessage, e);
       }
@@ -75,7 +75,7 @@ export class EditRecipeDetailsComponent {
           error.error.errors = { ...error.error.errors, ...e.error.errors };
         }
       } else {
-        const errorMessage = this.snackbar.exception(e, {});
+        const errorMessage = this.snackbar.exception(e, {}).message;
 
         Logger.error('Error updating ingredients:', errorMessage, e);
       }

@@ -54,7 +54,7 @@ export class CreateRecipeDetailsComponent {
       if (e instanceof HttpErrorResponse) {
         this.serverErrorResponse$.next(e);
       } else {
-        const errorMessage = this.snackbar.exception(e, {});
+        const errorMessage = this.snackbar.exception(e, {}).message;
 
         Logger.error('Error creating recipe:', errorMessage, e);
       }

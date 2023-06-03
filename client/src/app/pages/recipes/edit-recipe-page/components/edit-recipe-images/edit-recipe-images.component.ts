@@ -64,7 +64,7 @@ export class EditRecipeImagesComponent implements OnDestroy {
         .create(this.recipe.id, files[0])
         .pipe(
           catchError((e) => {
-            const errorMessage = this.snackbar.exception(e, {});
+            const errorMessage = this.snackbar.exception(e, {}).message;
 
             Logger.error('Error uploading image:', errorMessage, e);
 

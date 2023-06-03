@@ -83,11 +83,10 @@ export class CreateCookbookDialogComponent {
       this.saving$.next(false);
 
       if (!(e instanceof HttpErrorResponse && ServerValidationHelper.setValidationErrors(e, this.form))) {
-        const errorMessage = this.snackbar.exception(e, {});
+        const errorMessage = this.snackbar.exception(e, {}).message;
 
         Logger.error('Error creating cookbook:', errorMessage, e);
       }
     }
   }
 }
-

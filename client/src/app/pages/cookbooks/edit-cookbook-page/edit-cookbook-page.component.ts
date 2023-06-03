@@ -1,14 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslocoModule } from '@ngneat/transloco';
+import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { BehaviorSubject, EMPTY, combineLatest, of, shareReplay, startWith, switchMap } from 'rxjs';
+import { ConfirmDialogComponent } from 'src/app/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
+import { toPromise } from 'src/app/core/helpers/to-promise';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { CookbookHeaderComponent } from '../components/cookbook-header/cookbook-header.component';
@@ -82,7 +85,9 @@ export class EditCookbookPageComponent {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private auth: AuthService,
-    private snackbar: SnackbarService
+    private snackbar: SnackbarService,
+    private dialog: MatDialog,
+    private transloco: TranslocoService
   ) {}
 
   onDetailsSaving(saving: boolean) {
@@ -94,6 +99,40 @@ export class EditCookbookPageComponent {
   }
 
   async deleteCookbook() {
-    // TODO: implement
+    const confirmed = await toPromise(
+      this.dialog
+        .open(ConfirmDialogComponent, {
+          data: {
+            title: this.transloco.translate('messages.areYouSure'),
+            content: this.transloco.translate('messages.thisActionCantBeUndone'),
+            btnConfirm: this.transloco.translate('actions.confirm'),
+            btnDecline: this.transloco.translate('actions.abort'),
+            warn: true,
+          },
+        })
+        .afterClosed()
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.deleting$.next(true);
+
+    const cookbookId = await toPromise(this.cookbookId$);
+
+    try {
+      await toPromise(this.api.cookbooks.delete(cookbookId));
+
+      this.snackbar.info('messages.cookbookDeleted', { translateMessage: true });
+
+      this.router.navigateByUrl('/cookbooks');
+    } catch (e) {
+      const errorMessage = this.snackbar.exception(e, {}).message;
+
+      Logger.error('Error deleting cookbook:', errorMessage, e);
+    }
+
+    this.deleting$.next(false);
   }
 }

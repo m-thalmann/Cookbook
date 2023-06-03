@@ -102,6 +102,7 @@
     "areYouSure": "Bist du dir sicher?",
     "accountDeleted": "Konto wurde gelöscht",
     "cookbookCreated": "Kochbuch wurde erfolgreich erstellt",
+    "cookbookDeleted": "Kochbuch wurde erfolgreich gelöscht",
     "cookbookUpdated": "Kochbuch wurde erfolgreich aktualisiert",
     "emailVerified": "E-Mail erfolgreich verifiziert!",
     "errors": {

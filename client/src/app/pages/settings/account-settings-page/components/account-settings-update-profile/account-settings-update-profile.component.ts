@@ -92,7 +92,7 @@ export class AccountSettingsUpdateProfileComponent implements OnDestroy {
     };
 
     if (hasChangedEmail) {
-      const confirmedPassword: string | null = await toPromise(
+      const confirmedPassword: string | null | undefined = await toPromise(
         this.dialog
           .open(PromptDialogComponent, {
             data: {

@@ -112,7 +112,7 @@ export class LoginPageComponent implements OnDestroy {
   }
 
   async openResetPasswordDialog() {
-    const email: string | null = await toPromise(
+    const email: string | null | undefined = await toPromise(
       this.dialog
         .open(PromptDialogComponent, {
           width: '400px',

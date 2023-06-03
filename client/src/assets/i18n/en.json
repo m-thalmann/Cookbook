@@ -102,6 +102,7 @@
     "areYouSure": "Are you sure?",
     "accountDeleted": "Account deleted successfully",
     "cookbookCreated": "Cookbook created successfully",
+    "cookbookDeleted": "Cookbook deleted successfully",
     "cookbookUpdated": "Cookbook updated successfully",
     "emailVerified": "Email successfully verified!",
     "errors": {
