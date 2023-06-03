@@ -25,4 +25,6 @@ return [
     ],
 
     'not_available_in_demo' => 'This action is not available in demo mode.',
+
+    'user_already_in_cookbook' => 'The user is already in this cookbook.',
 ];

@@ -20,7 +20,7 @@ form {
     gap: 1em;
 
     button,
-    >span {
+    > span {
       width: 100%;
     }
   }
@@ -38,7 +38,7 @@ form {
       flex-direction: row;
 
       button,
-      >span {
+      > span {
         width: unset;
       }
     }

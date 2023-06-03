@@ -1,0 +1,94 @@
+<ng-container
+    *ngIf="{
+        authUser: auth.user$ | async,
+        users: users$ | async,
+        loading: loading$ | async,
+        saving: saving | async,
+        error: error$ | async
+    } as vm"
+>
+    <div class="actions">
+        <button
+            mat-raised-button
+            color="primary"
+            (click)="doAddUser()"
+            [disabled]="vm.loading || vm.saving || disabled"
+        >
+            <mat-icon>person_add</mat-icon> {{ 'pages.cookbooks.children.edit.addUser' | transloco }}
+        </button>
+    </div>
+
+    <app-error-display [error]="vm.error">
+        <ng-template #otherErrorMessage>
+            {{ 'pages.cookbooks.children.edit.usersLoadingError' | transloco }}
+        </ng-template>
+    </app-error-display>
+
+    <div class="users-list" *ngIf="!vm.error">
+        <table>
+            <thead>
+                <tr>
+                    <th>{{ 'general.name' | transloco }}</th>
+                    <th>{{ 'general.email' | transloco }}</th>
+                    <th>{{ 'general.added' | transloco }}</th>
+                    <th class="center">{{ 'general.admin' | transloco }}</th>
+                    <th class="center">{{ 'actions.delete' | transloco }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of vm.users?.users; trackBy: trackByUser">
+                    <td>
+                        {{ user.name }}
+                    </td>
+                    <td>
+                        <a [href]="'mailto:' + user.email">
+                            {{ user.email }}
+                        </a>
+                    </td>
+                    <td>
+                        {{ user.meta.created_at * 1000 | i18nDate: true }}
+                    </td>
+                    <td class="center">
+                        <mat-checkbox
+                            [checked]="user.meta.is_admin"
+                            [disabled]="vm.loading || vm.saving || user.id === vm.authUser?.id || disabled"
+                            (click)="updateIsAdmin(user)"
+                        ></mat-checkbox>
+                    </td>
+                    <td class="center">
+                        <button
+                            mat-icon-button
+                            color="warn"
+                            (click)="removeUser(user.id)"
+                            [disabled]="vm.loading || vm.saving || disabled"
+                        >
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+
+                <tr *ngIf="vm.loading && !vm.users?.users?.length">
+                    <td colspan="5">
+                        <mat-spinner [diameter]="32"></mat-spinner>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button
+        mat-raised-button
+        class="load-more-button"
+        color="accent"
+        (click)="nextPage()"
+        [disabled]="vm.loading || vm.saving || disabled"
+        *ngIf="vm.users?.hasMoreItems"
+    >
+        <div>
+            <mat-spinner *ngIf="vm.loading" [diameter]="20"></mat-spinner>
+            <mat-icon *ngIf="!vm.loading">south</mat-icon>
+
+            {{ 'actions.loadMore' | transloco }}
+        </div>
+    </button>
+</ng-container>

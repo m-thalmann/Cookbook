@@ -104,17 +104,25 @@ class CookbookUserController extends Controller {
 
         $this->authorizeAnonymously('update', $cookbook);
 
-        $data = $request->validate([
-            'user_id' => [
-                'bail',
-                'required',
-                'exists:App\Models\User,id',
-                Rule::unique('cookbook_user', 'user_id')->where(
-                    fn($query) => $query->where('cookbook_id', $cookbook->id)
-                ),
+        $data = $request->validate(
+            [
+                'user_id' => [
+                    'bail',
+                    'required',
+                    'exists:App\Models\User,id',
+                    Rule::unique('cookbook_user', 'user_id')->where(
+                        fn($query) => $query->where(
+                            'cookbook_id',
+                            $cookbook->id
+                        )
+                    ),
+                ],
+                'is_admin' => ['required', 'boolean'],
             ],
-            'is_admin' => ['required', 'boolean'],
-        ]);
+            [
+                'user_id.unique' => __('messages.user_already_in_cookbook'),
+            ]
+        );
 
         $cookbook->users()->attach($data['user_id'], [
             'is_admin' => $data['is_admin'],

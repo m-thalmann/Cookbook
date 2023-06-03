@@ -1,6 +1,7 @@
 {
   "actions": {
     "abort": "Abbrechen",
+    "add": "Hinzufügen",
     "cancel": "Abbrechen",
     "confirm": "Bestätigen",
     "copyLink": "Link kopieren",
@@ -58,6 +59,8 @@
     "unorderedList": "Ungeordnete Liste"
   },
   "general": {
+    "added": "Hinzugefügt",
+    "admin": "Admin",
     "auto": "Auto",
     "by": "von",
     "colorTheme": "Farbthema",
@@ -139,14 +142,19 @@
     "thisActionCantBeUndone": "Diese Aktion kann nicht rückgängig gemacht werden.",
     "trashCleared": "Papierkorb wurde endgültig geleert",
     "updateAvailable": "Eine neue Version ist verfügbar.",
+    "userAdded": "Benutzer wurde erfolgreich hinzugefügt",
+    "userRemoved": "Benutzer wurde erfolgreich entfernt",
+    "userUpdated": "Benutzer wurde erfolgreich aktualisiert",
     "verificationEmailSent": "Verifizierungs-E-Mail wurde gesendet"
   },
   "pages": {
     "cookbooks": {
       "children": {
         "edit": {
+          "addUser": "Benutzer hinzufügen",
+          "deleteCookbook": "Kochbuch löschen",
           "manageUsers": "Benutzer verwalten",
-          "deleteCookbook": "Kochbuch löschen"
+          "usersLoadingError": "Fehler beim Laden der Benutzer"
         }
       }
     },
@@ -246,5 +254,8 @@
       "total": "Gesamtzeit"
     },
     "viewTrash": "Papierkorb anzeigen"
+  },
+  "users": {
+    "notFound": "Benutzer konnte nicht gefunden werden."
   }
 }

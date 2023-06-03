@@ -22,6 +22,7 @@ use App\OpenApi\Responses\Users\UserShowDetailedResponse;
 use App\OpenApi\Responses\Users\UserShowResponse;
 use App\OpenApi\Responses\ValidationErrorResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -166,9 +167,11 @@ class UserController extends Controller {
         )
     ]
     public function showByEmail(string $email) {
-        return User::query()
-            ->where('email', $email)
-            ->firstOrFail();
+        return JsonResource::make(
+            User::query()
+                ->where('email', $email)
+                ->firstOrFail()
+        );
     }
 
     /**

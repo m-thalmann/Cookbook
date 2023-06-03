@@ -5,13 +5,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
 import { BehaviorSubject, EMPTY, combineLatest, of, shareReplay, startWith, switchMap } from 'rxjs';
+import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { CookbookHeaderComponent } from '../components/cookbook-header/cookbook-header.component';
-import { EditCookbookDetailsFormComponent } from './edit-cookbook-details-form/edit-cookbook-details-form.component';
+import { EditCookbookDetailsFormComponent } from './components/edit-cookbook-details-form/edit-cookbook-details-form.component';
+import { ManageCookbookUsersComponent } from './components/manage-cookbook-users/manage-cookbook-users.component';
 
 const Logger = new LoggerClass('Cookbooks');
 
@@ -25,6 +27,8 @@ const Logger = new LoggerClass('Cookbooks');
     MatButtonModule,
     CookbookHeaderComponent,
     EditCookbookDetailsFormComponent,
+    ManageCookbookUsersComponent,
+    ErrorDisplayComponent,
   ],
   templateUrl: './edit-cookbook-page.component.html',
   styleUrls: ['./edit-cookbook-page.component.scss'],

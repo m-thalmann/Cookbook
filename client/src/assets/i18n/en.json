@@ -1,6 +1,7 @@
 {
   "actions": {
     "abort": "Abort",
+    "add": "Add",
     "cancel": "Cancel",
     "confirm": "Confirm",
     "copyLink": "Copy link",
@@ -58,6 +59,8 @@
     "unorderedList": "Unordered list"
   },
   "general": {
+    "added": "Added",
+    "admin": "Admin",
     "auto": "Auto",
     "by": "by",
     "colorTheme": "Color theme",
@@ -139,14 +142,19 @@
     "thisActionCantBeUndone": "This action cannot be undone.",
     "trashCleared": "All trashed recipes deleted permanently",
     "updateAvailable": "A new update is available.",
+    "userAdded": "User added successfully",
+    "userRemoved": "User removed successfully",
+    "userUpdated": "User updated successfully",
     "verificationEmailSent": "Verification email sent successfully"
   },
   "pages": {
     "cookbooks": {
       "children": {
         "edit": {
+          "addUser": "Add user",
+          "deleteCookbook": "Delete cookbook",
           "manageUsers": "Manage users",
-          "deleteCookbook": "Delete cookbook"
+          "usersLoadingError": "Error loading users"
         }
       }
     },
@@ -246,5 +254,8 @@
       "total": "Total time"
     },
     "viewTrash": "View trash"
+  },
+  "users": {
+    "notFound": "User could not be found."
   }
 }

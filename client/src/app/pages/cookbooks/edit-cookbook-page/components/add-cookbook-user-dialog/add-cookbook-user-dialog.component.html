@@ -1,0 +1,74 @@
+<ng-container
+    *ngIf="{
+        foundUser: foundUser$ | async,
+        searching: searching$ | async,
+        searchingError: searchingError$ | async
+    } as vm"
+>
+    <h2 mat-dialog-title>
+        <mat-icon>person_add</mat-icon>
+        {{ 'pages.cookbooks.children.edit.addUser' | transloco }}
+    </h2>
+
+    <div mat-dialog-content>
+        <mat-form-field appearance="outline" hideRequiredMarker subscriptSizing="dynamic">
+            <mat-label>
+                {{ 'general.email' | transloco }}
+            </mat-label>
+            <input
+                matInput
+                type="email"
+                required
+                cdkFocusInitial
+                #searchInput
+                [disabled]="vm.searching"
+                (keyup.enter)="searchButton._elementRef.nativeElement.click()"
+            />
+            <div class="searchAction" matSuffix>
+                <button
+                    mat-icon-button
+                    color="primary"
+                    matSuffix
+                    #searchButton
+                    (click)="searchUser(searchInput.value)"
+                    [disabled]="!searchInput.checkValidity()"
+                    [class.hidden]="vm.searching"
+                >
+                    <mat-icon>search</mat-icon>
+                </button>
+                <mat-spinner [diameter]="24" *ngIf="vm.searching"></mat-spinner>
+            </div>
+        </mat-form-field>
+
+        <div class="found-user" *ngIf="vm.foundUser">
+            <mat-icon>account_circle</mat-icon>
+
+            <div class="details">
+                <span class="name">
+                    {{ vm.foundUser.name }}
+                </span>
+                <div class="email">
+                    {{ vm.foundUser.email }}
+                </div>
+            </div>
+
+            <button
+                mat-button
+                [mat-dialog-close]="vm.foundUser.id"
+                color="primary"
+                [disabled]="!vm.foundUser || vm.searching"
+            >
+                {{ 'actions.add' | transloco }}
+            </button>
+        </div>
+
+        <div class="error fg-warn" *ngIf="vm.searchingError">{{ vm.searchingError }}</div>
+    </div>
+
+    <div mat-dialog-actions align="end">
+        <button mat-button [mat-dialog-close]="null" [disabled]="vm.searching">
+            {{ 'actions.abort' | transloco }}
+        </button>
+    </div>
+</ng-container>
+
