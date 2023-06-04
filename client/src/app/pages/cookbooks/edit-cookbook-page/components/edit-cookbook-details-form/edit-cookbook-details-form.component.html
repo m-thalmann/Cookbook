@@ -5,9 +5,8 @@
                 <mat-icon matPrefix>drive_file_rename_outline</mat-icon>
                 <mat-label>{{ 'general.name' | transloco }}</mat-label>
                 <input matInput type="text" formControlName="name" />
-                <mat-error *ngIf="form.controls.name.getError('serverError') as serverError">{{
-                    serverError
-                    }}
+                <mat-error *ngIf="form.controls.name.getError('serverError') as serverError"
+                    >{{ serverError }}
                 </mat-error>
             </mat-form-field>
         </div>

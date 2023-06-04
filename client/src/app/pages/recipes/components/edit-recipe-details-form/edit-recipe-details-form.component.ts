@@ -1,4 +1,5 @@
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
@@ -45,6 +46,7 @@ export interface FormIngredient {
     CommonModule,
     ReactiveFormsModule,
     TranslocoModule,
+    DragDropModule,
     MatTooltipModule,
     MatFormFieldModule,
     MatInputModule,
@@ -277,6 +279,10 @@ export class EditRecipeDetailsFormComponent {
     this.form.controls.ingredients.removeAt(groupIndex);
   }
 
+  onIngredientReordered(ingredientGroup: FormGroup<FormIngredientGroup>, event: CdkDragDrop<unknown>) {
+    moveItemInArray(ingredientGroup.controls.ingredients.controls, event.previousIndex, event.currentIndex);
+  }
+
   onSubmit() {
     if (this.form.invalid) {
       return;
@@ -286,11 +292,12 @@ export class EditRecipeDetailsFormComponent {
       (allIngredients, ingredientGroup) => {
         const groupName = trimAndNull(ingredientGroup.controls.name.value);
 
-        const groupIngredients = ingredientGroup.controls.ingredients.controls.map((ingredient) => ({
+        const groupIngredients = ingredientGroup.controls.ingredients.controls.map((ingredient, index) => ({
           name: ingredient.controls.name.value,
           amount: ingredient.controls.amount.value,
           unit: trimAndNull(ingredient.controls.unit.value),
           group: groupName,
+          order_index: index,
           recipeIngredientId: ingredient.controls.recipeIngredientId.value,
         }));
 

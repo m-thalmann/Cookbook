@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Ingredient extends BaseModel {
     use HasFactory, QuerySortable, QuerySearchable;
 
-    protected $fillable = ['name', 'amount', 'unit', 'group'];
+    protected $fillable = ['name', 'amount', 'unit', 'group', 'order_index'];
 
     protected $hidden = [];
 
@@ -19,12 +19,20 @@ class Ingredient extends BaseModel {
         'amount' => null,
         'unit' => null,
         'group' => null,
+        'order_index' => 0,
     ];
 
     /*
      * Organize properties
      */
-    protected $sortableProperties = ['id', 'name', 'amount', 'unit', 'group'];
+    protected $sortableProperties = [
+        'id',
+        'name',
+        'amount',
+        'unit',
+        'group',
+        'order_index',
+    ];
     protected $searchProperties = ['name'];
 
     public function recipe() {
@@ -55,4 +63,3 @@ class Ingredient extends BaseModel {
         return !$query->exists();
     }
 }
-

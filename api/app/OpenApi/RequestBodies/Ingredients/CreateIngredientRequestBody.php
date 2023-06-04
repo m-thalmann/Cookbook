@@ -41,11 +41,11 @@ class CreateIngredientRequestBody extends RequestBodyFactory implements
                 ->description('The ingredient-group this ingredient belongs to')
                 ->nullable()
                 ->example('Topping'),
+            Schema::integer('order_index'),
         ];
     }
 
     public function getRequired(): array {
-        return ['name'];
+        return ['name', 'order_index'];
     }
 }
-

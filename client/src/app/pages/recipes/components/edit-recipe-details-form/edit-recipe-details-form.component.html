@@ -159,16 +159,29 @@
                         }}</mat-error>
                     </mat-form-field>
 
-                    <div class="ingredients" formArrayName="ingredients">
-                        <app-edit-recipe-ingredient-form-group
-                            [formControlGroup]="ingredient"
-                            [ingredientKey]="getIngredientKey(groupIndex, ingredientIndex)"
-                            [ingredientOptions]="vm.ingredients?.body?.data ?? null"
-                            [disabled]="form.disabled"
-                            (addIngredient)="addIngredient(groupIndex, null, true)"
-                            (removeIngredient)="removeIngredient(groupIndex, ingredientIndex)"
+                    <div
+                        class="ingredients"
+                        formArrayName="ingredients"
+                        cdkDropList
+                        (cdkDropListDropped)="onIngredientReordered(group, $event)"
+                    >
+                        <div
+                            class="ingredient"
                             *ngFor="let ingredient of group.controls.ingredients.controls; let ingredientIndex = index"
-                        ></app-edit-recipe-ingredient-form-group>
+                            cdkDrag
+                            cdkDragPreviewContainer="parent"
+                        >
+                            <mat-icon cdkDragHandle>drag_indicator</mat-icon>
+
+                            <app-edit-recipe-ingredient-form-group
+                                [formControlGroup]="ingredient"
+                                [ingredientKey]="getIngredientKey(groupIndex, ingredientIndex)"
+                                [ingredientOptions]="vm.ingredients?.body?.data ?? null"
+                                [disabled]="form.disabled"
+                                (addIngredient)="addIngredient(groupIndex, null, true)"
+                                (removeIngredient)="removeIngredient(groupIndex, ingredientIndex)"
+                            ></app-edit-recipe-ingredient-form-group>
+                        </div>
                     </div>
 
                     <div class="buttons">
@@ -228,4 +241,3 @@
         </div>
     </form>
 </ng-container>
-

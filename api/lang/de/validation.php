@@ -207,6 +207,7 @@ return [
         'is_verified' => 'Verifiziert',
         'language_code' => 'Sprach-Code',
         'name' => 'Name',
+        'order_index' => 'Reihenfolge-Index',
         'password' => 'Passwort',
         'portions' => 'Portionen',
         'preparation' => 'Zubereitung',

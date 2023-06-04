@@ -22,7 +22,9 @@ class RecipeResource extends JsonResource {
                 ->map(
                     fn($group, $key) => [
                         'group' => empty($key) ? null : $key,
-                        'items' => $group,
+                        'items' => collect($group)
+                            ->sortBy('order_index')
+                            ->values(),
                     ]
                 )
                 ->sortBy('group')
@@ -38,4 +40,3 @@ class RecipeResource extends JsonResource {
         return $array;
     }
 }
-

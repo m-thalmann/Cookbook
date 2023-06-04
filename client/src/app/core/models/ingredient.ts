@@ -3,6 +3,7 @@ export interface BaseIngredient {
   amount: number | null;
   unit: string | null;
   group: string | null;
+  order_index: number;
 }
 
 export interface Ingredient extends BaseIngredient {
@@ -22,6 +23,7 @@ export interface EditIngredientData {
   amount?: number | null;
   unit?: string | null;
   group?: string | null;
+  order_index?: number;
 }
 
 export interface EditRecipeFormIngredientData extends BaseIngredient {

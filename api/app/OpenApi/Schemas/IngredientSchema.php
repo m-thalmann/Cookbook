@@ -40,6 +40,11 @@ class IngredientSchema extends SchemaFactory implements Reusable {
                     )
                     ->nullable()
                     ->example('Topping'),
+                Schema::integer('order_index')
+                    ->description(
+                        'The order of the ingredient in the ingredient-group'
+                    )
+                    ->example(0),
                 Schema::integer('created_at')
                     ->description(
                         'The unix-timestamp when the ingredient was created'
@@ -58,9 +63,9 @@ class IngredientSchema extends SchemaFactory implements Reusable {
                 'amount',
                 'unit',
                 'group',
+                'order_index',
                 'created_at',
                 'updated_at'
             );
     }
 }
-

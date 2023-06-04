@@ -192,6 +192,7 @@ return [
         'is_verified' => 'verified',
         'language_code' => 'language code',
         'name' => 'name',
+        'order_index' => 'order index',
         'password' => 'password',
         'portions' => 'portions',
         'preparation' => 'preparation',

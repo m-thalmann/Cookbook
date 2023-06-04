@@ -144,6 +144,7 @@ class IngredientController extends Controller {
             'amount' => ['nullable', 'numeric', 'min:0'],
             'unit' => ['nullable', 'max:20'],
             'group' => ['nullable', 'max:20'],
+            'order_index' => ['integer', 'min:0'],
         ]);
 
         if (isset($data['name']) && $data['name'] === $ingredient->name) {
@@ -220,6 +221,7 @@ class IngredientController extends Controller {
             'amount' => ['nullable', 'numeric', 'min:0'],
             'unit' => ['nullable', 'max:20'],
             'group' => ['nullable', 'max:20'],
+            'order_index' => ['required', 'integer', 'min:0'],
         ])->validate();
 
         if (

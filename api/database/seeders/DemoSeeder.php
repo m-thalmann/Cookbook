@@ -71,6 +71,7 @@ class DemoSeeder extends Seeder {
             Ingredient::factory()
                 ->count(rand(1, 10))
                 ->for($recipe)
+                ->sequence(fn($sequence) => ['order_index' => $sequence->index])
                 ->create();
 
             try {

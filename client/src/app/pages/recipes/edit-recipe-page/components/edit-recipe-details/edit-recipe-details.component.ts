@@ -155,7 +155,7 @@ export class EditRecipeDetailsComponent {
 
       const updateIngredient: EditIngredientData = {};
 
-      const checkForUpdateKeys = ['name', 'amount', 'unit', 'group'] as const;
+      const checkForUpdateKeys = ['name', 'amount', 'unit', 'group', 'order_index'] as const;
 
       checkForUpdateKeys.forEach((key) => {
         if (ingredient[key] !== currentIngredient[key]) {

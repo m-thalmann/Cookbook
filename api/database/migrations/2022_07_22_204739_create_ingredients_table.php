@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->float('amount')->nullable();
             $table->string('unit', 20)->nullable();
             $table->string('group', 20)->nullable();
+            $table->integer('order_index');
             $table->timestamps();
 
             $table->unique(['recipe_id', 'name', 'group']);
@@ -37,4 +38,3 @@ return new class extends Migration {
         Schema::dropIfExists('ingredients');
     }
 };
-
