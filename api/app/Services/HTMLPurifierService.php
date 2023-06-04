@@ -15,7 +15,7 @@ class HTMLPurifierService {
     /**
      * Filters an HTML snippet/document to be XSS-free and standards-compliant.
      *
-     * @param string $html String of HTML to purify
+     * @param string|null $html String of HTML to purify
      * @param HTMLPurifier_Config $config Config object for this operation.
      *
      * @see HTMLPurifier::purify()
@@ -23,6 +23,10 @@ class HTMLPurifierService {
      * @return string Purified HTML
      */
     public function purify($html, $config = null) {
+        if ($html === null) {
+            return null;
+        }
+
         return $this->purifier->purify($html, $config);
     }
 }

@@ -3,7 +3,6 @@
 namespace Tests\Feature\Services;
 
 use App\Providers\HTMLPurifierServiceProvider;
-use App\Services\HCaptchaService;
 use App\Services\HTMLPurifierService;
 use HTMLPurifier;
 use Tests\TestCase;
@@ -24,5 +23,9 @@ class HTMLPurifierServiceTest extends TestCase {
             '',
             $this->service->purify("<script>console.log('test');</script>")
         );
+    }
+
+    public function testReturnsNullIfNullIsPassed() {
+        $this->assertNull($this->service->purify(null));
     }
 }
