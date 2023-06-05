@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
 import { AuthService } from 'src/app/core/auth/auth.service';
+import { AboutDialogComponent } from '../components/about-dialog/about-dialog.component';
 
 @Component({
   selector: 'app-settings-page-layout',
@@ -15,5 +17,9 @@ import { AuthService } from 'src/app/core/auth/auth.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsPageLayoutComponent {
-  constructor(public auth: AuthService) {}
+  constructor(public auth: AuthService, private dialog: MatDialog) {}
+
+  openAboutDialog() {
+    this.dialog.open(AboutDialogComponent, { width: '400px', autoFocus: false });
+  }
 }

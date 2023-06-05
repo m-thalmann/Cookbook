@@ -1,0 +1,42 @@
+[mat-dialog-title] {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+  align-items: center;
+
+  font-weight: normal;
+
+  padding: 1em 0;
+
+  &::before {
+    display: none;
+  }
+
+  img {
+    height: 4em;
+  }
+}
+
+[mat-dialog-content] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5em;
+
+  p {
+    text-align: justify;
+  }
+
+  a {
+    .button-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+
+      img {
+        height: 1.5em;
+        vertical-align: middle;
+      }
+    }
+  }
+}

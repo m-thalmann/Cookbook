@@ -1,4 +1,8 @@
 {
+  "about": {
+    "about": "About",
+    "description": "Cookbook is a web application that stores all your favorite recipes. Self-hosting gives you full control over your personal recipes and lets you share them with your friends and family."
+  },
   "actions": {
     "abort": "Abort",
     "add": "Add",

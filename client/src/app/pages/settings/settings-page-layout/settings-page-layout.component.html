@@ -35,6 +35,15 @@
                         <mat-icon color="warn" *ngIf="vm.isUnverified">warning</mat-icon>
                     </span>
                 </a>
+
+                <div class="divider"></div>
+
+                <a mat-list-item (click)="openAboutDialog()">
+                    <mat-icon matListItemIcon>info</mat-icon>
+                    <span>
+                        {{ 'about.about' | transloco }}
+                    </span>
+                </a>
             </mat-nav-list>
         </div>
 

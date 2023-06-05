@@ -1,4 +1,8 @@
 {
+  "about": {
+    "about": "Über",
+    "description": "Cookbook ist eine Webanwendung, die alle deine Lieblingsrezepte speichert. Durch das Selbsthosten hast du die volle Kontrolle über deine persönlichen Rezepte und kannst sie mit deinen Freunden und deiner Familie teilen."
+  },
   "actions": {
     "abort": "Abbrechen",
     "add": "Hinzufügen",

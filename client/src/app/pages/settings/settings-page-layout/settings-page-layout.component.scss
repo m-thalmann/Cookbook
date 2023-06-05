@@ -51,6 +51,15 @@ h2 {
         gap: 0.5em;
       }
     }
+
+    .divider {
+      margin: 1.5em 0;
+      height: 1px;
+
+      @include theme.apply() using ($variables) {
+        background: rgba(map.get($variables, 'foreground'), 10%);
+      }
+    }
   }
 }
 
