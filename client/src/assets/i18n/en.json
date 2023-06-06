@@ -159,6 +159,7 @@
           "addUser": "Add user",
           "deleteCookbook": "Delete cookbook",
           "manageUsers": "Manage users",
+          "title": "Edit cookbook",
           "usersLoadingError": "Error loading users"
         }
       }
@@ -167,6 +168,7 @@
       "title": "Home"
     },
     "notFound": {
+      "title": "Page not found",
       "goBack": "Go to homepage",
       "message": "Oops... Page not found!"
     },

@@ -11,18 +11,24 @@ export default [
     path: '',
     component: SettingsPageLayoutComponent,
     children: [
-      { path: 'general', component: GeneralSettingsPageComponent },
+      {
+        path: 'general',
+        component: GeneralSettingsPageComponent,
+        data: { title: 'pages.settings.title' },
+      },
       {
         path: 'account',
         canActivate: [AuthGuard],
         runGuardsAndResolvers: 'always',
         component: AccountSettingsPageComponent,
+        data: { title: 'pages.settings.title' },
       },
       {
         path: 'security',
         canActivate: [AuthGuard],
         runGuardsAndResolvers: 'always',
         component: SecuritySettingsPageComponent,
+        data: { title: 'pages.settings.title' },
       },
     ],
   },

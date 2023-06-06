@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +8,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class RouteHelperService {
   constructor(private location: Location, private router: Router) {}
 
-  getRouteLeaf(route: ActivatedRoute | null) {
+  getRouteLeaf(route: ActivatedRoute): ActivatedRoute;
+  getRouteLeaf(route: ActivatedRouteSnapshot): ActivatedRouteSnapshot;
+  getRouteLeaf(route: null): null;
+  getRouteLeaf(route: ActivatedRoute | ActivatedRouteSnapshot | null) {
     let leaf = route;
 
     while (leaf?.firstChild) {

@@ -35,19 +35,21 @@ import { LanguageService } from './app/core/language/language.service';
 import { TranslocoRootModule } from './app/core/language/transloco-root.module';
 import { CustomPaginatorIntl } from './app/core/material/custom-paginator-intl';
 import { ConditionalPreloadStrategy } from './app/core/routes/conditional-preload-strategy';
+import { SeoService } from './app/core/services/seo.service';
 import routes from './app/routes';
 
 if (environment.production) {
   enableProdMode();
 }
 
-function setup(language: LanguageService, config: ConfigService, auth: AuthService) {
+function setup(language: LanguageService, config: ConfigService, auth: AuthService, seo: SeoService) {
   return async () => {
     language.init();
 
     await config.load();
 
     auth.initialize();
+    seo.initialize();
   };
 }
 
@@ -101,7 +103,7 @@ bootstrapApplication(AppComponent, {
     {
       provide: APP_INITIALIZER,
       useFactory: setup,
-      deps: [LanguageService, ConfigService, AuthService],
+      deps: [LanguageService, ConfigService, AuthService, SeoService],
       multi: true,
     },
     {

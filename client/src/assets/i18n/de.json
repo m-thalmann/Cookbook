@@ -159,6 +159,7 @@
           "addUser": "Benutzer hinzufügen",
           "deleteCookbook": "Kochbuch löschen",
           "manageUsers": "Benutzer verwalten",
+          "title": "Kochbuch bearbeiten",
           "usersLoadingError": "Fehler beim Laden der Benutzer"
         }
       }
@@ -167,6 +168,7 @@
       "title": "Startseite"
     },
     "notFound": {
+      "title": "Seite nicht gefunden",
       "goBack": "Zurück zur Startseite",
       "message": "Ups... Die Seite wurde nicht gefunden!"
     },

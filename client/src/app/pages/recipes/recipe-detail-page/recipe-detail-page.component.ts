@@ -3,12 +3,13 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
-import { EMPTY, combineLatest, shareReplay, switchMap } from 'rxjs';
+import { EMPTY, combineLatest, shareReplay, switchMap, tap } from 'rxjs';
 import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
+import { SeoService } from 'src/app/core/services/seo.service';
 import { RecipeDetailComponent } from './components/recipe-detail/recipe-detail.component';
 
 const Logger = new LoggerClass('Recipes');
@@ -37,6 +38,17 @@ export class RecipeDetailPageComponent {
 
       return EMPTY;
     }),
+    tap((recipeResponse) => {
+      const recipe = recipeResponse.body?.data;
+
+      if (recipe) {
+        this.seo.setTitle(recipe.name);
+
+        if (recipe.description) {
+          this.seo.setDescription(recipe.description);
+        }
+      }
+    }),
     handledErrorInterceptor(),
     shareReplay({ bufferSize: 1, refCount: true })
   );
@@ -49,6 +61,7 @@ export class RecipeDetailPageComponent {
     private api: ApiService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private auth: AuthService
+    private auth: AuthService,
+    private seo: SeoService
   ) {}
 }
