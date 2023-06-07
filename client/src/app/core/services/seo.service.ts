@@ -2,7 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router } from '@angular/router';
 import { TranslocoService } from '@ngneat/transloco';
-import { Subscription, combineLatest, filter, map, startWith } from 'rxjs';
+import { Subscription, combineLatest, filter, map, startWith, switchMap } from 'rxjs';
 import { RouteHelperService } from './route-helper.service';
 
 const SITE_NAME = 'Cookbook';
@@ -32,7 +32,7 @@ export class SeoService implements OnDestroy {
     this.subSink.add(
       combineLatest([
         this.activatedRouteSnapshot$,
-        this.transloco.events$.pipe(filter((event) => event.type === 'translationLoadSuccess')),
+        this.transloco.langChanges$.pipe(switchMap(() => this.transloco.selectTranslation())),
       ]).subscribe(([activatedRoute, _]) => {
         this.generateTags(activatedRoute);
       })
