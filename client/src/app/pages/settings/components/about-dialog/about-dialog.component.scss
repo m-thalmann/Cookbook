@@ -15,6 +15,11 @@
   img {
     height: 4em;
   }
+
+  .version {
+    opacity: 0.75;
+    font-weight: lighter;
+  }
 }
 
 [mat-dialog-content] {

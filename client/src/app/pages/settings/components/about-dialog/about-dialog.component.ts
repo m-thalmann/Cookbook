@@ -5,6 +5,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { TranslocoModule } from '@ngneat/transloco';
 import { map } from 'rxjs';
 import { ThemeService } from 'src/app/core/services/theme.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-about-dialog',
@@ -18,5 +19,9 @@ export class AboutDialogComponent {
   isDarkTheme$ = this.theme.theme$.pipe(map((theme) => theme.scheme === 'dark'));
 
   constructor(private theme: ThemeService) {}
+
+  get version() {
+    return environment.version;
+  }
 }
 
