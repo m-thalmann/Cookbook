@@ -2,11 +2,11 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-import packageJson from '../../package.json';
+import { environment as prodEnvironment } from './environment.prod';
 
 export const environment = {
+  ...prodEnvironment,
   production: false,
-  version: packageJson.version,
 };
 
 /*

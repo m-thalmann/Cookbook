@@ -18,6 +18,7 @@ import { ServerValidationHelper } from 'src/app/core/forms/ServerValidationHelpe
 import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
 import { toPromise } from 'src/app/core/helpers/to-promise';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { environment } from 'src/environments/environment';
 
 const Logger = new LoggerClass('Authentication');
 
@@ -57,8 +58,8 @@ export class LoginPageComponent implements OnDestroy {
     private transloco: TranslocoService
   ) {
     this.loginForm = this.fb.group({
-      email: [''],
-      password: [''],
+      email: [environment.demo ? 'demo@example.com' : ''],
+      password: [environment.demo ? 'demo' : ''],
     });
 
     this.subSink.add(

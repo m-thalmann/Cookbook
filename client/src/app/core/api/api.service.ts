@@ -269,7 +269,7 @@ export class ApiService {
       getAuthenticatedUser: () => this.get<{ data: DetailedUser }>('/auth', TokenType.Access),
 
       login: (email: string, password: string) =>
-        this.post<{ data: { user: DetailedUser; access_token: string; refresh_token: string } }>(
+        this.post<{ data: { user: DetailedUser; access_token: string; refresh_token: string | null } }>(
           '/auth/login',
           { email, password },
           TokenType.None
@@ -282,7 +282,7 @@ export class ApiService {
         language_code?: string;
         hcaptcha_token?: string;
       }) => {
-        return this.post<{ data: { user: DetailedUser; access_token: string; refresh_token: string } }>(
+        return this.post<{ data: { user: DetailedUser; access_token: string; refresh_token: string | null } }>(
           '/auth/sign-up',
           data,
           TokenType.None

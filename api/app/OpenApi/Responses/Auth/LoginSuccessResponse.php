@@ -28,6 +28,7 @@ class LoginSuccessResponse extends ResponseFactory {
                                         ),
                                     Schema::string('refresh_token')
                                         ->description('The refresh token')
+                                        ->nullable()
                                         ->example(
                                             'uOky50sbsedxDSBVJxEE9v8M1MiGOU27JcS9yhn2JZXIq9TTyrYHPyq3jUk6xPzp'
                                         )

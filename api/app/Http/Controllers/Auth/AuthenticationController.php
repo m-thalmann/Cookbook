@@ -6,6 +6,7 @@ use App\Exceptions\HttpException;
 use App\Exceptions\UnauthorizedHttpException;
 use App\Http\Resources\UserResource;
 use App\Http\Controllers\Controller;
+use App\Models\AuthToken;
 use App\Models\User;
 use App\OpenApi\Parameters\BaseParameters;
 use App\OpenApi\RequestBodies\Auth\LoginRequestBody;
@@ -26,6 +27,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use TokenAuth\NewAuthToken;
 use TokenAuth\TokenAuth;
 use Vyuldashev\LaravelOpenApi\Attributes as OpenApi;
 
@@ -70,20 +72,12 @@ class AuthenticationController extends Controller {
             throw UnauthorizedHttpException::credentials(__('auth.failed'));
         }
 
-        [$refreshToken, $accessToken] = TokenAuth::createTokenPairForUser(
-            $user,
-            config('auth.token_names.refresh'),
-            config('auth.token_names.access'),
-            save: false
-        );
-
-        $refreshToken->token->setRequestAttributes($request)->save();
-        $accessToken->token->save();
+        [$refreshToken, $accessToken] = $this->generateTokens($request, $user);
 
         $response = JsonResource::make([
             'user' => UserResource::make($user),
             'access_token' => $accessToken->plainTextToken,
-            'refresh_token' => $refreshToken->plainTextToken,
+            'refresh_token' => $refreshToken?->plainTextToken,
         ])->response();
 
         if (!$user->hasVerifiedEmail()) {
@@ -155,20 +149,12 @@ class AuthenticationController extends Controller {
 
         event(new Registered($user));
 
-        [$refreshToken, $accessToken] = TokenAuth::createTokenPairForUser(
-            $user,
-            config('auth.token_names.refresh'),
-            config('auth.token_names.access'),
-            save: false
-        );
-
-        $refreshToken->token->setRequestAttributes($request)->save();
-        $accessToken->token->save();
+        [$refreshToken, $accessToken] = $this->generateTokens($request, $user);
 
         $response = JsonResource::make([
             'user' => UserResource::make($user),
             'access_token' => $accessToken->plainTextToken,
-            'refresh_token' => $refreshToken->plainTextToken,
+            'refresh_token' => $refreshToken?->plainTextToken,
         ])
             ->response()
             ->setStatusCode(201);
@@ -196,6 +182,8 @@ class AuthenticationController extends Controller {
         )
     ]
     public function refresh(Request $request) {
+        $this->verifyNoDemo();
+
         [$refreshToken, $accessToken] = TokenAuth::rotateRefreshToken(
             config('auth.token_names.access'),
             save: false
@@ -233,9 +221,11 @@ class AuthenticationController extends Controller {
         )
     ]
     public function logout() {
-        authUser()
-            ->currentToken()
-            ->deleteAllTokensFromSameGroup();
+        if (!app()->environment('demo')) {
+            authUser()
+                ->currentToken()
+                ->deleteAllTokensFromSameGroup();
+        }
 
         return response()->noContent();
     }
@@ -263,5 +253,25 @@ class AuthenticationController extends Controller {
         }
 
         return $response;
+    }
+
+    protected function generateTokens(Request $request, User $user) {
+        if (app()->environment('demo') && $user->email === User::DEMO_EMAIL) {
+            $demoToken = AuthToken::findAccessToken(AuthToken::DEMO_TOKEN);
+
+            return [null, new NewAuthToken($demoToken, AuthToken::DEMO_TOKEN)];
+        }
+
+        [$refreshToken, $accessToken] = TokenAuth::createTokenPairForUser(
+            $user,
+            config('auth.token_names.refresh'),
+            config('auth.token_names.access'),
+            save: false
+        );
+
+        $refreshToken->token->setRequestAttributes($request)->save();
+        $accessToken->token->save();
+
+        return [$refreshToken, $accessToken];
     }
 }

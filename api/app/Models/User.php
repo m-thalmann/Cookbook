@@ -19,6 +19,8 @@ class User extends Authenticatable implements MustVerifyEmail {
         QueryOrganizable,
         SerializesDatesToTimestamp;
 
+    const DEMO_EMAIL = 'demo@example.com';
+
     protected $fillable = ['name', 'email', 'password', 'language_code'];
 
     protected $hidden = [

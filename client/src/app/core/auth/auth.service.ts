@@ -108,7 +108,7 @@ export class AuthService implements OnDestroy {
   }
 
   async initialize() {
-    if (this._refreshToken$.value === null) {
+    if (this._accessToken$.value === null) {
       this._accessToken$.next(null);
       this._user$.next(null);
       this._isInitialized$.next(true);
@@ -142,7 +142,7 @@ export class AuthService implements OnDestroy {
     this._isInitialized$.next(true);
   }
 
-  public async login(user: DetailedUser, accessToken: string, refreshToken: string, redirectUrl = '/home') {
+  public async login(user: DetailedUser, accessToken: string, refreshToken: string | null, redirectUrl = '/home') {
     this._accessToken$.next(accessToken);
     this._refreshToken$.next(refreshToken);
 

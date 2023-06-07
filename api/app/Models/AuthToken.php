@@ -11,6 +11,8 @@ use TokenAuth\TokenAuth;
 class AuthToken extends BaseAuthToken {
     use SerializesDatesToTimestamp;
 
+    const DEMO_TOKEN = 'demo-auth-token';
+
     public function scopeNotExpired($query) {
         $query->where(function ($query) {
             $query->orWhere('expires_at', '>', now());

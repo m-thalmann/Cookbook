@@ -56,7 +56,8 @@
             },
             "scripts": [],
             "serviceWorker": true,
-            "ngswConfigPath": "ngsw-config.json"
+            "ngswConfigPath": "ngsw-config.json",
+            "allowedCommonJsDependencies": ["flat"]
           },
           "configurations": {
             "production": {
@@ -80,6 +81,27 @@
               ],
               "outputHashing": "all"
             },
+            "demo": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1.25mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.demo.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
             "development": {
               "buildOptimizer": false,
               "optimization": false,
@@ -96,6 +118,9 @@
           "configurations": {
             "production": {
               "browserTarget": "Cookbook:build:production"
+            },
+            "demo": {
+              "browserTarget": "Cookbook:build:demo"
             },
             "development": {
               "browserTarget": "Cookbook:build:development"
