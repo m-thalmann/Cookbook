@@ -165,23 +165,19 @@
                         cdkDropList
                         (cdkDropListDropped)="onIngredientReordered(group, $event)"
                     >
-                        <div
-                            class="ingredient"
-                            *ngFor="let ingredient of group.controls.ingredients.controls; let ingredientIndex = index"
+                        <app-edit-recipe-ingredient-form-group
+                            [formControlGroup]="ingredient"
+                            [ingredientKey]="getIngredientKey(groupIndex, ingredientIndex)"
+                            [ingredientOptions]="vm.ingredients?.body?.data ?? null"
+                            [disabled]="form.disabled"
+                            (addIngredient)="addIngredient(groupIndex, null, true)"
+                            (removeIngredient)="removeIngredient(groupIndex, ingredientIndex)"
                             cdkDrag
                             cdkDragPreviewContainer="parent"
+                            *ngFor="let ingredient of group.controls.ingredients.controls; let ingredientIndex = index"
                         >
-                            <mat-icon cdkDragHandle>drag_indicator</mat-icon>
-
-                            <app-edit-recipe-ingredient-form-group
-                                [formControlGroup]="ingredient"
-                                [ingredientKey]="getIngredientKey(groupIndex, ingredientIndex)"
-                                [ingredientOptions]="vm.ingredients?.body?.data ?? null"
-                                [disabled]="form.disabled"
-                                (addIngredient)="addIngredient(groupIndex, null, true)"
-                                (removeIngredient)="removeIngredient(groupIndex, ingredientIndex)"
-                            ></app-edit-recipe-ingredient-form-group>
-                        </div>
+                            <mat-icon cdkDragHandle prefix>drag_indicator</mat-icon>
+                        </app-edit-recipe-ingredient-form-group>
                     </div>
 
                     <div class="buttons">

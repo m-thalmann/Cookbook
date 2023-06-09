@@ -1,7 +1,6 @@
 @use 'sass:map';
 @use 'mixins';
 @use 'theme';
-@use 'variables' as *;
 
 form {
   .form-container {
@@ -62,36 +61,8 @@ form {
           padding-bottom: 1em;
           margin-bottom: 1em;
 
-          .ingredient {
-            display: flex;
-            align-items: center;
-            gap: 0.5em;
-
-            [cdkDragHandle] {
-              cursor: grab;
-            }
-
-            app-edit-recipe-ingredient-form-group {
-              flex: 1;
-            }
-
-            &.cdk-drag-placeholder {
-              opacity: 0;
-            }
-          }
-
-          &.cdk-drop-list-dragging {
-            cursor: grabbing;
-
-            .ingredient {
-              &:not(.cdk-drag-placeholder):not(.cdk-drag-preview) {
-                transition: transform $transition-time;
-              }
-
-              &.cdk-drag-preview {
-                cursor: grabbing;
-              }
-            }
+          app-edit-recipe-ingredient-form-group.cdk-drag-placeholder {
+            opacity: 0;
           }
         }
 

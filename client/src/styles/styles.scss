@@ -1,5 +1,6 @@
 @use 'theme/init';
 @use 'mixins';
+@use 'variables' as *;
 
 html,
 body {
@@ -29,6 +30,18 @@ a[disabled] {
 
 [fadeIn] {
   animation: fadeInAnimation ease 1s;
+}
+
+[cdkDragHandle] {
+  cursor: grab;
+}
+
+.cdk-drop-list-dragging {
+  cursor: grabbing;
+
+  > *:not(.cdk-drag-placeholder):not(.cdk-drag-preview) {
+    transition: transform $transition-time;
+  }
 }
 
 @include mixins.mobile() {

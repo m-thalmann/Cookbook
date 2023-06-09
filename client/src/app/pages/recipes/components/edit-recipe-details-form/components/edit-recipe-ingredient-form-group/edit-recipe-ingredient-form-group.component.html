@@ -1,4 +1,6 @@
 <ng-container *ngIf="{ filteredIngredients: filteredIngredients$ | async } as vm">
+    <ng-content select="[prefix]"></ng-content>
+
     <div class="ingredient-container" [attr.data-ingredient-key]="ingredientKey" [formGroup]="formControlGroup">
         <mat-form-field appearance="outline">
             <mat-label>
@@ -64,4 +66,3 @@
         </div>
     </div>
 </ng-container>
-

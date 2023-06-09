@@ -1,6 +1,14 @@
 @use 'mixins';
 
+:host {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
 .ingredient-container {
+  flex: 1;
+
   display: flex;
   flex-direction: column;
   align-items: center;
