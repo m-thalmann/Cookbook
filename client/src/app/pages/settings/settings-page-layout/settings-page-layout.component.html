@@ -5,50 +5,44 @@
         isUnverified: auth.isUnverified$ | async
     } as vm"
 >
-    <h2><mat-icon>settings</mat-icon> {{ 'pages.settings.title' | transloco }}</h2>
+    <app-settings-layout icon="settings" [title]="'pages.settings.title' | transloco">
+        <mat-nav-list nav-list>
+            <a mat-list-item routerLink="./general" routerLinkActive="current">
+                <mat-icon matListItemIcon>tune</mat-icon>
+                <span>{{ 'pages.settings.children.general.title' | transloco }}</span>
+            </a>
+            <a
+                mat-list-item
+                routerLink="./account"
+                routerLinkActive="current"
+                [disabled]="!vm.isAuthenticated || !vm.isAuthInitialized"
+            >
+                <mat-icon matListItemIcon>manage_accounts</mat-icon>
+                <span>{{ 'pages.settings.children.account.title' | transloco }}</span>
+            </a>
+            <a
+                mat-list-item
+                routerLink="./security"
+                routerLinkActive="current"
+                [disabled]="!vm.isAuthenticated || !vm.isAuthInitialized"
+            >
+                <mat-icon matListItemIcon>security</mat-icon>
+                <span>
+                    {{ 'pages.settings.children.security.title' | transloco }}
+                    <mat-icon color="warn" *ngIf="vm.isUnverified">warning</mat-icon>
+                </span>
+            </a>
 
-    <div class="container">
-        <div class="settings-nav">
-            <mat-nav-list>
-                <a mat-list-item routerLink="./general" routerLinkActive="current">
-                    <mat-icon matListItemIcon>tune</mat-icon>
-                    <span>{{ 'pages.settings.children.general.title' | transloco }}</span>
-                </a>
-                <a
-                    mat-list-item
-                    routerLink="./account"
-                    routerLinkActive="current"
-                    [disabled]="!vm.isAuthenticated || !vm.isAuthInitialized"
-                >
-                    <mat-icon matListItemIcon>manage_accounts</mat-icon>
-                    <span>{{ 'pages.settings.children.account.title' | transloco }}</span>
-                </a>
-                <a
-                    mat-list-item
-                    routerLink="./security"
-                    routerLinkActive="current"
-                    [disabled]="!vm.isAuthenticated || !vm.isAuthInitialized"
-                >
-                    <mat-icon matListItemIcon>security</mat-icon>
-                    <span>
-                        {{ 'pages.settings.children.security.title' | transloco }}
-                        <mat-icon color="warn" *ngIf="vm.isUnverified">warning</mat-icon>
-                    </span>
-                </a>
+            <div divider></div>
 
-                <div class="divider"></div>
+            <a mat-list-item (click)="openAboutDialog()">
+                <mat-icon matListItemIcon>info</mat-icon>
+                <span>
+                    {{ 'about.about' | transloco }}
+                </span>
+            </a>
+        </mat-nav-list>
 
-                <a mat-list-item (click)="openAboutDialog()">
-                    <mat-icon matListItemIcon>info</mat-icon>
-                    <span>
-                        {{ 'about.about' | transloco }}
-                    </span>
-                </a>
-            </mat-nav-list>
-        </div>
-
-        <div class="settings">
-            <router-outlet></router-outlet>
-        </div>
-    </div>
+        <router-outlet></router-outlet>
+    </app-settings-layout>
 </ng-container>

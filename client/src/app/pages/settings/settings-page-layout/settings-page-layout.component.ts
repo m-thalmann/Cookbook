@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
+import { SettingsLayoutComponent } from 'src/app/components/settings-layout/settings-layout.component';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { AboutDialogComponent } from '../components/about-dialog/about-dialog.component';
 
@@ -13,7 +14,7 @@ import { AboutDialogComponent } from '../components/about-dialog/about-dialog.co
   templateUrl: './settings-page-layout.component.html',
   styleUrls: ['./settings-page-layout.component.scss'],
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslocoModule, MatIconModule, MatListModule],
+  imports: [CommonModule, RouterModule, TranslocoModule, MatIconModule, MatListModule, SettingsLayoutComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsPageLayoutComponent {
