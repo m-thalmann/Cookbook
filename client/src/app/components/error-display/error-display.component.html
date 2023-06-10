@@ -8,7 +8,7 @@
     <ng-template #otherError>
         <mat-icon color="warn">error_outline</mat-icon>
         <div class="error-details">
-            <ng-content select="[otherErrorMessage]"></ng-content>
+            <ng-container *ngTemplateOutlet="otherErrorMessageTemplate || null"></ng-container>
             <small>
                 <ng-container *ngTemplateOutlet="defaultErrorTemplate"></ng-container>
             </small>
