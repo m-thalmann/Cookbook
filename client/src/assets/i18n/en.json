@@ -20,9 +20,6 @@
     "seeAll": "See all",
     "send": "Send"
   },
-  "admin": {
-    "area": "Admin area"
-  },
   "auth": {
     "dontRememberYourPassword": "Don't remember your password?",
     "login": "Login",
@@ -68,6 +65,7 @@
     "auto": "Auto",
     "by": "by",
     "colorTheme": "Color theme",
+    "created": "Created",
     "createDate": "Create date",
     "dangerZone": "Danger zone",
     "deletedAt": "Deleted at",
@@ -75,6 +73,7 @@
     "email": "Email",
     "enabled": "Enabled",
     "generalInformation": "General information",
+    "id": "ID",
     "images": "Images",
     "insertTextPlaceholder": "Insert text here ...",
     "language": "Language",
@@ -88,7 +87,9 @@
     "public": "Public",
     "resultsFound": "[[ amount, =1 '1 result found', default '{{amount}} results found' ]]",
     "save": "Save",
+    "search": "Search",
     "updateDate": "Update date",
+    "verified": "Verified",
     "view": "View",
     "yourEmail": "Your email"
   },
@@ -115,6 +116,7 @@
       "deletingRecipe": "Error permanently deleting recipe",
       "errorOccurred": "An error occurred!",
       "loadingUserInformation": "Error loading user information",
+      "loadingUsers": "Error loading users",
       "loggingOutFromAllSessions": "Error logging out from all sessions",
       "loggingOutFromSelectedSession": "Error logging out from selected session",
       "movingRecipeToTrash": "Error moving recipe to trash",
@@ -153,14 +155,27 @@
     "verificationEmailSent": "Verification email sent successfully"
   },
   "pages": {
+    "admin": {
+      "area": "Admin area",
+      "children": {
+        "users": {
+          "createUser": "Create user",
+          "deleteUser": "Delete user",
+          "editEmail": "Edit email",
+          "editPassword": "Edit password",
+          "empty": "No users found",
+          "manageUsers": "Manage users",
+          "title": "Users"
+        }
+      }
+    },
     "cookbooks": {
       "children": {
         "edit": {
           "addUser": "Add user",
           "deleteCookbook": "Delete cookbook",
           "manageUsers": "Manage users",
-          "title": "Edit cookbook",
-          "usersLoadingError": "Error loading users"
+          "title": "Edit cookbook"
         }
       }
     },

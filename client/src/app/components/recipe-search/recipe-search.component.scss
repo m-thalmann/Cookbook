@@ -145,10 +145,6 @@ mat-paginator {
   margin-left: calc(-1 * $layout-padding);
   margin-right: calc(-1 * $layout-padding);
 
-  @media screen and (max-width: 600px) {
-    padding: 1em 0;
-  }
-
   @include mixins.desktop() {
     position: sticky;
     bottom: 0;

@@ -55,6 +55,7 @@
       @include mat.slider-theme($app-theme);
       @include mat.slide-toggle-theme($app-theme);
       @include mat.snack-bar-theme($app-theme);
+      @include mat.table-theme($app-theme);
       @include mat.tabs-theme($app-theme);
       @include mat.toolbar-theme($app-theme);
       @include mat.tooltip-theme($app-theme);
@@ -84,6 +85,7 @@
       @include mat.slider-color($app-theme);
       @include mat.slide-toggle-color($app-theme);
       @include mat.snack-bar-color($app-theme);
+      @include mat.table-color($app-theme);
       @include mat.tabs-color($app-theme);
       @include mat.toolbar-color($app-theme);
       @include mat.tooltip-color($app-theme);

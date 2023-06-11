@@ -20,9 +20,6 @@
     "seeAll": "Alle anzeigen",
     "send": "Senden"
   },
-  "admin": {
-    "area": "Admin Bereich"
-  },
   "auth": {
     "dontRememberYourPassword": "Passwort vergessen?",
     "login": "Anmelden",
@@ -68,6 +65,7 @@
     "auto": "Auto",
     "by": "von",
     "colorTheme": "Farbthema",
+    "created": "Erstellt",
     "createDate": "Erstellungsdatum",
     "dangerZone": "Gefahrenzone",
     "deletedAt": "Gelöscht am",
@@ -75,6 +73,7 @@
     "email": "E-Mail",
     "enabled": "Aktiviert",
     "generalInformation": "Allgemeine Informationen",
+    "id": "ID",
     "images": "Bilder",
     "insertTextPlaceholder": "Text einfügen...",
     "language": "Sprache",
@@ -88,7 +87,9 @@
     "public": "Öffentlich",
     "resultsFound": "[[ amount, =1 '1 Ergebnis gefunden', default '{{amount}} Ergebnisse gefunden' ]]",
     "save": "Speichern",
+    "search": "Suchen",
     "updateDate": "Letzte Änderung",
+    "verified": "Verifiziert",
     "view": "Anzeigen",
     "yourEmail": "Deine E-Mail"
   },
@@ -115,6 +116,7 @@
       "deletingRecipe": "Fehler beim Löschen des Rezepts",
       "errorOccurred": "Ein Fehler ist aufgetreten!",
       "loadingUserInformation": "Fehler beim Laden der Benutzerinformationen",
+      "loadingUsers": "Fehler beim Laden der Benutzer",
       "loggingOutFromAllSessions": "Fehler beim Abmelden aller Sitzung",
       "loggingOutFromSelectedSession": "Fehler beim Abmelden der ausgewählten Sitzung",
       "movingRecipeToTrash": "Fehler beim Verschieben des Rezepts in den Papierkorb",
@@ -153,14 +155,27 @@
     "verificationEmailSent": "Verifizierungs-E-Mail wurde gesendet"
   },
   "pages": {
+    "admin": {
+      "area": "Admin Bereich",
+      "children": {
+        "users": {
+          "createUser": "Benutzer erstellen",
+          "deleteUser": "Benutzer löschen",
+          "editEmail": "Email ändern",
+          "editPassword": "Password ändern",
+          "empty": "Keine Benutzer gefunden",
+          "manageUsers": "Benutzer verwalten",
+          "title": "Benutzer"
+        }
+      }
+    },
     "cookbooks": {
       "children": {
         "edit": {
           "addUser": "Benutzer hinzufügen",
           "deleteCookbook": "Kochbuch löschen",
           "manageUsers": "Benutzer verwalten",
-          "title": "Kochbuch bearbeiten",
-          "usersLoadingError": "Fehler beim Laden der Benutzer"
+          "title": "Kochbuch bearbeiten"
         }
       }
     },

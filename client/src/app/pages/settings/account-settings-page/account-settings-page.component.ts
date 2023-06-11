@@ -8,9 +8,9 @@ import { ConfirmDialogComponent } from 'src/app/components/dialogs/confirm-dialo
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { toPromise } from 'src/app/core/helpers/to-promise';
+import { SettingsSectionComponent } from '../../../components/settings-section/settings-section.component';
 import { Logger as LoggerClass } from '../../../core/helpers/logger';
 import { SnackbarService } from '../../../core/services/snackbar.service';
-import { SettingsSectionComponent } from '../components/settings-section/settings-section.component';
 import { AccountSettingsUpdatePasswordComponent } from './components/account-settings-update-password/account-settings-update-password.component';
 import { AccountSettingsUpdateProfileComponent } from './components/account-settings-update-profile/account-settings-update-profile.component';
 

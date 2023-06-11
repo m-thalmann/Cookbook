@@ -56,6 +56,12 @@ a[disabled] {
   }
 }
 
+@media screen and (max-width: 600px) {
+  mat-paginator {
+    padding: 1em 0;
+  }
+}
+
 @media print {
   html {
     background: transparent !important;

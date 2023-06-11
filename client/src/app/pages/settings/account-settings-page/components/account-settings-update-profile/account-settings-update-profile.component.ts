@@ -14,8 +14,8 @@ import { AuthService } from 'src/app/core/auth/auth.service';
 import { ServerValidationHelper } from 'src/app/core/forms/ServerValidationHelper';
 import { toPromise } from 'src/app/core/helpers/to-promise';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { SettingsSectionComponent } from '../../../../../components/settings-section/settings-section.component';
 import { Logger as LoggerClass } from '../../../../../core/helpers/logger';
-import { SettingsSectionComponent } from '../../../components/settings-section/settings-section.component';
 
 const Logger = new LoggerClass('Settings');
 

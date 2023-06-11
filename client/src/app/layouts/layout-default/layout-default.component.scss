@@ -11,6 +11,8 @@ $add-button-height-mobile: 5em;
 }
 
 .container {
+  min-width: 0;
+
   > div {
     padding-bottom: 0.1px; // needed for chrome to get margin-bottom working
   }
@@ -173,6 +175,10 @@ a[mat-menu-item] {
 
     header {
       margin-bottom: 1em;
+    }
+
+    main {
+      margin-bottom: $main-space-bottom;
     }
   }
 

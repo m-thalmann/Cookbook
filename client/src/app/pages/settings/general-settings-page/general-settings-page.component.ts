@@ -6,7 +6,7 @@ import { LangDefinition, TranslocoModule, TranslocoService } from '@ngneat/trans
 import { BehaviorSubject } from 'rxjs';
 import { LanguageService } from 'src/app/core/language/language.service';
 import { ThemeConfig, ThemeService } from 'src/app/core/services/theme.service';
-import { SettingsSectionComponent } from '../components/settings-section/settings-section.component';
+import { SettingsSectionComponent } from '../../../components/settings-section/settings-section.component';
 
 @Component({
   selector: 'app-general-settings-page',

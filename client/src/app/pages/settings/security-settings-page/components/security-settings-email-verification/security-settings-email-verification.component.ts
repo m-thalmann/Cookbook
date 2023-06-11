@@ -9,8 +9,8 @@ import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { toPromise } from 'src/app/core/helpers/to-promise';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { SettingsSectionComponent } from '../../../../../components/settings-section/settings-section.component';
 import { Logger as LoggerClass } from '../../../../../core/helpers/logger';
-import { SettingsSectionComponent } from '../../../components/settings-section/settings-section.component';
 import { SecuritySettingsActiveTokensComponent } from '../security-settings-active-tokens/security-settings-active-tokens.component';
 
 const Logger = new LoggerClass('Settings');

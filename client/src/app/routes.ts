@@ -65,6 +65,13 @@ export default [
         path: 'settings',
         loadChildren: () => import('./pages/settings/routes'),
       },
+      {
+        path: 'admin',
+        loadChildren: () => import('./pages/admin/routes'),
+        canActivate: [AuthGuard],
+        runGuardsAndResolvers: 'always',
+        data: { mustBeAdmin: true },
+      },
 
       {
         path: 'not-found',

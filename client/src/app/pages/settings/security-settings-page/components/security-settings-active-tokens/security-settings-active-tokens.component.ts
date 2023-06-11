@@ -15,8 +15,8 @@ import { AuthToken } from 'src/app/core/models/auth-token';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { SettingsSectionComponent } from '../../../../../components/settings-section/settings-section.component';
 import { Logger as LoggerClass } from '../../../../../core/helpers/logger';
-import { SettingsSectionComponent } from '../../../components/settings-section/settings-section.component';
 import { SecuritySettingsActiveTokenCardComponent } from '../security-settings-active-token-card/security-settings-active-token-card.component';
 
 const Logger = new LoggerClass('Settings');
