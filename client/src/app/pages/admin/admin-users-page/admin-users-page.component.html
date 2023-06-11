@@ -55,6 +55,7 @@
                 <table
                     mat-table
                     [dataSource]="vm.users?.body?.data ?? []"
+                    [trackBy]="trackByUser"
                     matSort
                     matSortDisableClear
                     matSortActive="id"
@@ -86,6 +87,7 @@
                             <mat-checkbox
                                 [checked]="user.email_verified_at !== null"
                                 [disabled]="user.id === vm.authUser?.id || vm.loading || vm.saving"
+                                (click)="updateEmailVerified(user)"
                             ></mat-checkbox>
                         </td>
                     </ng-container>
@@ -98,6 +100,7 @@
                             <mat-checkbox
                                 [checked]="user.is_admin"
                                 [disabled]="user.id === vm.authUser?.id || vm.loading || vm.saving"
+                                (click)="updateIsAdmin(user)"
                             ></mat-checkbox>
                         </td>
                     </ng-container>

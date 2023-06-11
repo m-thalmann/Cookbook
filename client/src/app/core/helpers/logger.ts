@@ -33,6 +33,10 @@ const LoggerModulesConfig = {
     background: 'purple',
     foreground: 'white',
   },
+  Admin: {
+    background: 'darkgreen',
+    foreground: 'white',
+  },
 };
 
 export class Logger {
