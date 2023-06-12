@@ -27,6 +27,7 @@ import { DetailedUser, EditUserData } from 'src/app/core/models/user';
 import { I18nDatePipe } from 'src/app/core/pipes/i18n-date.pipe';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { CreateUserDialogComponent } from './components/create-user-dialog/create-user-dialog.component';
 
 const Logger = new LoggerClass('Admin');
 
@@ -123,7 +124,13 @@ export class AdminUsersPageComponent {
   }
 
   async openCreateUserDialog() {
-    // TODO: implement
+    const userCreated = await toPromise(this.dialog.open(CreateUserDialogComponent).afterClosed());
+
+    if (!userCreated) {
+      return;
+    }
+
+    this.resetList$.emit();
   }
 
   async openEditEmailDialog(user: DetailedUser) {

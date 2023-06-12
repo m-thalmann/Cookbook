@@ -37,6 +37,9 @@ class CreateUserRequestBody extends RequestBodyFactory {
                         ),
                         Schema::boolean('is_verified')->description(
                             'Whether the user\'s email should be marked as verified (default false)'
+                        ),
+                        Schema::boolean('send_verification_email')->description(
+                            'Whether to send a verification email to the user, if the email is not verified (default true)'
                         )
                     )
                     ->required('name', 'email', 'password')
@@ -44,4 +47,3 @@ class CreateUserRequestBody extends RequestBodyFactory {
         );
     }
 }
-

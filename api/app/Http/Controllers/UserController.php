@@ -97,10 +97,13 @@ class UserController extends Controller {
             'language_code' => ['nullable', 'min:2', 'max:2'],
             'is_admin' => ['boolean'],
             'is_verified' => ['boolean'],
+            'send_verification_email' => ['boolean'],
         ]);
 
         $isAdmin = Arr::pull($data, 'is_admin') ?? false;
         $isVerified = Arr::pull($data, 'is_verified') ?? false;
+        $sendVerificationEmail =
+            Arr::pull($data, 'send_verification_email') ?? true;
 
         $data['password'] = Hash::make($data['password']);
 
@@ -115,7 +118,10 @@ class UserController extends Controller {
             $user->markEmailAsVerified(); // saves after marking as verified
         } else {
             $user->save();
-            $user->sendEmailVerificationNotification();
+
+            if ($sendVerificationEmail) {
+                $user->sendEmailVerificationNotification();
+            }
         }
 
         return UserResource::make($user)

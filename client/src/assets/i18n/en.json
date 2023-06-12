@@ -150,6 +150,7 @@
     "trashCleared": "All trashed recipes deleted permanently",
     "updateAvailable": "A new update is available.",
     "userAdded": "User added successfully",
+    "userCreated": "User created successfully",
     "userRemoved": "User removed successfully",
     "userUpdated": "User updated successfully",
     "verificationEmailSent": "Verification email sent successfully"
@@ -163,8 +164,10 @@
           "deleteUser": "Delete user",
           "editEmail": "Edit email",
           "editPassword": "Edit password",
+          "emailVerified": "Email verified",
           "empty": "No users found",
           "manageUsers": "Manage users",
+          "sendVerificationEmail": "Send verification email",
           "title": "Users"
         }
       }

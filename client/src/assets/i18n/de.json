@@ -150,6 +150,7 @@
     "trashCleared": "Papierkorb wurde endgültig geleert",
     "updateAvailable": "Eine neue Version ist verfügbar.",
     "userAdded": "Benutzer wurde erfolgreich hinzugefügt",
+    "userCreated": "Benutzer wurde erfolgreich erstellt",
     "userRemoved": "Benutzer wurde erfolgreich entfernt",
     "userUpdated": "Benutzer wurde erfolgreich aktualisiert",
     "verificationEmailSent": "Verifizierungs-E-Mail wurde gesendet"
@@ -163,8 +164,10 @@
           "deleteUser": "Benutzer löschen",
           "editEmail": "Email ändern",
           "editPassword": "Password ändern",
+          "emailVerified": "E-Mail verifiziert",
           "empty": "Keine Benutzer gefunden",
           "manageUsers": "Benutzer verwalten",
+          "sendVerificationEmail": "Verifizierungs-E-Mail senden",
           "title": "Benutzer"
         }
       }

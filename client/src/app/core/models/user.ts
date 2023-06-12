@@ -19,6 +19,7 @@ export interface CreateUserData {
   language_code?: string | null;
   is_admin?: boolean;
   is_verified?: boolean;
+  send_verification_email?: boolean;
 }
 
 export interface EditUserData {
