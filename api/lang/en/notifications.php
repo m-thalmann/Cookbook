@@ -7,6 +7,14 @@ return [
     |--------------------------------------------------------------------------
     */
 
+    'template' => [
+        'greeting' => 'Hello!',
+        'error' => 'Whoops!',
+        'salutation' => 'Regards',
+        'trouble_clicking_button' =>
+            'If you\'re having trouble clicking the ":actionText" button, copy and paste the URL below into your web browser:',
+    ],
+
     'verify_email' => [
         'subject' => 'Verify Email Address',
         'line1' =>

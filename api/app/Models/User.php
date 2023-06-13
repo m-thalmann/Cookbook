@@ -61,6 +61,10 @@ class User extends Authenticatable implements MustVerifyEmail {
             ->as('meta');
     }
 
+    public function preferredLocale() {
+        return $this->language_code;
+    }
+
     public function hasVerifiedEmail() {
         return !config('app.email_verification_enabled') ||
             parent::hasVerifiedEmail();

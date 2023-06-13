@@ -28,7 +28,10 @@ foreach ($routeFiles as $name) {
 }
 
 Route::middleware('auth')->group(function () {
-    Route::apiResource('users', UserController::class)->only(['update']);
+    Route::apiResource('users', UserController::class)->only([
+        'update',
+        'destroy',
+    ]);
 
     Route::apiResource('cookbooks', CookbookController::class)->only([
         'index',
@@ -51,7 +54,10 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::apiResource('users', UserController::class)->except(['update']);
+    Route::apiResource('users', UserController::class)->except([
+        'update',
+        'destroy',
+    ]);
 
     Route::apiResource('recipes', RecipeController::class)->except([
         'index',
