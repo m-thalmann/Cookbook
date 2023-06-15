@@ -5,6 +5,7 @@ import { MAT_CHECKBOX_DEFAULT_OPTIONS, MatCheckboxModule } from '@angular/materi
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTableModule } from '@angular/material/table';
 import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { BehaviorSubject, combineLatest, map, of, shareReplay, startWith, switchMap, switchScan, tap } from 'rxjs';
 import { ConfirmDialogComponent } from 'src/app/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -33,6 +34,7 @@ const Logger = new LoggerClass('Cookbooks');
     MatIconModule,
     MatCheckboxModule,
     MatButtonModule,
+    MatTableModule,
     ErrorDisplayComponent,
     I18nDatePipe,
   ],
@@ -99,6 +101,8 @@ export class ManageCookbookUsersComponent {
   error$ = this.api.handleRequestError(this.users$);
 
   @Output() authUserRemoved = new EventEmitter<void>();
+
+  displayedColumns = ['name', 'email', 'created_at', 'is_admin', 'delete'];
 
   constructor(
     private api: ApiService,

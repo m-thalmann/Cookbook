@@ -1,58 +1,53 @@
 @use 'sass:map';
+@use '@angular/material' as mat;
 @use 'theme';
 
 app-error-display {
   margin: 2em 0;
 }
 
-.users-list {
-  overflow: auto;
-  margin-bottom: 2em;
+.table-container {
+  position: relative;
+  border-radius: 0.25em;
+  overflow: hidden;
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
+  @include mat.elevation(2);
 
-    tr {
-      .center {
+  .loading-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @include theme.apply() using ($variables) {
+      background: rgba(map.get($variables, 'background'), 0.5);
+    }
+  }
+
+  .table-wrapper {
+    overflow: auto;
+
+    table {
+      width: 100%;
+
+      .align-center {
         text-align: center;
       }
 
-      th {
-        text-align: left;
-        white-space: nowrap;
-        font-weight: lighter;
+      .no-padding {
+        padding: 0;
       }
 
-      td {
-        mat-spinner {
-          margin: 0.5em auto;
+      .mat-mdc-no-data-row {
+        td {
+          padding: 1em;
         }
-      }
-
-      th,
-      td {
-        padding: 0.5em;
-
-        &:first-of-type {
-          padding-left: 1em;
-        }
-      }
-    }
-
-    tbody tr:nth-of-type(odd) td {
-      @include theme.apply() using ($variables) {
-        background: theme.adjust-color($variables, map.get($variables, 'background'), -5%);
-      }
-
-      &:first-of-type {
-        border-top-left-radius: 1em;
-        border-bottom-left-radius: 1em;
-      }
-
-      &:last-of-type {
-        border-top-right-radius: 1em;
-        border-bottom-right-radius: 1em;
       }
     }
   }
@@ -60,7 +55,7 @@ app-error-display {
 
 .load-more-button {
   display: block;
-  margin: 0 auto;
+  margin: 1em auto;
 
   div {
     display: flex;
