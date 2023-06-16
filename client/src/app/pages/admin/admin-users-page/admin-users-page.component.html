@@ -1,6 +1,7 @@
 <ng-container
     *ngIf="{
         users: users$ | async,
+        filters: filters$ | async,
         paginationOptions: paginationOptions$ | async,
         error: error$ | async,
         loading: loading$ | async,
@@ -26,6 +27,7 @@
                 <mat-label> {{ 'general.search' | transloco }} </mat-label>
                 <input
                     matInput
+                    [value]="vm.filters?.search ?? null"
                     [disabled]="vm.loading || vm.saving"
                     (keyup.enter)="searchButton._elementRef.nativeElement.click()"
                     #searchInput

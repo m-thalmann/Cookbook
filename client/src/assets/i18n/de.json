@@ -89,6 +89,7 @@
     "save": "Speichern",
     "search": "Suchen",
     "updateDate": "Letzte Änderung",
+    "user": "Benutzer",
     "verified": "Verifiziert",
     "view": "Anzeigen",
     "yourEmail": "Deine E-Mail"
@@ -159,6 +160,10 @@
     "admin": {
       "area": "Admin Bereich",
       "children": {
+        "recipes": {
+          "manageRecipes": "Rezepte verwalten",
+          "title": "Rezepte"
+        },
         "users": {
           "createUser": "Benutzer erstellen",
           "deleteUser": "Benutzer löschen",

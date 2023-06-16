@@ -1,0 +1,129 @@
+import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSortModule, Sort } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { TranslocoModule } from '@ngneat/transloco';
+import { BehaviorSubject, Observable, combineLatest, map, shareReplay, startWith, switchMap, tap } from 'rxjs';
+import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
+import { SettingsSectionComponent } from 'src/app/components/settings-section/settings-section.component';
+import { ApiService } from 'src/app/core/api/api.service';
+import { AuthService } from 'src/app/core/auth/auth.service';
+import { PaginationOptions } from 'src/app/core/models/pagination-options';
+import { ListRecipe, RecipeFilters } from 'src/app/core/models/recipe';
+import { SortOption } from 'src/app/core/models/sort-option';
+import { I18nDatePipe } from 'src/app/core/pipes/i18n-date.pipe';
+import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
+
+@Component({
+  selector: 'app-admin-recipes-page',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterLink,
+    TranslocoModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ErrorDisplayComponent,
+    SettingsSectionComponent,
+    I18nDatePipe,
+  ],
+  templateUrl: './admin-recipes-page.component.html',
+  styleUrls: ['./admin-recipes-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class AdminRecipesPageComponent {
+  loading$ = new BehaviorSubject<boolean>(true);
+  saving$ = new BehaviorSubject<boolean>(false);
+
+  private resetList$ = new EventEmitter<void>();
+
+  filters$: Observable<RecipeFilters> = this.route.queryParams.pipe(
+    map((params) => {
+      let sort: SortOption;
+
+      if (typeof params['sort'] !== 'undefined') {
+        sort = { column: params['sort'], dir: 'asc' };
+      } else {
+        sort = { column: 'created_at', dir: 'desc' };
+      }
+
+      if (typeof params['sort-dir'] !== 'undefined') {
+        sort.dir = params['sort-dir'] === 'desc' ? 'desc' : 'asc';
+      }
+
+      return { search: params['search'], sort: [sort] };
+    })
+  );
+
+  paginationOptions$ = new BehaviorSubject<PaginationOptions>({ page: 1, perPage: 10 });
+
+  recipes$ = combineLatest([this.filters$, this.auth.user$, this.resetList$.pipe(startWith(undefined))]).pipe(
+    switchMap(([filters, _auth, _reset]) => {
+      this.paginationOptions$.next({ ...this.paginationOptions$.value, page: 1 });
+
+      return this.paginationOptions$.pipe(
+        tap(() => this.loading$.next(true)),
+        switchMap((paginationOptions) =>
+          this.api.recipes.getList({
+            all: true,
+            search: filters.search,
+            sort: filters.sort,
+            pagination: paginationOptions,
+          })
+        ),
+        tap(() => this.loading$.next(false))
+      );
+    }),
+    handledErrorInterceptor(),
+    shareReplay({ bufferSize: 1, refCount: true })
+  );
+
+  error$ = this.api.handleRequestError(this.recipes$);
+
+  displayedColumns = ['id', 'name', 'user', 'created_at', 'actions'];
+
+  constructor(
+    private auth: AuthService,
+    private api: ApiService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
+
+  onSearch(search: string) {
+    this.applyFilterParams({ search: search.length > 0 ? search : null });
+  }
+
+  onSort(sort: Sort) {
+    if (sort.direction === '') {
+      this.applyFilterParams({ sort: null });
+    } else {
+      this.applyFilterParams({ sort: sort.active, 'sort-dir': sort.direction });
+    }
+  }
+
+  onPagination(page: PageEvent) {
+    this.paginationOptions$.next({ page: page.pageIndex + 1, perPage: page.pageSize });
+  }
+
+  trackByRecipe(index: number, recipe: ListRecipe) {
+    return recipe.id;
+  }
+
+  private applyFilterParams(params: { [key: string]: string | null }) {
+    this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
+  }
+}
+

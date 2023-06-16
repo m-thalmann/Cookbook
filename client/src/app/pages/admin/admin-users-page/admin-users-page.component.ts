@@ -11,8 +11,9 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
-import { BehaviorSubject, combineLatest, shareReplay, startWith, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, map, shareReplay, startWith, switchMap, tap } from 'rxjs';
 import { ConfirmDialogComponent } from 'src/app/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { PromptDialogComponent } from 'src/app/components/dialogs/prompt-dialog/prompt-dialog.component';
 import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
@@ -23,7 +24,7 @@ import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
 import { toPromise } from 'src/app/core/helpers/to-promise';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
 import { SortOption } from 'src/app/core/models/sort-option';
-import { DetailedUser, EditUserData } from 'src/app/core/models/user';
+import { DetailedUser, EditUserData, UserFilters } from 'src/app/core/models/user';
 import { I18nDatePipe } from 'src/app/core/pipes/i18n-date.pipe';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
@@ -62,23 +63,34 @@ export class AdminUsersPageComponent {
 
   private resetList$ = new EventEmitter<void>();
 
-  search$ = new BehaviorSubject<string | undefined>(undefined);
-  sortOptions$ = new BehaviorSubject<SortOption[] | undefined>([{ column: 'id', dir: 'asc' }]);
+  filters$: Observable<UserFilters> = this.route.queryParams.pipe(
+    map((params) => {
+      let sort: SortOption;
+
+      if (typeof params['sort'] !== 'undefined') {
+        sort = { column: params['sort'], dir: 'asc' };
+      } else {
+        sort = { column: 'created_at', dir: 'desc' };
+      }
+
+      if (typeof params['sort-dir'] !== 'undefined') {
+        sort.dir = params['sort-dir'] === 'desc' ? 'desc' : 'asc';
+      }
+
+      return { search: params['search'], sort: [sort] };
+    })
+  );
+
   paginationOptions$ = new BehaviorSubject<PaginationOptions>({ page: 1, perPage: 10 });
 
-  users$ = combineLatest([
-    this.search$,
-    this.sortOptions$,
-    this.auth.user$,
-    this.resetList$.pipe(startWith(undefined)),
-  ]).pipe(
-    switchMap(([search, sortOptions, _auth, _reset]) => {
+  users$ = combineLatest([this.filters$, this.auth.user$, this.resetList$.pipe(startWith(undefined))]).pipe(
+    switchMap(([filters, _auth, _reset]) => {
       this.paginationOptions$.next({ ...this.paginationOptions$.value, page: 1 });
 
       return this.paginationOptions$.pipe(
         tap(() => this.loading$.next(true)),
         switchMap((paginationOptions) =>
-          this.api.users.getList({ search, sort: sortOptions, pagination: paginationOptions })
+          this.api.users.getList({ search: filters.search, sort: filters.sort, pagination: paginationOptions })
         ),
         tap(() => this.loading$.next(false))
       );
@@ -94,20 +106,22 @@ export class AdminUsersPageComponent {
   constructor(
     public auth: AuthService,
     private api: ApiService,
+    private route: ActivatedRoute,
+    private router: Router,
     private snackbar: SnackbarService,
     private dialog: MatDialog,
     private transloco: TranslocoService
   ) {}
 
   onSearch(search: string) {
-    this.search$.next(search.trim() || undefined);
+    this.applyFilterParams({ search: search.length > 0 ? search : null });
   }
 
   onSort(sort: Sort) {
     if (sort.direction === '') {
-      this.sortOptions$.next(undefined);
+      this.applyFilterParams({ sort: null });
     } else {
-      this.sortOptions$.next([{ column: sort.active, dir: sort.direction }]);
+      this.applyFilterParams({ sort: sort.active, 'sort-dir': sort.direction });
     }
   }
 
@@ -230,5 +244,8 @@ export class AdminUsersPageComponent {
 
     this.saving$.next(false);
   }
-}
 
+  private applyFilterParams(params: { [key: string]: string | null }) {
+    this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
+  }
+}

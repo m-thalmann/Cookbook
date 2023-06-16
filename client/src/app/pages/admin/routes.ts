@@ -12,6 +12,11 @@ export default [
         component: AdminUsersPageComponent,
         data: { title: 'pages.admin.area' },
       },
+      {
+        path: 'recipes',
+        component: AdminRecipesPageComponent,
+        data: { title: 'pages.admin.area' },
+      },
     ],
   },
 ] as Routes;

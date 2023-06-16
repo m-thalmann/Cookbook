@@ -1,3 +1,5 @@
+import { SortOption } from './sort-option';
+
 export interface User {
   id: number;
   name: string;
@@ -31,4 +33,9 @@ export interface EditUserData {
   is_verified?: boolean;
   do_logout?: boolean;
   current_password?: string;
+}
+
+export interface UserFilters {
+  search?: string;
+  sort?: SortOption[];
 }

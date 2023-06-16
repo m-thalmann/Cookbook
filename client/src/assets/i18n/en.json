@@ -89,6 +89,7 @@
     "save": "Save",
     "search": "Search",
     "updateDate": "Update date",
+    "user": "User",
     "verified": "Verified",
     "view": "View",
     "yourEmail": "Your email"
@@ -159,6 +160,10 @@
     "admin": {
       "area": "Admin area",
       "children": {
+        "recipes": {
+          "manageRecipes": "Manage recipes",
+          "title": "Recipes"
+        },
         "users": {
           "createUser": "Create user",
           "deleteUser": "Delete user",

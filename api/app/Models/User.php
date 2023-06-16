@@ -47,7 +47,7 @@ class User extends Authenticatable implements MustVerifyEmail {
      */
     protected $sortableProperties = ['id', 'name', 'email', 'language_code'];
     protected $filterableProperties = ['name', 'email', 'language_code'];
-    protected $searchProperties = ['name'];
+    protected $searchProperties = ['name', 'email'];
 
     public function recipes() {
         return $this->hasMany(Recipe::class);
