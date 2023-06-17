@@ -286,6 +286,7 @@
     "viewTrash": "Papierkorb anzeigen"
   },
   "users": {
-    "notFound": "Benutzer konnte nicht gefunden werden."
+    "notFound": "Benutzer konnte nicht gefunden werden.",
+    "search": "Benutzer suchen"
   }
 }

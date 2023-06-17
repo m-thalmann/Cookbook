@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -14,7 +14,7 @@ import { toPromise } from 'src/app/core/helpers/to-promise';
 import { User } from 'src/app/core/models/user';
 
 @Component({
-  selector: 'app-add-cookbook-user-dialog',
+  selector: 'app-search-user-dialog',
   standalone: true,
   imports: [
     CommonModule,
@@ -26,11 +26,11 @@ import { User } from 'src/app/core/models/user';
     MatInputModule,
     MatProgressSpinnerModule,
   ],
-  templateUrl: './add-cookbook-user-dialog.component.html',
-  styleUrls: ['./add-cookbook-user-dialog.component.scss'],
+  templateUrl: './search-user-dialog.component.html',
+  styleUrls: ['./search-user-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AddCookbookUserDialogComponent {
+export class SearchUserDialogComponent {
   private subSink = new Subscription();
 
   foundUser$ = new BehaviorSubject<User | null>(null);
@@ -40,7 +40,13 @@ export class AddCookbookUserDialogComponent {
   searchingError$ = new BehaviorSubject<string | null>(null);
 
   constructor(
-    private dialogRef: MatDialogRef<AddCookbookUserDialogComponent>,
+    @Inject(MAT_DIALOG_DATA)
+    public data: {
+      icon?: string;
+      title?: string;
+      selectIcon?: string;
+    },
+    private dialogRef: MatDialogRef<SearchUserDialogComponent>,
     private api: ApiService,
     private transloco: TranslocoService
   ) {
@@ -49,6 +55,18 @@ export class AddCookbookUserDialogComponent {
         this.dialogRef.disableClose = searching;
       })
     );
+  }
+
+  get icon() {
+    return this.data?.icon ?? 'person_search';
+  }
+
+  get title() {
+    return this.data?.title ?? this.transloco.translate('users.searchUser');
+  }
+
+  get selectIcon() {
+    return this.data?.selectIcon ?? 'check_circle_outline';
   }
 
   async searchUser(username: string) {

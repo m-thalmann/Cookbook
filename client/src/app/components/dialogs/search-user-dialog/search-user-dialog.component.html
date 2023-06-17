@@ -6,8 +6,8 @@
     } as vm"
 >
     <h2 mat-dialog-title>
-        <mat-icon>person_add</mat-icon>
-        {{ 'pages.cookbooks.children.edit.addUser' | transloco }}
+        <mat-icon>{{ icon }}</mat-icon>
+        {{ title }}
     </h2>
 
     <div mat-dialog-content>
@@ -53,12 +53,12 @@
             </div>
 
             <button
-                mat-button
+                mat-icon-button
                 [mat-dialog-close]="vm.foundUser.id"
                 color="primary"
                 [disabled]="!vm.foundUser || vm.searching"
             >
-                {{ 'actions.add' | transloco }}
+                <mat-icon>{{ selectIcon }}</mat-icon>
             </button>
         </div>
 

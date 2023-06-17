@@ -9,6 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { BehaviorSubject, combineLatest, map, of, shareReplay, startWith, switchMap, switchScan, tap } from 'rxjs';
 import { ConfirmDialogComponent } from 'src/app/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { SearchUserDialogComponent } from 'src/app/components/dialogs/search-user-dialog/search-user-dialog.component';
 import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
@@ -20,7 +21,6 @@ import { PaginationOptions } from 'src/app/core/models/pagination-options';
 import { I18nDatePipe } from 'src/app/core/pipes/i18n-date.pipe';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
-import { AddCookbookUserDialogComponent } from '../add-cookbook-user-dialog/add-cookbook-user-dialog.component';
 
 const Logger = new LoggerClass('Cookbooks');
 
@@ -118,7 +118,16 @@ export class ManageCookbookUsersComponent {
 
   async doAddUser() {
     const userId: number | null | undefined = await toPromise(
-      this.dialog.open(AddCookbookUserDialogComponent, { width: '350px' }).afterClosed()
+      this.dialog
+        .open(SearchUserDialogComponent, {
+          data: {
+            icon: 'person_add',
+            title: this.transloco.translate('pages.cookbooks.children.edit.addUser'),
+            selectIcon: 'add_circle_outline',
+          },
+          width: '350px',
+        })
+        .afterClosed()
     );
 
     if (userId == null) {

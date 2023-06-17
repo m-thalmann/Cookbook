@@ -286,6 +286,7 @@
     "viewTrash": "View trash"
   },
   "users": {
-    "notFound": "User could not be found."
+    "notFound": "User could not be found.",
+    "search": "Search user"
   }
 }
