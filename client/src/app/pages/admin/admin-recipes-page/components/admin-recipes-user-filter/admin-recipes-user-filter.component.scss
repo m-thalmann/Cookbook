@@ -1,0 +1,99 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use 'theme';
+@use 'variables' as *;
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+  box-sizing: border-box;
+
+  height: 3em;
+  padding: 0 0.5em;
+
+  border-radius: 2em;
+
+  @include mat.elevation(2);
+
+  @include theme.apply() using ($variables) {
+    background: darken(map.get($variables, 'background'), 10%);
+  }
+
+  &.disabled {
+    opacity: 0.5;
+  }
+
+  > mat-icon {
+    font-size: 2em;
+    height: fit-content;
+    width: fit-content;
+  }
+
+  > * {
+    min-width: 0;
+  }
+
+  em {
+    flex: 1;
+    padding: 0 0.5em;
+    font-weight: lighter;
+  }
+
+  .details {
+    flex: 1;
+
+    > * {
+      display: block;
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .email {
+      opacity: 0.75;
+      font-size: 0.9em;
+    }
+  }
+
+  button {
+    all: unset;
+
+    &:not(:disabled) {
+      cursor: pointer;
+    }
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    width: 2em;
+    height: 2em;
+
+    transition: background $transition-time;
+
+    @include theme.apply() using ($variables) {
+      &:not(:disabled) {
+        &:hover {
+          background: rgba(map.get($variables, 'foreground'), 0.25);
+        }
+      }
+
+      &:last-of-type {
+        background: rgba(map.get($variables, 'primary'), 0.5);
+
+        &:not(:disabled) {
+          &:hover {
+            background: rgba(map.get($variables, 'primary'), 0.75);
+          }
+        }
+
+        &:disabled {
+          background: rgba(map.get($variables, 'foreground'), 0.125);
+        }
+      }
+    }
+  }
+}

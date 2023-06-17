@@ -166,10 +166,13 @@
             <mat-icon>password</mat-icon>
             <span>{{ 'pages.admin.children.users.editPassword' | transloco }}</span>
         </button>
+        <a routerLink="/admin/recipes" [queryParams]="{ 'user-id': user.id }" mat-menu-item>
+            <mat-icon>restaurant</mat-icon>
+            <span>{{ 'pages.admin.children.users.viewRecipes' | transloco }}</span>
+        </a>
         <button mat-menu-item (click)="deleteUser(user.id)">
             <mat-icon color="warn">delete</mat-icon>
             <span class="fg-warn">{{ 'pages.admin.children.users.deleteUser' | transloco }}</span>
         </button>
     </ng-template>
 </mat-menu>
-

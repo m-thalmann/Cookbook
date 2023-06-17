@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AdminPageLayoutComponent } from './admin-page-layout/admin-page-layout.component';
+import { AdminRecipesPageComponent } from './admin-recipes-page/admin-recipes-page.component';
 import { AdminUsersPageComponent } from './admin-users-page/admin-users-page.component';
 
 export default [

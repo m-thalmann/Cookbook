@@ -1,0 +1,23 @@
+<div class="container" [class.disabled]="disabled">
+    <ng-container *ngIf="user">
+        <mat-icon inline>account_circle</mat-icon>
+
+        <div class="details">
+            <span class="name">
+                {{ user.name }}
+            </span>
+            <div class="email">
+                {{ user.email }}
+            </div>
+        </div>
+
+        <button (click)="doRemoveSearchUser()" [disabled]="disabled"><mat-icon>clear</mat-icon></button>
+    </ng-container>
+    <em *ngIf="!user">{{ 'users.filterUser' | transloco }}</em>
+    <button (click)="openSearchUserDialog()" [disabled]="disabled">
+        <mat-icon *ngIf="!loading">filter_alt</mat-icon>
+
+        <mat-spinner [diameter]="24" *ngIf="loading"></mat-spinner>
+    </button>
+</div>
+

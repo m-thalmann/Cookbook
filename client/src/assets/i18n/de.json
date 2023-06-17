@@ -173,7 +173,8 @@
           "empty": "Keine Benutzer gefunden",
           "manageUsers": "Benutzer verwalten",
           "sendVerificationEmail": "Verifizierungs-E-Mail senden",
-          "title": "Benutzer"
+          "title": "Benutzer",
+          "viewRecipes": "Rezepte anzeigen"
         }
       }
     },
@@ -286,7 +287,8 @@
     "viewTrash": "Papierkorb anzeigen"
   },
   "users": {
+    "filterUser": "Benutzer filtern...",
     "notFound": "Benutzer konnte nicht gefunden werden.",
-    "search": "Benutzer suchen"
+    "searchUser": "Benutzer suchen"
   }
 }

@@ -173,7 +173,8 @@
           "empty": "No users found",
           "manageUsers": "Manage users",
           "sendVerificationEmail": "Send verification email",
-          "title": "Users"
+          "title": "Users",
+          "viewRecipes": "View recipes"
         }
       }
     },
@@ -286,7 +287,8 @@
     "viewTrash": "View trash"
   },
   "users": {
+    "filterUser": "Filter user...",
     "notFound": "User could not be found.",
-    "search": "Search user"
+    "searchUser": "Search user"
   }
 }

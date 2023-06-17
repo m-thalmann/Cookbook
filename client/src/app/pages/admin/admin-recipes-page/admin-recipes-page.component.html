@@ -2,6 +2,8 @@
     *ngIf="{
         recipes: recipes$ | async,
         filters: filters$ | async,
+        filteredUser: filteredUser$ | async,
+        filteredUserLoading: filteredUserLoading$ | async,
         paginationOptions: paginationOptions$ | async,
         error: error$ | async,
         loading: loading$ | async,
@@ -22,7 +24,6 @@
         </app-error-display>
 
         <div class="actions" *ngIf="!vm.error">
-            <!-- TODO: filters -->
             <mat-form-field class="search-field" appearance="outline" subscriptSizing="dynamic" hideRequiredMarker>
                 <mat-label> {{ 'general.search' | transloco }} </mat-label>
                 <input
@@ -42,6 +43,13 @@
                     <mat-icon>search</mat-icon>
                 </button>
             </mat-form-field>
+
+            <app-admin-recipes-user-filter
+                [user]="vm.filteredUser"
+                (userChange)="onUserFilter($event)"
+                [disabled]="vm.loading || vm.saving || vm.filteredUserLoading"
+                [loading]="vm.filteredUserLoading"
+            ></app-admin-recipes-user-filter>
         </div>
 
         <div class="table-container" *ngIf="!vm.error">

@@ -18,6 +18,7 @@ import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
 import { toPromise } from 'src/app/core/helpers/to-promise';
 import { Cookbook, CookbookUser } from 'src/app/core/models/cookbook';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
+import { User } from 'src/app/core/models/user';
 import { I18nDatePipe } from 'src/app/core/pipes/i18n-date.pipe';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
@@ -117,7 +118,7 @@ export class ManageCookbookUsersComponent {
   }
 
   async doAddUser() {
-    const userId: number | null | undefined = await toPromise(
+    const user: User | null | undefined = await toPromise(
       this.dialog
         .open(SearchUserDialogComponent, {
           data: {
@@ -130,14 +131,14 @@ export class ManageCookbookUsersComponent {
         .afterClosed()
     );
 
-    if (userId == null) {
+    if (!user) {
       return;
     }
 
     this.saving.next(true);
 
     try {
-      await toPromise(this.api.cookbooks.users.create(this.cookbook!.id, userId, false));
+      await toPromise(this.api.cookbooks.users.create(this.cookbook!.id, user.id, false));
       this.resetList$.next();
 
       this.snackbar.info('messages.userAdded', { translateMessage: true });

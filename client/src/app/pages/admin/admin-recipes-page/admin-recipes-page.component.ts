@@ -15,11 +15,16 @@ import { ErrorDisplayComponent } from 'src/app/components/error-display/error-di
 import { SettingsSectionComponent } from 'src/app/components/settings-section/settings-section.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
+import { toPromise } from 'src/app/core/helpers/to-promise';
+import { FilterOption } from 'src/app/core/models/filter-option';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
 import { ListRecipe, RecipeFilters } from 'src/app/core/models/recipe';
 import { SortOption } from 'src/app/core/models/sort-option';
+import { User } from 'src/app/core/models/user';
 import { I18nDatePipe } from 'src/app/core/pipes/i18n-date.pipe';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
+import { SnackbarService } from 'src/app/core/services/snackbar.service';
+import { AdminRecipesUserFilterComponent } from './components/admin-recipes-user-filter/admin-recipes-user-filter.component';
 
 @Component({
   selector: 'app-admin-recipes-page',
@@ -38,6 +43,7 @@ import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interce
     MatInputModule,
     ErrorDisplayComponent,
     SettingsSectionComponent,
+    AdminRecipesUserFilterComponent,
     I18nDatePipe,
   ],
   templateUrl: './admin-recipes-page.component.html',
@@ -47,6 +53,9 @@ import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interce
 export class AdminRecipesPageComponent {
   loading$ = new BehaviorSubject<boolean>(true);
   saving$ = new BehaviorSubject<boolean>(false);
+
+  filteredUser$ = new BehaviorSubject<User | null>(null);
+  filteredUserLoading$ = new BehaviorSubject<boolean>(false);
 
   private resetList$ = new EventEmitter<void>();
 
@@ -64,8 +73,30 @@ export class AdminRecipesPageComponent {
         sort.dir = params['sort-dir'] === 'desc' ? 'desc' : 'asc';
       }
 
-      return { search: params['search'], sort: [sort] };
-    })
+      return { search: params['search'], sort: [sort], userId: params['user-id'] };
+    }),
+    tap(async (filters) => {
+      if (filters.userId === undefined) {
+        this.filteredUser$.next(null);
+        return;
+      }
+      if (filters.userId === this.filteredUser$.value?.id.toString()) {
+        return;
+      }
+
+      this.filteredUserLoading$.next(true);
+
+      try {
+        const userResponse = await toPromise(this.api.users.get(filters.userId));
+
+        this.filteredUser$.next(userResponse!.body!.data);
+      } catch (e) {
+        this.snackbar.warn('messages.errors.loadingUserInformation', { translateMessage: true });
+      }
+
+      this.filteredUserLoading$.next(false);
+    }),
+    shareReplay({ bufferSize: 1, refCount: true })
   );
 
   paginationOptions$ = new BehaviorSubject<PaginationOptions>({ page: 1, perPage: 10 });
@@ -76,14 +107,21 @@ export class AdminRecipesPageComponent {
 
       return this.paginationOptions$.pipe(
         tap(() => this.loading$.next(true)),
-        switchMap((paginationOptions) =>
-          this.api.recipes.getList({
+        switchMap((paginationOptions) => {
+          let filtersOptions: FilterOption[] = [];
+
+          if (filters.userId !== undefined) {
+            filtersOptions.push({ column: 'user_id', value: filters.userId });
+          }
+
+          return this.api.recipes.getList({
             all: true,
             search: filters.search,
+            filters: filtersOptions,
             sort: filters.sort,
             pagination: paginationOptions,
-          })
-        ),
+          });
+        }),
         tap(() => this.loading$.next(false))
       );
     }),
@@ -99,7 +137,8 @@ export class AdminRecipesPageComponent {
     private auth: AuthService,
     private api: ApiService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private snackbar: SnackbarService
   ) {}
 
   onSearch(search: string) {
@@ -116,6 +155,11 @@ export class AdminRecipesPageComponent {
 
   onPagination(page: PageEvent) {
     this.paginationOptions$.next({ page: page.pageIndex + 1, perPage: page.pageSize });
+  }
+
+  onUserFilter(user: User | null) {
+    this.filteredUser$.next(user);
+    this.applyFilterParams({ 'user-id': user?.id.toString() ?? null });
   }
 
   trackByRecipe(index: number, recipe: ListRecipe) {

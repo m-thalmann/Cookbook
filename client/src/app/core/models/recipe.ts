@@ -72,4 +72,5 @@ export interface RecipeFilters {
   search?: string;
   category?: string;
   sort?: SortOption[];
+  userId?: number;
 }
