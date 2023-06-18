@@ -49,7 +49,7 @@ class CookbookController extends Controller {
         $all = $request->exists('all');
 
         $cookbooks = Cookbook::query()
-            ->withCount(['recipes', 'users'])
+            ->withCount(['recipes'])
             ->sort($request)
             ->search($request);
 

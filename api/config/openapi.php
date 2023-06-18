@@ -53,6 +53,9 @@ return [
                 [
                     'name' => 'Users',
                 ],
+                [
+                    'name' => 'Admin',
+                ],
             ],
 
             'route' => [
@@ -62,4 +65,3 @@ return [
         ],
     ],
 ];
-

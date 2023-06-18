@@ -11,7 +11,14 @@ use App\Http\Controllers\UserController;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Route;
 
-$routeFiles = ['auth', 'users', 'recipes', 'recipe-images', 'cookbooks'];
+$routeFiles = [
+    'auth',
+    'users',
+    'recipes',
+    'recipe-images',
+    'cookbooks',
+    'admin',
+];
 
 Route::get(
     '/',

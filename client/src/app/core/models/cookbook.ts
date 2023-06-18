@@ -9,7 +9,6 @@ export interface Cookbook {
 
 export interface CookbookWithCounts extends Cookbook {
   recipes_count: number;
-  users_count: number;
 }
 
 export interface CookbookWithUserMeta extends Cookbook {

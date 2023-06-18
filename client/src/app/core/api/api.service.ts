@@ -13,6 +13,7 @@ import { Injectable } from '@angular/core';
 import { TranslocoService } from '@ngneat/transloco';
 import { EMPTY, Observable, catchError, filter, first, map, of, shareReplay, switchMap } from 'rxjs';
 import { HandledError } from '../helpers/handled-error';
+import { AdminDashboardData } from '../models/admin-dashboard-data';
 import { AuthToken } from '../models/auth-token';
 import { Cookbook, CookbookUser, CookbookWithCounts, CookbookWithUserMeta, SimpleCookbook } from '../models/cookbook';
 import { FilterOption } from '../models/filter-option';
@@ -532,6 +533,14 @@ export class ApiService {
 
         delete: (cookbookId: number, userId: number) =>
           this.delete<void>(`/cookbooks/${cookbookId}/users/${userId}`, TokenType.Access),
+      },
+    };
+  }
+
+  public get admin() {
+    return {
+      dashboard: {
+        get: () => this.get<{ data: AdminDashboardData }>(`/admin/dashboard`, TokenType.Access),
       },
     };
   }

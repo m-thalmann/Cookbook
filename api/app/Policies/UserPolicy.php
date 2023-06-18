@@ -77,4 +77,15 @@ class UserPolicy {
     public function admin(User $user, User $model) {
         return $user->is_admin && $user->id !== $model->id;
     }
+
+    /**
+     * Determine whether the user is an admin.
+     *
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function isAdmin(User $user) {
+        // handled by the "before" method
+        return false;
+    }
 }

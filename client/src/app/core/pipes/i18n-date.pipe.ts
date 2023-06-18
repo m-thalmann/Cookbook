@@ -4,6 +4,7 @@ import { TranslocoService } from '@ngneat/transloco';
 
 @Pipe({
   name: 'i18nDate',
+  pure: true,
   standalone: true,
 })
 export class I18nDatePipe implements PipeTransform {
@@ -15,4 +16,3 @@ export class I18nDatePipe implements PipeTransform {
     return formatDate(value, format, this.locale);
   }
 }
-

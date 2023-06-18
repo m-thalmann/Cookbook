@@ -7,6 +7,7 @@ use App\Notifications\VerifyEmail;
 use App\Traits\Models\QueryOrganizable;
 use App\Traits\Models\SerializesDatesToTimestamp;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -59,6 +60,10 @@ class User extends Authenticatable implements MustVerifyEmail {
             ->withPivot('is_admin')
             ->withTimestamps()
             ->as('meta');
+    }
+
+    public function scopeIsAdmin(Builder $query, bool $admin = true) {
+        $query->where('is_admin', $admin);
     }
 
     public function preferredLocale() {

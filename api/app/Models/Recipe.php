@@ -150,6 +150,10 @@ class Recipe extends BaseModel {
         $query->orderBy('category', 'asc');
     }
 
+    public function scopeIsPublic(Builder $query, bool $public = true) {
+        $query->where('is_public', $public);
+    }
+
     public function prunable() {
         return static::where('deleted_at', '<', now()->subWeek());
     }

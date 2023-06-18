@@ -16,14 +16,10 @@ class CookbookWithCountsSchema extends CookbookSchema {
             Schema::integer('recipes_count')
                 ->description('The amount of recipes in this cookbook')
                 ->example(12),
-            Schema::integer('users_count')
-                ->description('The amount of users in this cookbook')
-                ->example(4),
         ];
     }
 
     public function getRequired(): array {
-        return [...parent::getRequired(), 'recipes_count', 'users_count'];
+        return [...parent::getRequired(), 'recipes_count'];
     }
 }
-
