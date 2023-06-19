@@ -117,6 +117,7 @@
       "deletingAccount": "Fehler beim Löschen des Kontos",
       "deletingRecipe": "Fehler beim Löschen des Rezepts",
       "errorOccurred": "Ein Fehler ist aufgetreten!",
+      "loadingCookbooks": "Fehler beim Laden der Kochbücher",
       "loadingUserInformation": "Fehler beim Laden der Benutzerinformationen",
       "loadingUsers": "Fehler beim Laden der Benutzer",
       "loggingOutFromAllSessions": "Fehler beim Abmelden aller Sitzung",
@@ -161,6 +162,10 @@
     "admin": {
       "area": "Admin Bereich",
       "children": {
+        "cookbooks": {
+          "manageCookbooks": "Kochbücher verwalten",
+          "title": "Kochbücher"
+        },
         "dashboard": {
           "administrators": "Administratoren",
           "api": "API",

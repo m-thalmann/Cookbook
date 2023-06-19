@@ -3,7 +3,6 @@
 namespace App\OpenApi\Responses\Cookbooks;
 
 use App\OpenApi\Schemas\CookbookSchema;
-use App\OpenApi\Schemas\CookbookUserSchema;
 use GoldSpecDigital\ObjectOrientedOAS\Objects\MediaType;
 use GoldSpecDigital\ObjectOrientedOAS\Objects\Response;
 use GoldSpecDigital\ObjectOrientedOAS\Objects\Schema;
@@ -45,18 +44,13 @@ class CookbookShowWithUserResponse extends ResponseFactory {
                                                     ->example(1660997908)
                                             )
                                             ->required(
-                                                'meta',
+                                                'is_admin',
                                                 'created_at',
                                                 'updated_at'
                                             ),
                                     ]
                                 )
-                                ->required(
-                                    ...[
-                                        ...$cookbookSchema->getRequired(),
-                                        'meta',
-                                    ]
-                                )
+                                ->required(...$cookbookSchema->getRequired())
                         )
                         ->required('data')
                 )

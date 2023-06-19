@@ -117,6 +117,7 @@
       "deletingAccount": "Error deleting account",
       "deletingRecipe": "Error permanently deleting recipe",
       "errorOccurred": "An error occurred!",
+      "loadingCookbooks": "Error loading cookbooks",
       "loadingUserInformation": "Error loading user information",
       "loadingUsers": "Error loading users",
       "loggingOutFromAllSessions": "Error logging out from all sessions",
@@ -161,6 +162,10 @@
     "admin": {
       "area": "Admin area",
       "children": {
+        "cookbooks": {
+          "manageCookbooks": "Manage cookbooks",
+          "title": "Cookbooks"
+        },
         "dashboard": {
           "administrators": "Administrators",
           "api": "API",

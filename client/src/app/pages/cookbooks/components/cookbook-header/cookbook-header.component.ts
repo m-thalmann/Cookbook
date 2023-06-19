@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { SkeletonComponent } from 'src/app/components/skeleton/skeleton.component';
+import { AuthService } from 'src/app/core/auth/auth.service';
 import { CoerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-property';
 import { Cookbook, CookbookWithUserMeta } from 'src/app/core/models/cookbook';
 import { RouteHelperService } from 'src/app/core/services/route-helper.service';
@@ -26,9 +27,9 @@ export class CookbookHeaderComponent {
   @CoerceBooleanProperty()
   showBackButton: any = false;
 
-  constructor(public routeHelper: RouteHelperService) {}
+  constructor(public routeHelper: RouteHelperService, public auth: AuthService) {}
 
   get isAdmin() {
-    return this.cookbook && 'meta' in this.cookbook && this.cookbook.meta.is_admin;
+    return this.cookbook && 'meta' in this.cookbook && this.cookbook.meta?.is_admin;
   }
 }

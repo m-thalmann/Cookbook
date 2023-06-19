@@ -15,19 +15,14 @@ import { ErrorDisplayComponent } from 'src/app/components/error-display/error-di
 import { SettingsSectionComponent } from 'src/app/components/settings-section/settings-section.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
-import { toPromise } from 'src/app/core/helpers/to-promise';
-import { FilterOption } from 'src/app/core/models/filter-option';
+import { CookbookFilters, CookbookWithCounts } from 'src/app/core/models/cookbook';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
-import { ListRecipe, RecipeFilters } from 'src/app/core/models/recipe';
 import { SortOption } from 'src/app/core/models/sort-option';
-import { User } from 'src/app/core/models/user';
 import { I18nDatePipe } from 'src/app/core/pipes/i18n-date.pipe';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
-import { SnackbarService } from 'src/app/core/services/snackbar.service';
-import { AdminRecipesUserFilterComponent } from './components/admin-recipes-user-filter/admin-recipes-user-filter.component';
 
 @Component({
-  selector: 'app-admin-recipes-page',
+  selector: 'app-admin-cookbooks-page',
   standalone: true,
   imports: [
     CommonModule,
@@ -43,21 +38,17 @@ import { AdminRecipesUserFilterComponent } from './components/admin-recipes-user
     MatInputModule,
     ErrorDisplayComponent,
     SettingsSectionComponent,
-    AdminRecipesUserFilterComponent,
     I18nDatePipe,
   ],
-  templateUrl: './admin-recipes-page.component.html',
-  styleUrls: ['./admin-recipes-page.component.scss'],
+  templateUrl: './admin-cookbooks-page.component.html',
+  styleUrls: ['./admin-cookbooks-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AdminRecipesPageComponent {
+export class AdminCookbooksPageComponent {
   loading$ = new BehaviorSubject<boolean>(true);
   saving$ = new BehaviorSubject<boolean>(false);
 
-  filteredUser$ = new BehaviorSubject<User | null>(null);
-  filteredUserLoading$ = new BehaviorSubject<boolean>(false);
-
-  filters$: Observable<RecipeFilters> = this.route.queryParams.pipe(
+  filters$: Observable<CookbookFilters> = this.route.queryParams.pipe(
     map((params) => {
       let sort: SortOption;
 
@@ -71,55 +62,21 @@ export class AdminRecipesPageComponent {
         sort.dir = params['sort-dir'] === 'desc' ? 'desc' : 'asc';
       }
 
-      return { search: params['search'], sort: [sort], userId: params['user-id'] };
-    }),
-    tap(async (filters) => {
-      if (filters.userId === undefined) {
-        this.filteredUser$.next(null);
-        return;
-      }
-      if (filters.userId === this.filteredUser$.value?.id.toString()) {
-        return;
-      }
-
-      this.filteredUserLoading$.next(true);
-
-      try {
-        const userResponse = await toPromise(this.api.users.get(filters.userId));
-
-        this.filteredUser$.next(userResponse!.body!.data);
-      } catch (e) {
-        this.snackbar.warn('messages.errors.loadingUserInformation', { translateMessage: true });
-      }
-
-      this.filteredUserLoading$.next(false);
-    }),
-    shareReplay({ bufferSize: 1, refCount: true })
+      return { search: params['search'], sort: [sort] };
+    })
   );
 
   paginationOptions$ = new BehaviorSubject<PaginationOptions>({ page: 1, perPage: 10 });
 
-  recipes$ = combineLatest([this.filters$, this.auth.user$]).pipe(
+  cookbooks$ = combineLatest([this.filters$, this.auth.user$]).pipe(
     switchMap(([filters, _]) => {
       this.paginationOptions$.next({ ...this.paginationOptions$.value, page: 1 });
 
       return this.paginationOptions$.pipe(
         tap(() => this.loading$.next(true)),
-        switchMap((paginationOptions) => {
-          let filtersOptions: FilterOption[] = [];
-
-          if (filters.userId !== undefined) {
-            filtersOptions.push({ column: 'user_id', value: filters.userId });
-          }
-
-          return this.api.recipes.getList({
-            all: true,
-            search: filters.search,
-            filters: filtersOptions,
-            sort: filters.sort,
-            pagination: paginationOptions,
-          });
-        }),
+        switchMap((paginationOptions) =>
+          this.api.cookbooks.getList(true, paginationOptions, filters.sort, filters.search)
+        ),
         tap(() => this.loading$.next(false))
       );
     }),
@@ -127,16 +84,15 @@ export class AdminRecipesPageComponent {
     shareReplay({ bufferSize: 1, refCount: true })
   );
 
-  error$ = this.api.handleRequestError(this.recipes$);
+  error$ = this.api.handleRequestError(this.cookbooks$);
 
-  displayedColumns = ['id', 'name', 'user', 'created_at', 'actions'];
+  displayedColumns = ['id', 'name', 'recipes', 'users', 'created_at', 'actions'];
 
   constructor(
-    private auth: AuthService,
+    public auth: AuthService,
     private api: ApiService,
     private route: ActivatedRoute,
-    private router: Router,
-    private snackbar: SnackbarService
+    private router: Router
   ) {}
 
   onSearch(search: string) {
@@ -155,13 +111,8 @@ export class AdminRecipesPageComponent {
     this.paginationOptions$.next({ page: page.pageIndex + 1, perPage: page.pageSize });
   }
 
-  onUserFilter(user: User | null) {
-    this.filteredUser$.next(user);
-    this.applyFilterParams({ 'user-id': user?.id.toString() ?? null });
-  }
-
-  trackByRecipe(index: number, recipe: ListRecipe) {
-    return recipe.id;
+  trackByCookbook(index: number, cookbook: CookbookWithCounts) {
+    return cookbook.id;
   }
 
   private applyFilterParams(params: { [key: string]: string | null }) {

@@ -1,3 +1,4 @@
+import { SortOption } from './sort-option';
 import { User } from './user';
 
 export interface Cookbook {
@@ -9,10 +10,11 @@ export interface Cookbook {
 
 export interface CookbookWithCounts extends Cookbook {
   recipes_count: number;
+  users_count: number;
 }
 
 export interface CookbookWithUserMeta extends Cookbook {
-  meta: {
+  meta?: {
     is_admin: boolean;
     created_at: number;
     updated_at: number;
@@ -30,4 +32,9 @@ export interface CookbookUser extends User {
     created_at: number;
     updated_at: number;
   };
+}
+
+export interface CookbookFilters {
+  search?: string;
+  sort?: SortOption[];
 }

@@ -107,6 +107,10 @@ export class AuthService implements OnDestroy {
     );
   }
 
+  get user() {
+    return this._user$.value;
+  }
+
   async initialize() {
     if (this._accessToken$.value === null) {
       this._accessToken$.next(null);

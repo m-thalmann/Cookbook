@@ -15,6 +15,10 @@
             <mat-icon matListItemIcon>restaurant</mat-icon>
             <span>{{ 'pages.admin.children.recipes.title' | transloco }}</span>
         </a>
+        <a mat-list-item routerLink="./cookbooks" routerLinkActive="current">
+            <mat-icon matListItemIcon>menu_book</mat-icon>
+            <span>{{ 'pages.admin.children.cookbooks.title' | transloco }}</span>
+        </a>
     </mat-nav-list>
 
     <router-outlet></router-outlet>

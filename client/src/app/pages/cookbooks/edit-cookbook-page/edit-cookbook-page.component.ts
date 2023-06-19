@@ -57,7 +57,7 @@ export class EditCookbookPageComponent {
   cookbook$ = combineLatest([this.cookbookId$, this.updateCookbook$.pipe(startWith(undefined))]).pipe(
     switchMap(([cookbookId, _]) => this.api.cookbooks.get(cookbookId)),
     switchMap((cookbook) => {
-      if (cookbook.body?.data.meta.is_admin) {
+      if (cookbook.body?.data.meta?.is_admin || this.auth.user?.is_admin) {
         return of(cookbook);
       }
 

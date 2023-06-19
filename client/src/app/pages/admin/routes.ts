@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AdminCookbooksPageComponent } from './admin-cookbooks-page/admin-cookbooks-page.component';
 import { AdminDashboardPageComponent } from './admin-dashboard-page/admin-dashboard-page.component';
 import { AdminPageLayoutComponent } from './admin-page-layout/admin-page-layout.component';
 import { AdminRecipesPageComponent } from './admin-recipes-page/admin-recipes-page.component';
@@ -23,6 +24,11 @@ export default [
       {
         path: 'recipes',
         component: AdminRecipesPageComponent,
+        data: { title: 'pages.admin.area' },
+      },
+      {
+        path: 'cookbooks',
+        component: AdminCookbooksPageComponent,
         data: { title: 'pages.admin.area' },
       },
     ],

@@ -49,7 +49,7 @@ class CookbookController extends Controller {
         $all = $request->exists('all');
 
         $cookbooks = Cookbook::query()
-            ->withCount(['recipes'])
+            ->withCount(['recipes', 'users'])
             ->sort($request)
             ->search($request);
 
@@ -172,12 +172,21 @@ class CookbookController extends Controller {
             statusCode: 429
         )
     ]
-    public function show(int $cookbook) {
-        return JsonResource::make(
-            authUser()
+    public function show(Cookbook $cookbook) {
+        $this->authorizeAnonymously('view', $cookbook);
+
+        if (authUser()) {
+            $userCookbook = authUser()
                 ->cookbooks()
-                ->findOrFail($cookbook)
-        );
+                ->where('cookbook_id', $cookbook->id)
+                ->first();
+
+            if ($userCookbook) {
+                $cookbook = $userCookbook;
+            }
+        }
+
+        return JsonResource::make($cookbook);
     }
 
     /**
