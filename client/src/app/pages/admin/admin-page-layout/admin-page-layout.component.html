@@ -1,5 +1,12 @@
 <app-settings-layout icon="admin_panel_settings" [title]="'pages.admin.area' | transloco">
     <mat-nav-list nav-list>
+        <a mat-list-item routerLink="./dashboard" routerLinkActive="current">
+            <mat-icon matListItemIcon>dashboard</mat-icon>
+            <span>{{ 'pages.admin.children.dashboard.title' | transloco }}</span>
+        </a>
+
+        <div divider></div>
+
         <a mat-list-item routerLink="./users" routerLinkActive="current">
             <mat-icon matListItemIcon>people</mat-icon>
             <span>{{ 'pages.admin.children.users.title' | transloco }}</span>

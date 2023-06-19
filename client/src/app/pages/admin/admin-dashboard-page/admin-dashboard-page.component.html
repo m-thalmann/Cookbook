@@ -1,0 +1,98 @@
+<ng-container *ngIf="{ dashboard: dashboard$ | async, error: error$ | async } as vm">
+    <app-error-display [error]="vm.error">
+        <ng-template #otherErrorMessage>
+            {{ 'pages.admin.children.dashboard.loadingError' | transloco }}
+        </ng-template>
+    </app-error-display>
+
+    <div class="cards">
+        <ng-container *ngIf="vm.dashboard?.body?.data as data; else loading">
+            <div class="card">
+                <div class="amount">
+                    {{ data.recipes.total_amount }}
+                </div>
+                <div class="title">
+                    <mat-icon>restaurant</mat-icon>
+                    {{ 'recipes.recipes' | transloco }}
+                </div>
+
+                <ul class="details">
+                    <li>
+                        <span class="detail-name">{{ 'general.public' | transloco }}:</span>
+                        {{ vm.dashboard?.body?.data?.recipes?.public_amount }}
+                    </li>
+                    <li>
+                        <span class="detail-name">{{ 'general.private' | transloco }}:</span>
+                        {{ vm.dashboard?.body?.data?.recipes?.private_amount }}
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="amount">
+                    {{ data.users.total_amount }}
+                </div>
+                <div class="title">
+                    <mat-icon>people</mat-icon>
+                    {{ 'users.users' | transloco }}
+                </div>
+
+                <ul class="details">
+                    <li>
+                        <span class="detail-name">
+                            {{ 'pages.admin.children.dashboard.administrators' | transloco }}:
+                        </span>
+                        {{ data.users.admin_amount }}
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="amount" *ngIf="formatBytes(data.recipe_images.storage_size) as formattedBytes">
+                    {{ formattedBytes.value }} {{ formattedBytes.sizeTranslationKey | transloco }}
+                </div>
+                <div class="title">
+                    <mat-icon>collections</mat-icon>
+                    {{ 'pages.admin.children.dashboard.recipeImages' | transloco }}
+                </div>
+
+                <ul class="details">
+                    <li>
+                        <span class="detail-name">{{ 'pages.admin.children.dashboard.totalImages' | transloco }}:</span>
+                        {{ data.recipe_images.total_amount }}
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="amount">
+                    {{ data.cookbooks.total_amount }}
+                </div>
+                <div class="title">
+                    <mat-icon>menu_book</mat-icon>
+                    {{ 'cookbooks.cookbooks' | transloco }}
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="amount">v{{ data.api.version }}</div>
+                <div class="title">
+                    <mat-icon>dns</mat-icon>
+                    {{ 'pages.admin.children.dashboard.api' | transloco }}
+                </div>
+
+                <ul class="details">
+                    <li>
+                        <span class="detail-name">{{ 'pages.admin.children.dashboard.environment' | transloco }}:</span>
+                        {{ data.api.environment }}
+                    </li>
+                </ul>
+            </div>
+        </ng-container>
+    </div>
+</ng-container>
+
+<ng-template #loading>
+    <app-skeleton *appRepeat="5"></app-skeleton>
+</ng-template>
+

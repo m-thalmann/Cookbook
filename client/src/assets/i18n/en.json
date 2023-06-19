@@ -83,6 +83,7 @@
     "name": "Name",
     "password": "Password",
     "passwordConfirmation": "Password confirmation",
+    "private": "Private",
     "profile": "Profile",
     "public": "Public",
     "resultsFound": "[[ amount, =1 '1 result found', default '{{amount}} results found' ]]",
@@ -160,6 +161,21 @@
     "admin": {
       "area": "Admin area",
       "children": {
+        "dashboard": {
+          "administrators": "Administrators",
+          "api": "API",
+          "environment": "Umgebung",
+          "fileSizes": {
+            "b": "Bytes",
+            "kb": "KB",
+            "mb": "MB",
+            "gb": "GB"
+          },
+          "loadingError": "Dashboard could not be loaded.",
+          "recipeImages": "Recipe images",
+          "title": "Dashboard",
+          "totalImages": "Total images"
+        },
         "recipes": {
           "manageRecipes": "Manage recipes",
           "title": "Recipes"
@@ -289,6 +305,7 @@
   "users": {
     "filterUser": "Filter user...",
     "notFound": "User could not be found.",
-    "searchUser": "Search user"
+    "searchUser": "Search user",
+    "users": "Users"
   }
 }
