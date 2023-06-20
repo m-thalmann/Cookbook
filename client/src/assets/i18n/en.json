@@ -131,7 +131,8 @@
       "unexpectedError": "An unexpected error has occurred",
       "userCantEditCookbook": "You can't edit this cookbook",
       "userCantEditRecipe": "You can't edit this recipe",
-      "verifyingEmail": "Error verifying email. Please try again"
+      "verifyingEmail": "Error verifying email. Please try again",
+      "wrongUserForVerification": "You have to login with the user you want to verify the email address for"
     },
     "imageDeleted": "Image deleted successfully",
     "imageUploaded": "Image uploaded successfully",

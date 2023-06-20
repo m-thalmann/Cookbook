@@ -131,7 +131,8 @@
       "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten!",
       "userCantEditCookbook": "Du kannst dieses Kochbuch nicht bearbeiten",
       "userCantEditRecipe": "Du kannst dieses Rezept nicht bearbeiten",
-      "verifyingEmail": "Fehler beim Verifizieren der E-Mail. Bitte versuche es erneut."
+      "verifyingEmail": "Fehler beim Verifizieren der E-Mail. Bitte versuche es erneut.",
+      "wrongUserForVerification": "Du musst dich mit dem Benutzer anmelden, für den du die E-Mail verifizieren möchtest."
     },
     "imageDeleted": "Bild wurde erfolgreich gelöscht",
     "imageUploaded": "Bild wurde erfolgreich hochgeladen",
