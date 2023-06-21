@@ -24,8 +24,10 @@ import { CoerceBooleanProperty } from 'src/app/core/helpers/coerce-boolean-prope
 import { trimAndNull } from 'src/app/core/helpers/trim-and-null';
 import { Ingredient } from 'src/app/core/models/ingredient';
 import { DetailedRecipe, EditRecipeFormData } from 'src/app/core/models/recipe';
+import { User } from 'src/app/core/models/user';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 import { EditRecipeIngredientFormGroupComponent } from './components/edit-recipe-ingredient-form-group/edit-recipe-ingredient-form-group.component';
+import { EditRecipeUserSelectFormControlComponent } from './components/edit-recipe-user-select-form-control/edit-recipe-user-select-form-control.component';
 
 interface FormIngredientGroup {
   name: FormControl<string | null>;
@@ -58,6 +60,7 @@ export interface FormIngredient {
     MatIconModule,
     MatProgressSpinnerModule,
     EditRecipeIngredientFormGroupComponent,
+    EditRecipeUserSelectFormControlComponent,
     EditorComponent,
   ],
   templateUrl: './edit-recipe-details-form.component.html',
@@ -72,12 +75,16 @@ export class EditRecipeDetailsFormComponent {
   set disabled(disabled: any) {
     const isDisabled = coerceBooleanProperty(disabled);
 
+    this._disabled = isDisabled;
+
     if (isDisabled) {
       this.form.disable();
     } else {
       this.form.enable();
     }
   }
+
+  private _disabled = false;
 
   @Input()
   @CoerceBooleanProperty()
@@ -124,7 +131,7 @@ export class EditRecipeDetailsFormComponent {
     tap(() => this.form.controls.cookbookId.disable()),
     switchMap(() => this.api.cookbooks.getEditableList()),
     tap(() => {
-      if (!this.form.disabled) {
+      if (!this._disabled) {
         this.form.controls.cookbookId.enable();
       }
     }),
@@ -142,6 +149,7 @@ export class EditRecipeDetailsFormComponent {
 
   form = this.fb.nonNullable.group({
     name: [<string>'', [Validators.required]],
+    user: [<User>this.auth.user, [Validators.required]],
     isPublic: [<boolean>false, [Validators.required]],
     category: [<string | null>null],
     cookbookId: [<number | null>null],
@@ -197,6 +205,7 @@ export class EditRecipeDetailsFormComponent {
 
     this.form.patchValue({
       name: this.recipe.name,
+      user: this.recipe.user,
       isPublic: this.recipe.is_public,
       category: this.recipe.category,
       cookbookId: this.recipe.cookbook_id,
@@ -308,6 +317,7 @@ export class EditRecipeDetailsFormComponent {
 
     const recipe: EditRecipeFormData = {
       name: this.form.controls.name.value,
+      user_id: this.form.controls.user.value.id,
       is_public: this.form.controls.isPublic.value,
       category: trimAndNull(this.form.controls.category.value),
       cookbook_id: this.form.controls.cookbookId.value,
@@ -334,6 +344,7 @@ export class EditRecipeDetailsFormComponent {
 
   private setServerValidationErrors(errorResponse: HttpErrorResponse) {
     const fieldsMap: { [key: string]: string } = {
+      user_id: 'user',
       is_public: 'isPublic',
       preparation_time_minutes: 'preparationTimeMinutes',
       resting_time_minutes: 'restingTimeMinutes',

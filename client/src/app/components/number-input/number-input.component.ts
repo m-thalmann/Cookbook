@@ -39,8 +39,6 @@ export class NumberInputComponent implements ControlValueAccessor {
   private onChange = (_: number) => {};
   private onTouched = () => {};
 
-  constructor() {}
-
   get stepSize() {
     return typeof this.step !== 'undefined' ? this.step : 1;
   }

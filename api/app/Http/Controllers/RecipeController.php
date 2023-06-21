@@ -304,8 +304,8 @@ class RecipeController extends Controller {
             'is_shared' => ['boolean'],
         ];
 
-        if (auth()->id() === $recipe->user_id) {
-            // if the user is the owner it can update the cookbook
+        if (authUser()->is_admin || auth()->id() === $recipe->user_id) {
+            // if the user is an admin or the owner it can update the cookbook
 
             $validationRules['cookbook_id'] = [
                 'bail',

@@ -1,0 +1,111 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use 'theme';
+@use 'variables' as *;
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  box-sizing: border-box;
+
+  padding: 0.5em;
+
+  border-radius: 0.25em;
+
+  @include theme.apply() using ($variables) {
+    border: 1px solid rgba(map.get($variables, 'foreground'), 0.38);
+
+    &.disabled {
+      border: 1px solid rgba(map.get($variables, 'foreground'), 0.06);
+
+      .details {
+        color: rgba(map.get($variables, 'foreground'), 0.38);
+      }
+    }
+
+    &.has-error {
+      border: 1px solid map.get($variables, 'warn');
+    }
+  }
+
+  > mat-icon {
+    font-size: 2em;
+    height: fit-content;
+    width: fit-content;
+  }
+
+  > * {
+    min-width: 0;
+  }
+
+  .details {
+    flex: 1;
+
+    > * {
+      display: block;
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .email {
+      opacity: 0.75;
+      font-size: 0.9em;
+    }
+  }
+
+  button {
+    all: unset;
+
+    &:not(:disabled) {
+      cursor: pointer;
+    }
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    width: 2.5em;
+    height: 2.5em;
+
+    transition: background $transition-time;
+
+    @include theme.apply() using ($variables) {
+      &:not(:disabled) {
+        &:hover {
+          background: rgba(map.get($variables, 'foreground'), 0.25);
+        }
+      }
+
+      &:last-of-type {
+        background: rgba(map.get($variables, 'primary'), 0.5);
+
+        &:not(:disabled) {
+          &:hover {
+            background: rgba(map.get($variables, 'primary'), 0.75);
+          }
+        }
+
+        &:disabled {
+          background: rgba(map.get($variables, 'foreground'), 0.125);
+        }
+      }
+    }
+  }
+}
+
+.error {
+  display: inline-block;
+
+  font-size: 0.8em;
+  line-height: 2rem;
+
+  padding: 0 1rem;
+
+  @include theme.apply() using ($variables) {
+    color: map.get($variables, 'warn');
+  }
+}

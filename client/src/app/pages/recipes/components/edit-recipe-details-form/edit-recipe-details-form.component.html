@@ -21,6 +21,13 @@
                 }}</mat-error>
             </mat-form-field>
 
+            <app-edit-recipe-user-select-form-control
+                formControlName="user"
+                [error]="form.controls.user.getError('serverError')"
+                class="field-user"
+                style="grid-area: user"
+            ></app-edit-recipe-user-select-form-control>
+
             <mat-checkbox formControlName="isPublic" class="field-public" style="grid-area: public">
                 <span>
                     {{ 'general.public' | transloco }}

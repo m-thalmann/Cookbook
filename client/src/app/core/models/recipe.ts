@@ -64,6 +64,7 @@ export interface EditRecipeData {
 }
 
 export interface EditRecipeFormData extends BasicRecipe {
+  user_id: number;
   ingredients: EditRecipeFormIngredientData[];
 }
 

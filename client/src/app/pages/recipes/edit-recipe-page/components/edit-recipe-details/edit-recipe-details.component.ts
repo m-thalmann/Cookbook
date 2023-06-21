@@ -100,6 +100,7 @@ export class EditRecipeDetailsComponent {
 
     const checkForUpdateKeys = [
       'name',
+      'user_id',
       'is_public',
       'description',
       'category',
