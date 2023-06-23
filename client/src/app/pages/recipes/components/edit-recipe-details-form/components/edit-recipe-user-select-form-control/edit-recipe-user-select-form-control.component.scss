@@ -74,24 +74,20 @@
     transition: background $transition-time;
 
     @include theme.apply() using ($variables) {
+      background: rgba(map.get($variables, 'primary'), 0.5);
+
       &:not(:disabled) {
         &:hover {
-          background: rgba(map.get($variables, 'foreground'), 0.25);
+          background: rgba(map.get($variables, 'primary'), 0.75);
+        }
+
+        &:focus {
+          background: map.get($variables, 'primary');
         }
       }
 
-      &:last-of-type {
-        background: rgba(map.get($variables, 'primary'), 0.5);
-
-        &:not(:disabled) {
-          &:hover {
-            background: rgba(map.get($variables, 'primary'), 0.75);
-          }
-        }
-
-        &:disabled {
-          background: rgba(map.get($variables, 'foreground'), 0.125);
-        }
+      &:disabled {
+        background: rgba(map.get($variables, 'foreground'), 0.125);
       }
     }
   }

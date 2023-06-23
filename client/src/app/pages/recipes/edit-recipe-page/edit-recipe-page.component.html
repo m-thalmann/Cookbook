@@ -20,6 +20,7 @@
         mat-stretch-tabs="false"
         preserveContent
         dynamicHeight
+        animationDuration="0ms"
         [selectedIndex]="vm.selectedTab"
         (selectedIndexChange)="onTabChange($event)"
         *ngIf="!vm.error"
@@ -32,12 +33,14 @@
                 </div>
             </ng-template>
 
-            <app-edit-recipe-details
-                [recipe]="vm.recipe"
-                [disabled]="vm.detailsSaving || vm.imagesSaving"
-                (updateRecipe)="updateRecipe$.emit()"
-                (saving)="onDetailsSaving($event)"
-            ></app-edit-recipe-details>
+            <ng-template matTabContent>
+                <app-edit-recipe-details
+                    [recipe]="vm.recipe"
+                    [disabled]="vm.detailsSaving || vm.imagesSaving"
+                    (updateRecipe)="updateRecipe$.emit()"
+                    (saving)="onDetailsSaving($event)"
+                ></app-edit-recipe-details>
+            </ng-template>
         </mat-tab>
 
         <mat-tab [disabled]="vm.detailsSaving || vm.imagesSaving">
@@ -49,12 +52,14 @@
                 </div>
             </ng-template>
 
-            <app-edit-recipe-images
-                [recipe]="vm.recipe"
-                [disabled]="vm.detailsSaving || vm.imagesSaving"
-                (updateRecipe)="updateRecipe$.emit()"
-                (saving)="onImagesSaving($event)"
-            ></app-edit-recipe-images>
+            <ng-template matTabContent>
+                <app-edit-recipe-images
+                    [recipe]="vm.recipe"
+                    [disabled]="vm.detailsSaving || vm.imagesSaving"
+                    (updateRecipe)="updateRecipe$.emit()"
+                    (saving)="onImagesSaving($event)"
+                ></app-edit-recipe-images>
+            </ng-template>
         </mat-tab>
     </mat-tab-group>
 
