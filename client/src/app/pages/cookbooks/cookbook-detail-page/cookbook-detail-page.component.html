@@ -43,7 +43,9 @@
                         [recipe]="recipe"
                     ></app-recipe-card>
 
-                    <p *ngIf="recipes.length === 0" class="not-found-item">{{ 'recipes.empty' | transloco }}</p>
+                    <app-no-items-display *ngIf="recipes.length === 0">
+                        {{ 'recipes.empty' | transloco }}
+                    </app-no-items-display>
                 </ng-container>
 
                 <ng-template #recipesLoading>

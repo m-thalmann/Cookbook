@@ -23,7 +23,7 @@
         <app-recipe-search-filter
             class="sort-filter"
             [disabled]="!!vm.recipesLoading"
-            labelText="Sort"
+            [labelText]="'actions.sort' | transloco"
             labelIcon="sort"
             (change)="doSort($event.target!)"
         >
@@ -107,14 +107,16 @@
     <div class="recipes">
         <ng-container *ngIf="vm.recipes?.body?.data as recipes">
             <app-recipe-card *ngFor="let recipe of recipes; trackBy: trackByRecipe" [recipe]="recipe"></app-recipe-card>
-
-            <p *ngIf="recipes.length === 0" class="not-found-item">{{ 'recipes.empty' | transloco }}</p>
         </ng-container>
 
         <ng-container *ngIf="!vm.recipes && !vm.recipesError">
             <app-recipe-card [recipe]="null" *appRepeat="6"></app-recipe-card>
         </ng-container>
     </div>
+
+    <app-no-items-display *ngIf="vm.recipes?.body?.data?.length === 0">
+        {{ 'recipes.empty' | transloco }}
+    </app-no-items-display>
 
     <app-error-display [error]="vm.recipesError">
         <ng-template #otherErrorMessage> {{ 'recipes.loadingError' | transloco }} </ng-template>

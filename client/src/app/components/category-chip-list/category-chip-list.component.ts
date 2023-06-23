@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
 import { ClampArrayPipe } from 'src/app/core/pipes/clamp-array.pipe';
+import { NoItemsDisplayComponent } from '../no-items-display/no-items-display.component';
 import { SkeletonComponent } from '../skeleton/skeleton.component';
 
 @Component({
@@ -10,7 +11,7 @@ import { SkeletonComponent } from '../skeleton/skeleton.component';
   templateUrl: './category-chip-list.component.html',
   styleUrls: ['./category-chip-list.component.scss'],
   standalone: true,
-  imports: [CommonModule, RouterLink, TranslocoModule, ClampArrayPipe, SkeletonComponent],
+  imports: [CommonModule, RouterLink, TranslocoModule, ClampArrayPipe, SkeletonComponent, NoItemsDisplayComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CategoryChipListComponent {

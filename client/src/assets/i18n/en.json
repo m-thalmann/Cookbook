@@ -18,7 +18,8 @@
     "print": "Print",
     "restore": "Restore",
     "seeAll": "See all",
-    "send": "Send"
+    "send": "Send",
+    "sort": "Sort"
   },
   "auth": {
     "dontRememberYourPassword": "Don't remember your password?",

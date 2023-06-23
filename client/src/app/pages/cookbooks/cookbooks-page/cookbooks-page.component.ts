@@ -7,6 +7,7 @@ import { TranslocoModule } from '@ngneat/transloco';
 import { BehaviorSubject, catchError, map, shareReplay, switchMap, switchScan, tap, throwError } from 'rxjs';
 import { CookbookCardComponent } from 'src/app/components/cookbook-card/cookbook-card.component';
 import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
+import { NoItemsDisplayComponent } from 'src/app/components/no-items-display/no-items-display.component';
 import { SkeletonComponent } from 'src/app/components/skeleton/skeleton.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
@@ -30,6 +31,7 @@ const AMOUNT_ITEMS = 18;
     MatProgressSpinnerModule,
     CookbookCardComponent,
     ErrorDisplayComponent,
+    NoItemsDisplayComponent,
     SkeletonComponent,
     RepeatDirective,
   ],

@@ -28,6 +28,7 @@ import { ListRecipe, RecipeFilters } from 'src/app/core/models/recipe';
 import { SortOption } from 'src/app/core/models/sort-option';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 import { ErrorDisplayComponent } from '../error-display/error-display.component';
+import { NoItemsDisplayComponent } from '../no-items-display/no-items-display.component';
 import { RecipeCardComponent } from '../recipe-card/recipe-card.component';
 import { SearchBarComponent } from '../search-bar/search-bar.component';
 import { SkeletonComponent } from '../skeleton/skeleton.component';
@@ -55,6 +56,7 @@ interface AvailableSortOption {
     RecipeSearchFilterComponent,
     RecipeCardComponent,
     ErrorDisplayComponent,
+    NoItemsDisplayComponent,
     SkeletonComponent,
     RepeatDirective,
   ],

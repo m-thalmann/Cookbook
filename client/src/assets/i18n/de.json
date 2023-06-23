@@ -18,7 +18,8 @@
     "print": "Drucken",
     "restore": "Wiederherstellen",
     "seeAll": "Alle anzeigen",
-    "send": "Senden"
+    "send": "Senden",
+    "sort": "Sortieren"
   },
   "auth": {
     "dontRememberYourPassword": "Passwort vergessen?",

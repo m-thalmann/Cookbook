@@ -127,13 +127,10 @@
   @media screen and (min-width: 800px) {
     grid-template-columns: repeat(3, 1fr);
   }
+}
 
-  .not-found-item {
-    margin: 0;
-    margin-top: 0.5em;
-
-    font-style: italic;
-  }
+app-no-items-display {
+  margin-top: 1em;
 }
 
 app-error-display {

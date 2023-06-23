@@ -1,0 +1,48 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use 'theme';
+@use 'mixins';
+
+:host {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 0.5em 0.75em;
+  border-radius: 0.25em;
+
+  @include mat.elevation(2);
+
+  @include theme.apply() using ($variables) {
+    background: darken(map.get($variables, 'background'), 5%);
+  }
+
+  @include mixins.desktop() {
+    width: 20em;
+  }
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+
+  width: fit-content;
+
+  > * {
+    min-width: 0;
+  }
+
+  mat-icon {
+    font-size: 2em !important;
+    width: 1em !important;
+  }
+
+  .message {
+    font-style: italic;
+
+    @include theme.apply() using ($variables) {
+      color: rgba(map.get($variables, 'foreground'), 0.5);
+    }
+  }
+}

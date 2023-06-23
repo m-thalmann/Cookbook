@@ -7,6 +7,7 @@ import { TranslocoModule } from '@ngneat/transloco';
 import { Observable, combineLatest, map, shareReplay, switchMap, tap } from 'rxjs';
 import { CategoryChipListComponent } from 'src/app/components/category-chip-list/category-chip-list.component';
 import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
+import { NoItemsDisplayComponent } from 'src/app/components/no-items-display/no-items-display.component';
 import { PageSectionComponent } from 'src/app/components/page-section/page-section.component';
 import { RecipeCardComponent } from 'src/app/components/recipe-card/recipe-card.component';
 import { ApiService } from 'src/app/core/api/api.service';
@@ -34,6 +35,7 @@ import { CookbookHeaderComponent } from '../components/cookbook-header/cookbook-
     CategoryChipListComponent,
     RecipeCardComponent,
     ErrorDisplayComponent,
+    NoItemsDisplayComponent,
     RepeatDirective,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,

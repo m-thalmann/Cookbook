@@ -8,6 +8,7 @@ import { Subscription, of, shareReplay, switchMap } from 'rxjs';
 import { CategoryChipListComponent } from 'src/app/components/category-chip-list/category-chip-list.component';
 import { CookbookCardComponent } from 'src/app/components/cookbook-card/cookbook-card.component';
 import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
+import { NoItemsDisplayComponent } from 'src/app/components/no-items-display/no-items-display.component';
 import { PageSectionComponent } from 'src/app/components/page-section/page-section.component';
 import { RecipeCardComponent } from 'src/app/components/recipe-card/recipe-card.component';
 import { SearchBarComponent } from 'src/app/components/search-bar/search-bar.component';
@@ -37,6 +38,7 @@ import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interce
     RecipeCardComponent,
     CookbookCardComponent,
     ErrorDisplayComponent,
+    NoItemsDisplayComponent,
     RepeatDirective,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -42,14 +42,16 @@
                         *ngFor="let recipe of recipes; trackBy: trackByRecipe"
                         [recipe]="recipe"
                     ></app-recipe-card>
-
-                    <p *ngIf="recipes.length === 0" class="not-found-item">{{ 'recipes.empty' | transloco }}</p>
                 </ng-container>
 
                 <ng-container *ngIf="!vm.recipes && !vm.recipesError">
                     <app-recipe-card [recipe]="null" *appRepeat="amountItems"></app-recipe-card>
                 </ng-container>
             </div>
+
+            <app-no-items-display *ngIf="vm.recipes?.body?.data?.length === 0">
+                {{ 'recipes.empty' | transloco }}
+            </app-no-items-display>
 
             <app-error-display [error]="vm.recipesError">
                 <ng-template #otherErrorMessage> {{ 'recipes.loadingError' | transloco }} </ng-template>
@@ -84,14 +86,16 @@
                         *ngFor="let cookbook of cookbooks; trackBy: trackByCookbook"
                         [cookbook]="cookbook"
                     ></app-cookbook-card>
-
-                    <p *ngIf="cookbooks.length === 0" class="not-found-item">{{ 'cookbooks.empty' | transloco }}</p>
                 </ng-container>
 
                 <ng-container *ngIf="!vm.cookbooks && !vm.cookbooksError">
                     <app-cookbook-card [cookbook]="null" *appRepeat="amountItems"></app-cookbook-card>
                 </ng-container>
             </div>
+
+            <app-no-items-display *ngIf="vm.cookbooks?.body?.data?.length === 0">
+                {{ 'cookbooks.empty' | transloco }}
+            </app-no-items-display>
 
             <app-error-display [error]="vm.cookbooksError">
                 <ng-template #otherErrorMessage> {{ 'cookbooks.loadingError' | transloco }} </ng-template>

@@ -11,9 +11,9 @@
     </p>
     <app-skeleton class="amount-results" *ngIf="vm.cookbooksLoading && !vm.cookbooks" width="10em"></app-skeleton>
 
-    <em *ngIf="vm.cookbooks && vm.cookbooks.totalCookbooks === 0" class="not-found-item">
+    <app-no-items-display *ngIf="vm.cookbooks && vm.cookbooks.totalCookbooks === 0">
         {{ 'cookbooks.empty' | transloco }}
-    </em>
+    </app-no-items-display>
 
     <div class="cookbooks">
         <app-cookbook-card
