@@ -270,4 +270,6 @@ class QueryFilterableTest extends TestCase {
  */
 class QueryFilterableTestClass {
     use QueryFilterable;
+
+    public $filterableProperties;
 }

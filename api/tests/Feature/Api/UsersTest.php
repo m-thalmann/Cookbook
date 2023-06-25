@@ -177,6 +177,16 @@ class UsersTest extends TestCase {
         $response->assertNotFound();
     }
 
+    public function testUserCanBeSearchedByEmail() {
+        $user = $this->createAndLoginUser(isAdmin: false);
+
+        $response = $this->getJson("/v1/users/search/email/{$user->email}");
+
+        $response->assertOk();
+
+        $response->assertJson(['data' => $user->toArray()]);
+    }
+
     public function testUserCanUpdateItself() {
         $user = $this->createAndLoginUser(isAdmin: false);
 

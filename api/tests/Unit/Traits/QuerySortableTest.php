@@ -167,4 +167,6 @@ class QuerySortableTest extends TestCase {
  */
 class QuerySortableTestClass {
     use QuerySortable;
+
+    public $sortableProperties;
 }
