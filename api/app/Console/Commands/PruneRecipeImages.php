@@ -20,7 +20,7 @@ class PruneRecipeImages extends Command {
             return 0;
         }
 
-        $amountDeleted = RecipeImage::pruneImages();
+        $amountDeleted = app(RecipeImage::class)->pruneImages();
 
         $this->info("$amountDeleted images have been deleted.");
 

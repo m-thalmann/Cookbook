@@ -24,21 +24,13 @@ class RecipeImage extends BaseModel {
         return $this->belongsTo(Recipe::class);
     }
 
-    protected static function booted() {
-        static::deleted(function (RecipeImage $image) {
-            if ($image->image_path !== null) {
-                Storage::disk('public')->delete($image->image_path);
-            }
-        });
-    }
-
-    public static function deleteAllImages() {
+    public function deleteAllImages() {
         $images = Storage::disk('public')->allFiles(self::IMAGE_DIRECTORY);
 
         Storage::disk('public')->delete($images);
     }
 
-    public static function pruneImages() {
+    public function pruneImages() {
         $databaseImages = RecipeImage::query()
             ->get('image_path')
             ->pluck('image_path')
@@ -63,5 +55,13 @@ class RecipeImage extends BaseModel {
         }
 
         return $amountToDelete;
+    }
+
+    protected static function booted() {
+        static::deleted(function (RecipeImage $image) {
+            if ($image->image_path !== null) {
+                Storage::disk('public')->delete($image->image_path);
+            }
+        });
     }
 }

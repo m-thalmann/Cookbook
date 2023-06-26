@@ -23,6 +23,6 @@ class DatabaseSeeder extends Seeder {
     }
 
     private function pruneImages() {
-        RecipeImage::pruneImages();
+        app(RecipeImage::class)->pruneImages();
     }
 }

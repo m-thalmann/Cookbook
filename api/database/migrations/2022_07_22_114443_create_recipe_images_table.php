@@ -30,9 +30,8 @@ return new class extends Migration {
      * @return void
      */
     public function down() {
-        RecipeImage::deleteAllImages();
+        app(RecipeImage::class)->deleteAllImages();
 
         Schema::dropIfExists('recipe_images');
     }
 };
-
