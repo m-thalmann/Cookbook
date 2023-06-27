@@ -175,15 +175,13 @@ class CookbookController extends Controller {
     public function show(Cookbook $cookbook) {
         $this->authorizeAnonymously('view', $cookbook);
 
-        if (authUser()) {
-            $userCookbook = authUser()
-                ->cookbooks()
-                ->where('cookbook_id', $cookbook->id)
-                ->first();
+        $userCookbook = authUser()
+            ->cookbooks()
+            ->where('cookbook_id', $cookbook->id)
+            ->first();
 
-            if ($userCookbook) {
-                $cookbook = $userCookbook;
-            }
+        if ($userCookbook) {
+            $cookbook = $userCookbook;
         }
 
         return JsonResource::make($cookbook);

@@ -4,7 +4,6 @@ namespace Tests\Feature\Api\Auth;
 
 use App\Models\Cookbook;
 use App\Models\User;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Tests\TestCase;
 
 class CookbookUserTest extends TestCase {
