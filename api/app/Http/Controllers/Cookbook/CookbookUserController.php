@@ -180,7 +180,7 @@ class CookbookUserController extends Controller {
 
         $this->authorizeAnonymously('update', $cookbook);
 
-        if ($user->user_id === auth()->id()) {
+        if ($user->id === auth()->id()) {
             throw new AuthorizationException(__('messages.cant_update_self'));
         }
 

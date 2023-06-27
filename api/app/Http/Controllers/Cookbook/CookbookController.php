@@ -139,7 +139,7 @@ class CookbookController extends Controller {
          * @var Cookbook
          */
         $cookbook = Cookbook::create($data);
-        $cookbook->users()->attach(auth()->id(), [
+        $cookbook->users()->attach(authUser(), [
             'is_admin' => true,
         ]);
 
