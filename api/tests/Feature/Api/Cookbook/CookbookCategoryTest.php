@@ -19,8 +19,9 @@ class CookbookCategoryTest extends TestCase {
 
         $response->assertOk();
 
-        $response->assertJsonFragment([
+        $response->assertJson([
             'data' => $recipes
+                ->sortBy('id')
                 ->pluck('category')
                 ->unique()
                 ->values()
