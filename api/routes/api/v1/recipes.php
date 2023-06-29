@@ -6,19 +6,6 @@ use App\Http\Controllers\RecipeImageController;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(RecipeController::class)
-    ->middleware(['auth', 'verified'])
-    ->group(function () {
-        Route::get('/trash', 'indexTrash')->name('trash.index');
-        Route::delete('/trash', 'truncateTrash')->name('trash.truncate');
-        Route::delete('/trash/{recipe}', 'forceDestroy')
-            ->name('trash.delete')
-            ->withTrashed();
-        Route::put('/trash/{recipe}', 'restore')
-            ->name('trash.restore')
-            ->withTrashed();
-    });
-
-Route::controller(RecipeController::class)
     ->middleware('auth.optional')
     ->group(function () {
         Route::get('/shared/{shareUuid}', 'showShared')->name('shared.show');

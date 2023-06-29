@@ -405,16 +405,16 @@ export class ApiService {
       trash: {
         getList: (options: ListParamOptions) =>
           this.get<{ data: ListRecipe[]; meta: PaginationMeta }>(
-            '/recipes/trash',
+            '/recipe-trash',
             TokenType.Access,
             ApiService.generateListParamOptions(options)
           ),
 
-        restoreRecipe: (recipeId: number) => this.put<void>(`/recipes/trash/${recipeId}`, {}, TokenType.Access),
+        restoreRecipe: (recipeId: number) => this.put<void>(`/recipe-trash/${recipeId}`, {}, TokenType.Access),
 
-        deleteRecipe: (recipeId: number) => this.delete<void>(`/recipes/trash/${recipeId}`, TokenType.Access),
+        deleteRecipe: (recipeId: number) => this.delete<void>(`/recipe-trash/${recipeId}`, TokenType.Access),
 
-        deleteAll: () => this.delete<void>('/recipes/trash', TokenType.Access),
+        deleteAll: () => this.delete<void>('/recipe-trash', TokenType.Access),
       },
 
       images: {
@@ -545,3 +545,4 @@ export class ApiService {
     };
   }
 }
+

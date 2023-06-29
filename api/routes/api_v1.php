@@ -7,6 +7,7 @@ use App\Http\Controllers\Cookbook\CookbookController;
 use App\Http\Controllers\Cookbook\CookbookRecipeController;
 use App\Http\Controllers\Cookbook\CookbookUserController;
 use App\Http\Controllers\RecipeController;
+use App\Http\Controllers\RecipeTrashController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Route;
@@ -15,6 +16,7 @@ $routeFiles = [
     'auth',
     'users',
     'recipes',
+    'recipe-trash',
     'recipe-images',
     'cookbooks',
     'admin',
@@ -70,6 +72,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         'index',
         'show',
     ]);
+
+    Route::apiResource('recipe-trash', RecipeTrashController::class)
+        ->only(['index', 'update', 'destroy'])
+        ->parameters(['recipe-trash' => 'recipe'])
+        ->withTrashed(['index', 'update', 'destroy']);
 
     Route::apiResource('ingredients', IngredientController::class)->only([
         'index',

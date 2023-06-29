@@ -30,6 +30,9 @@ return [
                     'name' => 'Recipes',
                 ],
                 [
+                    'name' => 'Recipe-Trash',
+                ],
+                [
                     'name' => 'Recipe-Images',
                 ],
                 [
