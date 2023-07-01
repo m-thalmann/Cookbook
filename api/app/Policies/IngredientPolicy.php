@@ -34,7 +34,6 @@ class IngredientPolicy {
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function delete(User $user, Ingredient $ingredient) {
-        return $user->can('delete', $ingredient->recipe);
+        return $user->can('update', $ingredient->recipe);
     }
 }
-
