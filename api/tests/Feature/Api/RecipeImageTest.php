@@ -23,7 +23,8 @@ class RecipeImageTest extends TestCase {
 
         for ($i = 0; $i < $amount; $i++) {
             $image = $recipe->images()->make();
-            $image->image_path = 'dummy-image-path/image.jpg';
+            $image->image_path = "dummy-image-path/image_{$i}.jpg";
+            $this->storageFake->put($image->image_path, 'dummy-image-content');
             $image->save();
 
             $images->push($image);

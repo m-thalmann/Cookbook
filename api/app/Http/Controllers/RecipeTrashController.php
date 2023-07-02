@@ -27,6 +27,7 @@ class RecipeTrashController extends Controller {
     ]
     #[OpenApi\Parameters(factory: IndexRecipesTrashParameters::class)]
     #[OpenApi\Response(factory: RecipeIndexResponse::class, statusCode: 200)]
+    #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[
         OpenApi\Response(
             factory: TooManyRequestsResponse::class,
