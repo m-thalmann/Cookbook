@@ -20,4 +20,3 @@ class UpdateIngredientRequestBody extends RequestBodyFactory {
         );
     }
 }
-

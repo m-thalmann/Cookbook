@@ -42,4 +42,3 @@ class DetailedUserSchema extends UserSchema {
         ];
     }
 }
-

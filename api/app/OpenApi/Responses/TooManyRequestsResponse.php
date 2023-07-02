@@ -12,4 +12,3 @@ class TooManyRequestsResponse extends ResponseFactory {
         );
     }
 }
-

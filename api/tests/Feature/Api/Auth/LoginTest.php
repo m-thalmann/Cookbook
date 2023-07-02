@@ -88,4 +88,3 @@ class LoginTest extends TestCase {
         $response->assertUnauthorized();
     }
 }
-

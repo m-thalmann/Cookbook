@@ -3,7 +3,8 @@
   "scripts": {
     "api": "cd api && php artisan serve",
     "client": "cd client && npm run start -- --open",
-    "prettier": "npx prettier --write ."
+    "prettier": "npx prettier --write .",
+    "prettier-check": "npx prettier --check ."
   },
   "devDependencies": {
     "@prettier/plugin-php": "0.18.8",

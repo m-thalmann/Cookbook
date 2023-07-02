@@ -21,4 +21,3 @@ class TokenShowResponse extends ResponseFactory {
             );
     }
 }
-

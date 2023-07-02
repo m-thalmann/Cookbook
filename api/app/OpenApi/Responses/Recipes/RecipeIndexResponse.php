@@ -19,4 +19,3 @@ class RecipeIndexResponse extends ResponseFactory {
             );
     }
 }
-

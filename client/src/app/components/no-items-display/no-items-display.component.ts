@@ -29,4 +29,3 @@ export class NoItemsDisplayComponent {
     return ICONS[Math.floor(Math.random() * ICONS.length)];
   }
 }
-

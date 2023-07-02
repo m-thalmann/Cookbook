@@ -12,4 +12,3 @@ class NoContentResponse extends ResponseFactory {
             ->description('OK');
     }
 }
-

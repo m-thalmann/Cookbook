@@ -19,4 +19,3 @@ class UserIndexResponse extends ResponseFactory {
             );
     }
 }
-

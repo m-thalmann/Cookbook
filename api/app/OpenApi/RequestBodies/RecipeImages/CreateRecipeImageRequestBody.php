@@ -24,4 +24,3 @@ class CreateRecipeImageRequestBody extends RequestBodyFactory {
         );
     }
 }
-

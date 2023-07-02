@@ -150,4 +150,3 @@ class RecipeTrashController extends Controller {
         return response()->noContent();
     }
 }
-

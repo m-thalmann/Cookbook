@@ -36,4 +36,3 @@ export class SecuritySettingsActiveTokenCardComponent {
 
   expanded = false;
 }
-

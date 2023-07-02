@@ -25,4 +25,3 @@ class ConflictResponse extends ResponseFactory {
             );
     }
 }
-

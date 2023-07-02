@@ -21,4 +21,3 @@ class RecipeImageCreatedResponse extends ResponseFactory {
             );
     }
 }
-

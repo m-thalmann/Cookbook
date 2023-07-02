@@ -34,4 +34,3 @@ class SearchParameters extends ParametersFactory {
         ];
     }
 }
-

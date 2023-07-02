@@ -74,4 +74,3 @@ class FilterParameters extends ParametersFactory {
         );
     }
 }
-

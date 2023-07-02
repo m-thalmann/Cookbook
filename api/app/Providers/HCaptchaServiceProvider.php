@@ -28,4 +28,3 @@ class HCaptchaServiceProvider extends ServiceProvider implements
         return [HCaptchaService::class];
     }
 }
-

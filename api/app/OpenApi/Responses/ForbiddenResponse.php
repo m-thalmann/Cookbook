@@ -24,4 +24,3 @@ class ForbiddenResponse extends ResponseFactory {
             );
     }
 }
-

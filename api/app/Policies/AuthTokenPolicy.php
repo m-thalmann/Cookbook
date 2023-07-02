@@ -31,4 +31,3 @@ class AuthTokenPolicy {
         return $user->id === $authToken->tokenable_id;
     }
 }
-

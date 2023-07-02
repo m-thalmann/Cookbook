@@ -37,4 +37,3 @@ class VerifyEmail extends VerifyEmailBase {
             "/verify-email/$id/$hash?expires=$expires&signature=$signature";
     }
 }
-

@@ -26,4 +26,3 @@ class CategoryIndexResponse extends ResponseFactory {
             );
     }
 }
-

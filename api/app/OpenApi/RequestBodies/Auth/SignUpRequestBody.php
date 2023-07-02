@@ -43,4 +43,3 @@ class SignUpRequestBody extends RequestBodyFactory {
         );
     }
 }
-

@@ -28,4 +28,3 @@ class ResetPasswordRequestBody extends RequestBodyFactory {
         );
     }
 }
-

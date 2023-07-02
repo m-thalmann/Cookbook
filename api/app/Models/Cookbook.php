@@ -50,4 +50,3 @@ class Cookbook extends BaseModel {
         });
     }
 }
-

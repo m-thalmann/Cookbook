@@ -54,4 +54,3 @@ class DetailedRecipeSchema extends RecipeSchema {
         return [...parent::getRequired(), 'ingredients', 'images'];
     }
 }
-

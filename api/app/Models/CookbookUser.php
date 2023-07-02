@@ -17,4 +17,3 @@ class CookbookUser extends BasePivot {
         return $this->belongsTo(User::class);
     }
 }
-

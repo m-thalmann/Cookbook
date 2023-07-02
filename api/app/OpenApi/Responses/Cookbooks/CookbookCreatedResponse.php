@@ -21,4 +21,3 @@ class CookbookCreatedResponse extends ResponseFactory {
             );
     }
 }
-

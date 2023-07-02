@@ -78,4 +78,3 @@ class UpdateRecipeRequestBody extends RequestBodyFactory {
         );
     }
 }
-

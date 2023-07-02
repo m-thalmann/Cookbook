@@ -13,4 +13,3 @@ import { TranslocoModule } from '@ngneat/transloco';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotFoundPageComponent {}
-

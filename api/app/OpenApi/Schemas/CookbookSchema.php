@@ -35,4 +35,3 @@ class CookbookSchema extends ExtendableSchemaFactory {
         return ['id', 'name', 'created_at', 'updated_at'];
     }
 }
-

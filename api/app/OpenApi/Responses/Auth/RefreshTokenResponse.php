@@ -35,4 +35,3 @@ class RefreshTokenResponse extends ResponseFactory {
             );
     }
 }
-

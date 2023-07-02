@@ -88,4 +88,3 @@ class CreateRecipeRequestBody extends RequestBodyFactory {
         );
     }
 }
-

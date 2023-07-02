@@ -134,4 +134,3 @@ class PasswordResetTest extends TestCase {
         $response->assertForbidden();
     }
 }
-

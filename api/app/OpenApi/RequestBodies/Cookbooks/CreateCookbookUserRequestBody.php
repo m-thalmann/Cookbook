@@ -25,4 +25,3 @@ class CreateCookbookUserRequestBody extends RequestBodyFactory {
         );
     }
 }
-

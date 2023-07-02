@@ -10,4 +10,3 @@ class NotFoundResponse extends ResponseFactory {
         return Response::notFound()->description('Not found');
     }
 }
-

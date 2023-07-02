@@ -15,4 +15,3 @@ class AccessTokenSecurityScheme extends SecuritySchemeFactory {
             );
     }
 }
-

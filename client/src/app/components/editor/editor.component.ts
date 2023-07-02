@@ -158,4 +158,3 @@ export class EditorComponent implements ControlValueAccessor {
     this.content.nativeElement.focus();
   }
 }
-

@@ -25,4 +25,3 @@ class HttpException extends Exception {
         return response()->json($errorData, $this->statusCode);
     }
 }
-

@@ -15,4 +15,3 @@ import { SettingsLayoutComponent } from 'src/app/components/settings-layout/sett
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminPageLayoutComponent {}
-

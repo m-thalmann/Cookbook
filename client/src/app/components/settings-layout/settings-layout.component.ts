@@ -14,4 +14,3 @@ export class SettingsLayoutComponent {
   @Input() icon!: string;
   @Input() title!: string;
 }
-

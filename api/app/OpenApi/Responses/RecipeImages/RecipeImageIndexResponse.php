@@ -25,4 +25,3 @@ class RecipeImageIndexResponse extends ResponseFactory {
             );
     }
 }
-

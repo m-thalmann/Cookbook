@@ -26,4 +26,3 @@ class PaginationParameters extends ParametersFactory {
         ];
     }
 }
-

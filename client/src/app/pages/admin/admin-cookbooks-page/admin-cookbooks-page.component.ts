@@ -119,4 +119,3 @@ export class AdminCookbooksPageComponent {
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
 }
-

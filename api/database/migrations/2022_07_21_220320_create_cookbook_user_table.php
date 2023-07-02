@@ -38,4 +38,3 @@ return new class extends Migration {
         Schema::dropIfExists('cookbook_user');
     }
 };
-

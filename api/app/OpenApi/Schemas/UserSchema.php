@@ -32,4 +32,3 @@ class UserSchema extends ExtendableSchemaFactory {
         return ['id', 'name', 'email', 'language_code'];
     }
 }
-

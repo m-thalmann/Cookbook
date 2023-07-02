@@ -18,4 +18,3 @@ export class SkeletonComponent {
   @Input()
   height?: string;
 }
-

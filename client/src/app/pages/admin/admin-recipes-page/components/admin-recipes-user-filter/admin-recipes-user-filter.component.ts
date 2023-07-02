@@ -55,4 +55,3 @@ export class AdminRecipesUserFilterComponent {
     this.userChange.emit(user);
   }
 }
-

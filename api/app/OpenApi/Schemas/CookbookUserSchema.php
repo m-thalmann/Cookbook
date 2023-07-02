@@ -38,4 +38,3 @@ class CookbookUserSchema extends UserSchema {
         return [...parent::getRequired(), 'meta'];
     }
 }
-

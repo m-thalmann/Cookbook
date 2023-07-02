@@ -21,4 +21,3 @@ class RecipeShowResponse extends ResponseFactory {
             );
     }
 }
-

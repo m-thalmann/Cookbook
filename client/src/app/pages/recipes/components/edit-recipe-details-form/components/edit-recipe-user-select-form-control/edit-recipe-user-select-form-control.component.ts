@@ -69,4 +69,3 @@ export class EditRecipeUserSelectFormControlComponent implements ControlValueAcc
     this.onTouched();
   }
 }
-

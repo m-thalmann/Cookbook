@@ -21,4 +21,3 @@ class UserShowDetailedResponse extends ResponseFactory {
             );
     }
 }
-

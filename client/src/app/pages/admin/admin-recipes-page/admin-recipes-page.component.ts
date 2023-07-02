@@ -168,4 +168,3 @@ export class AdminRecipesPageComponent {
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
 }
-

@@ -82,4 +82,3 @@ export class SeoService implements OnDestroy {
     this.subSink.unsubscribe();
   }
 }
-

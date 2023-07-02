@@ -21,4 +21,3 @@ class IngredientCreatedResponse extends ResponseFactory {
             );
     }
 }
-

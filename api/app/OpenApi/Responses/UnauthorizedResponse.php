@@ -30,4 +30,3 @@ class UnauthorizedResponse extends ResponseFactory {
             );
     }
 }
-

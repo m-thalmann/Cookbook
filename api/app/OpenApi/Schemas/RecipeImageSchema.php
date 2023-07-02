@@ -36,4 +36,3 @@ class RecipeImageSchema extends SchemaFactory implements Reusable {
             ->required('id', 'recipe_id', 'created_at', 'updated_at', 'url');
     }
 }
-

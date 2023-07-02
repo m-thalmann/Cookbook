@@ -23,4 +23,3 @@ class UpdateCookbookRequestBody extends RequestBodyFactory {
         );
     }
 }
-

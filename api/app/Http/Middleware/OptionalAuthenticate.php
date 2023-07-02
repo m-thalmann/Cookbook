@@ -21,4 +21,3 @@ class OptionalAuthenticate extends Authenticate {
         return $next($request);
     }
 }
-

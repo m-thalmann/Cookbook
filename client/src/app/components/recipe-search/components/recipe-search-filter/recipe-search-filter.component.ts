@@ -28,4 +28,3 @@ export class RecipeSearchFilterComponent {
 
   @Output() change = new EventEmitter<Event>();
 }
-

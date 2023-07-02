@@ -21,4 +21,3 @@ class UserCreatedResponse extends ResponseFactory {
             );
     }
 }
-

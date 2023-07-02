@@ -28,4 +28,3 @@ class ResetPassword extends ResetPasswordBase {
             "/password-reset/{$notifiable->getEmailForPasswordReset()}/{$this->token}";
     }
 }
-

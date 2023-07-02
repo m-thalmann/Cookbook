@@ -45,4 +45,3 @@ class SortParameters extends ParametersFactory {
         ];
     }
 }
-

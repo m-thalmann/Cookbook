@@ -101,4 +101,3 @@ export class SearchUserDialogComponent {
     this.searching$.next(false);
   }
 }
-
