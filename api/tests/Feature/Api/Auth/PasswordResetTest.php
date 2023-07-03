@@ -14,7 +14,7 @@ class PasswordResetTest extends TestCase {
 
         $user = $this->createUser();
 
-        $response = $this->postJson('/v1/auth/reset-password/send', [
+        $response = $this->postJson('/api/v1/auth/reset-password/send', [
             'email' => $user->email,
         ]);
 
@@ -51,7 +51,7 @@ class PasswordResetTest extends TestCase {
 
         $user = $this->createUser();
 
-        $this->postJson('/v1/auth/reset-password/send', [
+        $this->postJson('/api/v1/auth/reset-password/send', [
             'email' => $user->email,
         ]);
 
@@ -60,7 +60,7 @@ class PasswordResetTest extends TestCase {
         ) use ($user) {
             $newPassword = self::DEFAULT_USER_PASSWORD . '--new';
 
-            $response = $this->postJson('/v1/auth/reset-password', [
+            $response = $this->postJson('/api/v1/auth/reset-password', [
                 'token' => $notification->token,
                 'email' => $user->email,
                 'password' => $newPassword,
@@ -78,7 +78,7 @@ class PasswordResetTest extends TestCase {
     public function testResetPasswordSucceedsWithoutSendingEmailIfUserDoesNotExist() {
         Notification::fake();
 
-        $response = $this->postJson('/v1/auth/reset-password/send', [
+        $response = $this->postJson('/api/v1/auth/reset-password/send', [
             'email' => 'email-not-exists@example.com',
         ]);
 
@@ -90,7 +90,7 @@ class PasswordResetTest extends TestCase {
     public function testResetPasswordFailsWithInvalidToken() {
         $user = $this->createUser();
 
-        $response = $this->postJson('/v1/auth/reset-password', [
+        $response = $this->postJson('/api/v1/auth/reset-password', [
             'token' => 'invalid-token',
             'email' => $user->email,
             'password' => self::DEFAULT_USER_PASSWORD,
@@ -104,14 +104,14 @@ class PasswordResetTest extends TestCase {
 
         $user = $this->createUser();
 
-        $this->postJson('/v1/auth/reset-password/send', [
+        $this->postJson('/api/v1/auth/reset-password/send', [
             'email' => $user->email,
         ]);
 
         Notification::assertSentTo($user, ResetPassword::class, function (
             $notification
         ) use ($user) {
-            $response = $this->postJson('/v1/auth/reset-password', [
+            $response = $this->postJson('/api/v1/auth/reset-password', [
                 'token' => $notification->token,
                 'email' => $user->email,
                 'password' => 'weak',
@@ -125,7 +125,7 @@ class PasswordResetTest extends TestCase {
     }
 
     public function testResetPasswordFailsWithWrongEmail() {
-        $response = $this->postJson('/v1/auth/reset-password', [
+        $response = $this->postJson('/api/v1/auth/reset-password', [
             'token' => 'invalid-token',
             'email' => 'no_user@email.com',
             'password' => self::DEFAULT_USER_PASSWORD,

@@ -23,7 +23,7 @@ class IngredientTest extends TestCase {
             'recipe_id' => $otherRecipe->id,
         ]);
 
-        $response = $this->getJson('/v1/ingredients');
+        $response = $this->getJson('/api/v1/ingredients');
 
         $response->assertOk();
 
@@ -45,12 +45,15 @@ class IngredientTest extends TestCase {
 
         $ingredient = Ingredient::factory()->make();
 
-        $response = $this->postJson("/v1/recipes/{$recipe->id}/ingredients", [
-            'name' => $ingredient->name,
-            'amount' => $ingredient->amount,
-            'unit' => $ingredient->unit,
-            'order_index' => 0,
-        ]);
+        $response = $this->postJson(
+            "/api/v1/recipes/{$recipe->id}/ingredients",
+            [
+                'name' => $ingredient->name,
+                'amount' => $ingredient->amount,
+                'unit' => $ingredient->unit,
+                'order_index' => 0,
+            ]
+        );
 
         $response->assertCreated();
 
@@ -70,12 +73,15 @@ class IngredientTest extends TestCase {
             'recipe_id' => $recipe->id,
         ]);
 
-        $response = $this->postJson("/v1/recipes/{$recipe->id}/ingredients", [
-            'name' => $ingredient->name,
-            'amount' => $ingredient->amount,
-            'unit' => $ingredient->unit,
-            'order_index' => 0,
-        ]);
+        $response = $this->postJson(
+            "/api/v1/recipes/{$recipe->id}/ingredients",
+            [
+                'name' => $ingredient->name,
+                'amount' => $ingredient->amount,
+                'unit' => $ingredient->unit,
+                'order_index' => 0,
+            ]
+        );
 
         $response->assertUnprocessable();
     }
@@ -90,13 +96,16 @@ class IngredientTest extends TestCase {
             'group' => 'group1',
         ]);
 
-        $response = $this->postJson("/v1/recipes/{$recipe->id}/ingredients", [
-            'name' => $ingredient->name,
-            'amount' => $ingredient->amount,
-            'unit' => $ingredient->unit,
-            'group' => 'group2',
-            'order_index' => 0,
-        ]);
+        $response = $this->postJson(
+            "/api/v1/recipes/{$recipe->id}/ingredients",
+            [
+                'name' => $ingredient->name,
+                'amount' => $ingredient->amount,
+                'unit' => $ingredient->unit,
+                'group' => 'group2',
+                'order_index' => 0,
+            ]
+        );
 
         $response->assertCreated();
     }
@@ -111,12 +120,15 @@ class IngredientTest extends TestCase {
 
         $ingredient = Ingredient::factory()->make();
 
-        $response = $this->postJson("/v1/recipes/{$recipe->id}/ingredients", [
-            'name' => $ingredient->name,
-            'amount' => $ingredient->amount,
-            'unit' => $ingredient->unit,
-            'order_index' => 0,
-        ]);
+        $response = $this->postJson(
+            "/api/v1/recipes/{$recipe->id}/ingredients",
+            [
+                'name' => $ingredient->name,
+                'amount' => $ingredient->amount,
+                'unit' => $ingredient->unit,
+                'order_index' => 0,
+            ]
+        );
 
         $response->assertNotFound();
     }
@@ -131,12 +143,15 @@ class IngredientTest extends TestCase {
 
         $ingredient = Ingredient::factory()->make();
 
-        $response = $this->postJson("/v1/recipes/{$recipe->id}/ingredients", [
-            'name' => $ingredient->name,
-            'amount' => $ingredient->amount,
-            'unit' => $ingredient->unit,
-            'order_index' => 0,
-        ]);
+        $response = $this->postJson(
+            "/api/v1/recipes/{$recipe->id}/ingredients",
+            [
+                'name' => $ingredient->name,
+                'amount' => $ingredient->amount,
+                'unit' => $ingredient->unit,
+                'order_index' => 0,
+            ]
+        );
 
         $response->assertCreated();
     }
@@ -148,12 +163,15 @@ class IngredientTest extends TestCase {
 
         $ingredient = Ingredient::factory()->make();
 
-        $response = $this->postJson("/v1/recipes/{$recipe->id}/ingredients", [
-            'name' => $ingredient->name,
-            'amount' => $ingredient->amount,
-            'unit' => $ingredient->unit,
-            'order_index' => 0,
-        ]);
+        $response = $this->postJson(
+            "/api/v1/recipes/{$recipe->id}/ingredients",
+            [
+                'name' => $ingredient->name,
+                'amount' => $ingredient->amount,
+                'unit' => $ingredient->unit,
+                'order_index' => 0,
+            ]
+        );
 
         $response->assertCreated();
     }
@@ -169,7 +187,7 @@ class IngredientTest extends TestCase {
 
         $newIngredient = Ingredient::factory()->make();
 
-        $response = $this->putJson("/v1/ingredients/{$ingredient->id}", [
+        $response = $this->putJson("/api/v1/ingredients/{$ingredient->id}", [
             'name' => $newIngredient->name,
             'amount' => $newIngredient->amount,
             'unit' => $newIngredient->unit,
@@ -199,7 +217,7 @@ class IngredientTest extends TestCase {
             'recipe_id' => $recipe->id,
         ]);
 
-        $response = $this->putJson("/v1/ingredients/{$ingredient->id}", [
+        $response = $this->putJson("/api/v1/ingredients/{$ingredient->id}", [
             'name' => $otherIngredient->name,
             'amount' => $otherIngredient->amount,
             'unit' => $otherIngredient->unit,
@@ -223,7 +241,7 @@ class IngredientTest extends TestCase {
 
         $newIngredient = Ingredient::factory()->make();
 
-        $response = $this->putJson("/v1/ingredients/{$ingredient->id}", [
+        $response = $this->putJson("/api/v1/ingredients/{$ingredient->id}", [
             'name' => $newIngredient->name,
             'amount' => $newIngredient->amount,
             'unit' => $newIngredient->unit,
@@ -247,7 +265,7 @@ class IngredientTest extends TestCase {
 
         $newIngredient = Ingredient::factory()->make();
 
-        $response = $this->putJson("/v1/ingredients/{$ingredient->id}", [
+        $response = $this->putJson("/api/v1/ingredients/{$ingredient->id}", [
             'name' => $newIngredient->name,
             'amount' => $newIngredient->amount,
             'unit' => $newIngredient->unit,
@@ -268,7 +286,7 @@ class IngredientTest extends TestCase {
 
         $newIngredient = Ingredient::factory()->make();
 
-        $response = $this->putJson("/v1/ingredients/{$ingredient->id}", [
+        $response = $this->putJson("/api/v1/ingredients/{$ingredient->id}", [
             'name' => $newIngredient->name,
             'amount' => $newIngredient->amount,
             'unit' => $newIngredient->unit,
@@ -287,7 +305,7 @@ class IngredientTest extends TestCase {
             'recipe_id' => $recipe->id,
         ]);
 
-        $response = $this->deleteJson("/v1/ingredients/{$ingredient->id}");
+        $response = $this->deleteJson("/api/v1/ingredients/{$ingredient->id}");
 
         $response->assertNoContent();
 
@@ -308,7 +326,7 @@ class IngredientTest extends TestCase {
             'recipe_id' => $recipe->id,
         ]);
 
-        $response = $this->deleteJson("/v1/ingredients/{$ingredient->id}");
+        $response = $this->deleteJson("/api/v1/ingredients/{$ingredient->id}");
 
         $response->assertNotFound();
     }
@@ -325,7 +343,7 @@ class IngredientTest extends TestCase {
             'recipe_id' => $recipe->id,
         ]);
 
-        $response = $this->deleteJson("/v1/ingredients/{$ingredient->id}");
+        $response = $this->deleteJson("/api/v1/ingredients/{$ingredient->id}");
 
         $response->assertNoContent();
     }
@@ -339,7 +357,7 @@ class IngredientTest extends TestCase {
             'recipe_id' => $recipe->id,
         ]);
 
-        $response = $this->deleteJson("/v1/ingredients/{$ingredient->id}");
+        $response = $this->deleteJson("/api/v1/ingredients/{$ingredient->id}");
 
         $response->assertNoContent();
     }

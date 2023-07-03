@@ -8,7 +8,7 @@ class LoginTest extends TestCase {
     public function testLoginSucceedsWithCorrectCredentials() {
         $user = $this->createUser();
 
-        $response = $this->postJson('/v1/auth/login', [
+        $response = $this->postJson('/api/v1/auth/login', [
             'email' => $user->email,
             'password' => self::DEFAULT_USER_PASSWORD,
         ]);
@@ -31,14 +31,14 @@ class LoginTest extends TestCase {
     public function testLoginAndAuthenticateWithReceivedAccessToken() {
         $user = $this->createUser();
 
-        $loginResponse = $this->postJson('/v1/auth/login', [
+        $loginResponse = $this->postJson('/api/v1/auth/login', [
             'email' => $user->email,
             'password' => self::DEFAULT_USER_PASSWORD,
         ]);
 
         $accessToken = $loginResponse->json('data.access_token');
 
-        $response = $this->getJson('/v1/auth', [
+        $response = $this->getJson('/api/v1/auth', [
             'Authorization' => "Bearer $accessToken",
         ]);
 
@@ -49,7 +49,7 @@ class LoginTest extends TestCase {
     public function testLoginAndAuthenticateWithReceivedRefreshToken() {
         $user = $this->createUser();
 
-        $loginResponse = $this->postJson('/v1/auth/login', [
+        $loginResponse = $this->postJson('/api/v1/auth/login', [
             'email' => $user->email,
             'password' => self::DEFAULT_USER_PASSWORD,
         ]);
@@ -57,7 +57,7 @@ class LoginTest extends TestCase {
         $refreshToken = $loginResponse->json('data.refresh_token');
 
         $response = $this->postJson(
-            '/v1/auth/refresh',
+            '/api/v1/auth/refresh',
             [],
             [
                 'Authorization' => "Bearer $refreshToken",
@@ -71,7 +71,7 @@ class LoginTest extends TestCase {
     }
 
     public function testLoginFailsWithValidationErrors() {
-        $response = $this->postJson('/v1/auth/login', [
+        $response = $this->postJson('/api/v1/auth/login', [
             'email' => 'no-email',
         ]);
 
@@ -80,7 +80,7 @@ class LoginTest extends TestCase {
     }
 
     public function testLoginFailsWithBadCredentials() {
-        $response = $this->postJson('/v1/auth/login', [
+        $response = $this->postJson('/api/v1/auth/login', [
             'email' => 'not@exists.com',
             'password' => '12345678',
         ]);

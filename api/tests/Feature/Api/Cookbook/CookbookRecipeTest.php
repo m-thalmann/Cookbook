@@ -15,7 +15,7 @@ class CookbookRecipeTest extends TestCase {
 
         $recipes = Recipe::factory(5)->create(['cookbook_id' => $cookbook->id]);
 
-        $response = $this->getJson("/v1/cookbooks/{$cookbook->id}/recipes");
+        $response = $this->getJson("/api/v1/cookbooks/{$cookbook->id}/recipes");
 
         $response->assertOk();
 
@@ -52,7 +52,7 @@ class CookbookRecipeTest extends TestCase {
 
         $cookbook = Cookbook::factory()->create();
 
-        $response = $this->getJson("/v1/cookbooks/{$cookbook->id}/recipes");
+        $response = $this->getJson("/api/v1/cookbooks/{$cookbook->id}/recipes");
 
         $response->assertNotFound();
     }
@@ -64,7 +64,7 @@ class CookbookRecipeTest extends TestCase {
 
         $recipes = Recipe::factory(5)->create(['cookbook_id' => $cookbook->id]);
 
-        $response = $this->getJson("/v1/cookbooks/{$cookbook->id}/recipes");
+        $response = $this->getJson("/api/v1/cookbooks/{$cookbook->id}/recipes");
 
         $response->assertOk();
 

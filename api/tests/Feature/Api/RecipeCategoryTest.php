@@ -15,7 +15,7 @@ class RecipeCategoryTest extends TestCase {
             'category' => 'this-category-is-not-included',
         ]);
 
-        $response = $this->getJson('/v1/categories');
+        $response = $this->getJson('/api/v1/categories');
 
         $response->assertOk();
 
@@ -45,7 +45,7 @@ class RecipeCategoryTest extends TestCase {
             'is_public' => false,
         ]);
 
-        $response = $this->getJson('/v1/categories?all');
+        $response = $this->getJson('/api/v1/categories?all');
 
         $response->assertOk();
 
@@ -73,7 +73,7 @@ class RecipeCategoryTest extends TestCase {
             'is_public' => false,
         ]);
 
-        $response = $this->getJson('/v1/categories?all');
+        $response = $this->getJson('/api/v1/categories?all');
 
         $response->assertOk();
 

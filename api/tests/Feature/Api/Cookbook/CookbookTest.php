@@ -16,7 +16,7 @@ class CookbookTest extends TestCase {
 
         $notUserCookbooks = Cookbook::factory(10)->create();
 
-        $response = $this->getJson('/v1/cookbooks');
+        $response = $this->getJson('/api/v1/cookbooks');
 
         $response->assertOk();
 
@@ -39,7 +39,7 @@ class CookbookTest extends TestCase {
 
         $cookbooks = Cookbook::factory(5)->create();
 
-        $response = $this->getJson('/v1/cookbooks?all');
+        $response = $this->getJson('/api/v1/cookbooks?all');
 
         $response->assertOk();
 
@@ -59,7 +59,7 @@ class CookbookTest extends TestCase {
             ]);
         }
 
-        $response = $this->getJson('/v1/cookbooks/editable');
+        $response = $this->getJson('/api/v1/cookbooks/editable');
 
         $response->assertOk();
 
@@ -72,7 +72,7 @@ class CookbookTest extends TestCase {
 
         $cookbooks = Cookbook::factory(5)->create();
 
-        $response = $this->getJson('/v1/cookbooks/editable');
+        $response = $this->getJson('/api/v1/cookbooks/editable');
 
         $response->assertOk();
 
@@ -84,7 +84,7 @@ class CookbookTest extends TestCase {
 
         $cookbook = Cookbook::factory()->make();
 
-        $response = $this->postJson('/v1/cookbooks', [
+        $response = $this->postJson('/api/v1/cookbooks', [
             'name' => $cookbook->name,
         ]);
 
@@ -106,7 +106,7 @@ class CookbookTest extends TestCase {
         $cookbook = Cookbook::factory()->create();
         $cookbook->users()->attach($user);
 
-        $response = $this->getJson("/v1/cookbooks/{$cookbook->id}");
+        $response = $this->getJson("/api/v1/cookbooks/{$cookbook->id}");
 
         $response->assertOk();
 
@@ -124,7 +124,7 @@ class CookbookTest extends TestCase {
 
         $cookbook = Cookbook::factory()->create();
 
-        $response = $this->getJson("/v1/cookbooks/{$cookbook->id}");
+        $response = $this->getJson("/api/v1/cookbooks/{$cookbook->id}");
 
         $response->assertNotFound();
     }
@@ -134,7 +134,7 @@ class CookbookTest extends TestCase {
 
         $cookbook = Cookbook::factory()->create();
 
-        $response = $this->getJson("/v1/cookbooks/{$cookbook->id}");
+        $response = $this->getJson("/api/v1/cookbooks/{$cookbook->id}");
 
         $response->assertOk();
 
@@ -151,7 +151,7 @@ class CookbookTest extends TestCase {
 
         $newName = 'New Cookbook Name';
 
-        $response = $this->putJson("/v1/cookbooks/{$cookbook->id}", [
+        $response = $this->putJson("/api/v1/cookbooks/{$cookbook->id}", [
             'name' => $newName,
         ]);
 
@@ -171,7 +171,7 @@ class CookbookTest extends TestCase {
 
         $newName = 'New Cookbook Name';
 
-        $response = $this->putJson("/v1/cookbooks/{$cookbook->id}", [
+        $response = $this->putJson("/api/v1/cookbooks/{$cookbook->id}", [
             'name' => $newName,
         ]);
 
@@ -185,7 +185,7 @@ class CookbookTest extends TestCase {
 
         $newName = 'New Cookbook Name';
 
-        $response = $this->putJson("/v1/cookbooks/{$cookbook->id}", [
+        $response = $this->putJson("/api/v1/cookbooks/{$cookbook->id}", [
             'name' => $newName,
         ]);
 
@@ -203,7 +203,7 @@ class CookbookTest extends TestCase {
         $cookbook = Cookbook::factory()->create();
         $cookbook->users()->attach($user, ['is_admin' => true]);
 
-        $response = $this->deleteJson("/v1/cookbooks/{$cookbook->id}");
+        $response = $this->deleteJson("/api/v1/cookbooks/{$cookbook->id}");
 
         $response->assertNoContent();
 
@@ -218,7 +218,7 @@ class CookbookTest extends TestCase {
         $cookbook = Cookbook::factory()->create();
         $cookbook->users()->attach($user, ['is_admin' => false]);
 
-        $response = $this->deleteJson("/v1/cookbooks/{$cookbook->id}");
+        $response = $this->deleteJson("/api/v1/cookbooks/{$cookbook->id}");
 
         $response->assertNotFound();
     }
@@ -228,7 +228,7 @@ class CookbookTest extends TestCase {
 
         $cookbook = Cookbook::factory()->create();
 
-        $response = $this->deleteJson("/v1/cookbooks/{$cookbook->id}");
+        $response = $this->deleteJson("/api/v1/cookbooks/{$cookbook->id}");
 
         $response->assertNoContent();
 

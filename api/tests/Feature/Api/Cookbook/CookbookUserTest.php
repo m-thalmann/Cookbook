@@ -19,7 +19,7 @@ class CookbookUserTest extends TestCase {
             $cookbook->users()->attach($cookbookUser);
         }
 
-        $response = $this->getJson("/v1/cookbooks/{$cookbook->id}/users");
+        $response = $this->getJson("/api/v1/cookbooks/{$cookbook->id}/users");
 
         $response->assertOk();
 
@@ -48,7 +48,7 @@ class CookbookUserTest extends TestCase {
             $cookbook->users()->attach($cookbookUser);
         }
 
-        $response = $this->getJson("/v1/cookbooks/{$cookbook->id}/users");
+        $response = $this->getJson("/api/v1/cookbooks/{$cookbook->id}/users");
 
         $response->assertNotFound();
     }
@@ -64,7 +64,7 @@ class CookbookUserTest extends TestCase {
             $cookbook->users()->attach($cookbookUser);
         }
 
-        $response = $this->getJson("/v1/cookbooks/{$cookbook->id}/users");
+        $response = $this->getJson("/api/v1/cookbooks/{$cookbook->id}/users");
 
         $response->assertNotFound();
     }
@@ -80,7 +80,7 @@ class CookbookUserTest extends TestCase {
             $cookbook->users()->attach($cookbookUser);
         }
 
-        $response = $this->getJson("/v1/cookbooks/{$cookbook->id}/users");
+        $response = $this->getJson("/api/v1/cookbooks/{$cookbook->id}/users");
 
         $response->assertOk();
 
@@ -95,7 +95,7 @@ class CookbookUserTest extends TestCase {
 
         $userToAdd = User::factory()->create();
 
-        $response = $this->postJson("/v1/cookbooks/{$cookbook->id}/users", [
+        $response = $this->postJson("/api/v1/cookbooks/{$cookbook->id}/users", [
             'user_id' => $userToAdd->id,
             'is_admin' => false,
         ]);
@@ -117,7 +117,7 @@ class CookbookUserTest extends TestCase {
 
         $userToAdd = User::factory()->create();
 
-        $response = $this->postJson("/v1/cookbooks/{$cookbook->id}/users", [
+        $response = $this->postJson("/api/v1/cookbooks/{$cookbook->id}/users", [
             'user_id' => $userToAdd->id,
             'is_admin' => false,
         ]);
@@ -132,7 +132,7 @@ class CookbookUserTest extends TestCase {
 
         $userToAdd = User::factory()->create();
 
-        $response = $this->postJson("/v1/cookbooks/{$cookbook->id}/users", [
+        $response = $this->postJson("/api/v1/cookbooks/{$cookbook->id}/users", [
             'user_id' => $userToAdd->id,
             'is_admin' => false,
         ]);
@@ -147,7 +147,7 @@ class CookbookUserTest extends TestCase {
 
         $userToAdd = User::factory()->create();
 
-        $response = $this->postJson("/v1/cookbooks/{$cookbook->id}/users", [
+        $response = $this->postJson("/api/v1/cookbooks/{$cookbook->id}/users", [
             'user_id' => $userToAdd->id,
             'is_admin' => false,
         ]);
@@ -165,7 +165,7 @@ class CookbookUserTest extends TestCase {
 
         $cookbook->users()->attach($userToAdd);
 
-        $response = $this->postJson("/v1/cookbooks/{$cookbook->id}/users", [
+        $response = $this->postJson("/api/v1/cookbooks/{$cookbook->id}/users", [
             'user_id' => $userToAdd->id,
             'is_admin' => false,
         ]);
@@ -184,7 +184,7 @@ class CookbookUserTest extends TestCase {
         $cookbook->users()->attach($userToUpdate);
 
         $response = $this->putJson(
-            "/v1/cookbooks/{$cookbook->id}/users/{$userToUpdate->id}",
+            "/api/v1/cookbooks/{$cookbook->id}/users/{$userToUpdate->id}",
             [
                 'is_admin' => true,
             ]
@@ -210,7 +210,7 @@ class CookbookUserTest extends TestCase {
         $cookbook->users()->attach($userToUpdate);
 
         $response = $this->putJson(
-            "/v1/cookbooks/{$cookbook->id}/users/{$userToUpdate->id}",
+            "/api/v1/cookbooks/{$cookbook->id}/users/{$userToUpdate->id}",
             [
                 'is_admin' => true,
             ]
@@ -227,7 +227,7 @@ class CookbookUserTest extends TestCase {
         $userToUpdate = User::factory()->create();
 
         $response = $this->putJson(
-            "/v1/cookbooks/{$cookbook->id}/users/{$userToUpdate->id}",
+            "/api/v1/cookbooks/{$cookbook->id}/users/{$userToUpdate->id}",
             [
                 'is_admin' => true,
             ]
@@ -246,7 +246,7 @@ class CookbookUserTest extends TestCase {
         $cookbook->users()->attach($userToUpdate);
 
         $response = $this->putJson(
-            "/v1/cookbooks/{$cookbook->id}/users/{$userToUpdate->id}",
+            "/api/v1/cookbooks/{$cookbook->id}/users/{$userToUpdate->id}",
             [
                 'is_admin' => true,
             ]
@@ -263,7 +263,7 @@ class CookbookUserTest extends TestCase {
         $cookbook->users()->attach($user, ['is_admin' => true]);
 
         $response = $this->putJson(
-            "/v1/cookbooks/{$cookbook->id}/users/{$user->id}",
+            "/api/v1/cookbooks/{$cookbook->id}/users/{$user->id}",
             [
                 'is_admin' => false,
             ]
@@ -283,7 +283,7 @@ class CookbookUserTest extends TestCase {
         $cookbook->users()->attach($userToRemove);
 
         $response = $this->deleteJson(
-            "/v1/cookbooks/{$cookbook->id}/users/{$userToRemove->id}"
+            "/api/v1/cookbooks/{$cookbook->id}/users/{$userToRemove->id}"
         );
 
         $response->assertNoContent();
@@ -305,7 +305,7 @@ class CookbookUserTest extends TestCase {
         $cookbook->users()->attach($userToRemove);
 
         $response = $this->deleteJson(
-            "/v1/cookbooks/{$cookbook->id}/users/{$userToRemove->id}"
+            "/api/v1/cookbooks/{$cookbook->id}/users/{$userToRemove->id}"
         );
 
         $response->assertNotFound();
@@ -319,7 +319,7 @@ class CookbookUserTest extends TestCase {
         $userToRemove = User::factory()->create();
 
         $response = $this->deleteJson(
-            "/v1/cookbooks/{$cookbook->id}/users/{$userToRemove->id}"
+            "/api/v1/cookbooks/{$cookbook->id}/users/{$userToRemove->id}"
         );
 
         $response->assertNotFound();
@@ -337,7 +337,7 @@ class CookbookUserTest extends TestCase {
         $cookbook->users()->attach($userToRemove);
 
         $response = $this->deleteJson(
-            "/v1/cookbooks/{$cookbook->id}/users/{$userToRemove->id}"
+            "/api/v1/cookbooks/{$cookbook->id}/users/{$userToRemove->id}"
         );
 
         $response->assertNoContent();
@@ -351,7 +351,7 @@ class CookbookUserTest extends TestCase {
         $cookbook->users()->attach($user, ['is_admin' => true]);
 
         $response = $this->deleteJson(
-            "/v1/cookbooks/{$cookbook->id}/users/{$user->id}"
+            "/api/v1/cookbooks/{$cookbook->id}/users/{$user->id}"
         );
 
         $response->assertConflict();
@@ -367,7 +367,7 @@ class CookbookUserTest extends TestCase {
         $cookbook->users()->attach($otherAdmin, ['is_admin' => true]);
 
         $response = $this->deleteJson(
-            "/v1/cookbooks/{$cookbook->id}/users/{$user->id}"
+            "/api/v1/cookbooks/{$cookbook->id}/users/{$user->id}"
         );
 
         $response->assertNoContent();

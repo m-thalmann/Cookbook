@@ -150,7 +150,7 @@ class EmailVerificationTest extends TestCase {
 
         Notification::fake();
 
-        $response = $this->postJson('/v1/auth/email-verification/resend');
+        $response = $this->postJson('/api/v1/auth/email-verification/resend');
 
         $response->assertNoContent();
 
@@ -160,7 +160,7 @@ class EmailVerificationTest extends TestCase {
     public function testResendEmailFailsWhenUnauthorized() {
         Notification::fake();
 
-        $response = $this->postJson('/v1/auth/email-verification/resend');
+        $response = $this->postJson('/api/v1/auth/email-verification/resend');
         $response->assertUnauthorized();
 
         Notification::assertNothingSent();
@@ -177,7 +177,7 @@ class EmailVerificationTest extends TestCase {
 
         Config::set('app.email_verification_enabled', false);
 
-        $response = $this->postJson('/v1/auth/email-verification/resend');
+        $response = $this->postJson('/api/v1/auth/email-verification/resend');
 
         $response->assertForbidden();
 

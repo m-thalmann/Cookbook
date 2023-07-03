@@ -21,7 +21,7 @@ class UsersTest extends TestCase {
         $this->createAndLoginUser(isAdmin: true);
         $amountUsers++;
 
-        $response = $this->getJson('/v1/users');
+        $response = $this->getJson('/api/v1/users');
 
         $response->assertOk();
 
@@ -43,7 +43,7 @@ class UsersTest extends TestCase {
     public function testShowAllUsersFailsForNonAdmin() {
         $this->createAndLoginUser(isAdmin: false);
 
-        $response = $this->getJson('/v1/users');
+        $response = $this->getJson('/api/v1/users');
 
         $response->assertForbidden();
     }
@@ -59,7 +59,7 @@ class UsersTest extends TestCase {
             'password' => self::DEFAULT_USER_PASSWORD,
         ];
 
-        $response = $this->postJson('/v1/users', $userData);
+        $response = $this->postJson('/api/v1/users', $userData);
 
         $response->assertCreated();
         $response->assertJson([
@@ -84,7 +84,7 @@ class UsersTest extends TestCase {
             'is_admin' => true,
         ];
 
-        $response = $this->postJson('/v1/users', $userData);
+        $response = $this->postJson('/api/v1/users', $userData);
 
         $response->assertCreated();
 
@@ -107,7 +107,7 @@ class UsersTest extends TestCase {
             'is_verified' => true,
         ];
 
-        $response = $this->postJson('/v1/users', $userData);
+        $response = $this->postJson('/api/v1/users', $userData);
 
         $response->assertCreated();
 
@@ -127,7 +127,7 @@ class UsersTest extends TestCase {
             'password' => self::DEFAULT_USER_PASSWORD,
         ];
 
-        $response = $this->postJson('/v1/users', $userData);
+        $response = $this->postJson('/api/v1/users', $userData);
 
         $response->assertForbidden();
     }
@@ -141,7 +141,7 @@ class UsersTest extends TestCase {
             'password' => self::DEFAULT_USER_PASSWORD,
         ];
 
-        $response = $this->postJson('/v1/users', $userData);
+        $response = $this->postJson('/api/v1/users', $userData);
 
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors(['name', 'email']);
@@ -150,7 +150,7 @@ class UsersTest extends TestCase {
     public function testUserCanViewItself() {
         $user = $this->createAndLoginUser(isAdmin: false);
 
-        $response = $this->getJson("/v1/users/{$user->id}");
+        $response = $this->getJson("/api/v1/users/{$user->id}");
 
         $response->assertOk();
 
@@ -161,7 +161,7 @@ class UsersTest extends TestCase {
         $this->createAndLoginUser(isAdmin: true);
         $otherUser = $this->createUser();
 
-        $response = $this->getJson("/v1/users/{$otherUser->id}");
+        $response = $this->getJson("/api/v1/users/{$otherUser->id}");
 
         $response->assertOk();
 
@@ -172,7 +172,7 @@ class UsersTest extends TestCase {
         $this->createAndLoginUser(isAdmin: false);
         $otherUser = $this->createUser();
 
-        $response = $this->getJson("/v1/users/{$otherUser->id}");
+        $response = $this->getJson("/api/v1/users/{$otherUser->id}");
 
         $response->assertNotFound();
     }
@@ -180,7 +180,7 @@ class UsersTest extends TestCase {
     public function testUserCanBeSearchedByEmail() {
         $user = $this->createAndLoginUser(isAdmin: false);
 
-        $response = $this->getJson("/v1/users/search/email/{$user->email}");
+        $response = $this->getJson("/api/v1/users/search/email/{$user->email}");
 
         $response->assertOk();
 
@@ -192,7 +192,7 @@ class UsersTest extends TestCase {
 
         $newName = "new_{$user->name}";
 
-        $response = $this->putJson("/v1/users/{$user->id}", [
+        $response = $this->putJson("/api/v1/users/{$user->id}", [
             'name' => $newName,
         ]);
 
@@ -212,7 +212,7 @@ class UsersTest extends TestCase {
 
         $newName = "new_{$user->name}";
 
-        $response = $this->putJson("/v1/users/{$user->id}", [
+        $response = $this->putJson("/api/v1/users/{$user->id}", [
             'name' => $newName,
             'do_logout' => true,
         ]);
@@ -225,7 +225,7 @@ class UsersTest extends TestCase {
     public function testUserRequiresCurrentPasswordIfEmailIsUpdatedForItself() {
         $user = $this->createAndLoginUser(isAdmin: false);
 
-        $response = $this->putJson("/v1/users/{$user->id}", [
+        $response = $this->putJson("/api/v1/users/{$user->id}", [
             'email' => 'test@example.com',
         ]);
 
@@ -237,7 +237,7 @@ class UsersTest extends TestCase {
     public function testUserRequiresCurrentPasswordIfPasswordIsUpdatedForItself() {
         $user = $this->createAndLoginUser(isAdmin: false);
 
-        $response = $this->putJson("/v1/users/{$user->id}", [
+        $response = $this->putJson("/api/v1/users/{$user->id}", [
             'password' => self::DEFAULT_USER_PASSWORD,
         ]);
 
@@ -253,7 +253,7 @@ class UsersTest extends TestCase {
 
         $newEmail = "new_{$user->email}";
 
-        $response = $this->putJson("/v1/users/{$user->id}", [
+        $response = $this->putJson("/api/v1/users/{$user->id}", [
             'current_password' => self::DEFAULT_USER_PASSWORD,
             'email' => $newEmail,
         ]);
@@ -270,7 +270,7 @@ class UsersTest extends TestCase {
 
         $newPassword = 'new_' . self::DEFAULT_USER_PASSWORD;
 
-        $response = $this->putJson("/v1/users/{$user->id}", [
+        $response = $this->putJson("/api/v1/users/{$user->id}", [
             'current_password' => self::DEFAULT_USER_PASSWORD,
             'password' => $newPassword,
         ]);
@@ -287,7 +287,7 @@ class UsersTest extends TestCase {
 
         $oldPassword = $user->password;
 
-        $response = $this->putJson("/v1/users/{$user->id}", [
+        $response = $this->putJson("/api/v1/users/{$user->id}", [
             'current_password' => self::DEFAULT_USER_PASSWORD,
             'password' => self::DEFAULT_USER_PASSWORD,
         ]);
@@ -308,7 +308,7 @@ class UsersTest extends TestCase {
 
         $newName = "new_{$otherUser->name}";
 
-        $response = $this->putJson("/v1/users/{$otherUser->id}", [
+        $response = $this->putJson("/api/v1/users/{$otherUser->id}", [
             'name' => $newName,
         ]);
 
@@ -325,7 +325,7 @@ class UsersTest extends TestCase {
         $this->createAndLoginUser(isAdmin: true);
         $otherUser = $this->createUser(isAdmin: false);
 
-        $response = $this->putJson("/v1/users/{$otherUser->id}", [
+        $response = $this->putJson("/api/v1/users/{$otherUser->id}", [
             'is_admin' => true,
         ]);
 
@@ -342,7 +342,7 @@ class UsersTest extends TestCase {
 
         $this->assertTrue($otherUser->hasVerifiedEmail());
 
-        $response = $this->putJson("/v1/users/{$otherUser->id}", [
+        $response = $this->putJson("/api/v1/users/{$otherUser->id}", [
             'is_verified' => false,
         ]);
 
@@ -359,7 +359,7 @@ class UsersTest extends TestCase {
 
         $this->assertFalse($otherUser->hasVerifiedEmail());
 
-        $response = $this->putJson("/v1/users/{$otherUser->id}", [
+        $response = $this->putJson("/api/v1/users/{$otherUser->id}", [
             'is_verified' => true,
         ]);
 
@@ -374,7 +374,7 @@ class UsersTest extends TestCase {
         $this->createAndLoginUser(isAdmin: false);
         $otherUser = $this->createUser();
 
-        $response = $this->putJson("/v1/users/{$otherUser->id}", [
+        $response = $this->putJson("/api/v1/users/{$otherUser->id}", [
             'name' => 'John Doe',
         ]);
 
@@ -384,7 +384,7 @@ class UsersTest extends TestCase {
     public function testNonAdminCantUpdateOwnAdminRole() {
         $user = $this->createAndLoginUser(isAdmin: false);
 
-        $response = $this->putJson("/v1/users/{$user->id}", [
+        $response = $this->putJson("/api/v1/users/{$user->id}", [
             'is_admin' => true,
         ]);
 
@@ -394,7 +394,7 @@ class UsersTest extends TestCase {
     public function testNonAdminCantUpdateOwnEmailVerificationState() {
         $user = $this->createAndLoginUser(isAdmin: false);
 
-        $response = $this->putJson("/v1/users/{$user->id}", [
+        $response = $this->putJson("/api/v1/users/{$user->id}", [
             'is_verified' => false,
         ]);
 
@@ -404,7 +404,7 @@ class UsersTest extends TestCase {
     public function testAdminCantUpdateOwnAdminRole() {
         $user = $this->createAndLoginUser(isAdmin: false);
 
-        $response = $this->putJson("/v1/users/{$user->id}", [
+        $response = $this->putJson("/api/v1/users/{$user->id}", [
             'is_admin' => true,
         ]);
 
@@ -414,7 +414,7 @@ class UsersTest extends TestCase {
     public function testAdminCantUpdateOwnEmailVerificationState() {
         $user = $this->createAndLoginUser(isAdmin: false);
 
-        $response = $this->putJson("/v1/users/{$user->id}", [
+        $response = $this->putJson("/api/v1/users/{$user->id}", [
             'is_verified' => false,
         ]);
 
@@ -430,7 +430,7 @@ class UsersTest extends TestCase {
             'password' => '123',
         ];
 
-        $response = $this->putJson("/v1/users/{$user->id}", $userData);
+        $response = $this->putJson("/api/v1/users/{$user->id}", $userData);
 
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors(['name', 'email', 'password']);
@@ -439,7 +439,7 @@ class UsersTest extends TestCase {
     public function testUserCanDeleteItself() {
         $user = $this->createAndLoginUser(isAdmin: false);
 
-        $response = $this->deleteJson("/v1/users/{$user->id}");
+        $response = $this->deleteJson("/api/v1/users/{$user->id}");
 
         $response->assertNoContent();
 
@@ -450,7 +450,7 @@ class UsersTest extends TestCase {
         $this->createAndLoginUser(isAdmin: true);
         $otherUser = $this->createUser();
 
-        $response = $this->deleteJson("/v1/users/{$otherUser->id}");
+        $response = $this->deleteJson("/api/v1/users/{$otherUser->id}");
 
         $response->assertNoContent();
 
@@ -461,7 +461,7 @@ class UsersTest extends TestCase {
         $this->createAndLoginUser(isAdmin: false);
         $otherUser = $this->createUser();
 
-        $response = $this->deleteJson("/v1/users/{$otherUser->id}");
+        $response = $this->deleteJson("/api/v1/users/{$otherUser->id}");
 
         $response->assertNotFound();
     }

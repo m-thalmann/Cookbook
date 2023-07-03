@@ -17,7 +17,7 @@ class RefreshTokenTest extends TestCase {
         );
 
         $response = $this->postJson(
-            '/v1/auth/refresh',
+            '/api/v1/auth/refresh',
             [],
             [
                 'Authorization' => "Bearer {$refreshToken->plainTextToken}",
@@ -55,7 +55,7 @@ class RefreshTokenTest extends TestCase {
         );
 
         $response = $this->postJson(
-            '/v1/auth/refresh',
+            '/api/v1/auth/refresh',
             [],
             [
                 'Authorization' => "Bearer {$accessToken->plainTextToken}",

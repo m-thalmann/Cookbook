@@ -15,7 +15,7 @@ class AdminDashboardTest extends TestCase {
         $recipes = Recipe::factory(5)->create();
         $cookbooks = Cookbook::factory(5)->create();
 
-        $response = $this->getJson('/v1/admin/dashboard');
+        $response = $this->getJson('/api/v1/admin/dashboard');
 
         $response->assertOk();
 
@@ -50,7 +50,7 @@ class AdminDashboardTest extends TestCase {
     public function testItFailsIfUserIsNotAnAdmin() {
         $user = $this->createAndLoginUser(isAdmin: false);
 
-        $response = $this->getJson('/v1/admin/dashboard');
+        $response = $this->getJson('/api/v1/admin/dashboard');
 
         $response->assertForbidden();
     }

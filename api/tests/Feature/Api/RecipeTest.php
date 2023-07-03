@@ -25,7 +25,7 @@ class RecipeTest extends TestCase {
         // not included
         $otherRecipes = Recipe::factory(5)->create(['is_public' => true]);
 
-        $response = $this->getJson('/v1/recipes');
+        $response = $this->getJson('/api/v1/recipes');
 
         $response->assertOk();
 
@@ -72,7 +72,7 @@ class RecipeTest extends TestCase {
 
         $privateRecipes = Recipe::factory(5)->create(['is_public' => false]);
 
-        $response = $this->getJson('/v1/recipes?all');
+        $response = $this->getJson('/api/v1/recipes?all');
 
         $response->assertOk();
 
@@ -89,7 +89,7 @@ class RecipeTest extends TestCase {
 
         $recipes = Recipe::factory(10)->create(['is_public' => false]);
 
-        $response = $this->getJson('/v1/recipes?all');
+        $response = $this->getJson('/api/v1/recipes?all');
 
         $response->assertOk();
 
@@ -100,7 +100,7 @@ class RecipeTest extends TestCase {
         $publicRecipes = Recipe::factory(10)->create(['is_public' => true]);
         $privateRecipes = Recipe::factory(10)->create(['is_public' => false]);
 
-        $response = $this->getJson('/v1/recipes');
+        $response = $this->getJson('/api/v1/recipes');
 
         $response->assertOk();
 
@@ -115,7 +115,7 @@ class RecipeTest extends TestCase {
 
         $recipe = Recipe::factory()->make();
 
-        $response = $this->postJson('/v1/recipes', $recipe->toArray());
+        $response = $this->postJson('/api/v1/recipes', $recipe->toArray());
 
         $response->assertCreated();
 
@@ -145,7 +145,7 @@ class RecipeTest extends TestCase {
             'cookbook_id' => $cookbook->id,
         ]);
 
-        $response = $this->postJson('/v1/recipes', $recipe->toArray());
+        $response = $this->postJson('/api/v1/recipes', $recipe->toArray());
 
         $response->assertCreated();
 
@@ -165,7 +165,7 @@ class RecipeTest extends TestCase {
             'cookbook_id' => $cookbook->id,
         ]);
 
-        $response = $this->postJson('/v1/recipes', $recipe->toArray());
+        $response = $this->postJson('/api/v1/recipes', $recipe->toArray());
 
         $response->assertUnprocessable();
     }
@@ -179,7 +179,7 @@ class RecipeTest extends TestCase {
             'cookbook_id' => $cookbook->id,
         ]);
 
-        $response = $this->postJson('/v1/recipes', $recipe->toArray());
+        $response = $this->postJson('/api/v1/recipes', $recipe->toArray());
 
         $response->assertUnprocessable();
     }
@@ -191,7 +191,7 @@ class RecipeTest extends TestCase {
             'cookbook_id' => 1,
         ]);
 
-        $response = $this->postJson('/v1/recipes', $recipe->toArray());
+        $response = $this->postJson('/api/v1/recipes', $recipe->toArray());
 
         $response->assertUnprocessable();
     }
@@ -217,7 +217,7 @@ class RecipeTest extends TestCase {
         ];
 
         $response = $this->postJson(
-            '/v1/recipes',
+            '/api/v1/recipes',
             array_merge($recipe->toArray(), ['ingredients' => $ingredients])
         );
 
@@ -256,7 +256,7 @@ class RecipeTest extends TestCase {
         ];
 
         $response = $this->postJson(
-            '/v1/recipes',
+            '/api/v1/recipes',
             array_merge($recipe->toArray(), ['ingredients' => $ingredients])
         );
 
@@ -279,7 +279,7 @@ class RecipeTest extends TestCase {
             'is_public' => false,
         ]);
 
-        $response = $this->getJson("/v1/recipes/{$recipe->id}");
+        $response = $this->getJson("/api/v1/recipes/{$recipe->id}");
 
         $response->assertOk();
 
@@ -317,7 +317,7 @@ class RecipeTest extends TestCase {
             'is_public' => false,
         ]);
 
-        $response = $this->getJson("/v1/recipes/{$recipe->id}");
+        $response = $this->getJson("/api/v1/recipes/{$recipe->id}");
 
         $response->assertOk();
     }
@@ -327,7 +327,7 @@ class RecipeTest extends TestCase {
             'is_public' => true,
         ]);
 
-        $response = $this->getJson("/v1/recipes/{$recipe->id}");
+        $response = $this->getJson("/api/v1/recipes/{$recipe->id}");
 
         $response->assertOk();
     }
@@ -339,7 +339,7 @@ class RecipeTest extends TestCase {
             'is_public' => false,
         ]);
 
-        $response = $this->getJson("/v1/recipes/{$recipe->id}");
+        $response = $this->getJson("/api/v1/recipes/{$recipe->id}");
 
         $response->assertNotFound();
     }
@@ -351,7 +351,7 @@ class RecipeTest extends TestCase {
             'is_public' => false,
         ]);
 
-        $response = $this->getJson("/v1/recipes/{$recipe->id}");
+        $response = $this->getJson("/api/v1/recipes/{$recipe->id}");
 
         $response->assertOk();
     }
@@ -364,13 +364,13 @@ class RecipeTest extends TestCase {
             'is_public' => false,
         ]);
 
-        $response = $this->getJson("/v1/recipes/shared/{$uuid}");
+        $response = $this->getJson("/api/v1/recipes/shared/{$uuid}");
 
         $response->assertOk();
     }
 
     public function testShowSharedFailsIfShareUuidDoesntExist() {
-        $response = $this->getJson('/v1/recipes/shared/doesnt-exist');
+        $response = $this->getJson('/api/v1/recipes/shared/doesnt-exist');
 
         $response->assertNotFound();
     }
@@ -385,7 +385,7 @@ class RecipeTest extends TestCase {
         $newRecipe = Recipe::factory()->make(['user_id' => $recipe->id]);
 
         $response = $this->putJson(
-            "/v1/recipes/{$recipe->id}",
+            "/api/v1/recipes/{$recipe->id}",
             $newRecipe->toArray()
         );
 
@@ -415,7 +415,7 @@ class RecipeTest extends TestCase {
 
         $recipe = Recipe::factory()->create();
 
-        $response = $this->putJson("/v1/recipes/{$recipe->id}", [
+        $response = $this->putJson("/api/v1/recipes/{$recipe->id}", [
             'cookbook_id' => $cookbook->id,
         ]);
 
@@ -433,7 +433,7 @@ class RecipeTest extends TestCase {
         $newRecipe = Recipe::factory()->make(['user_id' => $recipe->id]);
 
         $response = $this->putJson(
-            "/v1/recipes/{$recipe->id}",
+            "/api/v1/recipes/{$recipe->id}",
             $newRecipe->toArray()
         );
 
@@ -451,7 +451,7 @@ class RecipeTest extends TestCase {
         $newRecipe = Recipe::factory()->make(['user_id' => $recipe->id]);
 
         $response = $this->putJson(
-            "/v1/recipes/{$recipe->id}",
+            "/api/v1/recipes/{$recipe->id}",
             $newRecipe->toArray()
         );
 
@@ -466,7 +466,7 @@ class RecipeTest extends TestCase {
         $newRecipe = Recipe::factory()->make(['user_id' => $recipe->id]);
 
         $response = $this->putJson(
-            "/v1/recipes/{$recipe->id}",
+            "/api/v1/recipes/{$recipe->id}",
             $newRecipe->toArray()
         );
 
@@ -481,7 +481,7 @@ class RecipeTest extends TestCase {
         $newRecipe = Recipe::factory()->make(['user_id' => $recipe->id]);
 
         $response = $this->putJson(
-            "/v1/recipes/{$recipe->id}",
+            "/api/v1/recipes/{$recipe->id}",
             $newRecipe->toArray()
         );
 
@@ -493,7 +493,7 @@ class RecipeTest extends TestCase {
 
         $recipe = Recipe::factory()->create(['user_id' => $user->id]);
 
-        $response = $this->putJson("/v1/recipes/{$recipe->id}", [
+        $response = $this->putJson("/api/v1/recipes/{$recipe->id}", [
             'is_shared' => true,
         ]);
 
@@ -510,7 +510,7 @@ class RecipeTest extends TestCase {
             'user_id' => $user->id,
         ]);
 
-        $response = $this->putJson("/v1/recipes/{$recipe->id}", [
+        $response = $this->putJson("/api/v1/recipes/{$recipe->id}", [
             'is_shared' => false,
         ]);
 
@@ -526,7 +526,7 @@ class RecipeTest extends TestCase {
             'user_id' => $user->id,
         ]);
 
-        $response = $this->deleteJson("/v1/recipes/{$recipe->id}");
+        $response = $this->deleteJson("/api/v1/recipes/{$recipe->id}");
 
         $response->assertNoContent();
 
@@ -543,7 +543,7 @@ class RecipeTest extends TestCase {
 
         $recipe = Recipe::factory()->create(['cookbook_id' => $cookbook->id]);
 
-        $response = $this->deleteJson("/v1/recipes/{$recipe->id}");
+        $response = $this->deleteJson("/api/v1/recipes/{$recipe->id}");
 
         $response->assertNotFound();
     }
@@ -553,7 +553,7 @@ class RecipeTest extends TestCase {
 
         $recipe = Recipe::factory()->create();
 
-        $response = $this->deleteJson("/v1/recipes/{$recipe->id}");
+        $response = $this->deleteJson("/api/v1/recipes/{$recipe->id}");
 
         $response->assertNoContent();
 

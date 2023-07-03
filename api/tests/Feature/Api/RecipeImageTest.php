@@ -43,7 +43,7 @@ class RecipeImageTest extends TestCase {
 
         $images = $this->createImagesForRecipe($recipe);
 
-        $response = $this->getJson("/v1/recipes/{$recipe->id}/images");
+        $response = $this->getJson("/api/v1/recipes/{$recipe->id}/images");
 
         $response->assertOk();
 
@@ -57,7 +57,7 @@ class RecipeImageTest extends TestCase {
     public function testIndexFailsWhenRecipeDoesntExist() {
         $user = $this->createAndLoginUser(isAdmin: false);
 
-        $response = $this->getJson('/v1/recipes/1/images');
+        $response = $this->getJson('/api/v1/recipes/1/images');
 
         $response->assertNotFound();
     }
@@ -67,7 +67,7 @@ class RecipeImageTest extends TestCase {
 
         $recipe = Recipe::factory()->create(['is_public' => false]);
 
-        $response = $this->getJson("/v1/recipes/{$recipe->id}/images");
+        $response = $this->getJson("/api/v1/recipes/{$recipe->id}/images");
 
         $response->assertNotFound();
     }
@@ -79,7 +79,7 @@ class RecipeImageTest extends TestCase {
 
         $images = $this->createImagesForRecipe($recipe);
 
-        $response = $this->getJson("/v1/recipes/{$recipe->id}/images");
+        $response = $this->getJson("/api/v1/recipes/{$recipe->id}/images");
 
         $response->assertOk();
 
@@ -91,7 +91,7 @@ class RecipeImageTest extends TestCase {
 
         $images = $this->createImagesForRecipe($recipe);
 
-        $response = $this->getJson("/v1/recipes/{$recipe->id}/images");
+        $response = $this->getJson("/api/v1/recipes/{$recipe->id}/images");
 
         $response->assertOk();
 
@@ -106,7 +106,7 @@ class RecipeImageTest extends TestCase {
             'is_public' => false,
         ]);
 
-        $response = $this->postJson("/v1/recipes/{$recipe->id}/images", [
+        $response = $this->postJson("/api/v1/recipes/{$recipe->id}/images", [
             'image' => UploadedFile::fake()->image('image.jpg'),
         ]);
 
@@ -122,7 +122,7 @@ class RecipeImageTest extends TestCase {
 
         $recipe = Recipe::factory()->create(['is_public' => true]);
 
-        $response = $this->postJson("/v1/recipes/{$recipe->id}/images", [
+        $response = $this->postJson("/api/v1/recipes/{$recipe->id}/images", [
             'image' => UploadedFile::fake()->image('image.jpg'),
         ]);
 
@@ -134,7 +134,7 @@ class RecipeImageTest extends TestCase {
 
         $recipe = Recipe::factory()->create(['is_public' => false]);
 
-        $response = $this->postJson("/v1/recipes/{$recipe->id}/images", [
+        $response = $this->postJson("/api/v1/recipes/{$recipe->id}/images", [
             'image' => UploadedFile::fake()->image('image.jpg'),
         ]);
 
@@ -151,7 +151,7 @@ class RecipeImageTest extends TestCase {
 
         $image = $this->createImagesForRecipe($recipe, 1)->first();
 
-        $response = $this->deleteJson("/v1/recipe-images/{$image->id}");
+        $response = $this->deleteJson("/api/v1/recipe-images/{$image->id}");
 
         $response->assertNoContent();
 
@@ -165,7 +165,7 @@ class RecipeImageTest extends TestCase {
 
         $image = $this->createImagesForRecipe($recipe, 1)->first();
 
-        $response = $this->deleteJson("/v1/recipe-images/{$image->id}");
+        $response = $this->deleteJson("/api/v1/recipe-images/{$image->id}");
 
         $response->assertNotFound();
     }
@@ -177,7 +177,7 @@ class RecipeImageTest extends TestCase {
 
         $image = $this->createImagesForRecipe($recipe, 1)->first();
 
-        $response = $this->deleteJson("/v1/recipe-images/{$image->id}");
+        $response = $this->deleteJson("/api/v1/recipe-images/{$image->id}");
 
         $response->assertNoContent();
     }

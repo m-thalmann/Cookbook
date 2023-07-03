@@ -32,7 +32,7 @@ class RecipeTrashTest extends TestCase {
         $otherRecipes = Recipe::factory(5)->create();
         $otherRecipes->each(fn($recipe) => $recipe->delete());
 
-        $response = $this->getJson('/v1/recipe-trash');
+        $response = $this->getJson('/api/v1/recipe-trash');
 
         $response->assertOk();
 
@@ -68,7 +68,7 @@ class RecipeTrashTest extends TestCase {
         $recipe = Recipe::factory()->create(['user_id' => $user->id]);
         $recipe->delete();
 
-        $response = $this->putJson("/v1/recipe-trash/{$recipe->id}");
+        $response = $this->putJson("/api/v1/recipe-trash/{$recipe->id}");
 
         $response->assertNoContent();
 
@@ -84,7 +84,7 @@ class RecipeTrashTest extends TestCase {
         $recipe = Recipe::factory()->create(['cookbook_id' => $cookbook->id]);
         $recipe->delete();
 
-        $response = $this->putJson("/v1/recipe-trash/{$recipe->id}");
+        $response = $this->putJson("/api/v1/recipe-trash/{$recipe->id}");
 
         $response->assertNotFound();
 
@@ -97,7 +97,7 @@ class RecipeTrashTest extends TestCase {
         $recipe = Recipe::factory()->create();
         $recipe->delete();
 
-        $response = $this->putJson("/v1/recipe-trash/{$recipe->id}");
+        $response = $this->putJson("/api/v1/recipe-trash/{$recipe->id}");
 
         $response->assertNoContent();
 
@@ -107,7 +107,7 @@ class RecipeTrashTest extends TestCase {
     public function testUpdateFailsIfRecipeDoesntExist() {
         $user = $this->createAndLoginUser(isAdmin: true); // does not matter whether is admin
 
-        $response = $this->putJson('/v1/recipe-trash/1');
+        $response = $this->putJson('/api/v1/recipe-trash/1');
 
         $response->assertNotFound();
     }
@@ -118,7 +118,7 @@ class RecipeTrashTest extends TestCase {
         $recipe = Recipe::factory()->create(['user_id' => $user->id]);
         $recipe->delete();
 
-        $response = $this->deleteJson("/v1/recipe-trash/{$recipe->id}");
+        $response = $this->deleteJson("/api/v1/recipe-trash/{$recipe->id}");
 
         $response->assertNoContent();
 
@@ -134,7 +134,7 @@ class RecipeTrashTest extends TestCase {
         $recipe = Recipe::factory()->create(['cookbook_id' => $cookbook->id]);
         $recipe->delete();
 
-        $response = $this->deleteJson("/v1/recipe-trash/{$recipe->id}");
+        $response = $this->deleteJson("/api/v1/recipe-trash/{$recipe->id}");
 
         $response->assertNotFound();
 
@@ -147,7 +147,7 @@ class RecipeTrashTest extends TestCase {
         $recipe = Recipe::factory()->create();
         $recipe->delete();
 
-        $response = $this->deleteJson("/v1/recipe-trash/{$recipe->id}");
+        $response = $this->deleteJson("/api/v1/recipe-trash/{$recipe->id}");
 
         $response->assertNoContent();
 
@@ -157,7 +157,7 @@ class RecipeTrashTest extends TestCase {
     public function testDestroyFailsIfRecipeDoesntExist() {
         $user = $this->createAndLoginUser(isAdmin: true); // does not matter whether is admin
 
-        $response = $this->deleteJson('/v1/recipe-trash/1');
+        $response = $this->deleteJson('/api/v1/recipe-trash/1');
 
         $response->assertNotFound();
     }
@@ -178,7 +178,7 @@ class RecipeTrashTest extends TestCase {
 
         $recipe->delete();
 
-        $response = $this->deleteJson("/v1/recipe-trash/{$recipe->id}");
+        $response = $this->deleteJson("/api/v1/recipe-trash/{$recipe->id}");
 
         $response->assertNoContent();
 
@@ -209,7 +209,7 @@ class RecipeTrashTest extends TestCase {
         $otherRecipes = Recipe::factory(5)->create();
         $otherRecipes->each(fn($recipe) => $recipe->delete());
 
-        $response = $this->deleteJson('/v1/recipe-trash');
+        $response = $this->deleteJson('/api/v1/recipe-trash');
 
         $response->assertNoContent();
 
@@ -251,7 +251,7 @@ class RecipeTrashTest extends TestCase {
             $recipe->delete();
         });
 
-        $response = $this->deleteJson('/v1/recipe-trash');
+        $response = $this->deleteJson('/api/v1/recipe-trash');
 
         $response->assertNoContent();
 

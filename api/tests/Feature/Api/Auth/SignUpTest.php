@@ -40,7 +40,7 @@ class SignUpTest extends TestCase {
             'password' => self::DEFAULT_USER_PASSWORD,
         ];
 
-        $response = $this->postJson('/v1/auth/sign-up', $userData);
+        $response = $this->postJson('/api/v1/auth/sign-up', $userData);
 
         $response->assertCreated();
         $response->assertJson([
@@ -89,7 +89,7 @@ class SignUpTest extends TestCase {
             'hcaptcha_token' => $validToken,
         ];
 
-        $response = $this->postJson('/v1/auth/sign-up', $userData);
+        $response = $this->postJson('/api/v1/auth/sign-up', $userData);
 
         $response->assertCreated();
 
@@ -108,7 +108,7 @@ class SignUpTest extends TestCase {
             'password' => $password,
         ];
 
-        $response = $this->postJson('/v1/auth/sign-up', $userData);
+        $response = $this->postJson('/api/v1/auth/sign-up', $userData);
 
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors(['name', 'email', 'password']);
@@ -127,7 +127,7 @@ class SignUpTest extends TestCase {
             'password' => self::DEFAULT_USER_PASSWORD,
         ];
 
-        $response = $this->postJson('/v1/auth/sign-up', $userData);
+        $response = $this->postJson('/api/v1/auth/sign-up', $userData);
 
         $response->assertUnprocessable();
         $response->assertJsonValidationErrorFor('email');
@@ -155,7 +155,7 @@ class SignUpTest extends TestCase {
             'hcaptcha_token' => $invalidToken,
         ];
 
-        $response = $this->postJson('/v1/auth/sign-up', $userData);
+        $response = $this->postJson('/api/v1/auth/sign-up', $userData);
 
         $response->assertForbidden();
 
@@ -173,7 +173,7 @@ class SignUpTest extends TestCase {
             'password' => self::DEFAULT_USER_PASSWORD,
         ];
 
-        $response = $this->postJson('/v1/auth/sign-up', $userData);
+        $response = $this->postJson('/api/v1/auth/sign-up', $userData);
 
         $response->assertStatus(405);
 

@@ -37,7 +37,7 @@ class AuthTokenTest extends TestCase {
         );
         $expiredToken->token->update(['expires_at' => now()->subMinute()]);
 
-        $response = $this->getJson('/v1/auth/tokens');
+        $response = $this->getJson('/api/v1/auth/tokens');
 
         $response->assertOk();
 
@@ -64,7 +64,7 @@ class AuthTokenTest extends TestCase {
 
         $token = $user->createToken(TokenAuth::TYPE_ACCESS, 'TestToken')->token;
 
-        $response = $this->getJson("/v1/auth/tokens/{$token->id}");
+        $response = $this->getJson("/api/v1/auth/tokens/{$token->id}");
 
         $response->assertOk();
 
@@ -82,7 +82,7 @@ class AuthTokenTest extends TestCase {
         $token = $user->createToken(TokenAuth::TYPE_REFRESH, 'TestToken')
             ->token;
 
-        $response = $this->getJson("/v1/auth/tokens/{$token->id}");
+        $response = $this->getJson("/api/v1/auth/tokens/{$token->id}");
 
         $response->assertOk();
 
@@ -101,7 +101,7 @@ class AuthTokenTest extends TestCase {
         $tokenId = $user1->createToken(TokenAuth::TYPE_ACCESS, 'TestToken')
             ->token->id;
 
-        $response = $this->getJson("/v1/auth/tokens/{$tokenId}");
+        $response = $this->getJson("/api/v1/auth/tokens/{$tokenId}");
         $response->assertNotFound();
     }
 
@@ -143,7 +143,7 @@ class AuthTokenTest extends TestCase {
         // Tokens for other users should not be included even if they have the same group id
         $otherUser->createToken(TokenAuth::TYPE_ACCESS, 'TestToken', $groupId);
 
-        $response = $this->getJson("/v1/auth/tokens/groups/$groupId");
+        $response = $this->getJson("/api/v1/auth/tokens/groups/$groupId");
 
         $response->assertOk();
 
@@ -170,13 +170,13 @@ class AuthTokenTest extends TestCase {
 
         $token = $user->createToken(TokenAuth::TYPE_ACCESS, 'TestToken');
 
-        $response = $this->deleteJson("/v1/auth/tokens/{$token->token->id}");
+        $response = $this->deleteJson("/api/v1/auth/tokens/{$token->token->id}");
 
         $response->assertNoContent();
 
         TokenAuth::actingAs(null);
 
-        $newResponse = $this->getJson('/v1/auth', [
+        $newResponse = $this->getJson('/api/v1/auth', [
             'Authorization' => "Bearer {$token->plainTextToken}",
         ]);
         $newResponse->assertUnauthorized();
@@ -187,13 +187,13 @@ class AuthTokenTest extends TestCase {
 
         $token = $user->createToken(TokenAuth::TYPE_REFRESH, 'TestToken');
 
-        $response = $this->deleteJson("/v1/auth/tokens/{$token->token->id}");
+        $response = $this->deleteJson("/api/v1/auth/tokens/{$token->token->id}");
 
         $response->assertNoContent();
 
         TokenAuth::actingAs(null);
 
-        $newResponse = $this->postJson('/v1/auth/refresh', [
+        $newResponse = $this->postJson('/api/v1/auth/refresh', [
             'Authorization' => "Bearer {$token->plainTextToken}",
         ]);
         $newResponse->assertUnauthorized();
@@ -206,7 +206,7 @@ class AuthTokenTest extends TestCase {
         $tokenId = $user1->createToken(TokenAuth::TYPE_ACCESS, 'TestToken')
             ->token->id;
 
-        $response = $this->deleteJson("/v1/auth/tokens/{$tokenId}");
+        $response = $this->deleteJson("/api/v1/auth/tokens/{$tokenId}");
         $response->assertNotFound();
     }
 
@@ -224,7 +224,7 @@ class AuthTokenTest extends TestCase {
 
         $this->assertEquals($createdTokens, $user->tokens()->count());
 
-        $response = $this->deleteJson('/v1/auth/tokens');
+        $response = $this->deleteJson('/api/v1/auth/tokens');
 
         $response->assertNoContent();
 

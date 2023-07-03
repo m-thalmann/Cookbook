@@ -16,7 +16,7 @@ class LogoutTest extends TestCase {
         );
 
         $response = $this->postJson(
-            '/v1/auth/logout',
+            '/api/v1/auth/logout',
             [],
             [
                 'Authorization' => "Bearer {$accessToken->plainTextToken}",
@@ -27,7 +27,7 @@ class LogoutTest extends TestCase {
 
         TokenAuth::actingAs(null);
 
-        $newResponse = $this->getJson('/v1/auth', [
+        $newResponse = $this->getJson('/api/v1/auth', [
             'Authorization' => "Bearer {$accessToken->plainTextToken}",
         ]);
         $newResponse->assertUnauthorized();
