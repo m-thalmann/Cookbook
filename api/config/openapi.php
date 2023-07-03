@@ -62,7 +62,7 @@ return [
             ],
 
             'route' => [
-                'uri' => 'docs/openapi',
+                'uri' => 'api/docs/openapi',
                 'middleware' => [],
             ],
         ],

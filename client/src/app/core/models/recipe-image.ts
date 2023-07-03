@@ -6,4 +6,4 @@ export interface RecipeImage {
   url: string;
 }
 
-export const PLACEHOLDER_RECIPE_IMAGE_URL = '/assets/images/placeholder.jpeg';
+export const PLACEHOLDER_RECIPE_IMAGE_URL = 'assets/images/placeholder.jpeg';

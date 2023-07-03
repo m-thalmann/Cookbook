@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api\Auth;
+namespace Tests\Feature\Api\Cookbook;
 
 use App\Models\Cookbook;
 use App\Models\User;

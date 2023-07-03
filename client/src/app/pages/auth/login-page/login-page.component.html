@@ -1,6 +1,6 @@
 <ng-container *ngIf="{ isLoading: isLoading$ | async, error: error$ | async } as vm">
     <form [formGroup]="loginForm" (submit)="doLogin()">
-        <img src="/assets/images/cookbook.svg" alt="Cookbook Logo" />
+        <img src="assets/images/cookbook.svg" alt="Cookbook Logo" />
         <h1>Cookbook</h1>
 
         <mat-form-field appearance="outline" color="accent">

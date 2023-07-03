@@ -2,4 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::view('/docs', 'swagger')->name('docs');
+Route::redirect('/', '/app')->name('app');
+
+Route::view('/api/docs', 'swagger')->name('docs');

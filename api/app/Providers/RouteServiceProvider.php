@@ -19,24 +19,27 @@ class RouteServiceProvider extends ServiceProvider {
         $this->configureRateLimiting();
 
         $this->routes(function () {
-            Route::as('web.')->group(base_path('routes/web.php'));
-
             Route::middleware('api')
+                ->prefix('api')
                 ->as('api.')
                 ->group(function () {
                     Route::prefix('v1')
                         ->as('v1.')
                         ->group(base_path('routes/api_v1.php'));
+
+                    Route::fallback(function () {
+                        return response()->json(
+                            [
+                                'message' => __(
+                                    'messages.http.route_not_found'
+                                ),
+                            ],
+                            Response::HTTP_NOT_IMPLEMENTED
+                        );
+                    });
                 });
 
-            Route::fallback(function () {
-                return response()->json(
-                    [
-                        'message' => __('messages.http.route_not_found'),
-                    ],
-                    Response::HTTP_NOT_IMPLEMENTED
-                );
-            });
+            Route::as('web.')->group(base_path('routes/web.php'));
         });
     }
 

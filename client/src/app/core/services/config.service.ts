@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Logger as LoggerClass } from '../helpers/logger';
 import { toPromise } from '../helpers/to-promise';
 
-const CONFIG_URL = '/assets/config.json';
+const CONFIG_URL = 'assets/config.json';
 
 type ConfigType = { [key: string]: any };
 

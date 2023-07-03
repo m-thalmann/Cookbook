@@ -1,5 +1,5 @@
 {
-  "apiUrl": "http://localhost:8000",
-  "hcaptcha.enabled": true,
-  "hcaptcha.siteKey": "10000000-ffff-ffff-ffff-000000000001"
+  "apiUrl": "/api",
+  "hcaptcha.enabled": false,
+  "hcaptcha.siteKey": "site-key"
 }
