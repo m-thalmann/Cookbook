@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Recipe;
 use App\Models\Cookbook;
 use App\Models\User;
-use App\OpenApi\Parameters\BaseParameters;
 use App\OpenApi\Parameters\Cookbooks\IndexCookbookUsersParameters;
+use App\OpenApi\Parameters\Cookbooks\ShowCookbooksParameters;
+use App\OpenApi\Parameters\Cookbooks\ShowCookbookUsersParameters;
 use App\OpenApi\RequestBodies\Cookbooks\CreateCookbookUserRequestBody;
 use App\OpenApi\RequestBodies\Cookbooks\UpdateCookbookUserRequestBody;
 use App\OpenApi\Responses\ConflictResponse;
@@ -31,8 +32,6 @@ use Vyuldashev\LaravelOpenApi\Attributes as OpenApi;
 class CookbookUserController extends Controller {
     /**
      * Lists all users in the cookbook
-     *
-     * @param Cookbook $cookbook The cookbook's id
      */
     #[
         OpenApi\Operation(
@@ -68,8 +67,6 @@ class CookbookUserController extends Controller {
 
     /**
      * Adds a user to the cookbook
-     *
-     * @param Cookbook $cookbook The cookbook's id
      */
     #[
         OpenApi\Operation(
@@ -77,7 +74,7 @@ class CookbookUserController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
-    #[OpenApi\Parameters(factory: BaseParameters::class)]
+    #[OpenApi\Parameters(factory: ShowCookbooksParameters::class)]
     #[OpenApi\RequestBody(factory: CreateCookbookUserRequestBody::class)]
     #[
         OpenApi\Response(
@@ -142,9 +139,6 @@ class CookbookUserController extends Controller {
      * Updates the given cookbook user
      *
      * If the user is trying to update itself the request fails with a forbidden error.
-     *
-     * @param Cookbook $cookbook The cookbook's id
-     * @param User $user The user's id
      */
     #[
         OpenApi\Operation(
@@ -152,7 +146,7 @@ class CookbookUserController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
-    #[OpenApi\Parameters(factory: BaseParameters::class)]
+    #[OpenApi\Parameters(factory: ShowCookbookUsersParameters::class)]
     #[OpenApi\RequestBody(factory: UpdateCookbookUserRequestBody::class)]
     #[
         OpenApi\Response(
@@ -205,9 +199,6 @@ class CookbookUserController extends Controller {
      * are part of the cookbook are removed from it.
      *
      * If the user is the last admin of the cookbook the request fails with a conflict error.
-     *
-     * @param Cookbook $cookbook The cookbook's id
-     * @param int $user The id of the user that should be removed
      */
     #[
         OpenApi\Operation(
@@ -215,7 +206,7 @@ class CookbookUserController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
-    #[OpenApi\Parameters(factory: BaseParameters::class)]
+    #[OpenApi\Parameters(factory: ShowCookbookUsersParameters::class)]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]

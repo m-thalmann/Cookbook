@@ -17,8 +17,6 @@ use Vyuldashev\LaravelOpenApi\Attributes as OpenApi;
 class CookbookRecipeController extends Controller {
     /**
      * Lists all recipes in the cookbook
-     *
-     * @param Cookbook The cookbook's id
      */
     #[
         OpenApi\Operation(

@@ -1,24 +1,26 @@
 <?php
 
-namespace App\OpenApi\Parameters\Auth;
+namespace App\OpenApi\Parameters\Cookbooks;
 
 use App\OpenApi\Parameters\BaseParameters;
-use App\OpenApi\Parameters\PaginationParameters;
 use GoldSpecDigital\ObjectOrientedOAS\Objects\Parameter;
 use GoldSpecDigital\ObjectOrientedOAS\Objects\Schema;
 use Vyuldashev\LaravelOpenApi\Factories\ParametersFactory;
 
-class AuthTokenParameters extends ParametersFactory {
+class ShowCookbooksParameters extends ParametersFactory {
+    /**
+     * @return Parameter[]
+     */
     public function build(): array {
         return [
             Parameter::path()
-                ->name('groupId')
-                ->description('The id of the group')
+                ->name('cookbook')
+                ->description('The cookbook\'s id')
                 ->required(true)
                 ->schema(Schema::string()),
 
-            ...(new PaginationParameters())->build(),
             ...(new BaseParameters())->build(),
         ];
     }
 }
+

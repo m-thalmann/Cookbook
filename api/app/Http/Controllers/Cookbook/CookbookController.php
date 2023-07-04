@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Cookbook;
 use App\OpenApi\Parameters\BaseParameters;
 use App\OpenApi\Parameters\Cookbooks\IndexCookbooksParameters;
+use App\OpenApi\Parameters\Cookbooks\ShowCookbooksParameters;
 use App\OpenApi\RequestBodies\Cookbooks\CreateCookbookRequestBody;
 use App\OpenApi\RequestBodies\Cookbooks\UpdateCookbookRequestBody;
 use App\OpenApi\Responses\Cookbooks\CookbookCreatedResponse;
@@ -165,7 +166,7 @@ class CookbookController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
-    #[OpenApi\Parameters(factory: BaseParameters::class)]
+    #[OpenApi\Parameters(factory: ShowCookbooksParameters::class)]
     #[
         OpenApi\Response(
             factory: CookbookShowWithUserResponse::class,
@@ -197,8 +198,6 @@ class CookbookController extends Controller {
 
     /**
      * Updates an existing cookbook
-     *
-     * @param Cookbook $cookbook The cookbook's id
      */
     #[
         OpenApi\Operation(
@@ -206,7 +205,7 @@ class CookbookController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
-    #[OpenApi\Parameters(factory: BaseParameters::class)]
+    #[OpenApi\Parameters(factory: ShowCookbooksParameters::class)]
     #[OpenApi\RequestBody(factory: UpdateCookbookRequestBody::class)]
     #[OpenApi\Response(factory: CookbookShowResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
@@ -239,8 +238,6 @@ class CookbookController extends Controller {
 
     /**
      * Delete the given cookbook
-     *
-     * @param Cookbook $cookbook The cookbook's id
      */
     #[
         OpenApi\Operation(
@@ -248,7 +245,7 @@ class CookbookController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
-    #[OpenApi\Parameters(factory: BaseParameters::class)]
+    #[OpenApi\Parameters(factory: ShowCookbooksParameters::class)]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]

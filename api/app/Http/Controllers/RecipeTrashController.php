@@ -6,6 +6,7 @@ use App\Http\Resources\RecipeResource;
 use App\Models\Recipe;
 use App\OpenApi\Parameters\BaseParameters;
 use App\OpenApi\Parameters\Recipes\IndexRecipesTrashParameters;
+use App\OpenApi\Parameters\Recipes\ShowRecipesParameters;
 use App\OpenApi\Responses\NoContentResponse;
 use App\OpenApi\Responses\NotFoundResponse;
 use App\OpenApi\Responses\Recipes\RecipeIndexResponse;
@@ -58,8 +59,6 @@ class RecipeTrashController extends Controller {
 
     /**
      * Restores the recipe from the trash
-     *
-     * @param Recipe $recipe The recipe's id
      */
     #[
         OpenApi\Operation(
@@ -67,7 +66,7 @@ class RecipeTrashController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
-    #[OpenApi\Parameters(factory: BaseParameters::class)]
+    #[OpenApi\Parameters(factory: ShowRecipesParameters::class)]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
@@ -89,8 +88,6 @@ class RecipeTrashController extends Controller {
 
     /**
      * Deletes the recipe
-     *
-     * @param Recipe $recipe The recipe's id
      */
     #[
         OpenApi\Operation(
@@ -98,7 +95,7 @@ class RecipeTrashController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
-    #[OpenApi\Parameters(factory: BaseParameters::class)]
+    #[OpenApi\Parameters(factory: ShowRecipesParameters::class)]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]

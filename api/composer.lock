@@ -6254,16 +6254,16 @@
         },
         {
             "name": "vyuldashev/laravel-openapi",
-            "version": "v1.10.1",
+            "version": "v1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vyuldashev/laravel-openapi.git",
-                "reference": "10ea607c03de3dd10f115d8a840b4be3bdc8208c"
+                "reference": "bce53abda6176a0aa2000fead256e9b62b5529fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vyuldashev/laravel-openapi/zipball/10ea607c03de3dd10f115d8a840b4be3bdc8208c",
-                "reference": "10ea607c03de3dd10f115d8a840b4be3bdc8208c",
+                "url": "https://api.github.com/repos/vyuldashev/laravel-openapi/zipball/bce53abda6176a0aa2000fead256e9b62b5529fa",
+                "reference": "bce53abda6176a0aa2000fead256e9b62b5529fa",
                 "shasum": ""
             },
             "require": {
@@ -6313,9 +6313,9 @@
             ],
             "support": {
                 "issues": "https://github.com/vyuldashev/laravel-openapi/issues",
-                "source": "https://github.com/vyuldashev/laravel-openapi/tree/v1.10.1"
+                "source": "https://github.com/vyuldashev/laravel-openapi/tree/v1.11.0"
             },
-            "time": "2023-03-06T21:50:41+00:00"
+            "time": "2023-05-03T10:21:46+00:00"
         },
         {
             "name": "webmozart/assert",

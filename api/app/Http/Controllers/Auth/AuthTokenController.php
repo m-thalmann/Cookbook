@@ -6,6 +6,7 @@ use App\Http\Resources\AuthTokenResource;
 use App\Http\Controllers\Controller;
 use App\Models\AuthToken;
 use App\OpenApi\Parameters\Auth\AuthTokenParameters;
+use App\OpenApi\Parameters\Auth\ShowAuthTokensParameters;
 use App\OpenApi\Parameters\BaseParameters;
 use App\OpenApi\Responses\Auth\Tokens\TokenIndexResponse;
 use App\OpenApi\Responses\Auth\Tokens\TokenShowResponse;
@@ -51,8 +52,6 @@ class AuthTokenController extends Controller {
 
     /**
      * Returns the searched auth token
-     *
-     * @param AuthToken $authToken The id of the searched auth-token
      */
     #[
         OpenApi\Operation(
@@ -60,7 +59,7 @@ class AuthTokenController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
-    #[OpenApi\Parameters(factory: BaseParameters::class)]
+    #[OpenApi\Parameters(factory: ShowAuthTokensParameters::class)]
     #[OpenApi\Response(factory: TokenShowResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
@@ -80,8 +79,6 @@ class AuthTokenController extends Controller {
 
     /**
      * Returns all tokens within the given group
-     *
-     * @param int $groupId The id of the group
      */
     #[
         OpenApi\Operation(
@@ -113,8 +110,6 @@ class AuthTokenController extends Controller {
 
     /**
      * Deletes the given token and all tokens from the same group
-     *
-     * @param AuthToken $authToken The id of the searched auth-token
      */
     #[
         OpenApi\Operation(
@@ -122,7 +117,7 @@ class AuthTokenController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
-    #[OpenApi\Parameters(factory: BaseParameters::class)]
+    #[OpenApi\Parameters(factory: ShowAuthTokensParameters::class)]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]

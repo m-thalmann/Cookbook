@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Exceptions\HttpException;
 use App\Models\Recipe;
 use App\Models\RecipeImage;
-use App\OpenApi\Parameters\BaseParameters;
+use App\OpenApi\Parameters\Recipes\ShowRecipeImagesParameters;
+use App\OpenApi\Parameters\Recipes\ShowRecipesParameters;
 use App\OpenApi\RequestBodies\RecipeImages\CreateRecipeImageRequestBody;
 use App\OpenApi\Responses\NoContentResponse;
 use App\OpenApi\Responses\NotFoundResponse;
@@ -22,8 +23,6 @@ use Vyuldashev\LaravelOpenApi\Attributes as OpenApi;
 class RecipeImageController extends Controller {
     /**
      * Lists all images for the given recipe
-     *
-     * @param Recipe $recipe The recipe's id
      */
     #[
         OpenApi\Operation(
@@ -31,7 +30,7 @@ class RecipeImageController extends Controller {
             security: 'OptionalAccessTokenSecurityScheme'
         )
     ]
-    #[OpenApi\Parameters(factory: BaseParameters::class)]
+    #[OpenApi\Parameters(factory: ShowRecipesParameters::class)]
     #[
         OpenApi\Response(
             factory: RecipeImageIndexResponse::class,
@@ -53,8 +52,6 @@ class RecipeImageController extends Controller {
 
     /**
      * Creates a new image for the given recipe
-     *
-     * @param Recipe $recipe The recipe's id
      */
     #[
         OpenApi\Operation(
@@ -62,7 +59,7 @@ class RecipeImageController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
-    #[OpenApi\Parameters(factory: BaseParameters::class)]
+    #[OpenApi\Parameters(factory: ShowRecipesParameters::class)]
     #[OpenApi\RequestBody(factory: CreateRecipeImageRequestBody::class)]
     #[
         OpenApi\Response(
@@ -112,8 +109,6 @@ class RecipeImageController extends Controller {
 
     /**
      * Delete the given recipe image
-     *
-     * @param RecipeImage $recipeImage The recipe-image's id
      */
     #[
         OpenApi\Operation(
@@ -121,7 +116,7 @@ class RecipeImageController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
-    #[OpenApi\Parameters(factory: BaseParameters::class)]
+    #[OpenApi\Parameters(factory: ShowRecipeImagesParameters::class)]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]

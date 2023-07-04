@@ -20,8 +20,6 @@ class CookbookCategoryController extends Controller {
      *
      * The `sort` parameter can be used to sort the categories by the amount of recipes in the category.
      * If it is not set the categories are default sorted by their name (asc).
-     *
-     * @param Cookbook $cookbook The cookbook's id
      */
     #[
         OpenApi\Operation(

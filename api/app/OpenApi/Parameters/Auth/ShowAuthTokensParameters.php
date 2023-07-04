@@ -3,22 +3,24 @@
 namespace App\OpenApi\Parameters\Auth;
 
 use App\OpenApi\Parameters\BaseParameters;
-use App\OpenApi\Parameters\PaginationParameters;
 use GoldSpecDigital\ObjectOrientedOAS\Objects\Parameter;
 use GoldSpecDigital\ObjectOrientedOAS\Objects\Schema;
 use Vyuldashev\LaravelOpenApi\Factories\ParametersFactory;
 
-class AuthTokenParameters extends ParametersFactory {
+class ShowAuthTokensParameters extends ParametersFactory {
+    /**
+     * @return Parameter[]
+     */
     public function build(): array {
         return [
             Parameter::path()
-                ->name('groupId')
-                ->description('The id of the group')
+                ->name('authToken')
+                ->description('The id of the searched auth-token')
                 ->required(true)
                 ->schema(Schema::string()),
 
-            ...(new PaginationParameters())->build(),
             ...(new BaseParameters())->build(),
         ];
     }
 }
+

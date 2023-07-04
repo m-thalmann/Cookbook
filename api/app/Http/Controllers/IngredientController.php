@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Ingredient;
 use App\Models\Recipe;
-use App\OpenApi\Parameters\BaseParameters;
 use App\OpenApi\Parameters\Ingredients\IndexIngredientsParameters;
+use App\OpenApi\Parameters\Ingredients\ShowIngredientsParameters;
+use App\OpenApi\Parameters\Recipes\ShowRecipesParameters;
 use App\OpenApi\RequestBodies\Ingredients\CreateIngredientRequestBody;
 use App\OpenApi\RequestBodies\Ingredients\UpdateIngredientRequestBody;
 use App\OpenApi\Responses\Ingredients\IngredientCreatedResponse;
@@ -63,8 +64,6 @@ class IngredientController extends Controller {
 
     /**
      * Creates a new ingredient for the given recipe
-     *
-     * @param Recipe $recipe The id of the recipe
      */
     #[
         OpenApi\Operation(
@@ -72,7 +71,7 @@ class IngredientController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
-    #[OpenApi\Parameters(factory: BaseParameters::class)]
+    #[OpenApi\Parameters(factory: ShowRecipesParameters::class)]
     #[OpenApi\RequestBody(factory: CreateIngredientRequestBody::class)]
     #[
         OpenApi\Response(
@@ -108,8 +107,6 @@ class IngredientController extends Controller {
 
     /**
      * Updates an existing ingredient
-     *
-     * @param Ingredient $ingredient The id of the ingredient
      */
     #[
         OpenApi\Operation(
@@ -117,7 +114,7 @@ class IngredientController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
-    #[OpenApi\Parameters(factory: BaseParameters::class)]
+    #[OpenApi\Parameters(factory: ShowIngredientsParameters::class)]
     #[OpenApi\RequestBody(factory: UpdateIngredientRequestBody::class)]
     #[OpenApi\Response(factory: IngredientShowResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
@@ -175,8 +172,6 @@ class IngredientController extends Controller {
 
     /**
      * Deletes the ingredient
-     *
-     * @param Ingredient $ingredient The ingredient's id
      */
     #[
         OpenApi\Operation(
@@ -184,7 +179,7 @@ class IngredientController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
-    #[OpenApi\Parameters(factory: BaseParameters::class)]
+    #[OpenApi\Parameters(factory: ShowIngredientsParameters::class)]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]

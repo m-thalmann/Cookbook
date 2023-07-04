@@ -7,6 +7,8 @@ use App\Models\Recipe;
 use App\Models\Cookbook;
 use App\OpenApi\Parameters\BaseParameters;
 use App\OpenApi\Parameters\Recipes\IndexRecipesParameters;
+use App\OpenApi\Parameters\Recipes\ShowRecipesParameters;
+use App\OpenApi\Parameters\Recipes\ShowSharedRecipesParameters;
 use App\OpenApi\RequestBodies\Recipes\CreateRecipeRequestBody;
 use App\OpenApi\RequestBodies\Recipes\UpdateRecipeRequestBody;
 use App\OpenApi\Responses\ForbiddenResponse;
@@ -177,8 +179,6 @@ class RecipeController extends Controller {
 
     /**
      * Returns the recipe with the given id
-     *
-     * @param Recipe $recipe The recipe's id
      */
     #[
         OpenApi\Operation(
@@ -186,7 +186,7 @@ class RecipeController extends Controller {
             security: 'OptionalAccessTokenSecurityScheme'
         )
     ]
-    #[OpenApi\Parameters(factory: BaseParameters::class)]
+    #[OpenApi\Parameters(factory: ShowRecipesParameters::class)]
     #[OpenApi\Response(factory: RecipeShowResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
     #[
@@ -221,8 +221,6 @@ class RecipeController extends Controller {
 
     /**
      * Returns the recipe with the given share-uuid
-     *
-     * @param string $shareUuid The recipe's share-uuid
      */
     #[
         OpenApi\Operation(
@@ -230,7 +228,7 @@ class RecipeController extends Controller {
             security: 'OptionalAccessTokenSecurityScheme'
         )
     ]
-    #[OpenApi\Parameters(factory: BaseParameters::class)]
+    #[OpenApi\Parameters(factory: ShowSharedRecipesParameters::class)]
     #[OpenApi\Response(factory: RecipeShowResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
     #[
@@ -263,8 +261,6 @@ class RecipeController extends Controller {
 
     /**
      * Updates an existing recipe
-     *
-     * @param Recipe $recipe The recipe's id
      */
     #[
         OpenApi\Operation(
@@ -272,7 +268,7 @@ class RecipeController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
-    #[OpenApi\Parameters(factory: BaseParameters::class)]
+    #[OpenApi\Parameters(factory: ShowRecipesParameters::class)]
     #[OpenApi\RequestBody(factory: UpdateRecipeRequestBody::class)]
     #[OpenApi\Response(factory: RecipeShowResponse::class, statusCode: 200)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
@@ -352,8 +348,6 @@ class RecipeController extends Controller {
 
     /**
      * Moves the recipe to the trash
-     *
-     * @param Recipe $recipe The recipe's id
      */
     #[
         OpenApi\Operation(
@@ -361,7 +355,7 @@ class RecipeController extends Controller {
             security: 'AccessTokenSecurityScheme'
         )
     ]
-    #[OpenApi\Parameters(factory: BaseParameters::class)]
+    #[OpenApi\Parameters(factory: ShowRecipesParameters::class)]
     #[OpenApi\Response(factory: NoContentResponse::class, statusCode: 204)]
     #[OpenApi\Response(factory: UnauthorizedResponse::class, statusCode: 401)]
     #[OpenApi\Response(factory: NotFoundResponse::class, statusCode: 404)]
