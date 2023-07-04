@@ -26,6 +26,7 @@ export interface Recipe extends BasicRecipe {
   updated_at: number;
   user: User;
   user_can_edit?: boolean;
+  user_can_admin?: boolean;
 }
 
 export interface ListRecipe extends Recipe {

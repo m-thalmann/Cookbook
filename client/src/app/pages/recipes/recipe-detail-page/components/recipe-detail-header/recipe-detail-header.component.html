@@ -87,7 +87,7 @@
         <mat-icon>edit</mat-icon>
         <span>{{ 'actions.edit' | transloco }}</span>
     </a>
-    <button mat-menu-item (click)="deleteRecipe.emit()">
+    <button mat-menu-item (click)="deleteRecipe.emit()" *ngIf="recipe?.user_can_admin">
         <mat-icon color="warn">delete</mat-icon>
         <span>{{ 'recipes.moveToTrash' | transloco }}</span>
     </button>

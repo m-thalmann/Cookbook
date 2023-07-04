@@ -5,7 +5,8 @@
         ingredients: ingredients$ | async,
         amountOfIngredients: amountOfIngredients$ | async,
         cookbooksError: cookbooksError$ | async,
-        savingError: savingError$ | async
+        savingError: savingError$ | async,
+        authUser: auth.user$ | async
     } as vm"
 >
     <form [formGroup]="form" (submit)="onSubmit()">
@@ -59,6 +60,9 @@
                         [value]="cookbook.id"
                     >
                         {{ cookbook.name }}
+                        <ng-container *ngIf="vm.authUser?.is_admin">
+                            ({{ 'general.id' | transloco }}: {{ cookbook.id }})
+                        </ng-container>
                     </mat-option>
                 </mat-select>
                 <mat-icon

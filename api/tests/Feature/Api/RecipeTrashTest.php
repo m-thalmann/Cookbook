@@ -56,6 +56,7 @@ class RecipeTrashTest extends TestCase {
                 'updated_at',
                 'user' => ['id', 'name', 'email', 'language_code'],
                 'user_can_edit',
+                'user_can_admin',
             ],
             count($deletedRecipes),
             $response

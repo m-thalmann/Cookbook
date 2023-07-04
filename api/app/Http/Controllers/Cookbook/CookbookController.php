@@ -86,8 +86,16 @@ class CookbookController extends Controller {
         )
     ]
     public function indexEditable() {
-        $cookbooks = Cookbook::query()
-            ->forUser(authUser(), mustBeAdmin: true)
+        $cookbooksQuery = Cookbook::query();
+
+        if (!authUser()->is_admin) {
+            $cookbooksQuery = $cookbooksQuery->forUser(
+                authUser(),
+                mustBeAdmin: true
+            );
+        }
+
+        $cookbooks = $cookbooksQuery
             ->orderBy('name', 'asc')
             ->select(['id', 'name'])
             ->get();

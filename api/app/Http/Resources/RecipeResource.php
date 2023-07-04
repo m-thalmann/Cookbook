@@ -35,6 +35,8 @@ class RecipeResource extends JsonResource {
         if (authUser()) {
             $array['user_can_edit'] =
                 authUser()->can('update', $this->resource) || false;
+            $array['user_can_admin'] =
+                authUser()->can('admin', $this->resource) || false;
         }
 
         return $array;

@@ -58,7 +58,9 @@ class RecipeController extends Controller {
         if (auth()->check()) {
             $recipes->with([
                 'cookbook' => function ($query) {
-                    $query->forUser(authUser())->exists();
+                    if (!authUser()->is_admin) {
+                        $query->forUser(authUser())->exists();
+                    }
                 },
             ]);
         }
@@ -203,7 +205,9 @@ class RecipeController extends Controller {
 
             $recipe->load([
                 'cookbook' => function ($query) {
-                    $query->forUser(authUser())->exists();
+                    if (!authUser()->is_admin) {
+                        $query->forUser(authUser())->exists();
+                    }
                 },
             ]);
         }
@@ -243,7 +247,9 @@ class RecipeController extends Controller {
 
             $recipeQuery->with([
                 'cookbook' => function ($query) {
-                    $query->forUser(authUser())->exists();
+                    if (!authUser()->is_admin) {
+                        $query->forUser(authUser())->exists();
+                    }
                 },
             ]);
         }

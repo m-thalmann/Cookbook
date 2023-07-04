@@ -39,6 +39,7 @@ class CookbookRecipeTest extends TestCase {
                 'updated_at',
                 'user' => ['id', 'name', 'email', 'language_code'],
                 'user_can_edit',
+                'user_can_admin',
                 // thumbnail is excluded because it will not exist
                 'cookbook' => ['id', 'name', 'created_at', 'updated_at'],
             ],

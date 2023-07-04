@@ -67,7 +67,7 @@ class CookbookTest extends TestCase {
         $this->assertEquals($amountAdmin, count($response->json('data')));
     }
 
-    public function testIndexEditableReturnsNoCookbooksIfIsAdmin() {
+    public function testIndexEditableReturnsAllCookbooksIfIsAdmin() {
         $user = $this->createAndLoginUser(isAdmin: true);
 
         $cookbooks = Cookbook::factory(5)->create();
@@ -76,7 +76,7 @@ class CookbookTest extends TestCase {
 
         $response->assertOk();
 
-        $this->assertEquals(0, count($response->json('data')));
+        $this->assertEquals(count($cookbooks), count($response->json('data')));
     }
 
     public function testStoreCreatesACookbook() {

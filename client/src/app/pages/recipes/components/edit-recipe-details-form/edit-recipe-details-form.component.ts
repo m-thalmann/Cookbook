@@ -81,6 +81,10 @@ export class EditRecipeDetailsFormComponent {
       this.form.disable();
     } else {
       this.form.enable();
+
+      if (!this.recipe?.user_can_admin) {
+        this.form.controls.cookbookId.disable();
+      }
     }
   }
 
@@ -131,7 +135,7 @@ export class EditRecipeDetailsFormComponent {
     tap(() => this.form.controls.cookbookId.disable()),
     switchMap(() => this.api.cookbooks.getEditableList()),
     tap(() => {
-      if (!this._disabled) {
+      if (!this._disabled && this.recipe?.user_can_admin) {
         this.form.controls.cookbookId.enable();
       }
     }),
@@ -193,7 +197,7 @@ export class EditRecipeDetailsFormComponent {
     private fb: FormBuilder,
     private elementRef: ElementRef,
     private api: ApiService,
-    private auth: AuthService
+    public auth: AuthService
   ) {}
 
   resetForm() {
@@ -201,6 +205,10 @@ export class EditRecipeDetailsFormComponent {
       this.form.reset();
 
       return;
+    }
+
+    if (!this.recipe.user_can_admin) {
+      this.form.controls.cookbookId.disable();
     }
 
     this.form.patchValue({

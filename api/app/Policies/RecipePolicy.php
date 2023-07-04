@@ -78,7 +78,7 @@ class RecipePolicy {
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function delete(User $user, Recipe $recipe) {
-        return $user->id === $recipe->user_id;
+        return $this->admin($user, $recipe);
     }
 
     /**
@@ -89,7 +89,7 @@ class RecipePolicy {
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function restore(User $user, Recipe $recipe) {
-        return $user->id === $recipe->user_id;
+        return $this->admin($user, $recipe);
     }
 
     /**
@@ -100,6 +100,17 @@ class RecipePolicy {
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function forceDelete(User $user, Recipe $recipe) {
+        return $this->admin($user, $recipe);
+    }
+
+    /**
+     * Determine whether the user can administrate the model.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Recipe  $recipe
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function admin(User $user, Recipe $recipe) {
         return $user->id === $recipe->user_id;
     }
 }
