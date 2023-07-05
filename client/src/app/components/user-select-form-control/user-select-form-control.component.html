@@ -11,7 +11,14 @@
             </div>
         </div>
 
-        <button (click)="openSearchUserDialog()" type="button" [disabled]="vm.disabled">
+        <button
+            mat-mini-fab
+            (click)="openSearchUserDialog()"
+            type="button"
+            color="primary"
+            disableRipple
+            [disabled]="vm.disabled"
+        >
             <mat-icon>person_search</mat-icon>
         </button>
     </div>

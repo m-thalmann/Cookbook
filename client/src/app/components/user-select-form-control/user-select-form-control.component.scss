@@ -55,42 +55,6 @@
       font-size: 0.9em;
     }
   }
-
-  button {
-    all: unset;
-
-    &:not(:disabled) {
-      cursor: pointer;
-    }
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 50%;
-    width: 2.5em;
-    height: 2.5em;
-
-    transition: background $transition-time;
-
-    @include theme.apply() using ($variables) {
-      background: rgba(map.get($variables, 'primary'), 0.5);
-
-      &:not(:disabled) {
-        &:hover {
-          background: rgba(map.get($variables, 'primary'), 0.75);
-        }
-
-        &:focus {
-          background: map.get($variables, 'primary');
-        }
-      }
-
-      &:disabled {
-        background: rgba(map.get($variables, 'foreground'), 0.125);
-      }
-    }
-  }
 }
 
 .error {

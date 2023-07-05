@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { BehaviorSubject } from 'rxjs';
@@ -9,21 +10,21 @@ import { toPromise } from 'src/app/core/helpers/to-promise';
 import { User } from 'src/app/core/models/user';
 
 @Component({
-  selector: 'app-edit-recipe-user-select-form-control',
+  selector: 'app-user-select-form-control',
   standalone: true,
-  imports: [CommonModule, MatIconModule],
-  templateUrl: './edit-recipe-user-select-form-control.component.html',
-  styleUrls: ['./edit-recipe-user-select-form-control.component.scss'],
+  imports: [CommonModule, MatIconModule, MatButtonModule],
+  templateUrl: './user-select-form-control.component.html',
+  styleUrls: ['./user-select-form-control.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: EditRecipeUserSelectFormControlComponent,
+      useExisting: UserSelectFormControlComponent,
       multi: true,
     },
   ],
 })
-export class EditRecipeUserSelectFormControlComponent implements ControlValueAccessor {
+export class UserSelectFormControlComponent implements ControlValueAccessor {
   @Input() error: string | null = null;
 
   user$ = new BehaviorSubject<User | null>(null);

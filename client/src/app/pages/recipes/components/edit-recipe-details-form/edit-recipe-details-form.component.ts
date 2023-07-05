@@ -26,8 +26,8 @@ import { Ingredient } from 'src/app/core/models/ingredient';
 import { DetailedRecipe, EditRecipeFormData } from 'src/app/core/models/recipe';
 import { User } from 'src/app/core/models/user';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
+import { UserSelectFormControlComponent } from '../../../../components/user-select-form-control/user-select-form-control.component';
 import { EditRecipeIngredientFormGroupComponent } from './components/edit-recipe-ingredient-form-group/edit-recipe-ingredient-form-group.component';
-import { EditRecipeUserSelectFormControlComponent } from './components/edit-recipe-user-select-form-control/edit-recipe-user-select-form-control.component';
 
 interface FormIngredientGroup {
   name: FormControl<string | null>;
@@ -60,7 +60,7 @@ export interface FormIngredient {
     MatIconModule,
     MatProgressSpinnerModule,
     EditRecipeIngredientFormGroupComponent,
-    EditRecipeUserSelectFormControlComponent,
+    UserSelectFormControlComponent,
     EditorComponent,
   ],
   templateUrl: './edit-recipe-details-form.component.html',
