@@ -291,8 +291,6 @@ class RecipeController extends Controller {
         $this->authorizeAnonymously('update', $recipe);
 
         $validationRules = [
-            'user_id' => ['exists:App\Models\User,id'],
-            'is_public' => ['boolean'],
             'name' => ['filled', 'max:255'],
             'description' => ['nullable', 'max:255'],
             'category' => ['nullable', 'max:50'],
@@ -306,17 +304,20 @@ class RecipeController extends Controller {
         ];
 
         if (authUser()->is_admin || auth()->id() === $recipe->user_id) {
-            // if the user is an admin or the owner it can update the cookbook
+            $validationRules['user_id'] = ['exists:App\Models\User,id'];
+            $validationRules['is_public'] = ['boolean'];
 
             $validationRules['cookbook_id'] = [
                 'bail',
                 'nullable',
                 Rule::exists('cookbooks', 'id')->where(function ($query) {
-                    (new Cookbook())->scopeForUser(
-                        $query,
-                        authUser(),
-                        mustBeAdmin: true
-                    );
+                    if (!authUser()->is_admin) {
+                        (new Cookbook())->scopeForUser(
+                            $query,
+                            authUser(),
+                            mustBeAdmin: true
+                        );
+                    }
                 }),
             ];
         }

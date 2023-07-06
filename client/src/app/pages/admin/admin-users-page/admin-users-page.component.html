@@ -59,9 +59,9 @@
                     [dataSource]="vm.users?.body?.data ?? []"
                     [trackBy]="trackByUser"
                     matSort
+                    [matSortActive]="vm.filters?.sort?.[0]?.column ?? 'id'"
+                    [matSortDirection]="vm.filters?.sort?.[0]?.dir ?? 'asc'"
                     matSortDisableClear
-                    matSortActive="id"
-                    matSortDirection="asc"
                     (matSortChange)="onSort($event)"
                 >
                     <ng-container matColumnDef="id">

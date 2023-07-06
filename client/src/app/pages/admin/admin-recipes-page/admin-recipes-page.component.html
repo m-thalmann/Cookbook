@@ -63,6 +63,8 @@
                     [dataSource]="vm.recipes?.body?.data ?? []"
                     [trackBy]="trackByRecipe"
                     matSort
+                    [matSortActive]="vm.filters?.sort?.[0]?.column ?? 'id'"
+                    [matSortDirection]="vm.filters?.sort?.[0]?.dir ?? 'asc'"
                     matSortDisableClear
                     (matSortChange)="onSort($event)"
                 >

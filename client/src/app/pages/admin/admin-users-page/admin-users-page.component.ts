@@ -71,7 +71,7 @@ export class AdminUsersPageComponent {
       if (typeof params['sort'] !== 'undefined') {
         sort = { column: params['sort'], dir: 'asc' };
       } else {
-        sort = { column: 'created_at', dir: 'desc' };
+        sort = { column: 'id', dir: 'asc' };
       }
 
       if (typeof params['sort-dir'] !== 'undefined') {
