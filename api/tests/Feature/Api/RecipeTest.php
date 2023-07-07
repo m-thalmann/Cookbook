@@ -407,13 +407,13 @@ class RecipeTest extends TestCase {
         ]);
     }
 
-    public function testUpdateFailsIfUserIsNotAdminOfNewCookbook() {
-        $user = $this->createAndLoginUser(isAdmin: true); // Does not matter whether user is admin
+    public function testUpdateFailsIfUserIsNotAdminOfNewCookbookAndIsNotAdmin() {
+        $user = $this->createAndLoginUser(isAdmin: false);
 
         $cookbook = Cookbook::factory()->create();
         $cookbook->users()->attach($user, ['is_admin' => false]);
 
-        $recipe = Recipe::factory()->create();
+        $recipe = Recipe::factory()->create(['user_id' => $user->id]);
 
         $response = $this->putJson("/api/v1/recipes/{$recipe->id}", [
             'cookbook_id' => $cookbook->id,

@@ -214,6 +214,7 @@ class IngredientTest extends TestCase {
         ]);
 
         $otherIngredient = Ingredient::factory()->create([
+            'name' => $ingredient->name . '_other',
             'recipe_id' => $recipe->id,
         ]);
 
