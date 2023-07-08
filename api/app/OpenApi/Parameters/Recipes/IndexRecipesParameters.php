@@ -27,6 +27,14 @@ class IndexRecipesParameters extends ParametersFactory {
                 ->required(false)
                 ->allowEmptyValue(true),
 
+            Parameter::query()
+                ->name('include-deleted')
+                ->description(
+                    'Whether to include deleted recipes in the response or not (only allowed by the admin)'
+                )
+                ->required(false)
+                ->allowEmptyValue(true),
+
             ...(new PaginationParameters())->build(),
 
             ...(new SortParameters(

@@ -380,9 +380,13 @@ export class ApiService {
       getList: (
         options: {
           all?: boolean;
+          includeDeleted?: boolean;
         } & ListParamOptions
       ) => {
-        const baseParams = ApiService.generateParams({ all: options.all ? '' : undefined });
+        const baseParams = ApiService.generateParams({
+          all: options.all ? '' : undefined,
+          'include-deleted': options.includeDeleted ? '' : undefined,
+        });
 
         return this.get<{ data: ListRecipe[]; meta: PaginationMeta }>(
           '/recipes',

@@ -104,10 +104,29 @@
                         </td>
                     </ng-container>
 
+                    <ng-container matColumnDef="deleted">
+                        <th mat-header-cell class="align-center" *matHeaderCellDef>
+                            {{ 'general.deleted' | transloco }}
+                        </th>
+                        <td mat-cell class="align-center" *matCellDef="let recipe">
+                            <mat-checkbox
+                                color="warn"
+                                [checked]="recipe.deleted_at !== null"
+                                [disabled]="vm.loading || vm.saving"
+                                (click)="updateRecipeDeleted(recipe)"
+                            ></mat-checkbox>
+                        </td>
+                    </ng-container>
+
                     <ng-container matColumnDef="actions">
                         <th mat-header-cell class="align-center" *matHeaderCellDef></th>
                         <td mat-cell class="align-center" *matCellDef="let recipe">
-                            <a mat-icon-button color="primary" [routerLink]="['/recipes', recipe.id]">
+                            <a
+                                mat-icon-button
+                                color="primary"
+                                [routerLink]="['/recipes', recipe.id]"
+                                [disabled]="recipe.deleted_at !== null || vm.loading || vm.saving"
+                            >
                                 <mat-icon>visibility</mat-icon>
                             </a>
                         </td>

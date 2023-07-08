@@ -54,6 +54,8 @@ class RecipeController extends Controller {
     ]
     public function index(Request $request) {
         $all = $request->exists('all');
+        $includeDeleted =
+            authUser()?->is_admin && $request->exists('include-deleted');
 
         $recipes = Recipe::query()->with(['user', 'thumbnail']);
 
@@ -68,6 +70,10 @@ class RecipeController extends Controller {
         }
 
         $recipes->organized($request)->forUser(authUser(), $all);
+
+        if ($includeDeleted) {
+            $recipes->withTrashed();
+        }
 
         return response()->pagination(
             fn($perPage) => RecipeResource::collection(

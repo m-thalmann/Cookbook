@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MAT_CHECKBOX_DEFAULT_OPTIONS, MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -10,11 +11,12 @@ import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
-import { BehaviorSubject, Observable, combineLatest, map, shareReplay, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, map, shareReplay, startWith, switchMap, tap } from 'rxjs';
 import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 import { SettingsSectionComponent } from 'src/app/components/settings-section/settings-section.component';
 import { ApiService } from 'src/app/core/api/api.service';
 import { AuthService } from 'src/app/core/auth/auth.service';
+import { Logger as LoggerClass } from 'src/app/core/helpers/logger';
 import { toPromise } from 'src/app/core/helpers/to-promise';
 import { FilterOption } from 'src/app/core/models/filter-option';
 import { PaginationOptions } from 'src/app/core/models/pagination-options';
@@ -25,6 +27,8 @@ import { I18nDatePipe } from 'src/app/core/pipes/i18n-date.pipe';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { AdminRecipesUserFilterComponent } from './components/admin-recipes-user-filter/admin-recipes-user-filter.component';
+
+const Logger = new LoggerClass('Admin');
 
 @Component({
   selector: 'app-admin-recipes-page',
@@ -41,6 +45,7 @@ import { AdminRecipesUserFilterComponent } from './components/admin-recipes-user
     MatProgressSpinnerModule,
     MatFormFieldModule,
     MatInputModule,
+    MatCheckboxModule,
     ErrorDisplayComponent,
     SettingsSectionComponent,
     AdminRecipesUserFilterComponent,
@@ -49,10 +54,13 @@ import { AdminRecipesUserFilterComponent } from './components/admin-recipes-user
   templateUrl: './admin-recipes-page.component.html',
   styleUrls: ['./admin-recipes-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [{ provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { clickAction: 'noop' } }],
 })
 export class AdminRecipesPageComponent {
   loading$ = new BehaviorSubject<boolean>(true);
   saving$ = new BehaviorSubject<boolean>(false);
+
+  private reloadView$ = new EventEmitter<void>();
 
   filteredUser$ = new BehaviorSubject<User | null>(null);
   filteredUserLoading$ = new BehaviorSubject<boolean>(false);
@@ -103,9 +111,9 @@ export class AdminRecipesPageComponent {
     switchMap(([filters, _]) => {
       this.paginationOptions$.next({ ...this.paginationOptions$.value, page: 1 });
 
-      return this.paginationOptions$.pipe(
+      return combineLatest([this.paginationOptions$, this.reloadView$.pipe(startWith(undefined))]).pipe(
         tap(() => this.loading$.next(true)),
-        switchMap((paginationOptions) => {
+        switchMap(([paginationOptions]) => {
           let filtersOptions: FilterOption[] = [];
 
           if (filters.userId !== undefined) {
@@ -114,6 +122,7 @@ export class AdminRecipesPageComponent {
 
           return this.api.recipes.getList({
             all: true,
+            includeDeleted: true,
             search: filters.search,
             filters: filtersOptions,
             sort: filters.sort,
@@ -129,7 +138,7 @@ export class AdminRecipesPageComponent {
 
   error$ = this.api.handleRequestError(this.recipes$);
 
-  displayedColumns = ['id', 'name', 'user', 'created_at', 'actions'];
+  displayedColumns = ['id', 'name', 'user', 'created_at', 'deleted', 'actions'];
 
   constructor(
     private auth: AuthService,
@@ -158,6 +167,28 @@ export class AdminRecipesPageComponent {
   onUserFilter(user: User | null) {
     this.filteredUser$.next(user);
     this.applyFilterParams({ 'user-id': user?.id.toString() ?? null });
+  }
+
+  async updateRecipeDeleted(recipe: ListRecipe) {
+    this.saving$.next(true);
+
+    try {
+      if (recipe.deleted_at === null) {
+        await toPromise(this.api.recipes.delete(recipe.id));
+      } else {
+        await toPromise(this.api.recipes.trash.restoreRecipe(recipe.id));
+      }
+
+      this.reloadView$.emit();
+
+      this.snackbar.info('messages.recipeUpdated', { translateMessage: true });
+    } catch (e) {
+      const errorMessage = this.snackbar.exception(e, {}).message;
+
+      Logger.error('Error updating recipe:', errorMessage, e);
+    }
+
+    this.saving$.next(false);
   }
 
   trackByRecipe(index: number, recipe: ListRecipe) {
