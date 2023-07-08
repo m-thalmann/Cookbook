@@ -23,4 +23,3 @@ class ShowSharedRecipesParameters extends ParametersFactory {
         ];
     }
 }
-

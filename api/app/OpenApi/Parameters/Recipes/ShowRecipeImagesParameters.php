@@ -23,4 +23,3 @@ class ShowRecipeImagesParameters extends ParametersFactory {
         ];
     }
 }
-

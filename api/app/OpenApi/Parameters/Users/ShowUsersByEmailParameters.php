@@ -23,4 +23,3 @@ class ShowUsersByEmailParameters extends ParametersFactory {
         ];
     }
 }
-

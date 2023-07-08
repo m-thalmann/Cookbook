@@ -170,7 +170,9 @@ class AuthTokenTest extends TestCase {
 
         $token = $user->createToken(TokenAuth::TYPE_ACCESS, 'TestToken');
 
-        $response = $this->deleteJson("/api/v1/auth/tokens/{$token->token->id}");
+        $response = $this->deleteJson(
+            "/api/v1/auth/tokens/{$token->token->id}"
+        );
 
         $response->assertNoContent();
 
@@ -187,7 +189,9 @@ class AuthTokenTest extends TestCase {
 
         $token = $user->createToken(TokenAuth::TYPE_REFRESH, 'TestToken');
 
-        $response = $this->deleteJson("/api/v1/auth/tokens/{$token->token->id}");
+        $response = $this->deleteJson(
+            "/api/v1/auth/tokens/{$token->token->id}"
+        );
 
         $response->assertNoContent();
 

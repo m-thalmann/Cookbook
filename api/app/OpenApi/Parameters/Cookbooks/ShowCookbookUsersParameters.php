@@ -29,4 +29,3 @@ class ShowCookbookUsersParameters extends ParametersFactory {
         ];
     }
 }
-

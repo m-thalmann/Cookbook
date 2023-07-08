@@ -23,4 +23,3 @@ class ShowAuthTokensParameters extends ParametersFactory {
         ];
     }
 }
-

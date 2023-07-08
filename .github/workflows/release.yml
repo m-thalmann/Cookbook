@@ -53,7 +53,7 @@ jobs:
           cp -r docs ./release/cookbook/docs
           cd release/cookbook
           rm -rf tests phpunit.xml
-          find . -name '.git*' -delete
+          rm -rf `find . -name '.git*'`
           cd ..
           zip -r ../Cookbook-${{ steps.get_version.outputs.VERSION }}.zip *
 

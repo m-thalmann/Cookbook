@@ -23,4 +23,3 @@ class ShowIngredientsParameters extends ParametersFactory {
         ];
     }
 }
-
