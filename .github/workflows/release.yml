@@ -20,7 +20,6 @@ jobs:
 
       - name: Generate changelog
         run: |
-          cd client
           npm i -g conventional-changelog-cli@^3.0.0
           conventional-changelog -p angular -o CHANGELOG.md -r 2
           tail -n +2 CHANGELOG.md > CHANGELOG #remove first line

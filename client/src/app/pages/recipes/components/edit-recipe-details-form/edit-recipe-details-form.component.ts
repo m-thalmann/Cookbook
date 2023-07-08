@@ -159,7 +159,7 @@ export class EditRecipeDetailsFormComponent {
     cookbookId: [<number | null>null],
     description: [<string | null>null],
     portions: [<number | null>null, [Validators.min(1)]],
-    difficulty: [<number | null>null, [Validators.min(1), Validators.max(5)]],
+    difficulty: [<number>0, [Validators.min(0), Validators.max(5)]],
     preparationTimeMinutes: [<number | null>null, [Validators.min(1)]],
     restingTimeMinutes: [<number | null>null, [Validators.min(1)]],
     cookingTimeMinutes: [<number | null>null, [Validators.min(1)]],
@@ -219,7 +219,7 @@ export class EditRecipeDetailsFormComponent {
       cookbookId: this.recipe.cookbook_id,
       description: this.recipe.description,
       portions: this.recipe.portions,
-      difficulty: this.recipe.difficulty,
+      difficulty: this.recipe.difficulty ?? 0,
       preparationTimeMinutes: this.recipe.preparation_time_minutes,
       restingTimeMinutes: this.recipe.resting_time_minutes,
       cookingTimeMinutes: this.recipe.cooking_time_minutes,
@@ -323,6 +323,8 @@ export class EditRecipeDetailsFormComponent {
       [] as EditRecipeFormData['ingredients']
     );
 
+    const difficulty = this.form.controls.difficulty.value;
+
     const recipe: EditRecipeFormData = {
       name: this.form.controls.name.value,
       user_id: this.form.controls.user.value.id,
@@ -331,7 +333,7 @@ export class EditRecipeDetailsFormComponent {
       cookbook_id: this.form.controls.cookbookId.value,
       description: trimAndNull(this.form.controls.description.value),
       portions: this.form.controls.portions.value,
-      difficulty: this.form.controls.difficulty.value,
+      difficulty: difficulty >= 1 ? difficulty : null,
       preparation_time_minutes: this.form.controls.preparationTimeMinutes.value,
       resting_time_minutes: this.form.controls.restingTimeMinutes.value,
       cooking_time_minutes: this.form.controls.cookingTimeMinutes.value,

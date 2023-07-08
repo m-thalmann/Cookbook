@@ -3,11 +3,6 @@
         <h2>
             <ng-container *ngIf="recipe; else titleLoading">
                 <span>{{ recipe.name }}</span>
-
-                <div class="icons">
-                    <mat-icon [matTooltip]="'general.public' | transloco" *ngIf="recipe.is_public">public</mat-icon>
-                    <mat-icon [matTooltip]="'recipes.publicShare' | transloco" *ngIf="recipe.share_uuid">link</mat-icon>
-                </div>
             </ng-container>
 
             <ng-template #titleLoading>
@@ -17,6 +12,15 @@
         <h3>
             <ng-container *ngIf="recipe; else authorLoading">
                 {{ 'general.by' | transloco }} {{ recipe.user.name }}
+
+                <div class="icons">
+                    <mat-icon [matTooltip]="'general.public' | transloco" inline *ngIf="recipe.is_public">
+                        public
+                    </mat-icon>
+                    <mat-icon [matTooltip]="'recipes.publicShare' | transloco" inline *ngIf="recipe.share_uuid">
+                        link
+                    </mat-icon>
+                </div>
             </ng-container>
 
             <ng-template #authorLoading>
@@ -25,7 +29,7 @@
         </h3>
     </div>
 
-    <ng-container *ngIf="recipe; else optionsLoading">
+    <div class="actions" *ngIf="recipe; else optionsLoading">
         <app-share-menu
             color="primary"
             [disabled]="disabled"
@@ -41,7 +45,7 @@
         >
             <mat-icon>more_vert</mat-icon>
         </button>
-    </ng-container>
+    </div>
 
     <ng-template #optionsLoading>
         <app-skeleton class="circle"></app-skeleton>

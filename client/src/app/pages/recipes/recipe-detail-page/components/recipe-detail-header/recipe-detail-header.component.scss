@@ -24,11 +24,12 @@
 
 .title {
   display: flex;
+  gap: 1em;
   align-items: center;
 
   margin-bottom: 0.25em;
 
-  > div {
+  > div:first-of-type {
     flex: 1;
 
     h2 {
@@ -38,21 +39,28 @@
 
       margin-top: 0;
       margin-bottom: 0.5rem;
-
-      .icons {
-        display: flex;
-        align-items: center;
-        gap: 0.25em;
-      }
     }
 
     h3 {
+      display: flex;
+      align-items: center;
+      gap: 1em;
       margin: 0;
 
       font-weight: lighter;
       font-size: 1em;
       @include mixins.font-handwriting();
       opacity: 0.75;
+
+      .icons {
+        display: flex;
+        align-items: center;
+        gap: 0.25em;
+
+        mat-icon {
+          font-size: 1.125em;
+        }
+      }
 
       app-skeleton {
         margin-bottom: 0.125em;
