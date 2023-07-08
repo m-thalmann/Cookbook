@@ -1,0 +1,44 @@
+<ng-container
+    *ngIf="{ languageLoading: languageLoading$ | async, selectedTheme: themeService.selectedTheme$ | async } as vm"
+>
+    <app-settings-section icon="public" [title]="'general.language' | transloco">
+        <mat-action-list class="languages-list" [disabled]="vm.languageLoading">
+            <button
+                mat-list-item
+                [class.current]="language.id === activeLanguage"
+                (click)="setLanguage(language.id)"
+                *ngFor="let language of languages; trackBy: trackByLanguage"
+            >
+                <div class="button-content">
+                    {{ language.label }}
+                    <mat-icon color="accent" *ngIf="language.id === activeLanguage">check_circle</mat-icon>
+                </div>
+            </button>
+        </mat-action-list>
+    </app-settings-section>
+
+    <app-settings-section icon="brush" [title]="'general.colorTheme' | transloco">
+        <div class="themes">
+            <div
+                class="theme mat-elevation-z1 auto"
+                [class.selected]="vm.selectedTheme === null"
+                (click)="themeService.setTheme(null)"
+            >
+                <mat-icon>auto_awesome</mat-icon>
+                {{ 'general.auto' | transloco }}
+            </div>
+
+            <div
+                [class]="'theme mat-elevation-z1 scheme-' + theme.scheme"
+                [class.selected]="theme.key === vm.selectedTheme?.key"
+                (click)="themeService.setTheme(theme)"
+                *ngFor="let theme of themes; trackBy: trackByTheme"
+            >
+                <div class="colors">
+                    <div class="color" [style.background]="theme.primaryColor"></div>
+                    <div class="color" [style.background]="theme.accentColor"></div>
+                </div>
+            </div>
+        </div>
+    </app-settings-section>
+</ng-container>

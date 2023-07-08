@@ -1,32 +1,16 @@
-@use '~@angular/material' as mat;
-@import '~@angular/material/theming';
+// layout auth
 
-// for color info see: https://material.io/design/color/
+$layout-auth-mobile-breakpoint: 600;
 
-$primary: mat.define-palette(mat.$brown-palette, 600);
-$accent: mat.define-palette(mat.$teal-palette, 400);
-$warn: mat.define-palette(mat.$red-palette);
+// layout default
 
-$link: #1693ff;
+$navbar-height: 3.5rem;
+$navbar-desktop-width: 5.25rem;
 
-$header-background: #212121;
-$header-foreground: #fff;
+$mobile-breakpoint: 959;
+$layout-padding: 1rem;
 
-$body-background: #d4d4d4;
+$main-space-bottom: 2em;
+$desktop-content-width: 1080px;
 
-$background: #ffffff;
-$foreground: #000000;
-
-$mobile-width: 700px;
-$desktop-width: 700.1px;
-
-// adjusts light colors to dark, darker colors to light
-@function adjustColor($color, $amount) {
-  @if (lightness($color) >= 50%) {
-    // light color -> make darker
-    @return darken($color, $amount);
-  } @else {
-    // dark color -> make lighter
-    @return lighten($color, $amount);
-  }
-}
+$transition-time: 0.2s;

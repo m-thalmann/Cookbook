@@ -1,0 +1,8 @@
+<mat-icon>{{ data.icon }}</mat-icon> <span>{{ data.message }}</span>
+
+<div class="action" *ngIf="data.action">
+    <button mat-flat-button [color]="data.action.color" (click)="data.action.callback()">
+        <ng-container *ngIf="!data.action.isIcon">{{ data.action.name }}</ng-container>
+        <mat-icon *ngIf="data.action.isIcon">{{ data.action.name }}</mat-icon>
+    </button>
+</div>

@@ -1,0 +1,70 @@
+<ng-container
+    *ngIf="{
+        selectedTab: selectedTab$ | async,
+        recipe: (recipe$ | async)?.body?.data ?? null,
+        error: error$ | async,
+        detailsSaving: detailsSaving$ | async,
+        imagesSaving: imagesSaving$ | async
+    } as vm"
+>
+    <h2>
+        <mat-icon>restaurant</mat-icon>
+        {{ 'pages.recipes.children.edit.title' | transloco }}
+        <a [routerLink]="['/recipes', vm.recipe?.id]" mat-raised-button [disabled]="vm.recipe === null">
+            <mat-icon>visibility</mat-icon>
+            {{ 'general.view' | transloco }}
+        </a>
+    </h2>
+
+    <mat-tab-group
+        mat-stretch-tabs="false"
+        preserveContent
+        dynamicHeight
+        animationDuration="0ms"
+        [selectedIndex]="vm.selectedTab"
+        (selectedIndexChange)="onTabChange($event)"
+        *ngIf="!vm.error"
+    >
+        <mat-tab [disabled]="vm.detailsSaving || vm.imagesSaving">
+            <ng-template mat-tab-label>
+                <div class="tab-label">
+                    <mat-icon>format_list_bulleted</mat-icon>
+                    {{ 'general.details' | transloco }}
+                </div>
+            </ng-template>
+
+            <ng-template matTabContent>
+                <app-edit-recipe-details
+                    [recipe]="vm.recipe"
+                    [disabled]="vm.detailsSaving || vm.imagesSaving"
+                    (updateRecipe)="updateRecipe$.emit()"
+                    (saving)="onDetailsSaving($event)"
+                ></app-edit-recipe-details>
+            </ng-template>
+        </mat-tab>
+
+        <mat-tab [disabled]="vm.detailsSaving || vm.imagesSaving">
+            <ng-template mat-tab-label>
+                <div class="tab-label">
+                    <mat-icon>photo_library</mat-icon>
+                    {{ 'general.images' | transloco }}
+                    <ng-container *ngIf="vm.recipe"> ({{ vm.recipe.images.length }}) </ng-container>
+                </div>
+            </ng-template>
+
+            <ng-template matTabContent>
+                <app-edit-recipe-images
+                    [recipe]="vm.recipe"
+                    [disabled]="vm.detailsSaving || vm.imagesSaving"
+                    (updateRecipe)="updateRecipe$.emit()"
+                    (saving)="onImagesSaving($event)"
+                ></app-edit-recipe-images>
+            </ng-template>
+        </mat-tab>
+    </mat-tab-group>
+
+    <app-error-display [error]="vm.error">
+        <ng-template #notFoundMessage> {{ 'recipes.notFound' | transloco }} </ng-template>
+        <ng-template #otherErrorMessage> {{ 'recipes.singleLoadingError' | transloco }} </ng-template>
+    </app-error-display>
+</ng-container>

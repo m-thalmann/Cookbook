@@ -1,0 +1,27 @@
+app-page-section {
+  .show-more-items {
+    display: block;
+    margin: 2em auto 0 auto;
+    width: fit-content;
+
+    .button-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      height: 100%;
+    }
+  }
+
+  &.recipes div {
+    display: grid;
+
+    gap: 1em;
+
+    @media screen and (min-width: 500px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media screen and (min-width: 800px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+}

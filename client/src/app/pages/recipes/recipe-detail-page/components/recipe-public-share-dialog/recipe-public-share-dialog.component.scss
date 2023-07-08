@@ -1,0 +1,65 @@
+@use 'sass:map';
+@use 'theme';
+
+[mat-dialog-title] {
+  display: flex;
+  align-items: center;
+  padding-top: 1em;
+  padding-bottom: 0.75em;
+
+  mat-icon {
+    margin-right: 0.75em;
+  }
+
+  .title {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25em;
+
+    > * {
+      line-height: 1;
+    }
+
+    small {
+      font-size: 0.75em;
+      font-weight: lighter;
+    }
+  }
+}
+
+[mat-dialog-content] {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+
+  overflow: visible;
+
+  .toggle-container {
+    display: flex;
+    gap: 1em;
+    align-items: center;
+  }
+
+  .link-input {
+    display: flex;
+    align-items: center;
+    gap: 0.75em;
+
+    padding: 0.25em 0.5em;
+    border-radius: 0.25em;
+
+    @include theme.apply() using ($variables) {
+      background: map.get($variables, 'background');
+    }
+
+    input {
+      all: unset;
+      flex: 1;
+      min-width: 4em;
+
+      &:disabled {
+        opacity: 0.5;
+      }
+    }
+  }
+}

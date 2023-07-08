@@ -1,0 +1,18 @@
+<div class="container" *ngIf="cookbook; else loading">
+    <a [routerLink]="['/cookbooks', cookbook.id]" class="cookbook-link">
+        <mat-icon color="primary">menu_book</mat-icon>
+
+        <h3>{{ cookbook.name }}</h3>
+    </a>
+
+    <div class="divider"></div>
+
+    <a [routerLink]="['/cookbooks', cookbook.id, 'recipes']" class="recipes-link">
+        <mat-icon inline>restaurant</mat-icon>
+        <small>{{ cookbook.recipes_count }}</small>
+    </a>
+</div>
+
+<ng-template #loading>
+    <app-skeleton></app-skeleton>
+</ng-template>

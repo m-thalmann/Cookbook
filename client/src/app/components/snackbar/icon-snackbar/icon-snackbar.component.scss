@@ -1,0 +1,15 @@
+:host {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+.action {
+  flex: 1;
+
+  text-align: right;
+
+  mat-icon {
+    margin: 0;
+  }
+}

@@ -1,0 +1,212 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use 'variables' as *;
+@use 'mixins';
+@use 'theme';
+
+$add-button-height-mobile: 5em;
+
+.desktop-spacer {
+  display: none;
+}
+
+.container {
+  min-width: 0;
+
+  > div {
+    padding-bottom: 0.1px; // needed for chrome to get margin-bottom working
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+
+    padding: $layout-padding;
+
+    img {
+      height: 3em;
+      margin-right: 0.5em;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+
+      @include mixins.font-handwriting();
+    }
+
+    .spacer {
+      flex: 1;
+    }
+
+    .header-buttons {
+      display: flex;
+      gap: 0.25em;
+
+      &.logged-in {
+        gap: 1em;
+      }
+
+      .user-account-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        position: relative;
+        font-size: 1.25em;
+        font-family: Helvetica, Arial, sans-serif;
+
+        @include theme.apply() using ($variables) {
+          background: mat.get-color-from-palette(map.get($variables, 'primary-palette'), 800);
+          color: mat.get-color-from-palette(map.get($variables, 'primary-palette'), '800-contrast');
+
+          .account-action-required {
+            background: map.get($variables, 'warn');
+            border: 0.125em solid map.get($variables, 'background');
+          }
+        }
+
+        &:disabled {
+          filter: grayscale(100%);
+        }
+
+        .account-action-required {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          transform: translate(30%, 30%);
+
+          border-radius: 50%;
+
+          width: 1.125em;
+          height: 1.125em;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          mat-icon {
+            font-size: 0.75em;
+            height: 0.75em;
+            line-height: 0.7;
+          }
+        }
+      }
+    }
+  }
+
+  &.is-overlay main {
+    margin-bottom: 0;
+  }
+
+  main {
+    margin-bottom: calc($navbar-height + $main-space-bottom);
+  }
+}
+
+app-layout-add-action-fab {
+  position: fixed;
+  bottom: $add-button-height-mobile;
+  right: 2em;
+  z-index: 100;
+}
+
+app-layout-default-navbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  z-index: 10;
+}
+
+a[mat-menu-item] {
+  color: inherit;
+}
+
+[mat-menu-item] {
+  &.account-menu-item {
+    margin-bottom: 1em;
+    pointer-events: none;
+
+    [matListItemTitle],
+    [matListItemLine] {
+      display: inherit;
+
+      max-width: 12em;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+
+  [matListItemTitle] {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+  }
+}
+
+@include mixins.mobile() {
+  .container main.has-add-button {
+    margin-bottom: calc($navbar-height + $main-space-bottom + $add-button-height-mobile);
+  }
+}
+
+@include mixins.desktop() {
+  :host {
+    display: flex;
+  }
+
+  .desktop-spacer {
+    display: block;
+    width: $navbar-desktop-width;
+  }
+
+  .container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+
+    > div {
+      width: 100%;
+      max-width: $desktop-content-width;
+    }
+
+    header {
+      margin-bottom: 1em;
+    }
+
+    main {
+      margin-bottom: $main-space-bottom;
+    }
+  }
+
+  app-layout-default-navbar {
+    top: 0;
+    right: unset;
+  }
+}
+
+@media screen and (max-width: calc($desktop-content-width + $navbar-desktop-width * 4)) {
+  .desktop-spacer.right {
+    display: none;
+  }
+}
+
+@media print {
+  header {
+    display: none !important;
+  }
+
+  main {
+    margin: 0 !important;
+    padding: 0;
+    width: 100vw;
+  }
+
+  app-layout-default-navbar,
+  app-layout-add-action-fab {
+    display: none;
+  }
+}

@@ -1,0 +1,103 @@
+@use 'sass:map';
+@use 'mixins';
+@use 'theme';
+@use 'variables' as *;
+@use '../../styles/variables' as slider;
+
+:host {
+  height: slider.$image-height;
+  white-space: nowrap;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.container,
+app-skeleton {
+  height: 100%;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    button {
+      opacity: 1;
+
+      &[disabled] {
+        opacity: 0.5;
+      }
+    }
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: calc(
+      100% + 2 * slider.$content-border-radius
+    ); // since content overlaps on bottom and image is aligned in middle
+    object-fit: cover;
+
+    cursor: pointer;
+  }
+
+  button {
+    opacity: 0;
+    transition: opacity $transition-time, background $transition-time;
+
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    &:first-of-type {
+      left: 1em;
+    }
+    &:last-of-type {
+      right: 1em;
+    }
+
+    @include theme.apply() using ($variables) {
+      background: rgba(map.get($variables, 'background'), 0.75);
+
+      &:hover {
+        background: rgba(map.get($variables, 'background'), 1);
+      }
+    }
+  }
+}
+
+@include mixins.desktop() {
+  :host {
+    display: block;
+    position: relative;
+    left: unset;
+    right: unset;
+    top: unset;
+    bottom: unset;
+    overflow: hidden;
+  }
+}
+
+@media print {
+  :host {
+    display: block;
+    position: relative;
+    height: auto;
+  }
+
+  .container {
+    align-items: start;
+
+    img {
+      height: auto;
+      border-radius: 0.5em;
+    }
+
+    button {
+      display: none;
+    }
+  }
+}

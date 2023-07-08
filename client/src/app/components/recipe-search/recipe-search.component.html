@@ -1,0 +1,136 @@
+<ng-container
+    *ngIf="{
+        recipes: recipes$ | async,
+        categories: categories$ | async,
+        filters: filters$ | async,
+        paginationOptions: paginationOptions$ | async,
+        recipesLoading: recipesLoading$ | async,
+        isAuthenticated: auth.isAuthenticated$ | async,
+
+        recipesError: recipesError$ | async,
+        categoriesError: categoriesError$ | async
+    } as vm"
+>
+    <app-search-bar
+        [searchOnSubmit]="false"
+        clearable
+        [initialValue]="vm.filters?.search || null"
+        (search)="doSearch($event)"
+        [disabled]="!!vm.recipesLoading"
+    ></app-search-bar>
+
+    <div class="filters">
+        <app-recipe-search-filter
+            class="sort-filter"
+            [disabled]="!!vm.recipesLoading"
+            [labelText]="'actions.sort' | transloco"
+            labelIcon="sort"
+            (change)="doSort($event.target!)"
+        >
+            <option
+                *ngFor="let sortOption of availableSortOptions; trackBy: trackBySortOption"
+                [value]="sortOption.column"
+                [selected]="vm.filters?.sort?.[0]?.column === sortOption.column"
+            >
+                {{ sortOption.nameTranslateKey | transloco }}
+            </option>
+
+            <ng-container extra>
+                <button
+                    (click)="$event.stopPropagation(); toggleSortDir(vm.filters?.sort?.[0]?.dir)"
+                    [disabled]="vm.recipesLoading"
+                >
+                    <mat-icon inline>
+                        <ng-container *ngIf="vm.filters?.sort?.[0]?.dir === 'asc'">north</ng-container>
+                        <ng-container *ngIf="vm.filters?.sort?.[0]?.dir === 'desc'">south</ng-container>
+                    </mat-icon>
+                </button>
+            </ng-container>
+        </app-recipe-search-filter>
+
+        <app-recipe-search-filter
+            class="category-filter"
+            [class.none-selected]="!vm.filters?.category"
+            [disabled]="!!vm.recipesLoading"
+            [error]="vm.categoriesError ? ('categories.loadingError' | transloco) : undefined"
+            [labelText]="'categories.filterBy' | transloco"
+            labelIcon="local_dining"
+            (change)="doFilterByCategory($event.target!)"
+        >
+            <option value="" [selected]="vm.filters?.category === null">
+                {{ 'categories.filterBy' | transloco }}...
+            </option>
+            <option
+                *ngFor="let category of vm.categories?.body?.data"
+                [value]="category"
+                [selected]="vm.filters?.category === category"
+            >
+                {{ category }}
+            </option>
+
+            <!-- Will be shown until the categories are loaded or if it is not contained in the list -->
+            <option
+                [value]="vm.filters?.category"
+                *ngIf="
+                    vm.filters?.category &&
+                    (!vm.categories?.body?.data || vm.categories!.body!.data.indexOf(vm.filters!.category!) === -1)
+                "
+                selected
+            >
+                {{ vm.filters?.category }}
+            </option>
+
+            <ng-container extra *ngIf="vm.filters?.category && !vm.categoriesError">
+                <button (click)="$event.stopPropagation(); doFilterByCategory(null)" [disabled]="vm.recipesLoading">
+                    <mat-icon inline>clear</mat-icon>
+                </button>
+            </ng-container>
+        </app-recipe-search-filter>
+
+        <mat-slide-toggle
+            (change)="onChangeAll(!$event.checked)"
+            [checked]="!vm.filters?.all"
+            [disabled]="vm.recipesLoading"
+            *ngIf="vm.isAuthenticated && showAllFilter"
+        >
+            {{ 'recipes.onlyMy' | transloco }}
+        </mat-slide-toggle>
+    </div>
+
+    <p class="amount-results" *ngIf="vm.recipes?.body?.meta?.total as total">
+        {{ 'general.resultsFound' | transloco: { amount: total } }}
+    </p>
+    <ng-container *ngIf="!vm.recipes && !vm.recipesError">
+        <app-skeleton class="amount-results inline" height="1em" width="10em"></app-skeleton>
+    </ng-container>
+
+    <div class="recipes">
+        <ng-container *ngIf="vm.recipes?.body?.data as recipes">
+            <app-recipe-card *ngFor="let recipe of recipes; trackBy: trackByRecipe" [recipe]="recipe"></app-recipe-card>
+        </ng-container>
+
+        <ng-container *ngIf="!vm.recipes && !vm.recipesError">
+            <app-recipe-card [recipe]="null" *appRepeat="6"></app-recipe-card>
+        </ng-container>
+    </div>
+
+    <app-no-items-display *ngIf="vm.recipes?.body?.data?.length === 0">
+        {{ 'recipes.empty' | transloco }}
+    </app-no-items-display>
+
+    <app-error-display [error]="vm.recipesError">
+        <ng-template #otherErrorMessage> {{ 'recipes.loadingError' | transloco }} </ng-template>
+    </app-error-display>
+
+    <mat-paginator
+        class="mat-elevation-z1"
+        [length]="vm.recipes?.body?.meta?.total"
+        [pageIndex]="vm.paginationOptions?.page !== null ? vm.paginationOptions!.page - 1 : null"
+        [pageSize]="vm.paginationOptions?.perPage"
+        [pageSizeOptions]="[6, 12, 18, 24, 30]"
+        showFirstLastButtons
+        (page)="onPagination($event)"
+        [disabled]="vm.recipesLoading"
+        *ngIf="(vm.recipes?.body?.data?.length || 0) > 0"
+    ></mat-paginator>
+</ng-container>

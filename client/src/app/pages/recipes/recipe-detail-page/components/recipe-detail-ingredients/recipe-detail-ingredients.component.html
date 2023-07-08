@@ -1,0 +1,20 @@
+<div class="ingredient-group" *ngFor="let groupData of ingredients; trackBy: trackByGroup">
+    <h4 *ngIf="groupData.group">{{ groupData.group }}</h4>
+
+    <div class="ingredient" *ngFor="let ingredient of groupData.items; trackBy: trackByIngredient">
+        <div class="name">{{ ingredient.name }}</div>
+        <div class="amount">
+            {{ getIngredientAmount(ingredient.amount) | amount }}
+
+            {{ ingredient.unit }}
+        </div>
+    </div>
+</div>
+
+<p *ngIf="ingredients && ingredients.length === 0" class="no-ingredients">{{ 'recipes.noIngredients' | transloco }}</p>
+
+<div class="ingredient-group" *ngIf="!ingredients">
+    <div class="ingredient" *appRepeat="7">
+        <app-skeleton></app-skeleton>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+<ng-container
+    *ngIf="{
+        cookbook: cookbook$ | async,
+        error: error$ | async,
+        detailsSaving: detailsSaving$ | async,
+        usersSaving: usersSaving$ | async,
+        deleting: deleting$ | async
+    } as vm"
+>
+    <ng-container *ngIf="!vm.error">
+        <app-cookbook-header [cookbook]="vm.cookbook?.body?.data ?? null" showBackButton></app-cookbook-header>
+
+        <section>
+            <h2><mat-icon>info</mat-icon> {{ 'general.generalInformation' | transloco }}</h2>
+            <app-edit-cookbook-details-form
+                [cookbook]="vm.cookbook?.body?.data ?? null"
+                [disabled]="vm.detailsSaving || vm.usersSaving || vm.deleting"
+                (saving)="onDetailsSaving($event)"
+                (saved)="updateCookbook$.emit()"
+            ></app-edit-cookbook-details-form>
+        </section>
+
+        <section>
+            <h2><mat-icon>manage_accounts</mat-icon> {{ 'pages.cookbooks.children.edit.manageUsers' | transloco }}</h2>
+            <app-manage-cookbook-users
+                [cookbook]="vm.cookbook?.body?.data ?? null"
+                [disabled]="vm.detailsSaving || vm.usersSaving || vm.deleting"
+                (saving)="onUsersSaving($event)"
+                (authUserRemoved)="updateCookbook$.emit()"
+            ></app-manage-cookbook-users>
+        </section>
+
+        <section>
+            <h2 class="fg-warn">
+                <mat-icon color="warn">dangerous</mat-icon>
+                {{ 'general.dangerZone' | transloco }}
+            </h2>
+
+            <button
+                mat-raised-button
+                color="warn"
+                (click)="deleteCookbook()"
+                [disabled]="vm.detailsSaving || vm.usersSaving || vm.deleting"
+            >
+                {{ 'pages.cookbooks.children.edit.deleteCookbook' | transloco }}
+            </button>
+        </section>
+    </ng-container>
+
+    <app-error-display [error]="vm.error">
+        <ng-template #notFoundMessage>
+            {{ 'cookbooks.notFound' | transloco }}
+        </ng-template>
+    </app-error-display>
+</ng-container>

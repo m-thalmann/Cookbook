@@ -1,0 +1,25 @@
+<ng-container *ngIf="{ authUser: auth.user$ | async } as vm">
+    <h2>
+        <button mat-icon-button (click)="routeHelper.navigateBack()" *ngIf="showBackButton">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+
+        <mat-icon color="primary">menu_book</mat-icon>
+
+        <span *ngIf="cookbook; else loading">
+            {{ cookbook.name }}
+        </span>
+
+        <ng-template #loading>
+            <app-skeleton width="10em"></app-skeleton>
+        </ng-template>
+
+        <a
+            [routerLink]="['/cookbooks', cookbook?.id, 'edit']"
+            mat-icon-button
+            *ngIf="showEditButton && (isAdmin || vm.authUser?.is_admin)"
+        >
+            <mat-icon>edit</mat-icon>
+        </a>
+    </h2>
+</ng-container>

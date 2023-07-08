@@ -1,0 +1,32 @@
+<button mat-button (click)="routeHelper.navigateBack()" class="top-navigation navigate-back-button">
+    <mat-icon>arrow_back</mat-icon>
+    {{ 'actions.goBack' | transloco }}
+</button>
+
+<div class="top-navigation goto-auth-button">
+    <a
+        mat-button
+        routerLink="/sign-up"
+        routerLinkActive="is-current"
+        queryParamsHandling="merge"
+        color="accent"
+        class="sign-up-button"
+    >
+        <mat-icon>person_add</mat-icon>
+        {{ 'auth.signUp' | transloco }}
+    </a>
+
+    <a
+        mat-button
+        routerLink="/login"
+        routerLinkActive="is-current"
+        queryParamsHandling="merge"
+        color="accent"
+        class="login-button"
+    >
+        <mat-icon>login</mat-icon>
+        {{ 'auth.login' | transloco }}
+    </a>
+</div>
+
+<router-outlet></router-outlet>

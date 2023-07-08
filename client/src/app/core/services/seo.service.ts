@@ -1,56 +1,64 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
-import { TranslationService } from '../i18n/translation.service';
+import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router } from '@angular/router';
+import { TranslocoService } from '@ngneat/transloco';
+import { Subscription, combineLatest, filter, map, startWith, switchMap } from 'rxjs';
+import { RouteHelperService } from './route-helper.service';
+
+const SITE_NAME = 'Cookbook';
 
 @Injectable({
   providedIn: 'root',
 })
-export class SeoService {
+export class SeoService implements OnDestroy {
+  private subSink = new Subscription();
+
+  private activatedRouteSnapshot$ = this.router.events.pipe(
+    filter((event) => event instanceof NavigationEnd),
+    startWith(this.activatedRoute.snapshot),
+    map(() => this.activatedRoute.snapshot)
+  );
+
   constructor(
     private meta: Meta,
-    private titleService: Title,
-    private route: ActivatedRoute,
-    private translation: TranslationService
+    private title: Title,
+    private routeHelper: RouteHelperService,
+    private transloco: TranslocoService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) {}
 
-  /**
-   * Generates the seo tags (and title) for the currently active route.
-   * The title-information are contained in the route-data
-   */
-  generateTags() {
-    const baseRoute = this.route.snapshot;
-    let route = baseRoute.firstChild;
-
-    this.setTitle(this.siteName, '');
-
-    do {
-      route = route?.firstChild || null;
-
-      if (!route) return;
-
-      if (route.data.title) {
-        this.setTitle(this.translation.translate(route.data.title));
-        break;
-      } else if (route.data.titleFromParam) {
-        this.setTitle(`${route.params[route.data.titleFromParam]}`);
-        break;
-      }
-    } while (route.firstChild);
-
-    this.setDescription(this.translation.translate('seo.description'));
-    this.setImage(this.defaultImage);
-
-    this.meta.updateTag({ name: 'twitter:site', content: this.siteName });
-    this.meta.updateTag({ property: 'og:site_name', content: this.siteName });
-
-    this.meta.updateTag({ name: 'keywords', content: this.translation.translate('seo.keywords') });
+  initialize() {
+    this.subSink.add(
+      combineLatest([
+        this.activatedRouteSnapshot$,
+        this.transloco.langChanges$.pipe(switchMap(() => this.transloco.selectTranslation())),
+      ]).subscribe(([activatedRoute, _]) => {
+        this.generateTags(activatedRoute);
+      })
+    );
   }
 
-  setTitle(title: string, suffix = ' - ' + this.siteName) {
+  generateTags(route: ActivatedRouteSnapshot) {
+    const childRoute = this.routeHelper.getRouteLeaf(route);
+
+    if (childRoute.data['title']) {
+      this.setTitle(this.transloco.translate(childRoute.data['title']));
+    } else {
+      this.setTitle(SITE_NAME, '');
+    }
+
+    this.setDescription(this.transloco.translate('about.description'));
+    this.setImage(this.defaultImage);
+
+    this.meta.updateTag({ name: 'twitter:site', content: SITE_NAME });
+    this.meta.updateTag({ property: 'og:site_name', content: SITE_NAME });
+  }
+
+  setTitle(title: string, suffix = ' - ' + SITE_NAME) {
     title += suffix;
 
-    this.titleService.setTitle(title);
+    this.title.setTitle(title);
     this.meta.updateTag({ name: 'twitter:title', content: title });
     this.meta.updateTag({ property: 'og:title', content: title });
   }
@@ -66,11 +74,11 @@ export class SeoService {
     this.meta.updateTag({ property: 'og:image', content: imageUrl });
   }
 
-  get defaultImage() {
-    return `${location.origin}/assets/images/cookbook.png`;
+  private get defaultImage() {
+    return `${location.origin}/assets/images/app-icons/icon-128x128.png`;
   }
 
-  private get siteName() {
-    return this.translation.translate('cookbook');
+  ngOnDestroy() {
+    this.subSink.unsubscribe();
   }
 }

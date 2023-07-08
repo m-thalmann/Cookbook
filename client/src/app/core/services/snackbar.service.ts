@@ -1,105 +1,95 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { ComponentType } from '@angular/cdk/portal';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { SubSink } from '../functions';
-import { TranslationService } from '../i18n/translation.service';
+import { TranslocoService } from '@ngneat/transloco';
+import { take } from 'rxjs';
+import { ApiService } from '../api/api.service';
+
+interface SnackbarOptions {
+  duration?: number | null;
+  actionName?: string;
+  translateMessage?: boolean;
+}
 
 @Injectable({
   providedIn: 'root',
 })
-export class SnackbarService implements OnDestroy {
-  private subSink = new SubSink();
+export class SnackbarService {
+  constructor(private snackBar: MatSnackBar, private transloco: TranslocoService, private api: ApiService) {}
 
-  constructor(private snackBar: MatSnackBar, private translation: TranslationService) {}
-
-  /**
-   * Opens a snackbar
-   *
-   * @param message The message (or message-key if translate is true)
-   * @param duration The duration to show the snackbar (or undefined if infinite)
-   * @param translate Whether to translate the message
-   * @param warn Whether to show the action-button in the warn-color
-   */
-  private open(message: string, duration: number | undefined, translate = true, warn = false) {
-    if (translate) {
-      message = this.translation.translate(message);
+  private open(
+    message: string,
+    duration: number | null,
+    { warn = false, actionName, translateMessage }: { warn?: boolean; actionName?: string; translateMessage?: boolean }
+  ) {
+    if (actionName === undefined) {
+      actionName = this.transloco.translate('actions.ok');
     }
 
-    this.snackBar.open(message, this.translation.translate('ok'), {
+    const options = {
       panelClass: warn ? 'action-warn' : undefined,
-      duration,
+      duration: duration === null ? undefined : duration,
+    };
+
+    const snackbar = this.snackBar.open(
+      translateMessage ? this.transloco.translate(message) : message,
+      actionName,
+      options
+    );
+
+    return {
+      action: (action: () => void) => {
+        snackbar.onAction().pipe(take(1)).subscribe(action);
+      },
+    };
+  }
+
+  openComponent(component: ComponentType<unknown>, data: any, duration: number | null = null) {
+    this.snackBar.openFromComponent(component, {
+      data: data,
+      duration: duration === null ? undefined : duration,
     });
   }
 
-  /**
-   * Opens a snackbar with an action attached
-   *
-   * @param message The message (or message-key if translate is true)
-   * @param action The action-callback that is executed if the action-button is clicked
-   * @param actionText The action's text (or the key if translate is true)
-   * @param duration The duration to show the snackbar (or undefined if infinite)
-   * @param translate Whether to translate the message
-   * @param warn Whether to show the action-button in the warn-color
-   */
-  action(
-    message: string,
-    action: () => void,
-    actionText: string = 'ok',
-    duration: number | undefined = 5000,
-    translate = true,
-    warn = false
+  info(message: string, { duration = 5000, actionName, translateMessage = false }: SnackbarOptions) {
+    return this.open(message, duration, { actionName, warn: false, translateMessage });
+  }
+
+  warn(message: string, { duration = 10000, actionName, translateMessage = false }: SnackbarOptions) {
+    return this.open(message, duration, { actionName, warn: true, translateMessage });
+  }
+
+  exception(
+    error: unknown,
+    {
+      defaultMessage,
+      duration = 10000,
+      actionName,
+      translateMessage = false,
+    }: { defaultMessage?: string } & SnackbarOptions
   ) {
-    if (translate) {
-      message = this.translation.translate(message);
-      actionText = this.translation.translate(actionText);
+    let message: string | undefined = undefined;
+
+    if (error instanceof HttpErrorResponse) {
+      let apiErrorMessage = this.api.getErrorMessage(error);
+
+      if (typeof apiErrorMessage === 'string') {
+        message = apiErrorMessage;
+      }
     }
 
-    this.subSink.push(
-      this.snackBar
-        .open(message, actionText, {
-          panelClass: warn ? 'action-warn' : undefined,
-          duration,
-        })
-        .onAction()
-        .subscribe(() => {
-          action();
-        })
-    );
-  }
+    if (!message) {
+      if (!defaultMessage) {
+        message = this.transloco.translate('messages.errors.errorOccurred')!;
+      } else {
+        message = translateMessage ? this.transloco.translate(defaultMessage)! : defaultMessage;
+      }
+    }
 
-  /**
-   * Opens an info snackbar
-   *
-   * @param message The message (or message-key if translate is true)
-   * @param duration The duration to show the snackbar (or undefined if infinite)
-   * @param translate Whether to translate the message
-   */
-  info(message: string, duration: number | undefined = 5000, translate = true) {
-    this.open(message, duration, translate, false);
-  }
-
-  /**
-   * Opens a warn snackbar
-   *
-   * @param message The message (or message-key if translate is true)
-   * @param duration The duration to show the snackbar (or undefined if infinite)
-   * @param translate Whether to translate the message
-   */
-  warn(message: string, duration: number | undefined = 10000, translate = true) {
-    this.open(message, duration, translate, true);
-  }
-
-  /**
-   * Opens an error snackbar
-   *
-   * @param message The message (or message-key if translate is true)
-   * @param duration The duration to show the snackbar (or undefined if infinite)
-   * @param translate Whether to translate the message
-   */
-  error(message: string, duration: number | undefined = undefined, translate = true) {
-    this.open(message, duration, translate, true);
-  }
-
-  ngOnDestroy() {
-    this.subSink.clear();
+    return {
+      message: message,
+      snackbar: this.warn(message, { duration, actionName, translateMessage: false }),
+    };
   }
 }

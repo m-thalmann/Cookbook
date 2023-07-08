@@ -1,0 +1,44 @@
+@use 'sass:map';
+@use 'sass:math';
+@use '@angular/material' as mat;
+@use 'theme/variables' as *;
+
+@mixin apply() {
+  @each $theme, $variables in $themes {
+    $app-theme: map.get($variables, 'theme');
+
+    $additional-variables: (
+      'primary': mat.get-color-from-palette(map.get($variables, 'primary-palette')),
+      'primary-text': mat.get-color-from-palette(map.get($variables, 'primary-palette'), 'default-contrast'),
+      'accent': mat.get-color-from-palette(map.get($variables, 'accent-palette')),
+      'accent-text': mat.get-color-from-palette(map.get($variables, 'accent-palette'), 'default-contrast'),
+      'warn': mat.get-color-from-palette(map.get($variables, 'warn-palette')),
+      'warn-text': mat.get-color-from-palette(map.get($variables, 'warn-palette'), 'default-contrast'),
+      'background': mat.get-color-from-palette(map.get($app-theme, 'background'), 'background'),
+      'foreground': mat.get-color-from-palette(map.get($app-theme, 'foreground'), 'text'),
+    );
+
+    $variables: map.merge($variables, $additional-variables);
+
+    @if ($theme == $default-theme) {
+      :host-context(html:not([class^='theme-'])) &,
+      :host-context(html.theme-#{$theme}) & {
+        @content ($variables);
+      }
+    } @else {
+      :host-context(html.theme-#{$theme}) & {
+        @content ($variables);
+      }
+    }
+  }
+}
+
+@function adjust-color($variables, $color, $amount) {
+  $theme-type: map.get($variables, 'type');
+
+  @if (($theme-type == 'light' and $amount >= 0) or ($theme-type != 'light' and $amount < 0)) {
+    @return lighten($color, math.abs($amount));
+  }
+
+  @return darken($color, math.abs($amount));
+}

@@ -1,0 +1,18 @@
+<div class="add-action-fab" [class.opened]="isOpen" (click)="disabled ? null : (isOpen = !isOpen)">
+    <div class="options" *ngIf="!disabled">
+        <a routerLink="/recipes/create" mat-mini-fab [attr.data-description]="'recipes.recipe' | transloco">
+            <mat-icon>restaurant</mat-icon>
+        </a>
+        <button
+            mat-mini-fab
+            (click)="openCreateCookbookDialog()"
+            [attr.data-description]="'cookbooks.cookbook' | transloco"
+        >
+            <mat-icon>menu_book</mat-icon>
+        </button>
+    </div>
+
+    <button mat-fab color="primary" [disabled]="disabled">
+        <mat-icon>add</mat-icon>
+    </button>
+</div>

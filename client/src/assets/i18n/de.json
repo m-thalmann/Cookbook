@@ -1,377 +1,319 @@
 {
-  "admin": "Admin",
-  "amount": "Menge",
-  "any": "Jede",
-  "api_error": {
-    "bad_request": {
-      "config": {
-        "saving_value_invalid": "Der Wert ist ungültig!"
-      },
-      "default": "Gesendete Daten sind ungültig!",
-      "image": {
-        "no_file": "Keine Bild empfangen. Wahrscheinlich ist die Datei zu groß.",
-        "not_allowed_type": "Dieser Bild-Typ ist nicht erlaubt!",
-        "too_large": "Das Bild ist zu groß!"
-      },
-      "validation": "Ein Validierungsfehler ist aufgetreten!"
-    },
-    "error": {
-      "config": {
-        "loading": "Fehler beim Laden der Konfigurationsdatei!",
-        "saving": "Fehler beim Speichern der Konfiguration!",
-        "setting_not_found": "Einstellung wurde nicht gefunden!"
-      },
-      "database": {
-        "connection": "Fehler bei der Verbindung zur Datenbank!",
-        "default": "Fehler beim Abfragen der Datenbank!"
-      },
-      "default": "Ein Fehler ist aufgetreten!",
-      "sending_email": "Fehler beim Senden der Email!"
-    },
-    "forbidden": {
-      "default": "Du bist nicht berechtigt diese Aktion durchzuführen!",
-      "hcaptcha_invalid": "hCaptcha ist ungültig!",
-      "last_admin": "Du bist der letzte Admin!",
-      "old_password_wrong": "Altes Passwort ist falsch!",
-      "setting_not_editable": "Diese Einstellung kann nicht bearbeitet werden!"
-    },
-    "method_not_allowed": {
-      "email_disabled": "Emails sind deaktiviert"
-    }
+  "about": {
+    "about": "Über",
+    "description": "Cookbook ist eine Webanwendung, die alle deine Lieblingsrezepte speichert. Durch das Selbsthosten hast du die volle Kontrolle über deine persönlichen Rezepte und kannst sie mit deinen Freunden und deiner Familie teilen."
   },
-  "cancel": "Abbrechen",
-  "cookbook": "Kochbuch",
-  "date_format": "dd.MM.YYYY",
-  "date_time_format": "dd.MM.YYYY HH:mm",
-  "default": "Standart",
-  "dialogs": {
-    "delete_account": {
-      "content": "Bist du sicher, dass du deinen Account und alle deine Rezepte löschen möchtest? Diese Aktion ist nicht umkehrbar",
-      "title": "Account löschen?"
-    },
-    "delete_recipe": {
-      "content": "Bist du sicher, dass du dieses Rezept löschen möchtest? Diese Aktion ist nicht umkehrbar",
-      "title": "Rezept löschen?"
-    },
-    "delete_user": {
-      "content": "Bist du sicher, dass du diesen Benutzer löschen möchtest: \"{{email}}\"? Diese Aktion ist nicht umkehrbar",
-      "title": "Benutzer löschen?"
-    },
-    "grant_admin": {
-      "content": "Bist du sicher, dass du \"{{email}}\" die Admin-Rolle geben möchtest?",
-      "title": "Admin-Rolle hinzufügen?"
-    },
-    "password_was_reset": {
-      "content": "Das neue Passwort ist: <strong>{{password}}</strong>",
-      "title": "Passwort wurde zurückgesetzt"
-    },
-    "revoke_admin": {
-      "content": "Bist du sicher, dass du \"{{email}}\" die Admin-Rolle entziehen möchtest?",
-      "title": "Admin-Rolle entziehen?"
-    }
+  "actions": {
+    "abort": "Abbrechen",
+    "add": "Hinzufügen",
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen",
+    "copyLink": "Link kopieren",
+    "create": "Erstellen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "goBack": "Zurück",
+    "loadMore": "Mehr laden",
+    "ok": "OK",
+    "print": "Drucken",
+    "restore": "Wiederherstellen",
+    "seeAll": "Alle anzeigen",
+    "send": "Senden",
+    "sort": "Sortieren"
   },
+  "auth": {
+    "dontRememberYourPassword": "Passwort vergessen?",
+    "login": "Anmelden",
+    "logout": "Abmelden",
+    "resetPassword": "Passwort zurücksetzen",
+    "sendResetEmail": "E-Mail zum Zurücksetzen senden",
+    "signUp": "Registrieren",
+    "verifyingEmail": "Email wird verifiziert..."
+  },
+  "categories": {
+    "categories": "Kategorien",
+    "category": "Kategorie",
+    "empty": "Keine Kategorien gefunden ...",
+    "filterBy": "Kategorie filtern",
+    "loadingError": "Fehler beim Laden der Kategorien"
+  },
+  "cookbooks": {
+    "cookbook": "Kochbuch",
+    "cookbooks": "Kochbücher",
+    "cookbooksFound": "[[ amount, =1 '1 Kochbuch gefunden', default '{{amount}} Kochbücher gefunden' ]]",
+    "create": "Kochbuch erstellen",
+    "empty": "Keine Kochbücher gefunden ...",
+    "loadingError": "Kochbücher konnten nicht geladen werden.",
+    "notFound": "Kochbuch konnte nicht gefunden werden.",
+    "showAmountMore": "[[ amount, =1 '1 weiteres Kochbuch anzeigen', default '{{amount}} weitere Kochbücher anzeigen' ]]",
+    "singleLoadingError": "Kochbuch konnte nicht geladen werden."
+  },
+  "dateFormat": "dd.MM.y",
+  "dateTimeFormat": "dd.MM.y HH:mm:ss",
   "editor": {
-    "add_link": "Link einfügen",
+    "addLink": "Link hinzufügen",
     "bold": "Fett",
-    "clear_all_formatting": "Alle Formatierungen entfernen",
+    "clearAllFormatting": "Alle Formatierungen löschen",
     "italic": "Kursiv",
-    "ordered_list": "Geordnete Liste",
-    "remove_link": "Link entfernen",
-    "underline": "Unterstrichen",
-    "unordered_list": "Ungeordnete Liste"
+    "orderedList": "Geordnete Liste",
+    "removeLink": "Link entfernen",
+    "underline": "Unterstreichen",
+    "unorderedList": "Ungeordnete Liste"
   },
-  "email": "Email",
-  "group": "Gruppe",
-  "group_name": "Gruppenname",
-  "id": "ID",
-  "language": "Sprache",
-  "login": "Anmelden",
-  "login_register": {
-    "code": "Code",
-    "email_not_received": "Keine Email erhalten?",
-    "forgot_password": "Passwort vergessen?",
-    "has_account": "Du hast bereits einen Account?",
-    "no_account": "Noch keinen Account?",
-    "remember_me": "Angemeldet bleiben",
-    "resend": "Erneut senden",
-    "reset_password": "Passwort zurücksetzen",
-    "send_reset_email": "Email senden",
-    "verify_email": "Email verifizieren"
+  "general": {
+    "added": "Hinzugefügt",
+    "admin": "Admin",
+    "auto": "Auto",
+    "by": "von",
+    "colorTheme": "Farbthema",
+    "created": "Erstellt",
+    "createDate": "Erstellungsdatum",
+    "dangerZone": "Gefahrenzone",
+    "deleted": "Gelöscht",
+    "deletedAt": "Gelöscht am",
+    "details": "Details",
+    "email": "E-Mail",
+    "enabled": "Aktiviert",
+    "generalInformation": "Allgemeine Informationen",
+    "id": "ID",
+    "images": "Bilder",
+    "insertTextPlaceholder": "Text einfügen...",
+    "language": "Sprache",
+    "lastUpdated": "Zuletzt aktualisiert",
+    "link": "Link",
+    "myPlural": "Meine",
+    "name": "Name",
+    "password": "Passwort",
+    "passwordConfirmation": "Passwort wiederholen",
+    "private": "Privat",
+    "profile": "Profil",
+    "public": "Öffentlich",
+    "resultsFound": "[[ amount, =1 '1 Ergebnis gefunden', default '{{amount}} Ergebnisse gefunden' ]]",
+    "save": "Speichern",
+    "search": "Suchen",
+    "updateDate": "Letzte Änderung",
+    "user": "Benutzer",
+    "verified": "Verifiziert",
+    "view": "Anzeigen",
+    "yourEmail": "Deine E-Mail"
   },
-  "logout": "Abmelden",
+  "ingredients": {
+    "addGroup": "Zutatengruppe hinzufügen",
+    "addIngredient": "Zutat hinzufügen",
+    "amount": "Menge",
+    "groupName": "Gruppenname",
+    "ingredient": "Zutat",
+    "ingredients": "Zutaten",
+    "removeGroup": "Zutatengruppe entfernen",
+    "unit": "Einheit"
+  },
   "messages": {
-    "admin": {
-      "config_edited_successfully": "Konfiguration erfolgreich bearbeitet!",
-      "error_deleting_user": "Fehler beim Löschen des Benutzers!",
-      "error_loading_server_config": "Fehler beim Laden der Server-Konfiguration!",
-      "error_loading_server_information": "Fehler beim Laden der Server-Informationen!",
-      "error_resetting_password": "Fehler beim Zurücksetzen des Passwortes!",
-      "error_saving_config": "Fehler beim Speichern der Konfiguration!",
-      "error_saving_new_password": "Fehler beim Speichern des neuen Passwortes!",
-      "error_updating_user": "Fehler beim Bearbeiten des Benutzers!",
-      "new_password_successfully_saved": "Neues Passwort erfolgreich gespeichert!",
-      "test_email_sent_successfully": "Test-Email wurde erfolgreich versandt!",
-      "user_created_successfully": "Benutzer wurde erfolgreich erstellt!",
-      "user_deleted_successfully": "Benutzer erfolgreich gelöscht!",
-      "user_updated_successfully": "Benutzer erfolgreich bearbeitet!"
+    "areYouSure": "Bist du dir sicher?",
+    "accountDeleted": "Konto wurde gelöscht",
+    "cookbookCreated": "Kochbuch wurde erfolgreich erstellt",
+    "cookbookDeleted": "Kochbuch wurde erfolgreich gelöscht",
+    "cookbookUpdated": "Kochbuch wurde erfolgreich aktualisiert",
+    "emailVerified": "E-Mail erfolgreich verifiziert!",
+    "errors": {
+      "clearingTrash": "Fehler beim Leeren des Papierkorbs",
+      "deletingAccount": "Fehler beim Löschen des Kontos",
+      "deletingRecipe": "Fehler beim Löschen des Rezepts",
+      "errorOccurred": "Ein Fehler ist aufgetreten!",
+      "loadingCookbooks": "Fehler beim Laden der Kochbücher",
+      "loadingUserInformation": "Fehler beim Laden der Benutzerinformationen",
+      "loadingUsers": "Fehler beim Laden der Benutzer",
+      "loggingOutFromAllSessions": "Fehler beim Abmelden aller Sitzung",
+      "loggingOutFromSelectedSession": "Fehler beim Abmelden der ausgewählten Sitzung",
+      "movingRecipeToTrash": "Fehler beim Verschieben des Rezepts in den Papierkorb",
+      "noServerConnection": "Keine Verbindung mit dem Server möglich.",
+      "restoringRecipe": "Fehler beim Wiederherstellen des Rezepts",
+      "savingLanguage": "Fehler beim Speichern der Sprache",
+      "sendingResetEmail": "Fehler beim Senden der E-Mail zum Zurücksetzen",
+      "sendingVerificationEmail": "Fehler beim Senden der Verifizierungs-E-Mail",
+      "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten!",
+      "userCantEditCookbook": "Du kannst dieses Kochbuch nicht bearbeiten",
+      "userCantEditRecipe": "Du kannst dieses Rezept nicht bearbeiten",
+      "verifyingEmail": "Fehler beim Verifizieren der E-Mail. Bitte versuche es erneut.",
+      "wrongUserForVerification": "Du musst dich mit dem Benutzer anmelden, für den du die E-Mail verifizieren möchtest."
     },
-    "auth": {
-      "logout": {
-        "account_deleted": "Account erfolgreich gelöscht!",
-        "log_back_in": "Du musst dich erneut anmelden!",
-        "logged_out": "Du wurdest abgemeldet",
-        "logout": "Erfolgreich abgemeldet!"
-      },
-      "route": {
-        "login_required": "Du musst dich anmelden um diese Seite ansehen zu können!",
-        "unauthorized": "Du bist nicht berechtigt diese Seite anzusehen!"
-      }
-    },
-    "categories": {
-      "error_loading_categories": "Kategorien konnten nicht geladen werden!",
-      "no_categories_found": "Keine Kategorien gefunden"
-    },
-    "config_loading_error": "Konfigurations-Datei konnte nicht geladen werden. Hast du sie erstellt?",
-    "copy_successful": "Erfolgreich kopiert!",
-    "email": {
-      "error_sending_email": "Fehler beim Senden der Email!",
-      "verification_email_sent": "Verifizierungs-Email wurde gesendet!"
-    },
-    "error_occurred": "Ein Fehler ist aufgetreten!",
-    "form_validation": {
-      "email": "Keine gültige Email-Adresse",
-      "max": "Der Wert ist zu groß (max. {{max}})",
-      "max_length": "Der Wert ist zu lange (max. {{maxLength}})",
-      "min": "Der Wert ist zu klein (min. {{min}})",
-      "passwords_mismatch": "Die Passwörter stimmen nicht überein",
-      "required": "Dieses Feld muss ausgefüllt werden",
-      "too_few_elements": "Zu wenige Elemente"
-    },
-    "login_register": {
-      "error_verifying_email": "Fehler beim Verifizieren der Email!",
-      "wrong_code_submitted": "Der eingegebene Code ist falsch",
-      "wrong_verification_code": "Verifizierungs-Code ist entweder falsch oder abgelaufen"
-    },
-    "no_results": "Keine Ergebnisse",
-    "recipe_images": {
-      "error_deleting_image": "Fehler beim Löschen des Bildes!",
-      "error_loading_recipe_images": "Fehler beim Laden der Bilder!",
-      "error_uploading_image": "Fehler beim Hinzufügen des Bildes!",
-      "image_added_successfully": "Bild erfolgreich hinzugefügt!",
-      "image_deleted_successfully": "Bild erfolgreich gelöscht!",
-      "no_images": "Keine Bilder"
-    },
-    "recipes": {
-      "error_deleting_recipe": "Fehler beim Löschen des Rezeptes!",
-      "error_loading_recipe": "Fehler beim Laden des Rezeptes!",
-      "error_loading_recipes": "Fehler beim Laden der Rezepte!",
-      "error_saving_recipe": "Fehler beim Speichern des Rezeptes!",
-      "ingredients_error": "Einige Zutaten konnten nicht gespeichert werden",
-      "no_recipes_found": "Keine Rezepte gefunden",
-      "recipe_deleted_successfully": "Rezept wurde erfolgreich gelöscht!",
-      "recipe_not_found": "Rezept nicht gefunden",
-      "successfully_saved_ingredients_error": "Erfolgreich gespeichert! Einige Zutaten konnten nicht gespeichert werden.",
-      "user_not_owner": "Du bist nicht der Besitzer dieses Rezeptes!"
-    },
-    "successfully_saved": "Erfolgreich gespeichert!",
-    "users": {
-      "credentials_wrong": "Email oder Passwort falsch!",
-      "email_already_taken": "Ein Benutzer mit dieser Email existiert bereits!",
-      "entered_password_wrong": "Das eingegebene Passwort ist falsch!",
-      "error_deleting_account": "Fehler beim Löschen des Accounts!",
-      "error_loading_users": "Fehler beim Laden der Benutzer!",
-      "language_changed": "Deine Sprache wurde geändert. Möchtest du sie übernehmen?",
-      "login_successful": "Erfolgreich angemeldet!",
-      "no_users_found": "Keine Benutzer gefunden",
-      "password_reset_successful": "Passwort wurde erfolgreich zurückgesetzt!",
-      "settings_updated_successfully": "Einstellungen wurden erfolgreich bearbeitet!"
-    }
+    "imageDeleted": "Bild wurde erfolgreich gelöscht",
+    "imageUploaded": "Bild wurde erfolgreich hochgeladen",
+    "linkCopied": "Link kopiert!",
+    "loggedOut": "Du wurdest abgemeldet.",
+    "loggedOutFromAllSessions": "Du wurdest von allen Sitzungen abgemeldet.",
+    "loggedOutFromSelectedSession": "Du wurdest von der ausgewählten Sitzung abgemeldet.",
+    "noActionRequired": "Keine Aktion erforderlich.",
+    "passwordReset": "Passwort zurückgesetzt. Bitte melde dich mit deinem neuen Passwort an.",
+    "passwordUpdated": "Passwort wurde aktualisiert",
+    "profileUpdated": "Profil wurde aktualisiert",
+    "recipeCreated": "Rezept wurde erfolgreich erstellt",
+    "recipeDeleted": "Rezept wurde endgültig gelöscht",
+    "recipeMovedToTrash": "Rezept wurde in den Papierkorb verschoben",
+    "recipeRestored": "Rezept wurde wiederhergestellt",
+    "recipeUpdated": "Rezept wurde erfolgreich aktualisiert",
+    "resetEmailSent": "E-Mail zum Zurücksetzen gesendet. Bitte prüfe deinen Posteingang für weitere Anweisungen.",
+    "thisActionCantBeUndone": "Diese Aktion kann nicht rückgängig gemacht werden.",
+    "trashCleared": "Papierkorb wurde endgültig geleert",
+    "updateAvailable": "Eine neue Version ist verfügbar.",
+    "userAdded": "Benutzer wurde erfolgreich hinzugefügt",
+    "userCreated": "Benutzer wurde erfolgreich erstellt",
+    "userRemoved": "Benutzer wurde erfolgreich entfernt",
+    "userUpdated": "Benutzer wurde erfolgreich aktualisiert",
+    "verificationEmailSent": "Verifizierungs-E-Mail wurde gesendet"
   },
-  "min.": "min.",
-  "minutes": "Minuten",
-  "no": "Nein",
-  "ok": "OK",
   "pages": {
     "admin": {
-      "area": {
-        "administrators": "Admins",
-        "server_information": "Server Informationen",
-        "title": "Adminbereich",
-        "total_image_size": "Bildspeicher insgesamt",
-        "total_recipes": "Rezepte insgesamt",
-        "total_users": "Benutzer insgesamt",
-        "unverified": "Unverifiziert"
-      },
-      "go_back": "Zurück zum Adminbereich",
-      "recipes": {
-        "title": "Rezepte verwalten"
-      },
-      "server": {
-        "authentication": {
-          "bad_authentication_limit": "Limit fehlgeschlagener Anmeldungen",
-          "password_reset_ttl": "Passwort-Zurücksetzungs-TTL",
-          "password_secret": "Passwort Secret",
-          "password_secret_warning": "Wenn das Passwort-Secret verändert wird, muss jeder Nutzer sein Passwort zurücksetzen (über die Passwort-Wiederherstellung).",
-          "title": "Authentifizierung",
-          "token_secret": "Token Secret",
-          "token_secret_warning": "Wenn das Token-Secret verändert wird, werden alle Nutzer ausgeloggt und müssen sich erneut anmelden.",
-          "token_ttl": "Token TTL"
+      "area": "Admin Bereich",
+      "children": {
+        "cookbooks": {
+          "manageCookbooks": "Kochbücher verwalten",
+          "title": "Kochbücher"
         },
-        "basic": {
-          "email_verification_enabled": "Email-Verifizierung aktiv",
-          "email_verification_ttl": "Email-Verifizierungs-TTL",
-          "hcaptcha_enabled": "hCaptcha aktiv",
-          "hcaptcha_secret": "hCaptcha Secret",
-          "image_store_path": "Bildspeicher-Pfad",
-          "production": "Production",
-          "registration_enabled": "Registrierung aktiv",
-          "root_url": "Root URL",
-          "title": "Grundeinstellungen"
+        "dashboard": {
+          "administrators": "Administratoren",
+          "api": "API",
+          "environment": "Umgebung",
+          "fileSizes": {
+            "b": "Byte",
+            "kb": "KB",
+            "mb": "MB",
+            "gb": "GB"
+          },
+          "loadingError": "Fehler beim Laden des Dashboards.",
+          "recipeImages": "Rezeptbilder",
+          "title": "Dashboard",
+          "totalImages": "Gesamte Bilder"
         },
-        "database": {
-          "charset": "Zeichensatz",
-          "database": "Datenbank",
-          "host": "Host",
-          "password": "Passwort",
-          "title": "Datenbank",
-          "user": "Benutzer"
+        "recipes": {
+          "manageRecipes": "Rezepte verwalten",
+          "title": "Rezepte"
         },
-        "edit_config": "Konfiguration bearbeiten",
-        "json_config": "JSON Konfiguration",
-        "mail": {
-          "enabled": "Emails aktiviert",
-          "send_test_email": "Test-Email senden",
-          "send": "Senden",
-          "sender_mail": "Sender-Email",
-          "sender_name": "Sender-Name",
-          "smtp_encrypted": "SMTP Verschlüsselt",
-          "smtp_host": "SMTP Host",
-          "smtp_password": "SMTP Passwort",
-          "smtp_port": "SMTP Port",
-          "smtp_username": "SMTP Benutzername",
-          "title": "Mail"
-        },
-        "title": "Server verwalten"
-      },
-      "users": {
-        "admin_account": "Admin-Benutzer",
-        "create_user": "Benutzer erstellen",
-        "delete_user": "Benutzer löschen",
-        "edit_password": "Passwort bearbeiten",
-        "edit_user": "Benutzer bearbeiten",
-        "email_verified": "Email verifiziert",
-        "enter_new_password": "Neues Passwort eingeben",
-        "last_modified": "Letzte Änderung",
-        "reset_password": "Passwort zurücksetzen",
-        "search_placeholder": "z.B. max@muster.com, ...",
-        "send_verification_email": "Email-Verifikation senden",
-        "title": "Benutzer verwalten",
-        "view_user_recipes": "Rezepte anzeigen"
+        "users": {
+          "createUser": "Benutzer erstellen",
+          "deleteUser": "Benutzer löschen",
+          "editEmail": "Email ändern",
+          "editPassword": "Password ändern",
+          "emailVerified": "E-Mail verifiziert",
+          "empty": "Keine Benutzer gefunden",
+          "manageUsers": "Benutzer verwalten",
+          "sendVerificationEmail": "Verifizierungs-E-Mail senden",
+          "title": "Benutzer",
+          "viewRecipes": "Rezepte anzeigen"
+        }
       }
     },
-    "categories": {
-      "browse_categories": "Kategorien durchstöbern",
-      "go_back": "Zurück zu Kategorien",
-      "title": "Kategorien"
-    },
-    "create_recipe": {
-      "title": "Rezept erstellen"
-    },
-    "edit_recipe": {
-      "add_ingredient": "Zutat hinzufügen",
-      "add_ingredient_group": "Zutatengruppe hinzufügen",
-      "remove_ingredient_group": "Zutatengruppe löschen",
-      "delete_recipe": "Rezept löschen",
-      "edit_images": "Bilder bearbeiten",
-      "edit_information": "Informationen bearbeiten",
-      "general_information": "Generelle Informationen",
-      "insert_text_placeholder": "Text einfügen...",
-      "publish_and_continue": "Veröffentlichen & fortfahren",
-      "save_and_continue": "Speichern & fortfahren",
-      "times": "Zeiten",
-      "title": "Rezept bearbeiten",
-      "upload_new_image": "Neues Bild hochladen",
-      "view_recipe": "Rezept anzeigen"
+    "cookbooks": {
+      "children": {
+        "edit": {
+          "addUser": "Benutzer hinzufügen",
+          "deleteCookbook": "Kochbuch löschen",
+          "manageUsers": "Benutzer verwalten",
+          "title": "Kochbuch bearbeiten"
+        }
+      }
     },
     "home": {
-      "browse_recipes": "Rezepte durchstöbern",
       "title": "Startseite"
     },
-    "my_recipes": {
-      "title": "Meine Rezepte"
-    },
-    "not_found": {
-      "return_home": "Zurück zur Startseite",
+    "notFound": {
       "title": "Seite nicht gefunden",
-      "heading": "Oje...",
-      "text": "Die angeforderte Seite konnte nicht gefunden werden."
+      "goBack": "Zurück zur Startseite",
+      "message": "Ups... Die Seite wurde nicht gefunden!"
     },
-    "recipe": {
-      "ingredients_for": "Zutaten für",
-      "share": {
-        "copy_link": "Link kopieren"
+    "recipes": {
+      "children": {
+        "create": {
+          "title": "Rezept erstellen"
+        },
+        "edit": {
+          "title": "Rezept bearbeiten"
+        }
       }
     },
-    "search": {
-      "search_recipes": "Rezepte durchsuchen",
-      "title": "Suche"
+    "settings": {
+      "children": {
+        "account": {
+          "deleteAccount": "Konto löschen",
+          "settings": "Konto Einstellungen",
+          "title": "Konto",
+          "updatePassword": "Passwort aktualisieren",
+          "updateProfile": "Profil aktualisieren"
+        },
+        "general": {
+          "title": "Allgemein"
+        },
+        "security": {
+          "activeSessions": "Aktive Sitzungen",
+          "browser": "Browser",
+          "currentSession": "Aktuelle Sitzung",
+          "emailNotVerifiedText": {
+            "line1": "Deine E-Mail-Adresse ist nicht verifiziert. Bitte überprüfe deinen Posteingang und klicke auf den Verifizierungslink.",
+            "line2": "Wenn du keine E-Mail erhalten hast, überprüfe bitte deinen Spam-Ordner."
+          },
+          "emailVerification": "E-Mail Verifizierung",
+          "hostname": "Hostname",
+          "ipAddress": "IP Adresse",
+          "logoutFromAll": "Von allen abmelden",
+          "logoutFromThatSession": "Von dieser Sitzung abmelden",
+          "operatingSystem": "Betriebssystem",
+          "resendVerificationEmail": "Verifizierungs-E-Mail erneut senden",
+          "title": "Sicherheit"
+        }
+      },
+      "confirmCurrentPassword": "Aktuelles Passwort bestätigen",
+      "confirmNewPassword": "Neues Passwort bestätigen",
+      "newPassword": "Neues Passwort",
+      "oldPassword": "Altes Passwort",
+      "title": "Einstellungen"
+    },
+    "trash": {
+      "clearTrash": "Papierkorb leeren",
+      "empty": "Keine Elemente im Papierkorb",
+      "loadingError": "Fehler beim Laden des Papierkorbs.",
+      "title": "Papierkorb"
     }
   },
-  "paginator": {
-    "first_page": "Erste Seite",
-    "items_per_page": "Elemente pro Seite",
-    "last_page": "Letzte Seite",
-    "next_page": "Nächste Seite",
-    "of": "von",
-    "previous_page": "Vorherige Seite"
+  "pagination": {
+    "next": "Nächste Seite",
+    "previous": "Vorherige Seite",
+    "first": "Erste Seite",
+    "last": "Letzte Seite",
+    "itemsPerPage": "Elemente pro Seite",
+    "rangeLabel": "Seite {{page}} von {{pages}}"
   },
-  "recipe": {
-    "by": "von",
-    "category": "Kategorie",
-    "cook_time": "Koch-/Backzeit",
+  "recipes": {
+    "create": "Rezept erstellen",
     "description": "Beschreibung",
     "difficulty": "Schwierigkeit",
-    "ingredients": "Zutaten",
-    "name": "Name",
-    "owner": "Besitzer",
+    "empty": "Keine Rezepte gefunden ...",
+    "loadingError": "Fehler beim Laden der Rezepte.",
+    "moveToTrash": "In den Papierkorb verschieben",
+    "noIngredients": "Keine Zutaten für dieses Rezept",
+    "notFound": "Rezept konnte nicht gefunden werden.",
+    "onlyMy": "Nur meine Rezepte",
     "portions": "Portionen",
     "preparation": "Zubereitung",
-    "preparation_time": "Vorbereitungszeit",
-    "private": "Privat",
-    "public": "Öffentlich",
-    "publish_date": "Veröffentlichungsdatum",
+    "publicShare": "Öffentlicher Link",
     "recipe": "Rezept",
-    "rest_time": "Ruhezeit",
-    "total_time": "Gesamtzeit",
-    "total_time_value": "{{totalTime}} min.",
-    "visibility": "Sichtbarkeit",
-    "you": "dir"
+    "recipes": "Rezepte",
+    "searchRecipes": "Rezepte suchen...",
+    "showAmountMore": "[[ amount, =1 '1 weiteres Rezept anzeigen', default '{{amount}} weitere Rezepte anzeigen' ]]",
+    "singleLoadingError": "Rezept konnte nicht geladen werden.",
+    "times": {
+      "cooking": "Koch-/Backzeit",
+      "minutes": "Minuten",
+      "minutesAbbr": "min",
+      "preparation": "Zubereitungszeit",
+      "resting": "Ruhezeit",
+      "times": "Zeiten",
+      "total": "Gesamtzeit"
+    },
+    "viewTrash": "Papierkorb anzeigen"
   },
-  "register": "Registrieren",
-  "result": "Ergebnis",
-  "results": "Ergebnisse",
-  "save": "Speichern",
-  "save_changes": "Änderungen speichern",
-  "search": "Suchen",
-  "seconds": "Sekunden",
-  "seo": {
-    "description": "Eine Webseite für deine Rezepte",
-    "keywords": "Kochbuch,Rezepte,Kochen,Backen"
-  },
-  "setting": "Einstellung",
-  "settings": "Einstellungen",
-  "sort_by": "Sortieren nach",
-  "unit": "Einheit",
-  "user": {
-    "confirm_current_password": "Aktuelles Passwort bestätigen",
-    "delete_account": "Account löschen",
-    "email": "Email",
-    "name": "Name",
-    "new_password": "Neues Passwort",
-    "password": "Passwort",
-    "repeat_password": "Passwort wiederholen",
-    "user": "Benutzer"
-  },
-  "value": "Wert",
-  "yes": "Ja"
+  "users": {
+    "filterUser": "Benutzer filtern...",
+    "notFound": "Benutzer konnte nicht gefunden werden.",
+    "searchUser": "Benutzer suchen",
+    "users": "Benutzer"
+  }
 }

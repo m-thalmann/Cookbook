@@ -1,0 +1,60 @@
+@use 'sass:map';
+@use 'variables' as *;
+@use 'theme';
+
+.search-bar-container {
+  position: sticky;
+  top: -1px; // to be able to trigger the intersection-observer
+  z-index: 10;
+
+  padding: $layout-padding;
+  margin-top: -$layout-padding;
+
+  @include theme.apply() using ($variables) {
+    background: map.get($variables, 'background');
+  }
+
+  border-bottom-left-radius: 2em;
+  border-bottom-right-radius: 2em;
+
+  &.stuck {
+    box-shadow: 0 8px 8px -8px rgba(0, 0, 0, 0.75);
+  }
+}
+
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+
+  app-page-section {
+    .show-more-items {
+      display: block;
+      margin: 2em auto 0 auto;
+      width: fit-content;
+
+      .button-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+        height: 100%;
+      }
+    }
+
+    &.recipes,
+    &.cookbooks {
+      div {
+        display: grid;
+
+        gap: 1em;
+
+        @media screen and (min-width: 500px) {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        @media screen and (min-width: 800px) {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+    }
+  }
+}

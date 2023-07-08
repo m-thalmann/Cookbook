@@ -1,0 +1,119 @@
+<ng-container
+    *ngIf="{
+        isAuthenticated: auth.isAuthenticated$ | async,
+        categories: categories$ | async,
+        recipes: recipes$ | async,
+        cookbooks: cookbooks$ | async,
+
+        categoriesError: categoriesError$ | async,
+        recipesError: recipesError$ | async,
+        cookbooksError: cookbooksError$ | async
+    } as vm"
+>
+    <div class="search-bar-container" #searchBarContainer>
+        <app-search-bar></app-search-bar>
+    </div>
+
+    <div class="sections">
+        <app-page-section
+            [heading]="'categories.categories' | transloco"
+            [showMy]="!!vm.isAuthenticated"
+            class="categories"
+        >
+            <app-category-chip-list
+                [categories]="vm.categories?.body?.data ?? null"
+                *ngIf="!vm.categoriesError"
+            ></app-category-chip-list>
+
+            <app-error-display [error]="vm.categoriesError">
+                <ng-template #otherErrorMessage> {{ 'categories.loadingError' | transloco }} </ng-template>
+            </app-error-display>
+        </app-page-section>
+
+        <app-page-section
+            [heading]="'recipes.recipes' | transloco"
+            seeAllLink="/recipes"
+            [showMy]="!!vm.isAuthenticated"
+            class="recipes"
+        >
+            <div>
+                <ng-container *ngIf="vm.recipes?.body?.data as recipes">
+                    <app-recipe-card
+                        *ngFor="let recipe of recipes; trackBy: trackByRecipe"
+                        [recipe]="recipe"
+                    ></app-recipe-card>
+                </ng-container>
+
+                <ng-container *ngIf="!vm.recipes && !vm.recipesError">
+                    <app-recipe-card [recipe]="null" *appRepeat="amountItems"></app-recipe-card>
+                </ng-container>
+            </div>
+
+            <app-no-items-display *ngIf="vm.recipes?.body?.data?.length === 0">
+                {{ 'recipes.empty' | transloco }}
+            </app-no-items-display>
+
+            <app-error-display [error]="vm.recipesError">
+                <ng-template #otherErrorMessage> {{ 'recipes.loadingError' | transloco }} </ng-template>
+            </app-error-display>
+
+            <a
+                routerLink="/recipes"
+                mat-raised-button
+                color="primary"
+                class="show-more-items"
+                [disabled]="getRemainingItems(vm.recipes?.body?.meta) === 0"
+                *ngIf="!vm.recipesError && (!vm.recipes || getRemainingItems(vm.recipes?.body?.meta) > 0)"
+            >
+                <div class="button-wrapper">
+                    <mat-icon>restaurant</mat-icon>
+                    {{ 'recipes.showAmountMore' | transloco: { amount: getRemainingItems(vm.recipes?.body?.meta) } }}
+                    <mat-icon>arrow_forward</mat-icon>
+                </div>
+            </a>
+        </app-page-section>
+
+        <app-page-section
+            [heading]="'cookbooks.cookbooks' | transloco"
+            seeAllLink="/cookbooks"
+            showMy
+            class="cookbooks"
+            *ngIf="vm.isAuthenticated"
+        >
+            <div>
+                <ng-container *ngIf="vm.cookbooks?.body?.data as cookbooks">
+                    <app-cookbook-card
+                        *ngFor="let cookbook of cookbooks; trackBy: trackByCookbook"
+                        [cookbook]="cookbook"
+                    ></app-cookbook-card>
+                </ng-container>
+
+                <ng-container *ngIf="!vm.cookbooks && !vm.cookbooksError">
+                    <app-cookbook-card [cookbook]="null" *appRepeat="amountItems"></app-cookbook-card>
+                </ng-container>
+            </div>
+
+            <app-no-items-display *ngIf="vm.cookbooks?.body?.data?.length === 0">
+                {{ 'cookbooks.empty' | transloco }}
+            </app-no-items-display>
+
+            <app-error-display [error]="vm.cookbooksError">
+                <ng-template #otherErrorMessage> {{ 'cookbooks.loadingError' | transloco }} </ng-template>
+            </app-error-display>
+
+            <a
+                routerLink="/cookbooks"
+                mat-raised-button
+                color="primary"
+                class="show-more-items"
+                *ngIf="getRemainingItems(vm.cookbooks?.body?.meta) as remainingItems"
+            >
+                <div class="button-wrapper">
+                    <mat-icon>menu_book</mat-icon>
+                    {{ 'cookbooks.showAmountMore' | transloco: { amount: remainingItems } }}
+                    <mat-icon>arrow_forward</mat-icon>
+                </div>
+            </a>
+        </app-page-section>
+    </div>
+</ng-container>

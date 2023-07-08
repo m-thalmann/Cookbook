@@ -2,9 +2,15 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'amount',
+  pure: true,
+  standalone: true,
 })
 export class AmountPipe implements PipeTransform {
-  transform(value: string | number): string {
+  transform(value: string | number | null): string {
+    if (value === null) {
+      return '';
+    }
+
     if (typeof value === 'string') {
       value = parseFloat(value);
     }
@@ -30,6 +36,6 @@ export class AmountPipe implements PipeTransform {
       return floorValueStr + '¾';
     }
 
-    return value.toString();
+    return (Math.round(value * 100) / 100).toString();
   }
 }

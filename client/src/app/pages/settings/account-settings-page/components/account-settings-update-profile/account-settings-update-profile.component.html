@@ -1,0 +1,33 @@
+<ng-container
+    *ngIf="{
+        updateError: updateError$ | async
+    } as vm"
+>
+    <app-settings-section icon="badge" [title]="'general.profile' | transloco">
+        <form [formGroup]="form" (submit)="updateProfile()">
+            <mat-form-field appearance="outline">
+                <mat-label>{{ 'general.name' | transloco }}</mat-label>
+                <input matInput placeholder="John Doe" formControlName="name" />
+                <mat-error *ngIf="form.get('name')?.getError('serverError') as serverError">{{
+                    serverError
+                }}</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>{{ 'general.email' | transloco }}</mat-label>
+                <input matInput type="email" placeholder="john.doe@example.com" formControlName="email" />
+                <mat-error *ngIf="form.get('email')?.getError('serverError') as serverError">{{
+                    serverError
+                }}</mat-error>
+            </mat-form-field>
+
+            <p class="error" *ngIf="vm.updateError">
+                {{ 'messages.errors.unexpectedError' | transloco }}: {{ vm.updateError }}
+            </p>
+
+            <button mat-raised-button color="primary" [disabled]="form.invalid || form.disabled">
+                {{ 'pages.settings.children.account.updateProfile' | transloco }}
+            </button>
+        </form>
+    </app-settings-section>
+</ng-container>

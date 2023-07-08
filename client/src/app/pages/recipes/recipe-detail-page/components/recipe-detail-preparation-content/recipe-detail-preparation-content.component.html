@@ -1,0 +1,40 @@
+<div
+    class="preparation-times"
+    *ngIf="
+        recipe &&
+        (recipe.preparation_time_minutes !== null ||
+            recipe.resting_time_minutes !== null ||
+            recipe.cooking_time_minutes !== null)
+    "
+>
+    <span *ngIf="recipe.preparation_time_minutes !== null">
+        <mat-icon>timer</mat-icon>
+        <span>
+            {{ 'recipes.times.preparation' | transloco }} ~ {{ recipe.preparation_time_minutes
+            }}<small>{{ 'recipes.times.minutesAbbr' | transloco }}</small>
+        </span>
+    </span>
+    <span *ngIf="recipe.resting_time_minutes !== null">
+        <mat-icon>timer</mat-icon>
+        <span>
+            {{ 'recipes.times.resting' | transloco }} ~ {{ recipe.resting_time_minutes
+            }}<small>{{ 'recipes.times.minutesAbbr' | transloco }}</small>
+        </span>
+    </span>
+    <span *ngIf="recipe.cooking_time_minutes !== null">
+        <mat-icon>timer</mat-icon>
+        <span>
+            {{ 'recipes.times.cooking' | transloco }} ~ {{ recipe.cooking_time_minutes
+            }}<small>{{ 'recipes.times.minutesAbbr' | transloco }}</small>
+        </span>
+    </span>
+</div>
+
+<div class="container" [innerHTML]="recipe.preparation" *ngIf="recipe !== null; else loading"></div>
+
+<ng-template #loading>
+    <div class="container">
+        <app-skeleton class="text" *appRepeat="5"></app-skeleton>
+        <app-skeleton class="text" width="75%"></app-skeleton>
+    </div>
+</ng-template>

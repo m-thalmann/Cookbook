@@ -1,59 +1,32 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
-import { SubSink } from '../functions';
-import { SnackbarService } from '../services/snackbar.service';
-import { UserService } from './user.service';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { Observable, combineLatest, map } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthGuard implements CanActivate, OnDestroy {
-  private subSink = new SubSink();
+export class AuthGuard implements CanActivate {
+  constructor(private auth: AuthService, private router: Router) {}
 
-  constructor(private user: UserService, private router: Router, private snackbar: SnackbarService) {}
+  canActivate(
+    activatedRoute: ActivatedRouteSnapshot,
+    routerState: RouterStateSnapshot
+  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    return combineLatest([this.auth.user$, this.auth.isInitialized$]).pipe(
+      map(([user, isInitialized]) => {
+        const mustBeAdmin = activatedRoute.data['mustBeAdmin'];
 
-  /**
-   * Returns whether the currently authenticated user is allowed to request this route
-   * If the user is not allowed, it will be redirected to the home page and shown an error
-   *
-   * @param route
-   * @param _
-   * @returns whether the user is allowed to request this route
-   */
-  canActivate(route: ActivatedRouteSnapshot, _: RouterStateSnapshot) {
-    return new Observable<boolean>((subscriber) => {
-      subscriber.next(this.isAuthorized(route));
+        if (user && isInitialized && (!mustBeAdmin || user.is_admin)) {
+          return true;
+        }
 
-      this.subSink.push(
-        this.user.userChanged.subscribe(() => {
-          subscriber.next(this.isAuthorized(route, true));
-        })
-      );
-    });
-  }
-
-  private isAuthorized(route: ActivatedRouteSnapshot, userChanged = false) {
-    let error: string | null = null;
-
-    if (this.user.isLoggedin) {
-      if (!route.data.admin || this.user.user?.isAdmin) {
-        return true;
-      } else {
-        error = 'messages.auth.route.unauthorized';
-      }
-    }
-
-    if (!userChanged) {
-      this.snackbar.error(error || 'messages.auth.route.login_required');
-    }
-
-    this.router.navigateByUrl('/home');
-
-    return false;
-  }
-
-  ngOnDestroy() {
-    this.subSink.clear();
+        return this.router.createUrlTree(['/login'], {
+          queryParams: {
+            'redirect-url': routerState.url,
+          },
+        });
+      })
+    );
   }
 }

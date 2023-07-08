@@ -1,0 +1,36 @@
+@use 'sass:map';
+@use 'variables' as *;
+@use 'theme';
+@use 'mixins';
+
+section {
+  padding: 0 $layout-padding;
+
+  h2 {
+    display: flex;
+    align-items: center;
+    margin: 0.5em 0;
+
+    @include mixins.font-handwriting();
+
+    span.title-my-text {
+      @include theme.apply() using ($variables) {
+        color: map.get($variables, 'accent');
+      }
+    }
+
+    .spacer {
+      flex: 1;
+    }
+
+    a.see-all-link {
+      text-decoration: none;
+      font-size: 0.75em;
+      opacity: 0.75;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

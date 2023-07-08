@@ -19,7 +19,7 @@
       "files": "*.php",
       "options": {
         "printWidth": 80,
-        "singleQuote": false,
+        "singleQuote": true,
         "trailingCommaPHP": true,
         "braceStyle": "1tbs"
       }

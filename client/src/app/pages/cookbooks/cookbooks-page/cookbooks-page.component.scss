@@ -1,0 +1,45 @@
+@use 'variables' as *;
+@use 'mixins';
+
+.container {
+  padding: 0 $layout-padding;
+
+  .amount-results {
+    margin: 1em 0.5em 1.5em;
+    opacity: 0.5;
+
+    @include mixins.font-handwriting();
+  }
+
+  .cookbooks {
+    display: grid;
+    gap: 1em;
+
+    @media screen and (min-width: 500px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media screen and (min-width: 800px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    margin-bottom: 2em;
+  }
+
+  button {
+    display: block;
+    margin: 0 auto;
+
+    div {
+      display: flex;
+      align-items: center;
+    }
+
+    mat-spinner {
+      margin-right: 0.75em;
+    }
+
+    mat-icon {
+      margin-right: 0.25em;
+    }
+  }
+}

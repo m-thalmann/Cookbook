@@ -1,0 +1,78 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use 'variables' as *;
+@use 'mixins';
+@use 'theme';
+
+:host {
+  padding: 0 $layout-padding;
+  padding-bottom: 1em;
+  position: relative;
+  z-index: 1;
+  display: block;
+
+  @include theme.apply() using ($variables) {
+    background: map.get($variables, 'background');
+
+    &:first-of-type::before {
+      background: map.get($variables, 'background');
+    }
+  }
+}
+
+h3 {
+  box-sizing: border-box;
+
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
+  padding: 0.75em $layout-padding;
+  margin: 0 calc(-1 * $layout-padding);
+  margin-bottom: 0.5em;
+
+  @include mixins.font-handwriting();
+  @include mat.elevation(2);
+
+  @include theme.apply() using ($variables) {
+    background: theme.adjust-color($variables, map.get($variables, 'background'), 5%);
+  }
+}
+
+@include mixins.desktop() {
+  :host {
+    padding: 0 0.5em;
+    padding-bottom: 1em;
+
+    margin: 0;
+    margin-bottom: 0.5em;
+  }
+
+  h3 {
+    position: relative;
+    border-radius: 0.25em;
+    margin-left: -0.5em;
+    margin-right: -0.5em;
+  }
+}
+
+@media print {
+  :host {
+    background: transparent !important;
+    padding: 0;
+
+    &:first-of-type::before {
+      background: transparent !important;
+    }
+  }
+
+  h3 {
+    position: unset;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0;
+
+    background: transparent !important;
+    box-shadow: none;
+  }
+}

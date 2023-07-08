@@ -1,0 +1,76 @@
+@use 'sass:map';
+@use 'theme';
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+
+  .preparation-times {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+
+    > span {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+  }
+}
+
+.container ::ng-deep {
+  ul {
+    padding: 1.5em;
+    margin: 0;
+  }
+
+  @media screen {
+    ol {
+      list-style: none;
+      counter-reset: preparation-counter;
+
+      padding-left: 2.5em;
+
+      > li {
+        counter-increment: preparation-counter;
+
+        position: relative;
+        margin: 0 0 1rem 0;
+
+        &::before {
+          content: counter(preparation-counter);
+          width: 2em;
+          height: 2em;
+          line-height: 2em;
+          font-size: 0.9em;
+
+          position: absolute;
+          left: -2.5em;
+          top: -0.3em;
+
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+
+          border-radius: 50%;
+
+          @include theme.apply() using ($variables) {
+            background: map.get($variables, 'primary');
+            color: map.get($variables, 'primary-text');
+          }
+        }
+      }
+    }
+  }
+}
+
+@media print {
+  :host {
+    gap: 0.75em;
+  }
+
+  .container ::ng-deep ol {
+    padding: 1.5em;
+  }
+}

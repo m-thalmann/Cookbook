@@ -1,0 +1,30 @@
+<ng-container *ngIf="recipe; else loading">
+    <div class="container" [class.has-category]="!!recipe.category">
+        <a [routerLink]="['/recipes', recipe.id]" class="recipe">
+            <div class="image-container">
+                <div class="image" fadeIn [style]="thumbnailImageCSS"></div>
+            </div>
+
+            <div class="title">
+                <h3>{{ recipe.name }}</h3>
+                <h4>{{ 'general.by' | transloco }} {{ recipe.user.name }}</h4>
+            </div>
+
+            <div *ngIf="recipe.is_public" class="public-icon">
+                <mat-icon>public</mat-icon>
+            </div>
+        </a>
+
+        <a
+            routerLink="/recipes"
+            [queryParams]="{ category: recipe.category }"
+            class="category"
+            *ngIf="recipe.category"
+            >{{ recipe.category }}</a
+        >
+    </div>
+</ng-container>
+
+<ng-template #loading>
+    <app-skeleton class="container"></app-skeleton>
+</ng-template>

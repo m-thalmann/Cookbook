@@ -1,0 +1,4 @@
+root = false
+
+[*.{html,php}]
+indent_size = 4

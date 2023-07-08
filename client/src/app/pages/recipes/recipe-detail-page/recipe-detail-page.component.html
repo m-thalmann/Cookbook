@@ -1,0 +1,8 @@
+<ng-container *ngIf="{ recipe: recipe$ | async, error: error$ | async } as vm">
+    <app-recipe-detail [recipe]="vm.recipe?.body?.data ?? null" *ngIf="!vm.error"> </app-recipe-detail>
+
+    <app-error-display [error]="vm.error">
+        <ng-template #notFoundMessage> {{ 'recipes.notFound' | transloco }} </ng-template>
+        <ng-template #otherErrorMessage> {{ 'recipes.singleLoadingError' | transloco }} </ng-template>
+    </app-error-display>
+</ng-container>

@@ -1,0 +1,13 @@
+{
+  "private": false,
+  "scripts": {
+    "api:start": "cd api && php artisan serve",
+    "client:start": "cd client && npm run start -- --open",
+    "prettier:run": "npx prettier --write .",
+    "prettier:check": "npx prettier --check ."
+  },
+  "devDependencies": {
+    "@prettier/plugin-php": "0.18.8",
+    "prettier": "2.7.1"
+  }
+}

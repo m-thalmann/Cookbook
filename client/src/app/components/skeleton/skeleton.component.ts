@@ -1,10 +1,20 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
 
 @Component({
-  selector: 'cb-skeleton',
-  template: '',
+  selector: 'app-skeleton',
+  template: ``,
   styleUrls: ['./skeleton.component.scss'],
+  standalone: true,
+  imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SkeletonComponent {
-  constructor() {}
+  @HostBinding('style.width')
+  @Input()
+  width?: string;
+
+  @HostBinding('style.height')
+  @Input()
+  height?: string;
 }

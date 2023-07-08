@@ -1,0 +1,72 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use 'theme';
+
+app-error-display {
+  margin: 2em 0;
+}
+
+.table-container {
+  position: relative;
+  border-radius: 0.25em;
+  overflow: hidden;
+
+  @include mat.elevation(2);
+
+  .loading-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @include theme.apply() using ($variables) {
+      background: rgba(map.get($variables, 'background'), 0.5);
+    }
+  }
+
+  .table-wrapper {
+    overflow: auto;
+
+    table {
+      width: 100%;
+
+      .align-center {
+        text-align: center;
+      }
+
+      .no-padding {
+        padding: 0;
+      }
+
+      .mat-mdc-no-data-row {
+        td {
+          padding: 1em;
+        }
+      }
+    }
+  }
+}
+
+.load-more-button {
+  display: block;
+  margin: 1em auto;
+
+  div {
+    display: flex;
+    align-items: center;
+  }
+
+  mat-spinner {
+    margin-right: 0.75em;
+  }
+
+  mat-icon {
+    margin-right: 0.25em;
+  }
+}

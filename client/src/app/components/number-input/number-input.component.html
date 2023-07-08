@@ -1,0 +1,15 @@
+<div class="container">
+    <button (click)="decrementValue()" [disabled]="isDisabled"><mat-icon>remove</mat-icon></button>
+
+    <input
+        type="text"
+        [ngModel]="input.classList.contains('focus') ? value : (value | amount)"
+        (change)="onInputChange($event)"
+        [disabled]="isDisabled || !inputEnabled"
+        (focus)="input.classList.add('focus')"
+        (blur)="input.classList.remove('focus')"
+        #input
+    />
+
+    <button (click)="incrementValue()" [disabled]="isDisabled"><mat-icon>add</mat-icon></button>
+</div>

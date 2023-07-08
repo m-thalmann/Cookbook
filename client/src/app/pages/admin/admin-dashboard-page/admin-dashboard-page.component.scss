@@ -1,0 +1,77 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use 'theme';
+
+.cards {
+  display: grid;
+  gap: 1em;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+
+  padding: 1em;
+  text-align: center;
+
+  border-radius: 0.25em;
+
+  @include mat.elevation(2);
+
+  .amount {
+    font-size: 3em;
+    font-weight: lighter;
+  }
+
+  .title {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+  }
+
+  ul.details {
+    list-style-type: none;
+
+    margin-top: 0.5em;
+    margin-bottom: 0;
+    padding: 0;
+
+    font-size: 0.8em;
+
+    opacity: 0.75;
+
+    li {
+      line-height: 1.55;
+
+      .detail-name {
+        font-weight: lighter;
+      }
+    }
+  }
+
+  @include theme.apply() using ($variables) {
+    background: mat.get-color-from-palette(map.get(map.get($variables, 'theme'), 'background'), 'card');
+
+    .amount {
+      color: map.get($variables, 'primary');
+    }
+  }
+}
+
+app-skeleton {
+  height: 12em;
+}
+
+@media screen and (min-width: 500px) {
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

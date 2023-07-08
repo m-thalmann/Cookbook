@@ -1,0 +1,32 @@
+[mat-dialog-title] {
+  mat-icon {
+    vertical-align: bottom;
+  }
+}
+
+[mat-dialog-content] {
+  padding-top: 0.5em;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+
+    mat-form-field {
+      width: 20em;
+      max-width: 100%;
+    }
+
+    .checkboxes {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25em;
+    }
+  }
+}
+
+[mat-dialog-actions] {
+  mat-spinner {
+    margin-right: 1em;
+  }
+}

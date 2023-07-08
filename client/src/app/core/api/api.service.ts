@@ -1,453 +1,550 @@
-import { HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import { UserService } from '../auth/user.service';
-import { ConfigService } from '../config/config.service';
 import {
-  ApiOptions,
-  AuthUser,
-  CategoryInformation,
-  EditIngredient,
-  EditRecipe,
-  Ingredient,
-  ListIngredient,
-  NewIngredient,
-  NewRecipe,
-  Pagination,
-  Recipe,
-  RecipeFull,
-  RecipeImage,
-  ServerConfig,
-  ServerInformation,
-  User,
-  UserFull,
-} from './ApiInterfaces';
-import { ApiResponse } from './ApiResponse';
+  HttpClient,
+  HttpContext,
+  HttpErrorResponse,
+  HttpEventType,
+  HttpHeaders,
+  HttpParams,
+  HttpRequest,
+  HttpResponse,
+  HttpStatusCode,
+} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { TranslocoService } from '@ngneat/transloco';
+import { EMPTY, Observable, catchError, filter, first, map, of, shareReplay, switchMap } from 'rxjs';
+import { HandledError } from '../helpers/handled-error';
+import { AdminDashboardData } from '../models/admin-dashboard-data';
+import { AuthToken } from '../models/auth-token';
+import { Cookbook, CookbookUser, CookbookWithCounts, CookbookWithUserMeta, SimpleCookbook } from '../models/cookbook';
+import { FilterOption } from '../models/filter-option';
+import { BaseIngredient, EditIngredientData, Ingredient, SimpleIngredient } from '../models/ingredient';
+import { LoadingError } from '../models/loading-error';
+import { PaginationMeta } from '../models/pagination-meta';
+import { PaginationOptions } from '../models/pagination-options';
+import { CreateRecipeData, DetailedRecipe, EditRecipeData, ListRecipe } from '../models/recipe';
+import { RecipeImage } from '../models/recipe-image';
+import { SortOption } from '../models/sort-option';
+import { CreateUserData, DetailedUser, EditUserData, User } from '../models/user';
+import { ConfigService } from '../services/config.service';
+import { TOKEN_TYPE_HTTP_CONTEXT } from './auth.interceptor';
+
+export enum TokenType {
+  Access,
+  AccessOptional,
+  Refresh,
+  None,
+}
+
+export interface SignedRoute {
+  signature: string;
+  expires: string;
+}
+
+interface ListParamOptions {
+  pagination?: PaginationOptions;
+  sort?: SortOption[];
+  search?: string;
+  filters?: FilterOption[];
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private http: HttpClient, private config: ConfigService, private user: UserService) {}
+  static readonly API_VERSION = 1;
 
-  /**
-   * The http-options containing the token, if a user is logged-in
-   */
-  private get httpOptions(): { observe: 'response'; headers: HttpHeaders } {
+  constructor(private http: HttpClient, private config: ConfigService, private transloco: TranslocoService) {}
+
+  public get url() {
+    return `${this.config.get('apiUrl')}/v${ApiService.API_VERSION}`;
+  }
+
+  private get baseHttpHeaders() {
+    let headers = new HttpHeaders({
+      'X-Language': this.transloco.getActiveLang(),
+    });
+
+    return headers;
+  }
+
+  private get httpHeaders() {
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
+      'X-Language': this.transloco.getActiveLang(),
     });
 
-    let token = this.user.token;
-
-    if (this.user.isLoggedin && token) {
-      headers = headers.append('Authorization', token);
-    }
-
-    return {
-      observe: 'response',
-      headers,
-    };
+    return headers;
   }
 
-  private get httpOptionsImageUpload(): { observe: 'events'; headers: HttpHeaders; reportProgress: boolean } {
-    let headers = new HttpHeaders();
+  private request<T>(request: HttpRequest<T>, tokenType?: TokenType) {
+    let headers = this.httpHeaders;
 
-    let token = this.user.token;
+    request = request.clone({
+      url: `${this.url}${request.url}`,
+      headers: headers,
+      context: new HttpContext().set(TOKEN_TYPE_HTTP_CONTEXT, tokenType),
+    });
 
-    if (this.user.isLoggedin && token) {
-      headers = headers.append('Authorization', token);
-    }
-
-    return {
-      observe: 'events',
-      headers,
-      reportProgress: true,
-    };
+    return this.http.request(request).pipe(
+      shareReplay(1),
+      filter((response) => response instanceof HttpResponse),
+      first()
+    ) as Observable<HttpResponse<T>>;
   }
 
-  private get queryToken() {
-    if (this.user.isLoggedin && this.user.token) {
-      return `token=${encodeURIComponent(this.user.token)}`;
-    } else {
+  public get<T>(path: string, tokenType: TokenType, params?: HttpParams) {
+    return this.request(new HttpRequest<T>('GET', path, { params: params }), tokenType);
+  }
+
+  public post<T>(path: string, body: any, tokenType: TokenType, params?: HttpParams) {
+    return this.request(new HttpRequest<T>('POST', path, body, { params: params }), tokenType);
+  }
+
+  public put<T>(path: string, body: any, tokenType: TokenType, params?: HttpParams) {
+    return this.request(new HttpRequest<T>('PUT', path, body, { params: params }), tokenType);
+  }
+
+  public delete<T>(path: string, tokenType: TokenType, params?: HttpParams) {
+    return this.request(new HttpRequest<T>('DELETE', path, { params: params }), tokenType);
+  }
+
+  private static generateParams(params: { [key: string]: string | undefined }) {
+    for (const key in params) {
+      if (params[key] === undefined) {
+        delete params[key];
+      }
+    }
+
+    return new HttpParams().appendAll(params as { [key: string]: string });
+  }
+
+  private static mergeParams(...httpParams: (HttpParams | null)[]) {
+    let mergedParams: { [key: string]: string[] } = {};
+
+    for (let params of httpParams) {
+      if (params) {
+        for (let param of params.keys()) {
+          mergedParams[param] = params.getAll(param)!;
+        }
+      }
+    }
+
+    if (Object.keys(mergedParams).length === 0) {
+      return undefined;
+    }
+
+    return new HttpParams().appendAll(mergedParams);
+  }
+
+  private static generateSignedRouteParams(signature: SignedRoute) {
+    return new HttpParams().append('signature', signature.signature).append('expires', signature.expires);
+  }
+
+  private static generatePaginationParams(pagination?: PaginationOptions) {
+    if (!pagination) {
       return null;
     }
+
+    const paginationParams = {
+      page: pagination.page.toString(),
+      per_page: pagination.perPage?.toString(),
+    };
+
+    return ApiService.generateParams(paginationParams);
   }
 
-  /**
-   * The api url from the config
-   */
-  get URL() {
-    return this.config.get('api_url', 'http://localhost:80');
-  }
-
-  /**
-   * Handles the received http-response-observable and returns the appropriate ApiResponse instance
-   *
-   * @param observable the http-response-observable to handle
-   * @returns the created ApiResponse instance
-   */
-  private async handleResponse<T>(observable: Observable<HttpResponse<T | null>>): Promise<ApiResponse<T>> {
-    let prom = observable.toPromise();
-
-    let status: number;
-    let value: T | null;
-
-    try {
-      let ret = await prom;
-
-      status = ret.status;
-      value = ret.body;
-
-      if (ret.headers.has('X-Logout')) {
-        this.user.logout('unauthorized', null);
-      }
-    } catch (e: any) {
-      return this.handleError(e);
+  private static generateSortParams(sort?: SortOption[]) {
+    if (!sort || sort.length === 0) {
+      return null;
     }
 
-    return new ApiResponse<T>(status, value);
+    const sortString = sort
+      .map((option) => {
+        const dirPrefix = option.dir === 'desc' ? '-' : '';
+
+        return dirPrefix + option.column;
+      })
+      .join(',');
+
+    return new HttpParams().append('sort', sortString);
   }
 
-  private handleError<T>(e: HttpErrorResponse) {
-    let status = e.status;
-    let error = e.error;
+  private static generateFilterParams(filters?: FilterOption[]) {
+    if (!filters || filters.length === 0) {
+      return null;
+    }
 
-    if (status != 404) {
-      if (status == 401 && this.user.isLoggedin) {
-        this.user.logout('unauthorized', null);
+    return filters.reduce((params, filterOption) => {
+      let filter = `filter[${filterOption.column}]`;
+
+      if (filterOption.type) {
+        filter += `[${filterOption.type}]`;
       }
 
-      return new ApiResponse<T>(e.status, null, error);
+      let value = filterOption.value;
+
+      if (value === null) {
+        value = '\0';
+      }
+
+      return params.append(filter, value.toString());
+    }, new HttpParams());
+  }
+
+  private static generateListParamOptions(options: ListParamOptions) {
+    const baseParams = ApiService.generateParams({ search: options.search });
+    const paginationParams = ApiService.generatePaginationParams(options.pagination);
+    const sortParams = ApiService.generateSortParams(options.sort);
+    const filterParams = ApiService.generateFilterParams(options.filters);
+
+    return this.mergeParams(baseParams, paginationParams, sortParams, filterParams);
+  }
+
+  public getErrorMessage(error: unknown) {
+    if (error instanceof HttpErrorResponse) {
+      if (error.status !== 0 && error.error) {
+        if (error.status === HttpStatusCode.UnprocessableEntity) {
+          return error.error.errors[Object.keys(error.error.errors)[0]][0];
+        } else {
+          return error.error.message;
+        }
+      } else if (error.status === 504 || error.status === 0) {
+        // gateway timeout -> offline
+
+        return this.transloco.translate('messages.errors.noServerConnection');
+      }
+
+      return this.transloco.translate('messages.errors.unexpectedError');
     }
 
-    return new ApiResponse<T>(status, error);
+    return error;
   }
 
-  private static getOptionsQuery(options: ApiOptions) {
-    let query = [];
+  public handleRequestError(request: Observable<unknown>, errorCallback?: (error: unknown) => void) {
+    return request.pipe(
+      switchMap(() => EMPTY),
+      catchError((error) => {
+        if (error instanceof HandledError) {
+          error = error.error;
+        }
 
-    if (typeof options.page !== 'undefined') {
-      query.push(`page=${options.page}`);
-    }
-    if (typeof options.itemsPerPage !== 'undefined' && options.itemsPerPage !== null) {
-      query.push(`itemsPerPage=${options.itemsPerPage}`);
-    }
-    if (typeof options.sort !== 'undefined') {
-      query.push(`sort=${options.sort}`);
-    }
-    if (typeof options.sortDirection !== 'undefined' && options.sortDirection !== null) {
-      query.push(`sortDir=${options.sortDirection}`);
-    }
-    if (typeof options.language !== 'undefined') {
-      query.push(`language=${options.language}`);
-    }
+        if (errorCallback) {
+          errorCallback(error);
+        }
 
-    return query;
-  }
+        if (error instanceof HttpErrorResponse) {
+          const apiErrorMessage = this.getErrorMessage(error);
 
-  private static buildQueryString(query: string[]) {
-    if (query.length > 0) {
-      return `?${query.join('&')}`;
-    }
+          const message =
+            typeof apiErrorMessage === 'string'
+              ? apiErrorMessage
+              : this.transloco.translate('messages.errors.errorOccurred');
 
-    return '';
-  }
+          return of({
+            type: 'HTTP_ERROR',
+            error,
+            httpError: {
+              status: error.status,
+              data: error.error,
+              message,
+            },
+          } as LoadingError);
+        }
 
-  private static buildOptionsQueryString(options: ApiOptions) {
-    return ApiService.buildQueryString(ApiService.getOptionsQuery(options));
-  }
-
-  private get<T>(url: string, httpOptions = this.httpOptions) {
-    return this.handleResponse<T>(this.http.get<T>(url, httpOptions));
-  }
-  private post<T>(url: string, data: any = {}, httpOptions = this.httpOptions) {
-    return this.handleResponse<T>(this.http.post<T>(url, data, httpOptions));
-  }
-  private put<T>(url: string, data: any, httpOptions = this.httpOptions) {
-    return this.handleResponse<T>(this.http.put<T>(url, data, httpOptions));
-  }
-  private delete<T>(url: string, httpOptions = this.httpOptions) {
-    return this.handleResponse<T>(this.http.delete<T>(url, httpOptions));
-  }
-
-  // User
-
-  loginUser(email: string, password: string, hcaptchaToken?: string) {
-    return this.post<{ user: AuthUser; token: string }>(`${this.URL}/auth/login`, {
-      email,
-      password,
-      hcaptchaToken,
-    });
-  }
-
-  registerUser(email: string, password: string, name: string, languageCode: string, hcaptchaToken?: string) {
-    return this.post<AuthUser>(`${this.URL}/auth/register`, {
-      email,
-      password,
-      name,
-      languageCode,
-      hcaptchaToken,
-    });
-  }
-
-  updateUser(values: {
-    oldPassword?: string;
-    email?: string;
-    name?: string;
-    password?: string;
-    languageCode?: string;
-  }) {
-    return this.put<User>(`${this.URL}/auth`, values);
-  }
-
-  deleteUser() {
-    return this.delete<any>(`${this.URL}/auth`);
-  }
-
-  /**
-   * Loads the authenticated user and sets it in the user-service
-   */
-  getAuthenticatedUser() {
-    return this.get<AuthUser>(`${this.URL}/auth`);
-  }
-
-  verifyEmail(email: string, code: string) {
-    return this.post<any>(`${this.URL}/auth/verifyEmail`, {
-      email,
-      code,
-    });
-  }
-
-  resendVerificationEmail(email: string) {
-    return this.post<any>(`${this.URL}/auth/verifyEmail/resend`, {
-      email,
-    });
-  }
-
-  registrationEnabled() {
-    return this.get<boolean>(`${this.URL}/auth/registrationEnabled`);
-  }
-
-  resetPassword(email: string, token: string, password: string) {
-    return this.post<any>(`${this.URL}/auth/resetPassword`, { email, token, password });
-  }
-
-  sendResetPasswordEmail(email: string) {
-    return this.post<any>(`${this.URL}/auth/resetPassword/send`, { email });
-  }
-
-  // Recipe
-
-  getRecipes(options: ApiOptions) {
-    return this.get<Pagination<Recipe>>(`${this.URL}/recipes${ApiService.buildOptionsQueryString(options)}`);
-  }
-
-  searchRecipes(search: string, options: ApiOptions) {
-    return this.get<Pagination<Recipe>>(
-      `${this.URL}/recipes/search/${search}${ApiService.buildOptionsQueryString(options)}`
+        return of({
+          type: 'UNKNOWN_ERROR',
+          error,
+        } as LoadingError);
+      })
     );
   }
 
-  getRecipesForCategory(category: string, options: ApiOptions) {
-    return this.get<Pagination<Recipe>>(
-      `${this.URL}/recipes/category/${encodeURIComponent(category)}${ApiService.buildOptionsQueryString(options)}`
-    );
-  }
+  /*
+  |---------------|
+  |  API Methods  |
+  |---------------|
+  */
 
-  getRecipesForUser(id: number, options: ApiOptions) {
-    return this.get<Pagination<Recipe>>(
-      `${this.URL}/users/id/${id}/recipes${ApiService.buildOptionsQueryString(options)}`
-    );
-  }
-
-  getRecipeById(id: number) {
-    return this.get<RecipeFull>(`${this.URL}/recipes/id/${id}`);
-  }
-
-  createRecipe(recipe: NewRecipe) {
-    return this.post<RecipeFull>(`${this.URL}/recipes`, recipe);
-  }
-
-  editRecipe(id: number, recipe: EditRecipe) {
-    return this.put<RecipeFull>(`${this.URL}/recipes/id/${id}`, recipe);
-  }
-
-  deleteRecipe(id: number) {
-    return this.delete<any>(`${this.URL}/recipes/id/${id}`);
-  }
-
-  // Ingredient
-
-  addIngredient(recipeId: number, ingredient: NewIngredient) {
-    return this.post<Ingredient>(`${this.URL}/recipes/id/${recipeId}/ingredients`, ingredient);
-  }
-
-  editIngredient(id: number, ingredient: EditIngredient) {
-    return this.put<Ingredient>(`${this.URL}/ingredients/id/${id}`, ingredient);
-  }
-
-  deleteIngredient(id: number) {
-    return this.delete<any>(`${this.URL}/ingredients/id/${id}`);
-  }
-
-  getIngredientsList() {
-    return this.get<ListIngredient[]>(`${this.URL}/ingredients/list`);
-  }
-
-  // Recipe Images
-
-  getRecipeImages(recipeId: number) {
-    return this.get<RecipeImage[]>(`${this.URL}/recipes/id/${recipeId}/images`);
-  }
-
-  getRecipeImagesCount(recipeId: number) {
-    return this.get<number>(`${this.URL}/recipes/id/${recipeId}/images/count`);
-  }
-
-  getRecipeImageURL(recipeId: number, number: number, maxSize: number | null = null, includeToken = true) {
-    let query = [];
-
-    if (includeToken && this.queryToken) {
-      query.push(this.queryToken);
-    }
-    if (maxSize) {
-      query.push(`maxSize=${maxSize}`);
-    }
-
-    let queryString = '';
-
-    if (query.length > 0) {
-      queryString = `?${query.join('&')}`;
-    }
-
-    return `${this.URL}/recipes/id/${recipeId}/images/number/${number}${queryString}`;
-  }
-
-  getRecipeImageURLById(id: number, maxSize: number | null = null, includeToken = true) {
-    let query = [];
-
-    if (includeToken && this.queryToken) {
-      query.push(this.queryToken);
-    }
-    if (maxSize) {
-      query.push(`maxSize=${maxSize}`);
-    }
-
-    let queryString = '';
-
-    if (query.length > 0) {
-      queryString = `?${query.join('&')}`;
-    }
-
-    return `${this.URL}/recipeImages/id/${id}${queryString}`;
-  }
-
-  addRecipeImage(recipeId: number, image: File) {
-    const fd = new FormData();
-    fd.append('image', image, image.name);
-
-    return this.http
-      .post<RecipeImage>(`${this.URL}/recipes/id/${recipeId}/images`, fd, this.httpOptionsImageUpload)
-      .pipe(
-        catchError((error: HttpErrorResponse) => {
-          return of(this.handleError<RecipeImage>(error));
-        }),
-        map((event) => {
-          if (event instanceof ApiResponse) {
-            return event;
-          } else {
-            switch (event.type) {
-              case HttpEventType.UploadProgress:
-                return Math.round((event.loaded / event.total!) * 100);
-              case HttpEventType.Response:
-                return new ApiResponse<RecipeImage>(event.status, event.body);
-            }
-          }
-          return null;
-        })
-      );
-  }
-
-  deleteRecipeImage(id: number) {
-    return this.delete<any>(`${this.URL}/recipeImages/id/${id}`);
-  }
-
-  // Categories
-
-  getCategories() {
-    return this.get<CategoryInformation[]>(`${this.URL}/categories`);
-  }
-
-  // Admin
-
-  get admin() {
+  public get auth() {
     return {
-      getUsers: (search: string | null, options: ApiOptions) => {
-        let query = ApiService.getOptionsQuery(options);
+      getAuthenticatedUser: () => this.get<{ data: DetailedUser }>('/auth', TokenType.Access),
 
-        if (search) {
-          query.push(`search=${encodeURIComponent(search)}`);
-        }
+      login: (email: string, password: string) =>
+        this.post<{ data: { user: DetailedUser; access_token: string; refresh_token: string | null } }>(
+          '/auth/login',
+          { email, password },
+          TokenType.None
+        ),
 
-        return this.get<Pagination<UserFull>>(`${this.URL}/admin/users${ApiService.buildQueryString(query)}`);
+      signUp: (data: {
+        name: string;
+        email: string;
+        password: string;
+        language_code?: string;
+        hcaptcha_token?: string;
+      }) => {
+        return this.post<{ data: { user: DetailedUser; access_token: string; refresh_token: string | null } }>(
+          '/auth/sign-up',
+          data,
+          TokenType.None
+        );
       },
-      getUser: (id: number) => {
-        return this.get<UserFull>(`${this.URL}/admin/users/id/${id}`);
+
+      logout: () => this.post<void>('/auth/logout', {}, TokenType.Access),
+
+      refreshToken: () =>
+        this.post<{ data: { access_token: string; refresh_token: string } }>('/auth/refresh', {}, TokenType.Refresh),
+
+      verifyEmail: (id: string, hash: string, signature: SignedRoute) =>
+        this.post<void>(
+          `/auth/email-verification/verify/${id}/${hash}`,
+          {},
+          TokenType.Access,
+          ApiService.generateSignedRouteParams(signature)
+        ),
+
+      resendVerificationEmail: () => this.post<void>('/auth/email-verification/resend', {}, TokenType.Access),
+
+      resetPassword: (token: string, email: string, password: string) =>
+        this.post<void>('/auth/reset-password', { token, email, password }, TokenType.None),
+
+      sendResetPasswordEmail: (email: string) =>
+        this.post<void>('/auth/reset-password/send', { email }, TokenType.None),
+
+      tokens: {
+        getList: (pagination?: PaginationOptions) =>
+          this.get<{ data: AuthToken[]; meta: PaginationMeta }>(
+            `/auth/tokens`,
+            TokenType.Access,
+            ApiService.generateListParamOptions({ pagination })
+          ),
+
+        get: (id: number) => this.get<{ data: AuthToken }>(`/auth/tokens/${id}`, TokenType.Access),
+
+        delete: (id: number) => this.delete<void>(`/auth/tokens/${id}`, TokenType.Access),
+
+        deleteAll: () => this.delete<void>('/auth/tokens', TokenType.Access),
+
+        groups: {
+          getList: (groupId: number, pagination?: PaginationOptions) =>
+            this.get<{ data: AuthToken[]; meta: PaginationMeta }>(
+              `/auth/tokens/groups/${groupId}`,
+              TokenType.Access,
+              ApiService.generateListParamOptions({ pagination })
+            ),
+        },
       },
-      createUser: (
-        email: string,
-        password: string,
-        name: string,
-        isAdmin = false,
-        verifyEmail = true,
-        languageCode?: string
+    };
+  }
+
+  public get users() {
+    return {
+      getList: (options: ListParamOptions) =>
+        this.get<{ data: DetailedUser[]; meta: PaginationMeta }>(
+          '/users',
+          TokenType.Access,
+          ApiService.generateListParamOptions(options)
+        ),
+
+      get: (id: number) => this.get<{ data: DetailedUser }>(`/users/${id}`, TokenType.Access),
+
+      getByEmail: (email: string) => this.get<{ data: User }>(`/users/search/email/${email}`, TokenType.Access),
+
+      create: (data: CreateUserData) => this.post<{ data: DetailedUser }>('/users', data, TokenType.Access),
+
+      update: (id: number, data: EditUserData) =>
+        this.put<{ data: DetailedUser }>(`/users/${id}`, data, TokenType.Access),
+
+      delete: (id: number) => this.delete<void>(`/users/${id}`, TokenType.Access),
+    };
+  }
+
+  public get categories() {
+    return {
+      getList: (all = false, sortByAmount?: 'asc' | 'desc') => {
+        const sortParams = sortByAmount
+          ? ApiService.generateSortParams([{ column: 'amount', dir: sortByAmount }])
+          : null;
+
+        return this.get<{ data: string[] }>(
+          '/categories',
+          TokenType.AccessOptional,
+          ApiService.mergeParams(ApiService.generateParams({ all: all ? '' : undefined }), sortParams)
+        );
+      },
+    };
+  }
+
+  public get recipes() {
+    return {
+      getList: (
+        options: {
+          all?: boolean;
+          includeDeleted?: boolean;
+        } & ListParamOptions
       ) => {
-        return this.post<UserFull>(`${this.URL}/admin/users`, {
-          email,
-          password,
-          name,
-          isAdmin,
-          verifyEmail,
-          languageCode: languageCode || this.config.get('language', 'en'),
+        const baseParams = ApiService.generateParams({
+          all: options.all ? '' : undefined,
+          'include-deleted': options.includeDeleted ? '' : undefined,
         });
-      },
-      updateUser: (
-        userId: number,
-        values: { email?: string; name?: string; password?: string; isAdmin?: boolean; emailVerified?: boolean }
-      ) => {
-        return this.put<UserFull>(`${this.URL}/admin/users/id/${userId}`, values);
-      },
-      deleteUser: (userId: number) => {
-        return this.delete<any>(`${this.URL}/admin/users/id/${userId}`);
-      },
-      resetUserPassword: (userId: number) => {
-        return this.post<{ user: UserFull; password: string }>(`${this.URL}/admin/users/id/${userId}/resetPassword`);
-      },
-      getRecipes: (search: string | null, filterUserId: number | null, options: ApiOptions) => {
-        let query = ApiService.getOptionsQuery(options);
 
-        if (search) {
-          query.push(`search=${encodeURIComponent(search)}`);
-        }
-        if (filterUserId) {
-          query.push(`filterUserId=${filterUserId}`);
-        }
+        return this.get<{ data: ListRecipe[]; meta: PaginationMeta }>(
+          '/recipes',
+          TokenType.AccessOptional,
+          ApiService.mergeParams(baseParams, ApiService.generateListParamOptions(options)!)
+        );
+      },
 
-        return this.get<Pagination<Recipe>>(`${this.URL}/admin/recipes${ApiService.buildQueryString(query)}`);
+      get: (id: number) => this.get<{ data: DetailedRecipe }>(`/recipes/${id}`, TokenType.AccessOptional),
+      getShared: (shareUuid: string) =>
+        this.get<{ data: DetailedRecipe }>(`/recipes/shared/${shareUuid}`, TokenType.AccessOptional),
+
+      create: (data: CreateRecipeData) => this.post<{ data: DetailedRecipe }>('/recipes', data, TokenType.Access),
+
+      update: (id: number, data: EditRecipeData) =>
+        this.put<{ data: DetailedRecipe }>(`/recipes/${id}`, data, TokenType.Access),
+
+      delete: (id: number) => this.delete<void>(`/recipes/${id}`, TokenType.Access),
+
+      trash: {
+        getList: (options: ListParamOptions) =>
+          this.get<{ data: ListRecipe[]; meta: PaginationMeta }>(
+            '/recipe-trash',
+            TokenType.Access,
+            ApiService.generateListParamOptions(options)
+          ),
+
+        restoreRecipe: (recipeId: number) => this.put<void>(`/recipe-trash/${recipeId}`, {}, TokenType.Access),
+
+        deleteRecipe: (recipeId: number) => this.delete<void>(`/recipe-trash/${recipeId}`, TokenType.Access),
+
+        deleteAll: () => this.delete<void>('/recipe-trash', TokenType.Access),
       },
-      getServerInformation: () => {
-        return this.get<ServerInformation>(`${this.URL}/admin/information`);
+
+      images: {
+        getList: (recipeId: number) =>
+          this.get<{ data: RecipeImage[] }>(`/recipes/${recipeId}/images`, TokenType.AccessOptional),
+
+        create: (recipeId: number, image: File) => {
+          const fd = new FormData();
+          fd.append('image', image, image.name);
+
+          return this.http
+            .post<{ data: RecipeImage }>(`${this.url}/recipes/${recipeId}/images`, fd, {
+              headers: this.baseHttpHeaders,
+              reportProgress: true,
+              observe: 'events',
+              context: new HttpContext().set(TOKEN_TYPE_HTTP_CONTEXT, TokenType.Access),
+            })
+            .pipe(
+              map((event) => {
+                if (event instanceof HttpResponse) {
+                  return event;
+                } else if (event.type === HttpEventType.UploadProgress) {
+                  return Math.round((event.loaded / event.total!) * 100);
+                }
+                return null;
+              }),
+              shareReplay(1)
+            );
+        },
+
+        delete: (imageId: number) => this.delete<void>(`/recipe-images/${imageId}`, TokenType.Access),
       },
-      getServerConfig: () => {
-        return this.get<ServerConfig>(`${this.URL}/admin/server/config`);
+    };
+  }
+
+  public get ingredients() {
+    return {
+      getList: (search?: string, sort?: SortOption[]) =>
+        this.get<{ data: SimpleIngredient[] }>(
+          '/ingredients',
+          TokenType.Access,
+          ApiService.generateListParamOptions({ search, sort })
+        ),
+
+      create: (recipeId: number, data: BaseIngredient) =>
+        this.post<{ data: Ingredient }>(`/recipes/${recipeId}/ingredients`, data, TokenType.Access),
+
+      update: (id: number, data: EditIngredientData) =>
+        this.put<{ data: Ingredient }>(`/ingredients/${id}`, data, TokenType.Access),
+
+      delete: (id: number) => this.delete<void>(`/ingredients/${id}`, TokenType.Access),
+    };
+  }
+
+  public get cookbooks() {
+    return {
+      getList: (all?: boolean, pagination?: PaginationOptions, sort?: SortOption[], search?: string) => {
+        const baseParams = ApiService.generateParams({ all: all ? '' : undefined, search });
+        const paginationParams = ApiService.generatePaginationParams(pagination);
+        const sortParams = ApiService.generateSortParams(sort);
+
+        return this.get<{ data: CookbookWithCounts[]; meta: PaginationMeta }>(
+          '/cookbooks',
+          TokenType.Access,
+          ApiService.mergeParams(baseParams, paginationParams, sortParams)
+        );
       },
-      updateServerConfig: (path: string, value: any) => {
-        return this.put<any>(`${this.URL}/admin/server/config`, { path, value });
+
+      getEditableList: () => this.get<{ data: SimpleCookbook[] }>(`/cookbooks/editable`, TokenType.Access),
+
+      get: (id: number) => this.get<{ data: CookbookWithUserMeta }>(`/cookbooks/${id}`, TokenType.Access),
+
+      getRecipes: (cookbookId: number, options: ListParamOptions) =>
+        this.get<{ data: ListRecipe[]; meta: PaginationMeta }>(
+          `/cookbooks/${cookbookId}/recipes`,
+          TokenType.Access,
+          ApiService.generateListParamOptions(options)
+        ),
+
+      getCategories: (cookbookId: number, sortByAmount?: 'asc' | 'desc') => {
+        const sortParams = sortByAmount
+          ? ApiService.generateSortParams([{ column: 'amount', dir: sortByAmount }])!
+          : undefined;
+
+        return this.get<{ data: string[] }>(`/cookbooks/${cookbookId}/categories`, TokenType.Access, sortParams);
       },
-      sendTestEmail: (email: string) => {
-        return this.post<any>(`${this.URL}/admin/server/sendTestEmail`, { email });
+
+      create: (name: string) => this.post<{ data: Cookbook }>('/cookbooks', { name }, TokenType.Access),
+
+      update: (id: number, name: string) =>
+        this.put<{ data: Cookbook }>(`/cookbooks/${id}`, { name }, TokenType.Access),
+
+      delete: (id: number) => this.delete<void>(`/cookbooks/${id}`, TokenType.Access),
+
+      users: {
+        getList: (cookbookId: number, options: ListParamOptions) =>
+          this.get<{ data: CookbookUser[]; meta: PaginationMeta }>(
+            `/cookbooks/${cookbookId}/users`,
+            TokenType.Access,
+            ApiService.generateListParamOptions(options)
+          ),
+
+        create: (cookbookId: number, userId: number, isAdmin: boolean) =>
+          this.post<{ data: CookbookUser }>(
+            `/cookbooks/${cookbookId}/users`,
+            { user_id: userId, is_admin: isAdmin },
+            TokenType.Access
+          ),
+
+        update: (cookbookId: number, userId: number, isAdmin: boolean) =>
+          this.put<{ data: CookbookUser }>(
+            `/cookbooks/${cookbookId}/users/${userId}`,
+            { is_admin: isAdmin },
+            TokenType.Access
+          ),
+
+        delete: (cookbookId: number, userId: number) =>
+          this.delete<void>(`/cookbooks/${cookbookId}/users/${userId}`, TokenType.Access),
+      },
+    };
+  }
+
+  public get admin() {
+    return {
+      dashboard: {
+        get: () => this.get<{ data: AdminDashboardData }>(`/admin/dashboard`, TokenType.Access),
       },
     };
   }

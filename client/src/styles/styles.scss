@@ -1,136 +1,82 @@
-@use '~@angular/material' as mat;
-@import '~@angular/material/theming';
-@import 'variables.scss';
-
-@include mat.core();
-
-$theme: mat.define-light-theme(
-  (
-    color: (
-      primary: $primary,
-      accent: $accent,
-      warn: $warn,
-    ),
-  )
-);
-
-@include mat.all-component-themes($theme);
-
-* {
-  box-sizing: border-box;
-}
+@use 'theme/init';
+@use 'mixins';
+@use 'variables' as *;
 
 html,
 body {
-  min-height: 100%;
-  height: fit-content;
+  height: 100%;
+  width: 100%;
 }
 
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
-
-  background: $body-background;
-
-  overflow-y: scroll;
-}
-
-a,
-.link {
-  color: $link;
 }
 
 h1,
 h2,
-h3,
-h4 {
-  font-weight: normal !important;
-
-  > mat-icon,
-  > span {
-    vertical-align: middle;
-  }
-
-  > mat-icon {
-    margin-right: 0.5em;
-  }
+h3 {
+  font-weight: normal;
 }
 
-strong {
-  font-weight: 500;
+.custom-dialog mat-dialog-container {
+  background: transparent;
+  box-shadow: none;
 }
 
-.cdk-global-scrollblock {
-  overflow-y: unset;
+a[disabled] {
+  pointer-events: none !important;
 }
 
-.mat-snack-bar-container.action-warn .mat-simple-snackbar-action {
-  color: mat.get-color-from-palette($warn) !important;
+[fadeIn] {
+  animation: fadeInAnimation ease 1s;
 }
 
-.fg-primary {
-  color: mat.get-color-from-palette($primary) !important;
-}
-.bg-primary {
-  background: mat.get-color-from-palette($primary) !important;
-}
-.fg-accent {
-  color: mat.get-color-from-palette($accent) !important;
-}
-.bg-accent {
-  background: mat.get-color-from-palette($accent) !important;
-}
-.fg-warn {
-  color: mat.get-color-from-palette($warn) !important;
-}
-.bg-warn {
-  background: mat.get-color-from-palette($warn) !important;
+[cdkDragHandle] {
+  cursor: grab;
 }
 
-.fg-whatsapp {
-  color: #25d366 !important;
-}
-.fg-telegram {
-  color: #0088cc !important;
-}
+.cdk-drop-list-dragging {
+  cursor: grabbing;
 
-.link {
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.vertical-align-middle {
-  vertical-align: middle !important;
-}
-
-.inline-block {
-  display: inline-block !important;
-}
-
-.icon-text {
-  > * {
-    vertical-align: middle;
-    display: inline-block;
-  }
-
-  mat-icon {
-    margin-right: 0.25em;
+  > *:not(.cdk-drag-placeholder):not(.cdk-drag-preview) {
+    transition: transform $transition-time;
   }
 }
 
-@media screen and (min-width: $desktop-width) {
-  .hide-desktop {
-    display: none !important;
-  }
-}
-@media screen and (max-width: $mobile-width) {
+@include mixins.mobile() {
   .hide-mobile {
     display: none !important;
   }
 }
 
+@include mixins.desktop() {
+  .hide-desktop {
+    display: none !important;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  mat-paginator {
+    padding: 1em 0;
+  }
+}
+
 @media print {
-  body {
-    background: transparent;
+  html {
+    background: transparent !important;
+  }
+
+  app-root {
+    color: black !important;
+  }
+}
+
+@keyframes fadeInAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }

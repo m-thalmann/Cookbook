@@ -1,0 +1,9 @@
+<ng-container *ngIf="{ saving: saving | async, serverErrorResponse: serverErrorResponse$ | async } as vm">
+    <app-edit-recipe-details-form
+        [recipe]="null"
+        [disabled]="disabled || vm.saving"
+        [loading]="vm.saving"
+        [serverErrorResponse]="vm.serverErrorResponse"
+        (save)="onSave($event)"
+    ></app-edit-recipe-details-form>
+</ng-container>

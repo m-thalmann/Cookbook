@@ -1,0 +1,114 @@
+@use 'sass:map';
+@use 'theme';
+@use 'variables' as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.25em;
+  overflow: hidden;
+
+  @include theme.apply() using ($variables) {
+    border: 1px solid theme.adjust-color($variables, map.get($variables, 'background'), -20%);
+
+    &:focus-within {
+      border-color: map.get($variables, 'primary');
+      outline: 1px solid map.get($variables, 'primary');
+    }
+  }
+}
+
+.container {
+  &.disabled {
+    opacity: 0.5;
+  }
+}
+
+.toolbar {
+  flex-shrink: 0;
+
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+
+  padding: 0.125em 0.5em;
+
+  overflow: auto;
+
+  @include theme.apply() using ($variables) {
+    background: darken(map.get($variables, 'background'), 5%);
+
+    .divider {
+      background: theme.adjust-color($variables, map.get($variables, 'foreground'), 50%);
+    }
+
+    .section {
+      button {
+        color: map.get($variables, 'foreground');
+
+        &:not(:disabled):hover {
+          background: rgba(map.get($variables, 'foreground'), 0.1);
+        }
+      }
+    }
+  }
+
+  .divider {
+    height: 1.5em;
+    width: 1px;
+  }
+
+  .section {
+    display: flex;
+
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 0.5em;
+
+      background: transparent;
+      border: none;
+      border-radius: 0.25em;
+      transition: background $transition-time;
+
+      &:not(:disabled) {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.content {
+  flex: 1;
+  max-height: 25em;
+  overflow: auto;
+
+  padding: 1.25em 1em;
+
+  outline: none;
+
+  ::ng-deep {
+    a {
+      position: relative;
+
+      &:hover::after {
+        content: '[' attr(href) ']';
+        display: inline-block;
+        margin-left: 0.25em;
+        font-size: 0.75rem;
+
+        @include theme.apply() using ($variables) {
+          color: map.get($variables, 'foreground');
+        }
+      }
+    }
+  }
+
+  &.empty:not(:focus)::before {
+    content: attr(data-placeholder);
+    cursor: text;
+    opacity: 0.5;
+  }
+}

@@ -1,0 +1,66 @@
+@use 'sass:map';
+@use 'variables' as *;
+@use 'theme';
+
+.container {
+  display: flex;
+  align-items: center;
+  border-radius: 2em;
+  padding: 0 0.75em;
+
+  transition: background $transition-time;
+
+  @include theme.apply() using ($variables) {
+    background: rgba(map.get($variables, 'foreground'), 0.1);
+  }
+
+  label {
+    padding-right: 0.5em;
+    opacity: 0.5;
+
+    mat-icon {
+      vertical-align: middle;
+    }
+  }
+
+  input {
+    all: unset;
+    display: block;
+    flex: 1;
+    padding: 0.75em 0;
+
+    max-width: calc(100% - 2em);
+  }
+
+  &:focus-within {
+    @include theme.apply() using ($variables) {
+      background: rgba(map.get($variables, 'primary'), 0.1);
+    }
+
+    label {
+      opacity: 1;
+    }
+  }
+
+  button.clear-button {
+    all: unset;
+    cursor: pointer;
+    display: flex;
+  }
+
+  label,
+  input,
+  button.clear-button {
+    transition: opacity $transition-time;
+  }
+
+  &.disabled {
+    cursor: default;
+
+    label,
+    input,
+    button.clear-button {
+      opacity: 0.25;
+    }
+  }
+}

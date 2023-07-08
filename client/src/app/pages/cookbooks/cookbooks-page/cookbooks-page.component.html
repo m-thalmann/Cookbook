@@ -1,0 +1,48 @@
+<div
+    class="container"
+    *ngIf="{
+        cookbooks: cookbooks$ | async,
+        cookbooksLoading: cookbooksLoading$ | async,
+        error: error$ | async
+    } as vm"
+>
+    <p class="amount-results" *ngIf="vm.cookbooks?.totalCookbooks as total">
+        {{ 'cookbooks.cookbooksFound' | transloco: { amount: total } }}
+    </p>
+    <app-skeleton class="amount-results" *ngIf="vm.cookbooksLoading && !vm.cookbooks" width="10em"></app-skeleton>
+
+    <app-no-items-display *ngIf="vm.cookbooks && vm.cookbooks.totalCookbooks === 0">
+        {{ 'cookbooks.empty' | transloco }}
+    </app-no-items-display>
+
+    <div class="cookbooks">
+        <app-cookbook-card
+            [cookbook]="cookbook"
+            *ngFor="let cookbook of vm.cookbooks?.cookbooks; trackBy: trackByCookbook"
+        >
+        </app-cookbook-card>
+
+        <ng-container *ngIf="vm.cookbooksLoading && !vm.cookbooks">
+            <app-cookbook-card [cookbook]="null" *appRepeat="6"> </app-cookbook-card>
+        </ng-container>
+    </div>
+
+    <app-error-display [error]="vm.error">
+        <ng-template #otherErrorMessage> {{ 'cookbooks.loadingError' | transloco }} </ng-template>
+    </app-error-display>
+
+    <button
+        mat-raised-button
+        color="accent"
+        (click)="nextPage()"
+        [disabled]="!vm.cookbooks || vm.cookbooksLoading"
+        *ngIf="(!vm.cookbooks || vm.cookbooks.hasMoreItems) && !vm.error"
+    >
+        <div>
+            <mat-spinner *ngIf="vm.cookbooksLoading" [diameter]="20"></mat-spinner>
+            <mat-icon *ngIf="!vm.cookbooksLoading">south</mat-icon>
+
+            {{ 'actions.loadMore' | transloco }}
+        </div>
+    </button>
+</div>

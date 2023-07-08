@@ -1,0 +1,37 @@
+.active-sessions-section {
+  > button {
+    margin-bottom: 2em;
+  }
+
+  .active-sessions-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1em;
+
+    margin-bottom: 2em;
+  }
+
+  .load-more-button {
+    display: block;
+    margin: 0 auto;
+
+    div {
+      display: flex;
+      align-items: center;
+    }
+
+    mat-spinner {
+      margin-right: 0.75em;
+    }
+
+    mat-icon {
+      margin-right: 0.25em;
+    }
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .active-sessions-section .active-sessions-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

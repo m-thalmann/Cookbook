@@ -1,0 +1,78 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use 'variables' as *;
+@use 'theme';
+
+:host {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+
+  padding: 0 0.75em;
+  border-radius: 2em;
+
+  cursor: pointer;
+
+  &,
+  > label > select {
+    transition: background $transition-time, box-shadow $transition-time;
+  }
+
+  @include mat.elevation(2);
+
+  @include theme.apply() using ($variables) {
+    &,
+    > label > select {
+      background: darken(map.get($variables, 'background'), 10%);
+    }
+
+    &:not(.disabled):not(.error) {
+      &:hover,
+      &:focus-within {
+        &,
+        > label > select {
+          background: darken(map.get($variables, 'background'), 5%);
+        }
+      }
+    }
+  }
+
+  &.disabled,
+  &.error {
+    &,
+    > * {
+      cursor: default;
+    }
+  }
+
+  &.disabled > *,
+  &.error label {
+    opacity: 0.25;
+  }
+
+  > * {
+    transition: opacity $transition-time, background $transition-time !important;
+  }
+
+  &:focus-within {
+    @include mat.elevation(4);
+  }
+
+  > label {
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    cursor: pointer;
+  }
+
+  select {
+    all: unset;
+
+    flex: 1;
+
+    padding: 0.25em 0;
+    line-height: 1.5;
+  }
+}

@@ -1,0 +1,22 @@
+<button mat-icon-button [matMenuTriggerFor]="shareMenu" [color]="color" [disabled]="disabled" *ngIf="!hasShareApi">
+    <mat-icon>share</mat-icon>
+</button>
+<button mat-icon-button (click)="doShare()" [color]="color" [disabled]="disabled" *ngIf="hasShareApi">
+    <mat-icon>share</mat-icon>
+</button>
+
+<mat-menu #shareMenu="matMenu">
+    <button mat-menu-item (click)="copyLink()"><mat-icon>link</mat-icon> {{ 'actions.copyLink' | transloco }}</button>
+    <button mat-menu-item (click)="doPrint()" *ngIf="showPrint">
+        <mat-icon>print</mat-icon> {{ 'actions.print' | transloco }}
+    </button>
+    <a mat-menu-item [href]="shareEmailLink" target="_blank" rel="noopener">
+        <mat-icon>email</mat-icon> {{ 'general.email' | transloco }}
+    </a>
+    <a mat-menu-item [href]="shareWhatsAppLink" target="_blank" rel="noopener">
+        <mat-icon svgIcon="whatsapp" class="fg-whatsapp"></mat-icon> WhatsApp
+    </a>
+    <a mat-menu-item [href]="shareTelegramLink" target="_blank" rel="noopener">
+        <mat-icon svgIcon="telegram" class="fg-telegram"></mat-icon> Telegram
+    </a>
+</mat-menu>

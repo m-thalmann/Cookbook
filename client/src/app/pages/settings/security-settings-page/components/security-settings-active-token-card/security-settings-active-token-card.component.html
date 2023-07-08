@@ -1,0 +1,66 @@
+<div class="container" *ngIf="token; else loading">
+    <div class="summary">
+        <span
+            class="current-indicator"
+            [class.is-current]="token.is_current"
+            [matTooltip]="'pages.settings.children.security.currentSession' | transloco"
+            [matTooltipDisabled]="!token.is_current"
+        ></span>
+
+        <mat-icon>
+            {{ token.user_agent_details?.is_mobile ? 'smartphone' : 'laptop' }}
+        </mat-icon>
+
+        <span class="updated-at">
+            <label>
+                {{ 'general.lastUpdated' | transloco }}
+            </label>
+            {{ token.created_at * 1000 | i18nDate: true }}
+        </span>
+
+        <button mat-icon-button (click)="expanded = !expanded">
+            <mat-icon>
+                {{ expanded ? 'expand_less' : 'expand_more' }}
+            </mat-icon>
+        </button>
+
+        <button
+            mat-icon-button
+            color="warn"
+            [matTooltip]="'pages.settings.children.security.logoutFromThatSession' | transloco"
+            [disabled]="disabled"
+            (click)="logout.emit()"
+        >
+            <mat-icon>power_settings_new</mat-icon>
+        </button>
+    </div>
+
+    <div class="details" *ngIf="expanded">
+        <table>
+            <tbody>
+                <tr>
+                    <td>{{ 'pages.settings.children.security.ipAddress' | transloco }}:</td>
+                    <td>{{ token.ip_address || '-' }}</td>
+                </tr>
+                <tr>
+                    <td>{{ 'pages.settings.children.security.hostname' | transloco }}:</td>
+                    <td>{{ token.ip_host || '-' }}</td>
+                </tr>
+                <tr>
+                    <td>{{ 'pages.settings.children.security.operatingSystem' | transloco }}:</td>
+                    <td>{{ token.user_agent_details?.os || '-' }}</td>
+                </tr>
+                <tr>
+                    <td>{{ 'pages.settings.children.security.browser' | transloco }}:</td>
+                    <td>
+                        {{ token.user_agent_details ? token.user_agent_details.browser : '-' }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<ng-template #loading>
+    <app-skeleton></app-skeleton>
+</ng-template>

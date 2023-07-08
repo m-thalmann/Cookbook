@@ -1,0 +1,67 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+// themes-config
+
+$themes: (
+  'dark': (
+    'primary-palette': mat.define-palette(mat.$blue-palette, 700),
+    'accent-palette': mat.define-palette(mat.$deep-orange-palette, 500),
+    'warn-palette': mat.define-palette(mat.$red-palette, 700),
+    'link-palette': mat.define-palette(mat.$orange-palette, A700),
+    'type': 'dark',
+  ),
+  'light': (
+    'primary-palette': mat.define-palette(mat.$blue-palette, 700),
+    'accent-palette': mat.define-palette(mat.$deep-orange-palette, 500),
+    'warn-palette': mat.define-palette(mat.$red-palette, 700),
+    'link-palette': mat.define-palette(mat.$orange-palette, A700),
+    'type': 'light',
+  ),
+  'dark-light-yellow-lime': (
+    'primary-palette': mat.define-palette(mat.$light-green-palette, A700),
+    'accent-palette': mat.define-palette(mat.$lime-palette, A200),
+    'warn-palette': mat.define-palette(mat.$red-palette, 700),
+    'link-palette': mat.define-palette(mat.$light-green-palette, A700),
+    'type': 'dark',
+  ),
+  'light-purple-pink': (
+    'primary-palette': mat.define-palette(mat.$purple-palette, 700),
+    'accent-palette': mat.define-palette(mat.$pink-palette, A100),
+    'warn-palette': mat.define-palette(mat.$red-palette, 700),
+    'link-palette': mat.define-palette(mat.$purple-palette, A700),
+    'type': 'light',
+  ),
+);
+
+$default-theme: 'dark';
+
+// initialize the themes-map
+
+@each $theme, $variables in $themes {
+  $color-config: (
+    'primary': map.get($variables, 'primary-palette'),
+    'accent': map.get($variables, 'accent-palette'),
+    'warn': map.get($variables, 'warn-palette'),
+  );
+
+  $app-theme: ();
+
+  @if (map.get($variables, 'type') == 'light') {
+    $app-theme: mat.define-light-theme(
+      (
+        color: $color-config,
+      )
+    );
+  } @else {
+    $app-theme: mat.define-dark-theme(
+      (
+        color: $color-config,
+      )
+    );
+  }
+
+  $variables: map.set($variables, 'theme', $app-theme);
+
+  $themes: map.set($themes, $theme, $variables);
+}

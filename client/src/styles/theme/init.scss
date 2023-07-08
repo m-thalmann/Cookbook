@@ -1,0 +1,100 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use './variables' as *;
+
+@include mat.core();
+@include mat.all-component-typographies();
+
+// initialize theme
+
+@mixin -html-styles($variables) {
+  $app-theme: map.get($variables, 'theme');
+
+  background: mat.get-color-from-palette(map.get($app-theme, 'background'), 'background');
+
+  app-root {
+    color: mat.get-color-from-palette(map.get($app-theme, 'foreground'), 'text');
+  }
+
+  a {
+    color: mat.get-color-from-palette(map.get($variables, 'link-palette'));
+  }
+
+  .fg-primary {
+    color: mat.get-color-from-palette(map.get($variables, 'primary-palette'));
+  }
+  .fg-accent {
+    color: mat.get-color-from-palette(map.get($variables, 'accent-palette'));
+  }
+  .fg-warn {
+    color: mat.get-color-from-palette(map.get($variables, 'warn-palette'));
+  }
+}
+
+// used mixins can be found here: https://github.com/angular/components/blob/main/src/material/core/theming/_all-theme.scss
+
+@each $theme, $variables in $themes {
+  $app-theme: map.get($variables, 'theme');
+
+  @if ($theme == $default-theme) {
+    html {
+      @include mat.core-theme($app-theme);
+      @include mat.button-theme($app-theme);
+      @include mat.icon-button-theme($app-theme);
+      @include mat.checkbox-theme($app-theme);
+      @include mat.chips-theme($app-theme);
+      @include mat.dialog-theme($app-theme);
+      @include mat.fab-theme($app-theme);
+      @include mat.form-field-theme($app-theme);
+      @include mat.icon-theme($app-theme);
+      @include mat.input-theme($app-theme);
+      @include mat.list-theme($app-theme);
+      @include mat.menu-theme($app-theme);
+      @include mat.paginator-theme($app-theme);
+      @include mat.progress-spinner-theme($app-theme);
+      @include mat.slider-theme($app-theme);
+      @include mat.slide-toggle-theme($app-theme);
+      @include mat.snack-bar-theme($app-theme);
+      @include mat.table-theme($app-theme);
+      @include mat.tabs-theme($app-theme);
+      @include mat.toolbar-theme($app-theme);
+      @include mat.tooltip-theme($app-theme);
+
+      @include -html-styles($variables);
+
+      .mat-mdc-snack-bar-container.action-warn .mat-mdc-snack-bar-action {
+        color: mat.get-color-from-palette(map.get($variables, 'warn-palette')) !important;
+      }
+    }
+  } @else {
+    html.theme-#{$theme} {
+      @include mat.core-color($app-theme);
+      @include mat.button-color($app-theme);
+      @include mat.icon-button-color($app-theme);
+      @include mat.checkbox-color($app-theme);
+      @include mat.chips-color($app-theme);
+      @include mat.dialog-color($app-theme);
+      @include mat.fab-color($app-theme);
+      @include mat.form-field-color($app-theme);
+      @include mat.icon-color($app-theme);
+      @include mat.input-color($app-theme);
+      @include mat.list-color($app-theme);
+      @include mat.menu-color($app-theme);
+      @include mat.paginator-color($app-theme);
+      @include mat.progress-spinner-color($app-theme);
+      @include mat.slider-color($app-theme);
+      @include mat.slide-toggle-color($app-theme);
+      @include mat.snack-bar-color($app-theme);
+      @include mat.table-color($app-theme);
+      @include mat.tabs-color($app-theme);
+      @include mat.toolbar-color($app-theme);
+      @include mat.tooltip-color($app-theme);
+
+      @include -html-styles($variables);
+
+      .mat-mdc-snack-bar-container.action-warn .mat-mdc-snack-bar-action {
+        color: mat.get-color-from-palette(map.get($variables, 'warn-palette')) !important;
+      }
+    }
+  }
+}

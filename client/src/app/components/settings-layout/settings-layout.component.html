@@ -1,0 +1,13 @@
+<h2>
+    <mat-icon>{{ icon }}</mat-icon> {{ title }}
+</h2>
+
+<div class="container">
+    <div class="settings-nav">
+        <ng-content select="[nav-list]"></ng-content>
+    </div>
+
+    <div class="settings">
+        <ng-content></ng-content>
+    </div>
+</div>

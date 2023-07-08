@@ -1,0 +1,120 @@
+<ng-container
+    *ngIf="{
+        user: auth.user$ | async,
+        isAuthenticated: auth.isAuthenticated$ | async,
+        isAuthInitialized: (auth.isInitialized$ | async) ?? true,
+        isUnverified: auth.isUnverified$ | async,
+        isOverlayRoute: isOverlayRoute$ | async,
+        showAddButton: showAddButton$ | async
+    } as vm"
+>
+    <div class="desktop-spacer left"></div>
+
+    <div class="container" [class.is-overlay]="vm.isOverlayRoute">
+        <div>
+            <header [class.hide-mobile]="vm.isOverlayRoute">
+                <img src="assets/images/cookbook.svg" alt="Cookbook Logo" />
+                <h1>Cookbook</h1>
+
+                <div class="spacer"></div>
+
+                <div class="header-buttons" [class.logged-in]="vm.isAuthenticated">
+                    <ng-container *ngIf="vm.isAuthenticated; else unauthenticatedButtons">
+                        <button
+                            class="hide-mobile"
+                            mat-icon-button
+                            [matMenuTriggerFor]="addMenu"
+                            color="primary"
+                            [disabled]="!vm.isAuthInitialized"
+                        >
+                            <mat-icon>add</mat-icon>
+                        </button>
+
+                        <button
+                            class="user-account-button"
+                            mat-icon-button
+                            [matMenuTriggerFor]="accountMenu"
+                            [disabled]="!vm.isAuthInitialized"
+                        >
+                            {{ getUserInitials(vm.user!) }}
+
+                            <span class="account-action-required" *ngIf="vm.isUnverified">
+                                <mat-icon> warning </mat-icon>
+                            </span>
+                        </button>
+                    </ng-container>
+                    <ng-template #unauthenticatedButtons>
+                        <a mat-icon-button routerLink="/settings">
+                            <mat-icon>settings</mat-icon>
+                        </a>
+                        <a mat-icon-button routerLink="/login" [queryParams]="loginQueryParams" color="primary">
+                            <mat-icon>login</mat-icon>
+                        </a>
+                    </ng-template>
+                </div>
+            </header>
+
+            <main [class.has-add-button]="vm.showAddButton">
+                <router-outlet></router-outlet>
+            </main>
+        </div>
+    </div>
+
+    <div class="desktop-spacer right"></div>
+
+    <app-layout-add-action-fab
+        class="hide-desktop"
+        *ngIf="vm.showAddButton"
+        [disabled]="!vm.isAuthInitialized"
+    ></app-layout-add-action-fab>
+
+    <app-layout-default-navbar [class.hide-mobile]="vm.isOverlayRoute"></app-layout-default-navbar>
+
+    <mat-menu #addMenu="matMenu" xPosition="before">
+        <a routerLink="/recipes/create" mat-menu-item>
+            <mat-icon>restaurant</mat-icon>
+            <div matListItemTitle>{{ 'recipes.create' | transloco }}</div>
+        </a>
+        <button mat-menu-item (click)="openCreateCookbookDialog()">
+            <mat-icon>menu_book</mat-icon>
+            <div matListItemTitle>{{ 'cookbooks.create' | transloco }}</div>
+        </button>
+    </mat-menu>
+
+    <mat-menu #accountMenu="matMenu" xPosition="before">
+        <div mat-menu-item class="account-menu-item">
+            <mat-icon>account_circle</mat-icon>
+            <div matListItemTitle>{{ vm.user?.name }}</div>
+            <div matListItemLine>{{ vm.user?.email }}</div>
+        </div>
+
+        <a mat-menu-item routerLink="/settings">
+            <mat-icon>settings</mat-icon>
+            <div matListItemTitle>
+                {{ 'pages.settings.title' | transloco }}
+                <mat-icon color="warn" *ngIf="vm.isUnverified">warning</mat-icon>
+            </div>
+        </a>
+
+        <a mat-menu-item routerLink="/admin" *ngIf="vm.user?.is_admin">
+            <mat-icon>admin_panel_settings</mat-icon>
+            <div matListItemTitle>
+                {{ 'pages.admin.area' | transloco }}
+            </div>
+        </a>
+
+        <a mat-menu-item routerLink="/recipes/trash">
+            <mat-icon>delete</mat-icon>
+            <div matListItemTitle>
+                {{ 'recipes.viewTrash' | transloco }}
+            </div>
+        </a>
+
+        <a mat-menu-item class="logout-button" (click)="doLogout()">
+            <mat-icon color="warn">logout</mat-icon>
+            <div matListItemTitle class="fg-warn">
+                {{ 'auth.logout' | transloco }}
+            </div>
+        </a>
+    </mat-menu>
+</ng-container>

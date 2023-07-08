@@ -1,0 +1,15 @@
+@use 'sass:map';
+@use 'theme';
+
+h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+
+  margin: 0 0 1em 0;
+  padding-bottom: 1em;
+
+  @include theme.apply() using ($variables) {
+    border-bottom: 1px solid rgba(map.get($variables, 'foreground'), 0.2);
+  }
+}

@@ -1,0 +1,24 @@
+<ng-container *ngIf="{ savingError: savingError$ | async, saving: saving | async } as vm">
+    <form [formGroup]="form" (submit)="onSubmit()">
+        <div class="form-container">
+            <mat-form-field appearance="outline" hideRequiredMarker subscriptSizing="dynamic">
+                <mat-icon matPrefix>drive_file_rename_outline</mat-icon>
+                <mat-label>{{ 'general.name' | transloco }}</mat-label>
+                <input matInput type="text" formControlName="name" />
+                <mat-error *ngIf="form.controls.name.getError('serverError') as serverError"
+                    >{{ serverError }}
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+            <button mat-raised-button color="primary" [disabled]="form.invalid || form.disabled || vm.saving">
+                {{ 'general.save' | transloco }}
+            </button>
+
+            <mat-spinner [diameter]="32" color="accent" *ngIf="vm.saving"></mat-spinner>
+
+            <span class="saving-error fg-warn" *ngIf="vm.savingError as savingError">{{ savingError }}</span>
+        </div>
+    </form>
+</ng-container>

@@ -1,0 +1,28 @@
+<ng-container *ngIf="{ saving: saving$ | async } as vm">
+    <h1 mat-dialog-title>
+        <mat-icon inline>menu_book</mat-icon>
+        {{ 'cookbooks.create' | transloco }}
+    </h1>
+
+    <div mat-dialog-content>
+        <form [formGroup]="form" (submit)="onSubmit()">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic" hideRequiredMarker>
+                <mat-label> {{ 'general.name' | transloco }} </mat-label>
+                <input matInput cdkFocusInitial formControlName="name" />
+                <mat-error *ngIf="form.controls.name.getError('serverError') as serverError">{{
+                    serverError
+                }}</mat-error>
+            </mat-form-field>
+        </form>
+    </div>
+
+    <div mat-dialog-actions align="end">
+        <mat-spinner [diameter]="24" *ngIf="vm.saving"></mat-spinner>
+
+        <button mat-button mat-dialog-close [disabled]="vm.saving">{{ 'actions.cancel' | transloco }}</button>
+
+        <button mat-button (click)="onSubmit()" color="primary" [disabled]="vm.saving || form.invalid" #submitButton>
+            {{ 'actions.create' | transloco }}
+        </button>
+    </div>
+</ng-container>

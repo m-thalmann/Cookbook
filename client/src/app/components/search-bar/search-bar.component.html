@@ -1,0 +1,22 @@
+<div class="container mat-elevation-z2" [class.disabled]="disabled">
+    <label [for]="inputId">
+        <mat-icon>search</mat-icon>
+    </label>
+    <input
+        (keydown.enter)="doSearch(searchBarInput.value)"
+        [placeholder]="'recipes.searchRecipes' | transloco"
+        [value]="initialValue"
+        [disabled]="disabled"
+        [id]="inputId"
+        #searchBarInput
+    />
+
+    <button
+        class="clear-button"
+        (click)="doClear()"
+        [disabled]="disabled"
+        *ngIf="clearable && searchBarInput.value.length > 0"
+    >
+        <mat-icon>clear</mat-icon>
+    </button>
+</div>

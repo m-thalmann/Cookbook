@@ -1,0 +1,20 @@
+<ng-container *ngIf="{ isDarkTheme: isDarkTheme$ | async } as vm">
+    <h2 mat-dialog-title>
+        <img src="assets/images/cookbook.svg" alt="Cookbook Logo" />
+        Cookbook
+        <small class="version">v{{ version }}</small>
+    </h2>
+
+    <div mat-dialog-content>
+        <p>
+            {{ 'about.description' | transloco }}
+        </p>
+
+        <a mat-flat-button href="https://github.com/m-thalmann/Cookbook" target="_blank" rel="noreferrer noopener">
+            <div class="button-wrapper">
+                <img src="assets/images/icons/github-{{ vm.isDarkTheme ? 'light' : 'dark' }}.svg" alt="GitHub Logo" />
+                GitHub
+            </div>
+        </a>
+    </div>
+</ng-container>

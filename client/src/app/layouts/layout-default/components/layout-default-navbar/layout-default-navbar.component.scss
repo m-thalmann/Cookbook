@@ -1,0 +1,131 @@
+@use 'sass:map';
+@use 'variables' as *;
+@use 'theme';
+@use 'mixins';
+
+mat-toolbar {
+  height: $navbar-height;
+  padding: 0;
+  overflow: hidden;
+
+  &,
+  &::before {
+    border-top-left-radius: 0.5em;
+    border-top-right-radius: 0.5em;
+  }
+
+  &::before {
+    display: block;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    @include theme.apply() using ($variables) {
+      background: linear-gradient(
+        50deg,
+        rgba(map.get($variables, 'primary'), 0.25) 0%,
+        rgba(map.get($variables, 'accent'), 0.25) 100%
+      );
+    }
+  }
+
+  nav {
+    width: 100%;
+    height: 100%;
+
+    ul {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      display: flex;
+
+      list-style-type: none;
+
+      li {
+        flex: 1;
+
+        > * {
+          height: 100%;
+          width: 100%;
+          background: transparent;
+          border-radius: 0;
+
+          &.current {
+            @include theme.apply() using ($variables) {
+              color: map.get($variables, 'accent');
+            }
+          }
+
+          .button-wrapper {
+            height: 100%;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            letter-spacing: normal;
+          }
+
+          span {
+            font-size: small;
+            line-height: 1.2;
+            font-weight: normal;
+
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height $transition-time;
+
+            @include mixins.font-handwriting();
+          }
+
+          &:hover,
+          &.current {
+            span {
+              max-height: 2em;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@include mixins.desktop() {
+  mat-toolbar {
+    height: 100%;
+    width: $navbar-desktop-width;
+
+    &,
+    &::before {
+      border-top-left-radius: unset;
+      border-bottom-right-radius: 0.5em;
+    }
+
+    display: flex;
+    flex-direction: column;
+
+    nav {
+      flex: 1;
+
+      ul {
+        flex-direction: column;
+
+        li {
+          flex: unset;
+
+          > * {
+            padding: 1.25em 0;
+
+            span {
+              max-height: 2em;
+              margin-top: 0.5em;
+            }
+          }
+        }
+      }
+    }
+  }
+}

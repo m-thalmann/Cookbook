@@ -1,0 +1,12 @@
+<section>
+    <h2>
+        <span>
+            <span *ngIf="showMy" class="title-my-text">{{ 'general.myPlural' | transloco }}</span>
+            {{ heading }}
+        </span>
+        <span class="spacer"></span>
+        <a [routerLink]="seeAllLink" class="see-all-link" *ngIf="seeAllLink">{{ 'actions.seeAll' | transloco }}</a>
+    </h2>
+
+    <ng-content></ng-content>
+</section>

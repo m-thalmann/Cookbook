@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>
+    <mat-icon color="primary">share</mat-icon>
+    <div class="title">
+        <span> {{ 'recipes.publicShare' | transloco }} </span>
+        <small>{{ recipe.name }} {{ 'general.by' | transloco }} {{ recipe.user.name }}</small>
+    </div>
+</h2>
+
+<div mat-dialog-content>
+    <div class="toggle-container">
+        <mat-slide-toggle [checked]="publicShareEnabled" [disabled]="updating" (change)="enabledChanged($event)">
+            {{ 'general.enabled' | transloco }}
+        </mat-slide-toggle>
+        <mat-spinner [diameter]="24" *ngIf="updating"></mat-spinner>
+    </div>
+
+    <div class="link-input" *ngIf="recipe.share_uuid">
+        <input [value]="shareLink" readonly [disabled]="updating" #linkInput />
+        <button
+            mat-icon-button
+            matSuffix
+            [disabled]="updating"
+            [cdkCopyToClipboard]="shareLink"
+            (cdkCopyToClipboardCopied)="linkCopied()"
+        >
+            <mat-icon>copy</mat-icon>
+        </button>
+    </div>
+</div>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close [disabled]="updating" cdkFocusInitial>{{ 'actions.ok' | transloco }}</button>
+</mat-dialog-actions>

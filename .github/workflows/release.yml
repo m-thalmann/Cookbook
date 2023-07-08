@@ -7,35 +7,57 @@ on:
 
 jobs:
   build_release:
-    name: build_release
+    name: Build release
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
       - name: Get version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-      - name: build
+
+      - name: Generate changelog
         run: |
-          npm i -g conventional-changelog-cli
-          cd client
-          npm i
-          npm run build-prod
-          cd ..
+          npm i -g conventional-changelog-cli@^3.0.0
           conventional-changelog -p angular -o CHANGELOG.md -r 2
           tail -n +2 CHANGELOG.md > CHANGELOG #remove first line
           sed -i -e '/./,$!d' -e :a -e '/^\n*$/{$d;N;ba' -e '}' CHANGELOG #trim empty lines
-          mkdir release
-          cp -r api ./release/api
-          cp -r client/dist/Cookbook ./release/client
-          cp README.md ./release
-          cp LICENSE ./release
-          cp -r docs ./release/docs
-          cd release
+      - name: Build client
+        run: |
+          cd client
+          cp src/assets/config.example.json src/assets/config.json
+          npm i
+          npm run build -- --base-href=/app/
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          extensions: ctype, curl, dom, fileinfo, filter, hash, json, libxml, mbstring, openssl, pcre, phar, session, tokenizer, xml, xmlwriter
+          ini-values: error_reporting=E_ALL
+          tools: composer:v2
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist --optimize-autoloader --no-dev
+        working-directory: ./api
+
+      - name: Bundle release
+        run: |
+          mkdir -p release/cookbook
+          cp -r api/* ./release/cookbook
+          cp ./api/.env.example ./release/cookbook/.env
+          cp -r client/dist/cookbook/* ./release/cookbook/public/app
+          cp README.md ./release/cookbook
+          cp LICENSE ./release/cookbook
+          cp -r docs ./release/cookbook/docs
+          cd release/cookbook
+          rm -rf tests phpunit.xml
+          find . -name '.git*' -delete
+          cd ..
           zip -r ../Cookbook-${{ steps.get_version.outputs.VERSION }}.zip *
-      - name: release
+
+      - name: Release
         uses: actions/create-release@v1
         id: create_release
         with:

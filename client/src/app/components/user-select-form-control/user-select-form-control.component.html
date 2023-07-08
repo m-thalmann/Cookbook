@@ -1,0 +1,27 @@
+<ng-container *ngIf="{ user: user$ | async, disabled: disabled$ | async } as vm">
+    <div class="container" [class.disabled]="vm.disabled" [class.has-error]="error">
+        <mat-icon inline>account_circle</mat-icon>
+
+        <div class="details">
+            <span class="name">
+                {{ vm.user?.name }}
+            </span>
+            <div class="email">
+                {{ vm.user?.email }}
+            </div>
+        </div>
+
+        <button
+            mat-mini-fab
+            (click)="openSearchUserDialog()"
+            type="button"
+            color="primary"
+            disableRipple
+            [disabled]="vm.disabled"
+        >
+            <mat-icon>person_search</mat-icon>
+        </button>
+    </div>
+
+    <div class="error" *ngIf="error">{{ error }}</div>
+</ng-container>

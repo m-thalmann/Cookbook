@@ -1,0 +1,60 @@
+<ng-container
+    *ngIf="{
+        activeTokens: activeTokens$ | async,
+        isLoading: isLoading$ | async,
+        isUpdating: isUpdating$ | async,
+        error: error$ | async
+    } as vm"
+>
+    <app-settings-section
+        class="active-sessions-section"
+        icon="devices"
+        [title]="
+            ('pages.settings.children.security.activeSessions' | transloco) +
+            (vm.activeTokens ? ' (' + vm.activeTokens.totalItems + ')' : '')
+        "
+    >
+        <button
+            mat-raised-button
+            color="warn"
+            [disabled]="vm.isLoading || vm.isUpdating"
+            (click)="logoutFromAllSessions()"
+        >
+            <mat-icon>power_settings_new</mat-icon> {{ 'pages.settings.children.security.logoutFromAll' | transloco }}
+        </button>
+
+        <app-error-display [error]="vm.error"></app-error-display>
+
+        <div class="active-sessions-container">
+            <app-security-settings-active-token-card
+                [token]="session"
+                [disabled]="!!vm.isLoading || !!vm.isUpdating"
+                (logout)="logoutFromSession(session.id)"
+                *ngFor="let session of vm.activeTokens?.items; trackBy: trackBySession"
+            ></app-security-settings-active-token-card>
+
+            <ng-container *ngIf="vm.activeTokens === null && !vm.error">
+                <app-security-settings-active-token-card
+                    [token]="null"
+                    *appRepeat="6"
+                ></app-security-settings-active-token-card>
+            </ng-container>
+        </div>
+
+        <button
+            mat-raised-button
+            class="load-more-button"
+            color="accent"
+            (click)="nextPage()"
+            [disabled]="vm.isLoading || vm.isUpdating"
+            *ngIf="vm.activeTokens?.hasMoreItems"
+        >
+            <div>
+                <mat-spinner *ngIf="vm.isLoading" [diameter]="20"></mat-spinner>
+                <mat-icon *ngIf="!vm.isLoading">south</mat-icon>
+
+                {{ 'actions.loadMore' | transloco }}
+            </div>
+        </button>
+    </app-settings-section>
+</ng-container>
