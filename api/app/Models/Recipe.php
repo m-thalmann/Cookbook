@@ -144,7 +144,7 @@ class Recipe extends BaseModel {
                 ->selectRaw('count(*) as amount')
                 ->orderBy('amount', $sortDir);
         } else {
-            $query->orderBy('id')->distinct();
+            $query->distinct();
         }
 
         $query->orderBy('category', 'asc');
