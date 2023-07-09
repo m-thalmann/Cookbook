@@ -20,9 +20,9 @@ class RecipeCategoryTest extends TestCase {
         $response->assertOk();
 
         $categories = $recipes
-            ->sortBy('id')
             ->pluck('category')
             ->unique()
+            ->sort()
             ->values()
             ->toArray();
 
@@ -51,9 +51,9 @@ class RecipeCategoryTest extends TestCase {
 
         $categories = $recipes
             ->merge($publicRecipes)
-            ->sortBy('id')
             ->pluck('category')
             ->unique()
+            ->sort()
             ->values()
             ->toArray();
 
@@ -79,9 +79,9 @@ class RecipeCategoryTest extends TestCase {
 
         $categories = $publicRecipes
             ->merge($privateRecipes)
-            ->sortBy('id')
             ->pluck('category')
             ->unique()
+            ->sort()
             ->values()
             ->toArray();
 

@@ -5,7 +5,7 @@
         </ng-template>
     </app-error-display>
 
-    <div class="cards">
+    <div class="cards" *ngIf="!vm.error">
         <ng-container *ngIf="vm.dashboard?.body?.data as data; else loading">
             <div class="card">
                 <div class="amount">
@@ -89,9 +89,9 @@
                 </ul>
             </div>
         </ng-container>
+
+        <ng-template #loading>
+            <app-skeleton *appRepeat="5"></app-skeleton>
+        </ng-template>
     </div>
 </ng-container>
-
-<ng-template #loading>
-    <app-skeleton *appRepeat="5"></app-skeleton>
-</ng-template>

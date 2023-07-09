@@ -23,9 +23,9 @@ class CookbookCategoryTest extends TestCase {
 
         $response->assertJson([
             'data' => $recipes
-                ->sortBy('id')
                 ->pluck('category')
                 ->unique()
+                ->sort()
                 ->values()
                 ->toArray(),
         ]);
