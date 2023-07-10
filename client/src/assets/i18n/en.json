@@ -173,7 +173,7 @@
         "dashboard": {
           "administrators": "Administrators",
           "api": "API",
-          "environment": "Umgebung",
+          "environment": "Environment",
           "fileSizes": {
             "b": "Bytes",
             "kb": "KB",

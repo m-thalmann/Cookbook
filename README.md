@@ -8,7 +8,7 @@
 <img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/m-thalmann/cookbook">
 <img alt="GitHub issues" src="https://img.shields.io/github/issues/m-thalmann/cookbook">
 <a href="https://codecov.io/gh/m-thalmann/Cookbook">
-   <img src="https://codecov.io/gh/m-thalmann/Cookbook/branch/master/graph/badge.svg?token=KO36KNI37E"/>
+   <img src="https://codecov.io/gh/m-thalmann/Cookbook/branch/main/graph/badge.svg?token=KO36KNI37E"/>
 </a>
 </p>
 
