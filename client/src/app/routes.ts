@@ -9,6 +9,7 @@ export default [
 
   {
     path: 'verify-email/:userId/:token',
+    canActivate: [AuthGuard],
     loadComponent: () =>
       import('./pages/auth/verify-email-page/verify-email-page.component').then(
         (comp) => comp.VerifyEmailPageComponent

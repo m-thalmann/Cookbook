@@ -1,4 +1,4 @@
-<div class="container mat-elevation-z2" [class.disabled]="disabled">
+<form class="container mat-elevation-z2" [class.disabled]="disabled" (submit)="$event.preventDefault()">
     <label [for]="inputId">
         <mat-icon>search</mat-icon>
     </label>
@@ -13,10 +13,11 @@
 
     <button
         class="clear-button"
+        type="button"
         (click)="doClear()"
         [disabled]="disabled"
         *ngIf="clearable && searchBarInput.value.length > 0"
     >
         <mat-icon>clear</mat-icon>
     </button>
-</div>
+</form>

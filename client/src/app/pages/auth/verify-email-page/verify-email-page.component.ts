@@ -38,7 +38,7 @@ export class VerifyEmailPageComponent {
     const expires = routeSnapshot.queryParams['expires'];
     const signature = routeSnapshot.queryParams['signature'];
 
-    if (userId !== this.auth.user?.id) {
+    if (parseInt(userId) !== this.auth.user?.id) {
       this.snackbar.warn('messages.errors.wrongUserForVerification', { translateMessage: true });
       await this.router.navigateByUrl('/');
       return;

@@ -8,7 +8,7 @@
 <img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/m-thalmann/cookbook">
 <img alt="GitHub issues" src="https://img.shields.io/github/issues/m-thalmann/cookbook">
 <a href="https://codecov.io/gh/m-thalmann/Cookbook">
-   <img src="https://codecov.io/gh/m-thalmann/Cookbook/branch/master/graph/badge.svg?token=KO36KNI37E"/>
+   <img src="https://codecov.io/gh/m-thalmann/Cookbook/branch/main/graph/badge.svg?token=KO36KNI37E"/>
 </a>
 </p>
 
@@ -23,8 +23,11 @@ Cookbook is a web application that stores all your favorite recipes. Self-hostin
 ### Requirements
 
 - PHP ^8.1
-- Composer
+- Composer (if you want to execute certain commands on the server)
 - MySQL (or almost any other SQL-Server)
+- Apache Webserver
+  - Alternatively any other webserver, in which case you have to replicate the behavior of the `.htaccess` files in `api/public` and `client/src/.htaccess`
+  - Make sure you enable the `mod-rewrite` for Apache and set `AllowOverride All` in order for the `.htaccess` files to work.
 
 To check the PHP requirements run the following command inside of the release folder (or the api folder):
 
@@ -37,11 +40,11 @@ composer check-platform-reqs
 1. Download the `Cookbook-<version>.zip` file from the release
 1. Create a MySQL-database (alternatively a SQLite-database can be used; see [Development](#development))
 1. Host the `public`-directory publicly on an Apache-Webserver
-   - Make sure you enabled `AllowOverride All` in order for the `.htaccess` file to work
 1. Update the `.env` and `public/app/assets/config.json` configuration files if necessary (see [Configuration](#configuration))
 1. Run the following command to set the application key: `php artisan key:generate`
    - Alternatively you can set the `APP_KEY` manually inside of the `.env` file
-1. Run the following command to setup the database: `php artisan migrate`
+1. Run the following command to setup the database: `php artisan migrate --seed`
+   - This also creates the administrator user (you can then update the details of the user)
 1. Link the `public` storage: `php artisan storage:link`
    - See: https://laravel.com/docs/10.x/filesystem#the-public-disk
 1. Run the following commands (optional; for better performance):
@@ -62,8 +65,8 @@ composer check-platform-reqs
    1. Install the composer dependencies using `composer install --no-interaction --no-progress --prefer-dist --optimize-autoloader --no-dev`
    1. Copy `.env.example` to `.env` and update the file if necessary (see section [Configuration](#configuration))
    1. Host the `public`-directory publicly on an Apache-Webserver
-      - Make sure you enabled `AllowOverride All` in order for the `.htaccess` file to work
-   1. Run the following command to setup the database: `php artisan migrate`
+   1. Run the following command to setup the database: `php artisan migrate --seed`
+      - This also creates the administrator user (you can then update the details of the user)
    1. Link the `public` storage: `php artisan storage:link`
    - See: https://laravel.com/docs/10.x/filesystem#the-public-disk
    1. Run the same optional commands from above
@@ -72,7 +75,6 @@ composer check-platform-reqs
    1. Install the npm dependencies using `npm install`
    1. Build the client `npm run build`
    1. Host the created `client/dist/cookbook`-folder publicly
-      - Make sure you enabled `AllowOverride All` in order for the `.htaccess` file to work
       - Create a configuration file by copying the file `client/dist/Cookbook/assets/config.example.json` to `client/dist/Cookbook/assets/config.json` and setting the values accordingly (see section [Configuration](#configuration))
 
 ### Setting up the cronjob
@@ -161,7 +163,8 @@ To add a new translation:
 1. Copy the `.env.development` to `.env` and set values if necessary (don't set any database settings)
 1. Create the `api/database/database.sqlite` file (empty)
 1. Set the application key: `php artisan key:generate`
-1. Run the following command to setup the database: `php artisan migrate`
+1. Run the following command to setup the database: `php artisan migrate --seed`
+   - This also creates the administrator user (you can then update the details of the user)
 1. Link the `public` storage: `php artisan storage:link`
    - See: https://laravel.com/docs/10.x/filesystem#the-public-disk
 1. Start: `php artisan serve`
