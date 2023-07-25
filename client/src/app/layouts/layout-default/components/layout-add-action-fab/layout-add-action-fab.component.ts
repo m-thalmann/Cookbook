@@ -4,6 +4,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
 import { CreateCookbookDialogComponent } from 'src/app/pages/cookbooks/components/create-cookbook-dialog/create-cookbook-dialog.component';
 
@@ -12,7 +13,7 @@ import { CreateCookbookDialogComponent } from 'src/app/pages/cookbooks/component
   templateUrl: './layout-add-action-fab.component.html',
   styleUrls: ['./layout-add-action-fab.component.scss'],
   standalone: true,
-  imports: [CommonModule, TranslocoModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule, RouterLink, TranslocoModule, MatButtonModule, MatIconModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LayoutAddActionFabComponent {
