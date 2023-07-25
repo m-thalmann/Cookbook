@@ -22,6 +22,7 @@ return [
         'too_many_requests' =>
             'Zu viele Anfragen. Bitte warte bevor du es erneut versuchst.',
         'unauthorized' => 'Nicht autorisiert.',
+        'invalid_signature' => 'Ungültige Signatur.',
     ],
 
     'not_available_in_demo' =>

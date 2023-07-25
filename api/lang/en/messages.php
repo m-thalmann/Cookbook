@@ -22,6 +22,7 @@ return [
         'too_many_requests' =>
             'Too many requests. Please wait before trying again.',
         'unauthorized' => 'Unauthorized.',
+        'invalid_signature' => 'Invalid signature.',
     ],
 
     'not_available_in_demo' => 'This action is not available in demo mode.',
