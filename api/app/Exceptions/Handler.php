@@ -6,6 +6,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
+use Illuminate\Routing\Exceptions\InvalidSignatureException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use PDOException;
 use Throwable;
@@ -68,6 +69,10 @@ class Handler extends ExceptionHandler {
                 $e->guards(),
                 $e->redirectTo()
             );
+        }
+
+        if ($e instanceof InvalidSignatureException) {
+            $e = new HttpException(403, __('messages.http.invalid_signature'));
         }
 
         if ($e instanceof PDOException && !config('app.debug')) {

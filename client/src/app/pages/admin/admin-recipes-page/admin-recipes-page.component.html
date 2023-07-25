@@ -4,7 +4,6 @@
         filters: filters$ | async,
         filteredUser: filteredUser$ | async,
         filteredUserLoading: filteredUserLoading$ | async,
-        paginationOptions: paginationOptions$ | async,
         error: error$ | async,
         loading: loading$ | async,
         saving: saving$ | async
@@ -85,7 +84,7 @@
                         <td mat-cell *matCellDef="let recipe">
                             {{ recipe.user.name }}
                             <a
-                                [href]="'/admin/users?search=' + recipe.user.email"
+                                [href]="'admin/users?search=' + recipe.user.email"
                                 target="_blank"
                                 rel="noopener"
                                 class="open-details-link"
@@ -148,8 +147,10 @@
 
             <mat-paginator
                 [length]="vm.recipes?.body?.meta?.total"
-                [pageIndex]="vm.paginationOptions?.page !== null ? vm.paginationOptions!.page - 1 : null"
-                [pageSize]="vm.paginationOptions?.perPage"
+                [pageIndex]="
+                    vm.filters?.paginationOptions?.page !== null ? vm.filters!.paginationOptions!.page - 1 : null
+                "
+                [pageSize]="vm.filters?.paginationOptions?.perPage"
                 [pageSizeOptions]="[10, 25, 50, 100]"
                 showFirstLastButtons
                 (page)="onPagination($event)"

@@ -11,7 +11,6 @@ import {
   BehaviorSubject,
   Observable,
   combineLatest,
-  debounceTime,
   distinctUntilChanged,
   map,
   shareReplay,
@@ -39,6 +38,8 @@ interface AvailableSortOption {
   nameTranslateKey: string;
   icon: string;
 }
+
+type Filters = RecipeFilters & { paginationOptions: PaginationOptions };
 
 @Component({
   selector: 'app-recipe-search',
@@ -96,12 +97,7 @@ export class RecipeSearchComponent {
 
   recipesLoading$ = new BehaviorSubject<boolean>(true);
 
-  paginationOptions$ = new BehaviorSubject<PaginationOptions>({ page: 1, perPage: 12 });
-
-  filters$: Observable<RecipeFilters> = this.route.queryParams.pipe(
-    tap(() => {
-      this.paginationOptions$.next({ page: 1, perPage: this.paginationOptions$.value.perPage });
-    }),
+  filters$: Observable<Filters> = this.route.queryParams.pipe(
     map((params) => {
       let all: boolean | undefined = undefined;
       let sort: SortOption;
@@ -120,14 +116,24 @@ export class RecipeSearchComponent {
         sort.dir = params['sort-dir'] === 'desc' ? 'desc' : 'asc';
       }
 
-      return { all: all, search: params['search'], category: params['category'], sort: [sort] };
+      const paginationOptions: PaginationOptions = {
+        page: typeof params['page'] !== 'undefined' ? parseInt(params['page']) : 1,
+        perPage: typeof params['per-page'] !== 'undefined' ? parseInt(params['per-page']) : 12,
+      };
+
+      return {
+        all: all,
+        search: params['search'],
+        category: params['category'],
+        sort: [sort],
+        paginationOptions: paginationOptions,
+      } as Filters;
     })
   );
 
-  recipes$ = combineLatest([this.filters$, this.paginationOptions$, this.auth.user$]).pipe(
-    debounceTime(5), // to prevent reloading if filter is changed since then pagination is changed as well
+  recipes$ = combineLatest([this.filters$, this.auth.user$]).pipe(
     tap(() => this.recipesLoading$.next(true)),
-    switchMap(([filters, paginationOptions, authUser]) => this.fetchRecipesFn(filters, paginationOptions, !!authUser)),
+    switchMap(([filters, authUser]) => this.fetchRecipesFn(filters, filters.paginationOptions, !!authUser)),
     tap(() => this.recipesLoading$.next(false)),
     handledErrorInterceptor(),
     shareReplay({ bufferSize: 1, refCount: true })
@@ -180,10 +186,14 @@ export class RecipeSearchComponent {
   }
 
   onPagination(page: PageEvent) {
-    this.paginationOptions$.next({ page: page.pageIndex + 1, perPage: page.pageSize });
+    this.applyFilterParams({ page: (page.pageIndex + 1).toString(), 'per-page': page.pageSize.toString() });
   }
 
-  private applyFilterParams(params: { [key: string]: string | null }) {
+  private applyFilterParams(params: { [key: string]: string | null }, resetPage = true) {
+    if (resetPage && !('page' in params)) {
+      params['page'] = null;
+    }
+
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
 

@@ -105,6 +105,33 @@ class EmailVerificationTest extends TestCase {
         $this->assertFalse($user->fresh()->hasVerifiedEmail());
     }
 
+    public function testFailsWithValidHashAndInvalidSignature() {
+        $user = User::factory()->create([
+            'email_verified_at' => null,
+        ]);
+
+        TokenAuth::actingAs($user);
+
+        Event::fake();
+
+        $verificationUrl = URL::temporarySignedRoute(
+            'api.v1.auth.emailVerification.verify',
+            now()->subMinutes(1),
+            ['id' => $user->id, 'hash' => sha1($user->email)]
+        );
+
+        $parsedUrl = parse_url($verificationUrl);
+
+        $response = $this->postJson(
+            "{$parsedUrl['path']}?{$parsedUrl['query']}"
+        );
+
+        $response->assertForbidden();
+
+        Event::assertNotDispatched(Verified::class);
+        $this->assertFalse($user->fresh()->hasVerifiedEmail());
+    }
+
     public function testFailsForOtherUser() {
         $user = User::factory()->create();
 

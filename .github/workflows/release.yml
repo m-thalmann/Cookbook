@@ -47,7 +47,7 @@ jobs:
           mkdir -p release/cookbook
           cp -r api/* ./release/cookbook
           cp ./api/.env.example ./release/cookbook/.env
-          cp -r client/dist/cookbook/* ./release/cookbook/public/app
+          cp -r client/dist/cookbook/. ./release/cookbook/public/app
           cp README.md ./release/cookbook
           cp LICENSE ./release/cookbook
           cp -r docs ./release/cookbook/docs
