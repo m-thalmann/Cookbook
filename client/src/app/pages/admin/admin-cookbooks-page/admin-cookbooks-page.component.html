@@ -2,7 +2,6 @@
     *ngIf="{
         cookbooks: cookbooks$ | async,
         filters: filters$ | async,
-        paginationOptions: paginationOptions$ | async,
         error: error$ | async,
         loading: loading$ | async,
         saving: saving$ | async,
@@ -122,8 +121,10 @@
 
             <mat-paginator
                 [length]="vm.cookbooks?.body?.meta?.total"
-                [pageIndex]="vm.paginationOptions?.page !== null ? vm.paginationOptions!.page - 1 : null"
-                [pageSize]="vm.paginationOptions?.perPage"
+                [pageIndex]="
+                    vm.filters?.paginationOptions?.page !== null ? vm.filters!.paginationOptions!.page - 1 : null
+                "
+                [pageSize]="vm.filters?.paginationOptions?.perPage"
                 [pageSizeOptions]="[10, 25, 50, 100]"
                 showFirstLastButtons
                 (page)="onPagination($event)"

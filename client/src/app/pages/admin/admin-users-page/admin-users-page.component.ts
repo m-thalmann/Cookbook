@@ -32,6 +32,8 @@ import { CreateUserDialogComponent } from './components/create-user-dialog/creat
 
 const Logger = new LoggerClass('Admin');
 
+type Filters = UserFilters & { paginationOptions: PaginationOptions };
+
 @Component({
   selector: 'app-admin-users-page',
   standalone: true,
@@ -64,7 +66,7 @@ export class AdminUsersPageComponent {
 
   private resetList$ = new EventEmitter<void>();
 
-  filters$: Observable<UserFilters> = this.route.queryParams.pipe(
+  filters$: Observable<Filters> = this.route.queryParams.pipe(
     map((params) => {
       let sort: SortOption;
 
@@ -78,24 +80,25 @@ export class AdminUsersPageComponent {
         sort.dir = params['sort-dir'] === 'desc' ? 'desc' : 'asc';
       }
 
-      return { search: params['search'], sort: [sort] };
+      const paginationOptions: PaginationOptions = {
+        page: typeof params['page'] !== 'undefined' ? parseInt(params['page']) : 1,
+        perPage: typeof params['per-page'] !== 'undefined' ? parseInt(params['per-page']) : 10,
+      };
+
+      return {
+        search: params['search'],
+        sort: [sort],
+        paginationOptions: paginationOptions,
+      } as Filters;
     })
   );
 
-  paginationOptions$ = new BehaviorSubject<PaginationOptions>({ page: 1, perPage: 10 });
-
   users$ = combineLatest([this.filters$, this.auth.user$, this.resetList$.pipe(startWith(undefined))]).pipe(
-    switchMap(([filters, _auth, _reset]) => {
-      this.paginationOptions$.next({ ...this.paginationOptions$.value, page: 1 });
-
-      return this.paginationOptions$.pipe(
-        tap(() => this.loading$.next(true)),
-        switchMap((paginationOptions) =>
-          this.api.users.getList({ search: filters.search, sort: filters.sort, pagination: paginationOptions })
-        ),
-        tap(() => this.loading$.next(false))
-      );
-    }),
+    tap(() => this.loading$.next(true)),
+    switchMap(([filters]) =>
+      this.api.users.getList({ search: filters.search, sort: filters.sort, pagination: filters.paginationOptions })
+    ),
+    tap(() => this.loading$.next(false)),
     handledErrorInterceptor(),
     shareReplay({ bufferSize: 1, refCount: true })
   );
@@ -127,7 +130,7 @@ export class AdminUsersPageComponent {
   }
 
   onPagination(page: PageEvent) {
-    this.paginationOptions$.next({ page: page.pageIndex + 1, perPage: page.pageSize });
+    this.applyFilterParams({ page: (page.pageIndex + 1).toString(), 'per-page': page.pageSize.toString() });
   }
 
   async updateEmailVerified(user: DetailedUser) {
@@ -213,7 +216,7 @@ export class AdminUsersPageComponent {
 
     try {
       await toPromise(this.api.users.delete(userId));
-      this.resetList$.next();
+      this.resetList$.emit();
 
       this.snackbar.info('messages.userRemoved', { translateMessage: true });
     } catch (e) {
@@ -234,7 +237,7 @@ export class AdminUsersPageComponent {
 
     try {
       await toPromise(this.api.users.update(user.id, data));
-      this.resetList$.next();
+      this.resetList$.emit();
 
       this.snackbar.info('messages.userUpdated', { translateMessage: true });
     } catch (e) {
@@ -246,7 +249,11 @@ export class AdminUsersPageComponent {
     this.saving$.next(false);
   }
 
-  private applyFilterParams(params: { [key: string]: string | null }) {
+  private applyFilterParams(params: { [key: string]: string | null }, resetPage = true) {
+    if (resetPage && !('page' in params)) {
+      params['page'] = null;
+    }
+
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
 }

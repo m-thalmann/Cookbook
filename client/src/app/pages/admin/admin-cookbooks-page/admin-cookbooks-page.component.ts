@@ -21,6 +21,8 @@ import { SortOption } from 'src/app/core/models/sort-option';
 import { I18nDatePipe } from 'src/app/core/pipes/i18n-date.pipe';
 import { handledErrorInterceptor } from 'src/app/core/rxjs/handled-error-interceptor';
 
+type Filters = CookbookFilters & { paginationOptions: PaginationOptions };
+
 @Component({
   selector: 'app-admin-cookbooks-page',
   standalone: true,
@@ -48,7 +50,7 @@ export class AdminCookbooksPageComponent {
   loading$ = new BehaviorSubject<boolean>(true);
   saving$ = new BehaviorSubject<boolean>(false);
 
-  filters$: Observable<CookbookFilters> = this.route.queryParams.pipe(
+  filters$: Observable<Filters> = this.route.queryParams.pipe(
     map((params) => {
       let sort: SortOption;
 
@@ -62,24 +64,23 @@ export class AdminCookbooksPageComponent {
         sort.dir = params['sort-dir'] === 'desc' ? 'desc' : 'asc';
       }
 
-      return { search: params['search'], sort: [sort] };
+      const paginationOptions: PaginationOptions = {
+        page: typeof params['page'] !== 'undefined' ? parseInt(params['page']) : 1,
+        perPage: typeof params['per-page'] !== 'undefined' ? parseInt(params['per-page']) : 10,
+      };
+
+      return {
+        search: params['search'],
+        sort: [sort],
+        paginationOptions: paginationOptions,
+      } as Filters;
     })
   );
 
-  paginationOptions$ = new BehaviorSubject<PaginationOptions>({ page: 1, perPage: 10 });
-
   cookbooks$ = combineLatest([this.filters$, this.auth.user$]).pipe(
-    switchMap(([filters, _]) => {
-      this.paginationOptions$.next({ ...this.paginationOptions$.value, page: 1 });
-
-      return this.paginationOptions$.pipe(
-        tap(() => this.loading$.next(true)),
-        switchMap((paginationOptions) =>
-          this.api.cookbooks.getList(true, paginationOptions, filters.sort, filters.search)
-        ),
-        tap(() => this.loading$.next(false))
-      );
-    }),
+    tap(() => this.loading$.next(true)),
+    switchMap(([filters]) => this.api.cookbooks.getList(true, filters.paginationOptions, filters.sort, filters.search)),
+    tap(() => this.loading$.next(false)),
     handledErrorInterceptor(),
     shareReplay({ bufferSize: 1, refCount: true })
   );
@@ -108,14 +109,18 @@ export class AdminCookbooksPageComponent {
   }
 
   onPagination(page: PageEvent) {
-    this.paginationOptions$.next({ page: page.pageIndex + 1, perPage: page.pageSize });
+    this.applyFilterParams({ page: (page.pageIndex + 1).toString(), 'per-page': page.pageSize.toString() });
   }
 
   trackByCookbook(index: number, cookbook: CookbookWithCounts) {
     return cookbook.id;
   }
 
-  private applyFilterParams(params: { [key: string]: string | null }) {
+  private applyFilterParams(params: { [key: string]: string | null }, resetPage = true) {
+    if (resetPage && !('page' in params)) {
+      params['page'] = null;
+    }
+
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
 }

@@ -3,7 +3,6 @@
         recipes: recipes$ | async,
         categories: categories$ | async,
         filters: filters$ | async,
-        paginationOptions: paginationOptions$ | async,
         recipesLoading: recipesLoading$ | async,
         isAuthenticated: auth.isAuthenticated$ | async,
 
@@ -125,8 +124,8 @@
     <mat-paginator
         class="mat-elevation-z1"
         [length]="vm.recipes?.body?.meta?.total"
-        [pageIndex]="vm.paginationOptions?.page !== null ? vm.paginationOptions!.page - 1 : null"
-        [pageSize]="vm.paginationOptions?.perPage"
+        [pageIndex]="vm.filters?.paginationOptions?.page !== null ? vm.filters!.paginationOptions!.page - 1 : null"
+        [pageSize]="vm.filters?.paginationOptions?.perPage"
         [pageSizeOptions]="[6, 12, 18, 24, 30]"
         showFirstLastButtons
         (page)="onPagination($event)"

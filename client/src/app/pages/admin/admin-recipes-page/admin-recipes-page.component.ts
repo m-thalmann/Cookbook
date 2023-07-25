@@ -11,7 +11,7 @@ import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
-import { BehaviorSubject, Observable, combineLatest, map, shareReplay, startWith, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest, map, shareReplay, switchMap, tap } from 'rxjs';
 import { ErrorDisplayComponent } from 'src/app/components/error-display/error-display.component';
 import { SettingsSectionComponent } from 'src/app/components/settings-section/settings-section.component';
 import { ApiService } from 'src/app/core/api/api.service';
@@ -29,6 +29,8 @@ import { SnackbarService } from 'src/app/core/services/snackbar.service';
 import { AdminRecipesUserFilterComponent } from './components/admin-recipes-user-filter/admin-recipes-user-filter.component';
 
 const Logger = new LoggerClass('Admin');
+
+type Filters = RecipeFilters & { paginationOptions: PaginationOptions };
 
 @Component({
   selector: 'app-admin-recipes-page',
@@ -65,7 +67,7 @@ export class AdminRecipesPageComponent {
   filteredUser$ = new BehaviorSubject<User | null>(null);
   filteredUserLoading$ = new BehaviorSubject<boolean>(false);
 
-  filters$: Observable<RecipeFilters> = this.route.queryParams.pipe(
+  filters$: Observable<Filters> = this.route.queryParams.pipe(
     map((params) => {
       let sort: SortOption;
 
@@ -79,14 +81,24 @@ export class AdminRecipesPageComponent {
         sort.dir = params['sort-dir'] === 'desc' ? 'desc' : 'asc';
       }
 
-      return { search: params['search'], sort: [sort], userId: params['user-id'] };
+      const paginationOptions: PaginationOptions = {
+        page: typeof params['page'] !== 'undefined' ? parseInt(params['page']) : 1,
+        perPage: typeof params['per-page'] !== 'undefined' ? parseInt(params['per-page']) : 10,
+      };
+
+      return {
+        search: params['search'],
+        sort: [sort],
+        userId: 'user-id' in params ? parseInt(params['user-id']) : undefined,
+        paginationOptions: paginationOptions,
+      } as Filters;
     }),
     tap(async (filters) => {
       if (filters.userId === undefined) {
         this.filteredUser$.next(null);
         return;
       }
-      if (filters.userId === this.filteredUser$.value?.id.toString()) {
+      if (filters.userId === this.filteredUser$.value?.id) {
         return;
       }
 
@@ -105,33 +117,25 @@ export class AdminRecipesPageComponent {
     shareReplay({ bufferSize: 1, refCount: true })
   );
 
-  paginationOptions$ = new BehaviorSubject<PaginationOptions>({ page: 1, perPage: 10 });
-
   recipes$ = combineLatest([this.filters$, this.auth.user$]).pipe(
-    switchMap(([filters, _]) => {
-      this.paginationOptions$.next({ ...this.paginationOptions$.value, page: 1 });
+    tap(() => this.loading$.next(true)),
+    switchMap(([filters]) => {
+      let filtersOptions: FilterOption[] = [];
 
-      return combineLatest([this.paginationOptions$, this.reloadView$.pipe(startWith(undefined))]).pipe(
-        tap(() => this.loading$.next(true)),
-        switchMap(([paginationOptions]) => {
-          let filtersOptions: FilterOption[] = [];
+      if (filters.userId !== undefined) {
+        filtersOptions.push({ column: 'user_id', value: filters.userId });
+      }
 
-          if (filters.userId !== undefined) {
-            filtersOptions.push({ column: 'user_id', value: filters.userId });
-          }
-
-          return this.api.recipes.getList({
-            all: true,
-            includeDeleted: true,
-            search: filters.search,
-            filters: filtersOptions,
-            sort: filters.sort,
-            pagination: paginationOptions,
-          });
-        }),
-        tap(() => this.loading$.next(false))
-      );
+      return this.api.recipes.getList({
+        all: true,
+        includeDeleted: true,
+        search: filters.search,
+        filters: filtersOptions,
+        sort: filters.sort,
+        pagination: filters.paginationOptions,
+      });
     }),
+    tap(() => this.loading$.next(false)),
     handledErrorInterceptor(),
     shareReplay({ bufferSize: 1, refCount: true })
   );
@@ -161,7 +165,7 @@ export class AdminRecipesPageComponent {
   }
 
   onPagination(page: PageEvent) {
-    this.paginationOptions$.next({ page: page.pageIndex + 1, perPage: page.pageSize });
+    this.applyFilterParams({ page: (page.pageIndex + 1).toString(), 'per-page': page.pageSize.toString() });
   }
 
   onUserFilter(user: User | null) {
@@ -195,7 +199,11 @@ export class AdminRecipesPageComponent {
     return recipe.id;
   }
 
-  private applyFilterParams(params: { [key: string]: string | null }) {
+  private applyFilterParams(params: { [key: string]: string | null }, resetPage = true) {
+    if (resetPage && !('page' in params)) {
+      params['page'] = null;
+    }
+
     this.router.navigate([], { queryParams: params, queryParamsHandling: 'merge' });
   }
 }
