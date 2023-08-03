@@ -15,7 +15,7 @@ class OptionalAuthenticate extends Authenticate {
      */
     public function handle($request, Closure $next, ...$guards) {
         if ($request->bearerToken() !== null) {
-            return parent::handle($request, $next, $guards);
+            return parent::handle($request, $next, ...$guards);
         }
 
         return $next($request);

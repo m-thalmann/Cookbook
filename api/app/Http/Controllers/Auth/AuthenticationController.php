@@ -68,6 +68,10 @@ class AuthenticationController extends Controller {
             ->where('email', $credentials['email'])
             ->first();
 
+        if (app()->environment('demo') && $user->email !== User::DEMO_EMAIL) {
+            throw UnauthorizedHttpException::credentials(__('auth.failed'));
+        }
+
         if (!$user || !Hash::check($credentials['password'], $user->password)) {
             throw UnauthorizedHttpException::credentials(__('auth.failed'));
         }
