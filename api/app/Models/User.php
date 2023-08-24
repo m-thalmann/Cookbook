@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use TokenAuth\Traits\HasAuthTokens;
+use TokenAuth\Concerns\HasAuthTokens;
 
 class User extends Authenticatable implements MustVerifyEmail {
     use HasFactory,

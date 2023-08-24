@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
 use ReflectionClass;
 use Tests\TestCase;
-use TokenAuth\TokenAuth;
+use TokenAuth\Facades\TokenAuth;
 
 class EmailVerificationTest extends TestCase {
     public function testSucceedsWithValidHashAndSignature() {

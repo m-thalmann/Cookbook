@@ -2,9 +2,11 @@
 
 namespace Tests\Feature\Api\Auth;
 
+use App\Models\AuthToken;
 use Illuminate\Support\Arr;
 use Tests\TestCase;
-use TokenAuth\TokenAuth;
+use TokenAuth\Enums\TokenType;
+use TokenAuth\Facades\TokenAuth;
 
 class AuthTokenTest extends TestCase {
     public function testShowAllRefreshTokensForUserSucceeds() {
@@ -14,28 +16,27 @@ class AuthTokenTest extends TestCase {
         $createdTokens = 2;
 
         for ($i = 0; $i < $createdTokens; $i++) {
-            $user->createToken(TokenAuth::TYPE_REFRESH, 'TestToken');
+            $user->createToken(TokenType::REFRESH)->build();
         }
 
         // access tokens should not be included
-        $user->createToken(TokenAuth::TYPE_ACCESS, 'TestToken');
+        $user->createToken(TokenType::ACCESS)->build();
 
         // Tokens for other users should not be included
-        $otherUser->createToken(TokenAuth::TYPE_REFRESH, 'TestToken');
+        $otherUser->createToken(TokenType::REFRESH)->build();
 
         // Revoked tokens should not be included
-        $revokedToken = $user->createToken(
-            TokenAuth::TYPE_REFRESH,
-            'TestToken'
-        );
-        $revokedToken->token->revoke()->save();
+        $revokedToken = $user
+            ->createToken(TokenType::REFRESH)
+            ->build(save: false);
+        $revokedToken->token->revoke()->store();
 
         // Expired tokens should not be included
-        $expiredToken = $user->createToken(
-            TokenAuth::TYPE_REFRESH,
-            'TestToken'
-        );
-        $expiredToken->token->update(['expires_at' => now()->subMinute()]);
+        $expiredToken = $user
+            ->createToken(TokenType::REFRESH)
+            ->build(save: false);
+        $expiredToken->token->expires_at = now()->subMinute();
+        $expiredToken->token->store();
 
         $response = $this->getJson('/api/v1/auth/tokens');
 
@@ -45,8 +46,8 @@ class AuthTokenTest extends TestCase {
             [
                 'id',
                 'type',
-                'tokenable_type',
-                'tokenable_id',
+                'authenticatable_type',
+                'authenticatable_id',
                 'group_id',
                 'name',
                 'abilities' => [],
@@ -62,7 +63,11 @@ class AuthTokenTest extends TestCase {
     public function testShowSpecificAccessTokenForUserSucceeds() {
         $user = $this->createAndLoginUser();
 
-        $token = $user->createToken(TokenAuth::TYPE_ACCESS, 'TestToken')->token;
+        /**
+         * @var AuthToken
+         */
+        $token = $user->createToken(TokenType::ACCESS)->build()->token;
+        $token->unsetRelation('authenticatable');
 
         $response = $this->getJson("/api/v1/auth/tokens/{$token->id}");
 
@@ -79,8 +84,11 @@ class AuthTokenTest extends TestCase {
     public function testShowSpecificRefreshTokenForUserSucceeds() {
         $user = $this->createAndLoginUser();
 
-        $token = $user->createToken(TokenAuth::TYPE_REFRESH, 'TestToken')
-            ->token;
+        /**
+         * @var AuthToken
+         */
+        $token = $user->createToken(TokenType::REFRESH)->build()->token;
+        $token->unsetRelation('authenticatable');
 
         $response = $this->getJson("/api/v1/auth/tokens/{$token->id}");
 
@@ -98,8 +106,7 @@ class AuthTokenTest extends TestCase {
         $user1 = $this->createUser();
         $user2 = $this->createAndLoginUser();
 
-        $tokenId = $user1->createToken(TokenAuth::TYPE_ACCESS, 'TestToken')
-            ->token->id;
+        $tokenId = $user1->createToken(TokenType::ACCESS)->build()->token->id;
 
         $response = $this->getJson("/api/v1/auth/tokens/{$tokenId}");
         $response->assertNotFound();
@@ -111,37 +118,43 @@ class AuthTokenTest extends TestCase {
 
         $createdTokens = 10;
 
-        $groupId = TokenAuth::getNextTokenGroupId($user);
+        $groupId = AuthToken::generateGroupId($user);
 
         for ($i = 0; $i < $createdTokens; $i++) {
-            $user->createToken(
-                Arr::random([TokenAuth::TYPE_ACCESS, TokenAuth::TYPE_REFRESH]),
-                'TestToken',
-                $groupId
-            );
+            $user
+                ->createToken(
+                    Arr::random([TokenType::ACCESS, TokenType::REFRESH])
+                )
+                ->setGroupId($groupId)
+                ->build();
         }
 
-        $revokedToken = $user->createToken(
-            TokenAuth::TYPE_ACCESS,
-            'TestToken',
-            $groupId
-        );
-        $revokedToken->token->revoke()->save();
+        $revokedToken = $user
+            ->createToken(TokenType::ACCESS)
+            ->setGroupId($groupId)
+            ->build(save: false);
+        $revokedToken->token->revoke()->store();
         $createdTokens++; // should be included
 
-        $expiredToken = $user->createToken(
-            TokenAuth::TYPE_ACCESS,
-            'TestToken',
-            $groupId
-        );
-        $expiredToken->token->update(['expires_at' => now()->subMinute()]);
+        $expiredToken = $user
+            ->createToken(TokenType::ACCESS)
+            ->setGroupId($groupId)
+            ->build(save: false);
+        $expiredToken->token->expires_at = now()->subMinute();
+        $expiredToken->token->store();
         $createdTokens++; // should be included
 
         // Tokens of other group should not be included
-        $user->createToken(TokenAuth::TYPE_ACCESS, 'TestToken', $groupId + 1);
+        $user
+            ->createToken(TokenType::ACCESS)
+            ->setGroupId($groupId + 1)
+            ->build();
 
         // Tokens for other users should not be included even if they have the same group id
-        $otherUser->createToken(TokenAuth::TYPE_ACCESS, 'TestToken', $groupId);
+        $otherUser
+            ->createToken(TokenType::ACCESS)
+            ->setGroupId($groupId)
+            ->build();
 
         $response = $this->getJson("/api/v1/auth/tokens/groups/$groupId");
 
@@ -151,8 +164,8 @@ class AuthTokenTest extends TestCase {
             [
                 'id',
                 'type',
-                'tokenable_type',
-                'tokenable_id',
+                'authenticatable_type',
+                'authenticatable_id',
                 'group_id',
                 'name',
                 'abilities' => [],
@@ -168,7 +181,7 @@ class AuthTokenTest extends TestCase {
     public function testDeleteSpecificAccessTokenForUserSucceeds() {
         $user = $this->createAndLoginUser();
 
-        $token = $user->createToken(TokenAuth::TYPE_ACCESS, 'TestToken');
+        $token = $user->createToken(TokenType::ACCESS)->build();
 
         $response = $this->deleteJson(
             "/api/v1/auth/tokens/{$token->token->id}"
@@ -187,7 +200,7 @@ class AuthTokenTest extends TestCase {
     public function testDeleteSpecificRefreshTokenForUserSucceeds() {
         $user = $this->createAndLoginUser();
 
-        $token = $user->createToken(TokenAuth::TYPE_REFRESH, 'TestToken');
+        $token = $user->createToken(TokenType::REFRESH)->build();
 
         $response = $this->deleteJson(
             "/api/v1/auth/tokens/{$token->token->id}"
@@ -207,8 +220,7 @@ class AuthTokenTest extends TestCase {
         $user1 = $this->createUser();
         $user2 = $this->createAndLoginUser();
 
-        $tokenId = $user1->createToken(TokenAuth::TYPE_ACCESS, 'TestToken')
-            ->token->id;
+        $tokenId = $user1->createToken(TokenType::ACCESS)->build()->token->id;
 
         $response = $this->deleteJson("/api/v1/auth/tokens/{$tokenId}");
         $response->assertNotFound();
@@ -220,10 +232,11 @@ class AuthTokenTest extends TestCase {
         $createdTokens = 10;
 
         for ($i = 0; $i < $createdTokens; $i++) {
-            $user->createToken(
-                Arr::random([TokenAuth::TYPE_ACCESS, TokenAuth::TYPE_REFRESH]),
-                'TestToken'
-            );
+            $user
+                ->createToken(
+                    Arr::random([TokenType::ACCESS, TokenType::REFRESH])
+                )
+                ->build();
         }
 
         $this->assertEquals($createdTokens, $user->tokens()->count());

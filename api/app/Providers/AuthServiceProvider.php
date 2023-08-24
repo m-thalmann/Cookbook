@@ -12,7 +12,7 @@ use App\Policies\IngredientPolicy;
 use App\Policies\RecipePolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use TokenAuth\TokenAuth;
+use TokenAuth\Facades\TokenAuth;
 
 class AuthServiceProvider extends ServiceProvider {
     /**
@@ -28,6 +28,12 @@ class AuthServiceProvider extends ServiceProvider {
         User::class => UserPolicy::class,
     ];
 
+    public function register() {
+        parent::register();
+
+        TokenAuth::useAuthToken(AuthToken::class);
+    }
+
     /**
      * Register any authentication / authorization services.
      *
@@ -35,7 +41,5 @@ class AuthServiceProvider extends ServiceProvider {
      */
     public function boot() {
         $this->registerPolicies();
-
-        TokenAuth::useAuthTokenModel(AuthToken::class);
     }
 }

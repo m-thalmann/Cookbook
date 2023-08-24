@@ -4,7 +4,8 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Jenssegers\Agent\Agent;
-use TokenAuth\TokenAuth;
+use TokenAuth\Enums\TokenType;
+use TokenAuth\Facades\TokenAuth;
 
 class AuthTokenResource extends JsonResource {
     /**
@@ -14,10 +15,11 @@ class AuthTokenResource extends JsonResource {
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request) {
-        $isCurrent = match ($this->type === TokenAuth::TYPE_ACCESS) {
-            true => $request->user()->currentToken()->id === $this->id,
-            default => $request->user()->currentToken()->group_id ===
-                $this->group_id,
+        $currentToken = TokenAuth::currentToken();
+
+        $isCurrent = match ($this->type === TokenType::ACCESS) {
+            true => $currentToken->id === $this->id,
+            default => $currentToken->group_id === $this->group_id,
         };
 
         return [

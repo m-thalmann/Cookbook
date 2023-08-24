@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\AuthToken;
 use App\Models\Recipe;
 use App\Models\Cookbook;
 use App\Models\Ingredient;
@@ -11,7 +10,6 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Exception;
 use Illuminate\Support\Facades\Hash;
-use TokenAuth\TokenAuth;
 
 class DemoSeeder extends Seeder {
     const USER_AMOUNT = 3;
@@ -27,15 +25,6 @@ class DemoSeeder extends Seeder {
             'name' => 'John Doe',
             'email' => User::DEMO_EMAIL,
             'password' => Hash::make('demo'),
-        ]);
-
-        $demoUser->tokens()->create([
-            'type' => TokenAuth::TYPE_ACCESS,
-            'group_id' => null,
-            'name' => 'demo-token',
-            'token' => hash('sha256', AuthToken::DEMO_TOKEN),
-            'abilities' => ['*'],
-            'expires_at' => null,
         ]);
 
         $users = [

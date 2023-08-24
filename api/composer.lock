@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f10a3ec0c00b4bdaee77fe4bd704f8f1",
+    "content-hash": "9f2c07eba84904d24b953be5c9c86e63",
     "packages": [
         {
             "name": "brick/math",
@@ -2295,23 +2295,23 @@
         },
         {
             "name": "m-thalmann/laravel-token-auth",
-            "version": "v0.4.1",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/m-thalmann/laravel-token-auth.git",
-                "reference": "371bc8df8a47dd691c08960c7cfe9fb0c6008cd3"
+                "reference": "f1d9fb4c56bec9227966e696dd32016e0d988a76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/m-thalmann/laravel-token-auth/zipball/371bc8df8a47dd691c08960c7cfe9fb0c6008cd3",
-                "reference": "371bc8df8a47dd691c08960c7cfe9fb0c6008cd3",
+                "url": "https://api.github.com/repos/m-thalmann/laravel-token-auth/zipball/f1d9fb4c56bec9227966e696dd32016e0d988a76",
+                "reference": "f1d9fb4c56bec9227966e696dd32016e0d988a76",
                 "shasum": ""
             },
             "require": {
                 "illuminate/contracts": "^9.0|^10.0",
                 "illuminate/database": "^9.0|^10.0",
                 "illuminate/support": "^9.0|^10.0",
-                "php": "^8.0"
+                "php": "^8.1"
             },
             "require-dev": {
                 "mockery/mockery": "^1.0",
@@ -2323,7 +2323,10 @@
                 "laravel": {
                     "providers": [
                         "TokenAuth\\TokenAuthServiceProvider"
-                    ]
+                    ],
+                    "aliases": {
+                        "TokenAuth": "TokenAuth\\Facades\\TokenAuth"
+                    }
                 }
             },
             "autoload": {
@@ -2342,6 +2345,7 @@
                 }
             ],
             "description": "Provides token-based authentication system for Laravel REST APIs",
+            "homepage": "https://github.com/m-thalmann/laravel-token-auth",
             "keywords": [
                 "api",
                 "auth",
@@ -2352,9 +2356,9 @@
             ],
             "support": {
                 "issues": "https://github.com/m-thalmann/laravel-token-auth/issues",
-                "source": "https://github.com/m-thalmann/laravel-token-auth/tree/v0.4.1"
+                "source": "https://github.com/m-thalmann/laravel-token-auth/tree/v1.0.0"
             },
-            "time": "2022-09-07T17:04:53+00:00"
+            "time": "2023-08-23T15:14:43+00:00"
         },
         {
             "name": "mobiledetect/mobiledetectlib",

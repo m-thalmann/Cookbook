@@ -13,7 +13,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'token',
+        'guard' => 'token-access',
         'passwords' => 'users',
     ],
 
@@ -37,7 +37,7 @@ return [
     'guards' => [
         // Will be replaced by TokenAuth package.
         // Needed to create policies with artisan command
-        'token' => [
+        'token-access' => [
             'provider' => 'users',
         ],
     ],
@@ -88,20 +88,5 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Token settings
-    |--------------------------------------------------------------------------
-    |
-    | These options define the settings for the tokens passed
-    | to the client after authentication (Bearer Token)
-    |
-    */
-
-    'token_names' => [
-        'refresh' => 'RefreshToken',
-        'access' => 'AccessToken',
     ],
 ];

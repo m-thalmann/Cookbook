@@ -14,6 +14,7 @@ use App\OpenApi\Responses\NoContentResponse;
 use App\OpenApi\Responses\NotFoundResponse;
 use App\OpenApi\Responses\TooManyRequestsResponse;
 use App\OpenApi\Responses\UnauthorizedResponse;
+use TokenAuth\Enums\TokenType;
 use Vyuldashev\LaravelOpenApi\Attributes as OpenApi;
 
 #[OpenApi\PathItem]
@@ -44,7 +45,7 @@ class AuthTokenController extends Controller {
                 authUser()
                     ->tokens()
                     ->active()
-                    ->refreshTokens()
+                    ->type(TokenType::REFRESH)
                     ->paginate($perPage)
             )
         );
@@ -132,7 +133,11 @@ class AuthTokenController extends Controller {
 
         $this->authorizeAnonymously('delete', $authToken);
 
-        $authToken->deleteAllTokensFromSameGroup();
+        if ($authToken->getGroupId() === null) {
+            $authToken->delete();
+        } else {
+            AuthToken::deleteTokensFromGroup($authToken->getGroupId());
+        }
 
         return response()->noContent();
     }

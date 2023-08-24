@@ -17,20 +17,22 @@ class AuthTokenSchema extends SchemaFactory implements Reusable {
                 Schema::string('type')
                     ->enum('access', 'refresh')
                     ->description('The type of the token'),
-                Schema::string('tokenable_type')
+                Schema::string('authenticatable_type')
                     ->description('The class for which the token was created')
                     ->default('App\\Models\\User'),
-                Schema::integer('tokenable_id')
+                Schema::integer('authenticatable_id')
                     ->description(
-                        'The id of the model the token belongs to (the user\'s id'
+                        'The id of the model the token belongs to (the user\'s id)'
                     )
                     ->example(1),
                 Schema::integer('group_id')
+                    ->nullable()
                     ->description(
                         'The token-group this token belongs to (each user has its own groups)'
                     )
                     ->example(2),
                 Schema::string('name')
+                    ->nullable()
                     ->description('The name of the token')
                     ->example('AccessToken'),
                 Schema::array('abilities')
@@ -95,8 +97,8 @@ class AuthTokenSchema extends SchemaFactory implements Reusable {
             ->required(
                 'id',
                 'type',
-                'tokenable_type',
-                'tokenable_id',
+                'authenticatable_type',
+                'authenticatable_id',
                 'group_id',
                 'name',
                 'abilities',

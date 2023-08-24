@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
-use TokenAuth\TokenAuth;
+use TokenAuth\Enums\TokenType;
 
 class UsersTest extends TestCase {
     use WithFaker;
@@ -208,7 +208,7 @@ class UsersTest extends TestCase {
     public function testUserCanUpdateAndLogout() {
         $user = $this->createAndLoginUser(isAdmin: false);
 
-        $user->createToken(TokenAuth::TYPE_ACCESS, 'TestToken');
+        $user->createToken(TokenType::ACCESS)->build();
 
         $newName = "new_{$user->name}";
 
@@ -249,7 +249,7 @@ class UsersTest extends TestCase {
     public function testUserIsLoggedOutIfEmailIsUpdated() {
         $user = $this->createAndLoginUser(isAdmin: false);
 
-        $user->createToken(TokenAuth::TYPE_ACCESS, 'TestToken');
+        $user->createToken(TokenType::ACCESS)->build();
 
         $newEmail = "new_{$user->email}";
 
@@ -266,7 +266,7 @@ class UsersTest extends TestCase {
     public function testUserIsLoggedOutIfPasswordIsUpdated() {
         $user = $this->createAndLoginUser(isAdmin: false);
 
-        $user->createToken(TokenAuth::TYPE_ACCESS, 'TestToken');
+        $user->createToken(TokenType::ACCESS)->build();
 
         $newPassword = 'new_' . self::DEFAULT_USER_PASSWORD;
 
@@ -283,7 +283,7 @@ class UsersTest extends TestCase {
     public function testUserPasswordIsNotUpdatedIfIsSame() {
         $user = $this->createAndLoginUser(isAdmin: false);
 
-        $user->createToken(TokenAuth::TYPE_ACCESS, 'TestToken');
+        $user->createToken(TokenType::ACCESS)->build();
 
         $oldPassword = $user->password;
 
