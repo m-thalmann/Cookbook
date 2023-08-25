@@ -88,4 +88,8 @@ abstract class TestCase extends BaseTestCase {
 
         $response->assertJsonPath('meta.count', $expectedAmount);
     }
+
+    protected function setDemoEnv() {
+        $this->app['env'] = 'demo';
+    }
 }

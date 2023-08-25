@@ -27,11 +27,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
-use TokenAuth\Enums\TokenType;
 use TokenAuth\Facades\TokenAuth;
-use TokenAuth\Support\NewAuthToken;
 use TokenAuth\Support\NewAuthTokenPair;
-use TokenAuth\Support\TransientAuthToken;
 use Vyuldashev\LaravelOpenApi\Attributes as OpenApi;
 
 #[OpenApi\PathItem]
