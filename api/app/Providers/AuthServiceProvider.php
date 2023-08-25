@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Auth\TokenGuard;
 use App\Models\AuthToken;
 use App\Models\Cookbook;
 use App\Models\Ingredient;
@@ -32,6 +33,7 @@ class AuthServiceProvider extends ServiceProvider {
         parent::register();
 
         TokenAuth::useAuthToken(AuthToken::class);
+        TokenAuth::useTokenGuard(TokenGuard::class);
     }
 
     /**

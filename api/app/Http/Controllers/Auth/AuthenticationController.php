@@ -263,21 +263,12 @@ class AuthenticationController extends Controller {
         Request $request,
         User $user
     ): NewAuthTokenPair {
-        if (app()->environment('demo') && $user->email === User::DEMO_EMAIL) {
+        if ($user->email === User::DEMO_EMAIL) {
             $demoUser = User::query()
-                ->where('email', User::DEMO_EMAIL)
+                ->demoUser()
                 ->first();
 
-            $demoToken = new TransientAuthToken();
-            $demoToken->type = TokenType::ACCESS;
-            $demoToken->authenticatable = $demoUser;
-
-            $demoAccessToken = new NewAuthToken(
-                $demoToken,
-                AuthToken::DEMO_TOKEN
-            );
-
-            return new NewAuthTokenPair($demoAccessToken, $demoAccessToken); // just return the access token twice
+            return AuthToken::createDemoPair($demoUser);
         }
 
         $newTokenPair = TokenAuth::createTokenPair($user)

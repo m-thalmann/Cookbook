@@ -66,6 +66,10 @@ class User extends Authenticatable implements MustVerifyEmail {
         $query->where('is_admin', $admin);
     }
 
+    public function scopeDemoUser(Builder $query) {
+        $query->where('email', self::DEMO_EMAIL);
+    }
+
     public function preferredLocale() {
         return $this->language_code;
     }
