@@ -17,7 +17,7 @@ class AuthTokenPolicy {
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function view(User $user, AuthToken $authToken) {
-        return $user->id === $authToken->tokenable_id;
+        return $user->id === $authToken->authenticatable_id;
     }
 
     /**
@@ -28,6 +28,6 @@ class AuthTokenPolicy {
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function delete(User $user, AuthToken $authToken) {
-        return $user->id === $authToken->tokenable_id;
+        return $user->id === $authToken->authenticatable_id;
     }
 }

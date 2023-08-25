@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Hash;
-use TokenAuth\TokenAuth;
+use TokenAuth\Facades\TokenAuth;
 
 abstract class TestCase extends BaseTestCase {
     use CreatesApplication, LazilyRefreshDatabase;
@@ -87,5 +87,9 @@ abstract class TestCase extends BaseTestCase {
         ]);
 
         $response->assertJsonPath('meta.count', $expectedAmount);
+    }
+
+    protected function setDemoEnv() {
+        $this->app['env'] = 'demo';
     }
 }

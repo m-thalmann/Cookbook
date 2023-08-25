@@ -1,8 +1,8 @@
 export interface AuthToken {
   id: number;
   type: 'access' | 'refresh';
-  tokenable_type: string;
-  tokenable_id: number;
+  authenticatable_type: string;
+  authenticatable_id: number;
   group_id: number | null;
   name: string;
   abilities: string[];

@@ -4,23 +4,20 @@ namespace Tests\Feature\Api\Auth;
 
 use App\Models\AuthToken;
 use Tests\TestCase;
-use TokenAuth\TokenAuth;
+use TokenAuth\Enums\TokenType;
+use TokenAuth\Facades\TokenAuth;
 
 class RefreshTokenTest extends TestCase {
     public function testRefreshingTokenSucceeds() {
         $user = $this->createUser();
 
-        [$refreshToken, $accessToken] = TokenAuth::createTokenPairForUser(
-            $user,
-            'name1',
-            'name2'
-        );
+        $newTokenPair = TokenAuth::createTokenPair($user)->buildPair();
 
         $response = $this->postJson(
             '/api/v1/auth/refresh',
             [],
             [
-                'Authorization' => "Bearer {$refreshToken->plainTextToken}",
+                'Authorization' => "Bearer {$newTokenPair->refreshToken->plainTextToken}",
             ]
         );
 
@@ -29,12 +26,16 @@ class RefreshTokenTest extends TestCase {
             'data' => ['refresh_token', 'access_token'],
         ]);
 
-        $oldRefreshToken = $refreshToken->token;
+        /**
+         * @var AuthToken
+         */
+        $oldRefreshToken = $newTokenPair->refreshToken->token;
         $oldRefreshToken->refresh();
 
         $this->assertTrue($oldRefreshToken->isRevoked());
 
-        $newRefreshToken = AuthToken::findRefreshToken(
+        $newRefreshToken = AuthToken::find(
+            TokenType::REFRESH,
             $response->json('data.refresh_token')
         );
         $this->assertNotNull($newRefreshToken);
@@ -48,17 +49,13 @@ class RefreshTokenTest extends TestCase {
     public function testRefreshingTokenWithAccessTokenFails() {
         $user = $this->createUser();
 
-        [$refreshToken, $accessToken] = TokenAuth::createTokenPairForUser(
-            $user,
-            'name1',
-            'name2'
-        );
+        $newTokenPair = TokenAuth::createTokenPair($user)->buildPair();
 
         $response = $this->postJson(
             '/api/v1/auth/refresh',
             [],
             [
-                'Authorization' => "Bearer {$accessToken->plainTextToken}",
+                'Authorization' => "Bearer {$newTokenPair->accessToken->plainTextToken}",
             ]
         );
 

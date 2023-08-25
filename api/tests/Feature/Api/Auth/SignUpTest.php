@@ -14,6 +14,7 @@ use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Mockery\Mock;
 use Tests\TestCase;
+use TokenAuth\Enums\TokenType;
 
 class SignUpTest extends TestCase {
     use WithFaker, MockeryPHPUnitIntegration;
@@ -57,10 +58,16 @@ class SignUpTest extends TestCase {
         ]);
 
         $this->assertNotNull(
-            AuthToken::findAccessToken($response->json('data.access_token'))
+            AuthToken::find(
+                TokenType::ACCESS,
+                $response->json('data.access_token')
+            )
         );
         $this->assertNotNull(
-            AuthToken::findRefreshToken($response->json('data.refresh_token'))
+            AuthToken::find(
+                TokenType::REFRESH,
+                $response->json('data.refresh_token')
+            )
         );
 
         Notification::assertSentTo(

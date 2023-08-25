@@ -2,24 +2,21 @@
 
 namespace Tests\Feature\Api\Auth;
 
+use App\Models\AuthToken;
 use Tests\TestCase;
-use TokenAuth\TokenAuth;
+use TokenAuth\Facades\TokenAuth;
 
 class LogoutTest extends TestCase {
     public function testLogoutSuccess() {
         $user = $this->createUser();
 
-        [$refreshToken, $accessToken] = TokenAuth::createTokenPairForUser(
-            $user,
-            'name1',
-            'name2'
-        );
+        $newTokenPair = TokenAuth::createTokenPair($user)->buildPair();
 
         $response = $this->postJson(
             '/api/v1/auth/logout',
             [],
             [
-                'Authorization' => "Bearer {$accessToken->plainTextToken}",
+                'Authorization' => "Bearer {$newTokenPair->accessToken->plainTextToken}",
             ]
         );
 
@@ -28,12 +25,18 @@ class LogoutTest extends TestCase {
         TokenAuth::actingAs(null);
 
         $newResponse = $this->getJson('/api/v1/auth', [
-            'Authorization' => "Bearer {$accessToken->plainTextToken}",
+            'Authorization' => "Bearer {$newTokenPair->accessToken->plainTextToken}",
         ]);
         $newResponse->assertUnauthorized();
 
-        $refreshToken = $refreshToken->token;
-        $accessToken = $accessToken->token;
+        /**
+         * @var AuthToken
+         */
+        $refreshToken = $newTokenPair->refreshToken->token;
+        /**
+         * @var AuthToken
+         */
+        $accessToken = $newTokenPair->accessToken->token;
 
         $this->assertNull($refreshToken->fresh());
         $this->assertNull($accessToken->fresh());

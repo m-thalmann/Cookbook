@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use TokenAuth\Traits\HasAuthTokens;
+use TokenAuth\Concerns\HasAuthTokens;
 
 class User extends Authenticatable implements MustVerifyEmail {
     use HasFactory,
@@ -64,6 +64,10 @@ class User extends Authenticatable implements MustVerifyEmail {
 
     public function scopeIsAdmin(Builder $query, bool $admin = true) {
         $query->where('is_admin', $admin);
+    }
+
+    public function scopeDemoUser(Builder $query) {
+        $query->where('email', self::DEMO_EMAIL);
     }
 
     public function preferredLocale() {

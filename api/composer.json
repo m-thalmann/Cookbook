@@ -16,7 +16,7 @@
     "jenssegers/agent": "^2.6",
     "laravel/framework": "^10.0",
     "laravel/tinker": "^2.8",
-    "m-thalmann/laravel-token-auth": "^0.4.0",
+    "m-thalmann/laravel-token-auth": "^1.0.0",
     "vyuldashev/laravel-openapi": "^1.11"
   },
   "require-dev": {
